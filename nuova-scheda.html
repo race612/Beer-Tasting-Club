@@ -11,7 +11,7 @@
     <div class="container">
         <div style="text-align: center; margin-bottom: 20px;">
             <img src="assets/logo-hbl.png" alt="Logo" style="width: 60px;">
-            <h3>Nuova Scheda di degustazione</h3>
+            <h3>Nuova Scheda</h3>
         </div>
 
         <div class="card">
@@ -19,15 +19,15 @@
                 
                 <label style="margin-bottom: 10px; display:block;">Cosa stiamo bevendo?</label>
                 <div class="mode-switch">
-                    <div class="mode-option active" id="mode-event" onclick="setMode('event')">
-                        📅 Evento HBL
-                    </div>
-                    <div class="mode-option" id="mode-free" onclick="setMode('free')">
+                    <div class="mode-option active" id="mode-free" onclick="setMode('free')">
                         🏠 Libera / Privata
+                    </div>
+                    <div class="mode-option" id="mode-event" onclick="setMode('event')">
+                        📅 Evento HBL
                     </div>
                 </div>
 
-                <div class="form-group" id="event-selector-group">
+                <div class="form-group" id="event-selector-group" style="display: none;">
                     <label for="evento-select">Seleziona la serata:</label>
                     <select id="evento-select">
                         <option value="">Caricamento eventi...</option>
@@ -42,7 +42,8 @@
                     <label>📝 Che scheda usi?</label>
                     <div class="grid-2">
                         <div class="selection-card" onclick="selectCard(this, 'bjcp-sintetica')">
-                            <h4 style="font-size: 1.5rem;">📜</h4> <h4>BJCP Sintetica</h4>
+                            <h4 style="font-size: 1.5rem;">📜</h4>
+                            <h4>BJCP Sintetica</h4>
                             <p>Veloce e precisa</p>
                         </div>
                         
@@ -81,13 +82,12 @@
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        let freeEventId = null; // Qui salveremo l'ID dell'evento "Libero"
+        let freeEventId = null; // ID evento Libero
 
-        // 1. Carica Eventi e Configura le Modalità
+        // 1. Carica Eventi
         async function loadEvents() {
             const select = document.getElementById('evento-select');
             
-            // Scarica tutti gli eventi attivi
             const { data: events, error } = await supabase
                 .from('events')
                 .select('id, name')
@@ -102,12 +102,10 @@
             select.innerHTML = '<option value="" disabled selected>-- Scegli Evento --</option>';
             
             events.forEach(event => {
-                // Cerchiamo se esiste un evento chiamato "Libero" o "Privato"
                 const nameLower = event.name.toLowerCase();
                 if (nameLower.includes('libero') || nameLower.includes('privato')) {
-                    freeEventId = event.id; // Lo salviamo per dopo
+                    freeEventId = event.id;
                 } else {
-                    // Aggiungiamo alla tendina SOLO gli eventi veri
                     const option = document.createElement('option');
                     option.value = event.id;
                     option.textContent = event.name;
@@ -126,22 +124,22 @@
             const select = document.getElementById('evento-select');
 
             if (mode === 'event') {
-                // Attiva Tab Evento
+                // Attiva Evento
                 btnEvent.classList.add('active');
                 btnFree.classList.remove('active');
-                selectorGroup.style.display = 'block'; // Mostra tendina
+                selectorGroup.style.display = 'block'; 
                 select.required = true;
             } else {
-                // Attiva Tab Libero
+                // Attiva Libero
                 btnFree.classList.add('active');
                 btnEvent.classList.remove('active');
-                selectorGroup.style.display = 'none'; // Nascondi tendina
+                selectorGroup.style.display = 'none'; 
                 select.required = false;
-                select.value = ""; // Resetta selezione
+                select.value = ""; 
             }
         }
 
-        // 3. Selezione Scheda (Grafica)
+        // 3. Selezione Scheda Grafica
         window.selectCard = function(element, value) {
             document.querySelectorAll('.selection-card').forEach(el => {
                 el.style.border = '2px solid transparent';
@@ -162,7 +160,7 @@
 
             if (isFreeMode) {
                 if (!freeEventId) {
-                    alert("Errore: Non trovo l'ID 'Evento Libero' nel database.");
+                    alert("Errore tecnico: Non trovo l'ID 'Libero' nel database.");
                     return;
                 }
                 finalId = freeEventId;
@@ -180,7 +178,6 @@
                 return;
             }
 
-            // Salvataggio e Redirect
             localStorage.setItem('hbl_selected_event', finalId);
             window.location.href = `schede/${tipoScheda}.html`;
         });
