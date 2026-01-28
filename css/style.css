@@ -1,0 +1,127 @@
+/* css/style.css */
+:root {
+    --primary-color: #f59e0b; /* Ambra Birra */
+    --primary-hover: #d97706;
+    --bg-color: #111827;       /* Grigio molto scuro (quasi nero) */
+    --card-bg: #1f2937;        /* Grigio scuro per le schede */
+    --text-color: #f3f4f6;     /* Bianco sporco */
+    --text-muted: #9ca3af;     /* Grigio testo secondario */
+    --danger: #ef4444;         /* Rosso per errori/logout */
+    --success: #10b981;        /* Verde */
+    --radius: 12px;            /* Arrotondamento angoli */
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+/* Layout */
+.container {
+    max-width: 500px; /* Stretto, ideale per mobile */
+    margin: 0 auto;
+    padding-bottom: 50px;
+}
+
+.center-screen {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Immagini */
+.logo {
+    max-width: 120px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.3)); /* alone luminoso */
+}
+
+/* Tipografia */
+h1, h2, h3 { margin-top: 0; color: var(--primary-color); }
+a { color: var(--primary-color); text-decoration: none; }
+small { color: var(--text-muted); }
+
+/* Card / Pannelli */
+.card {
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    margin-bottom: 20px;
+    border: 1px solid #374151;
+}
+
+/* Form Elements */
+.form-group { margin-bottom: 15px; text-align: left; }
+label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; color: var(--text-muted); }
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #374151;
+    background: #111827;
+    color: white;
+    font-size: 1rem;
+    box-sizing: border-box; /* Importante per i padding */
+    transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+/* Pulsanti */
+.btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.1s, background-color 0.2s;
+    text-decoration: none;
+}
+
+.btn:active { transform: scale(0.98); }
+
+.btn-primary { background-color: var(--primary-color); color: #000; }
+.btn-primary:hover { background-color: var(--primary-hover); }
+
+.btn-secondary { background-color: #374151; color: white; }
+.btn-secondary:hover { background-color: #4b5563; }
+
+.btn-outline { background: transparent; border: 1px solid #374151; color: var(--text-muted); }
+.btn-outline:hover { border-color: var(--danger); color: var(--danger); }
+
+/* Utilità */
+.link-back { display: block; margin-top: 20px; text-align: center; font-size: 0.9rem; opacity: 0.7; }
+#loading { text-align: center; margin-top: 20px; color: var(--text-muted); font-style: italic; }
+
+/* Griglia per selezione schede */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.selection-card {
+    background: var(--card-bg);
+    border: 2px solid transparent;
+    border-radius: var(--radius);
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.selection-card:hover { border-color: var(--primary-color); background: #2d3748; }
+.selection-card h4 { margin: 0 0 5px 0; color: white; }
+.selection-card p { margin: 0; font-size: 0.8rem; color: var(--text-muted); }

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuova Degustazione - HBL</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="module" src="js/app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 30px; margin-top: 20px;">
+            <img src="assets/logo-hbl.png" alt="Logo" style="width: 60px;">
+            <h3>Nuova Scheda</h3>
+        </div>
+
+        <div class="card">
+            <form id="setup-form">
+                
+                <div class="form-group">
+                    <label for="evento-select">📅 Per quale evento?</label>
+                    <select id="evento-select" required>
+                        <option value="">Caricamento eventi...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>📝 Che scheda usi?</label>
+                    <div class="grid-2">
+                        <div class="selection-card" onclick="selectCard(this, 'bjcp-sintetica')">
+                            <h4>BJCP Sintetica</h4>
+                            <p>Veloce e precisa</p>
+                        </div>
+                        
+                        <div class="selection-card" onclick="selectCard(this, 'hbl-classica')">
+                            <h4>Scheda HBL</h4>
+                            <p>Standard Club</p>
+                        </div>
+                        
+                        <div class="selection-card" onclick="selectCard(this, 'crocette')">
+                            <h4>Crocette</h4>
+                            <p>Super rapida</p>
+                        </div>
+
+                        <div class="selection-card" onclick="selectCard(this, 'bjcp-full')">
+                            <h4>BJCP Full</h4>
+                            <p>Esame completo</p>
+                        </div>
+                    </div>
+                    <input type="hidden" id="tipo-scheda" required>
+                    <p id="selection-error" style="color: var(--danger); display: none; margin-top: 5px;">⚠️ Seleziona un tipo di scheda</p>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid #374151; margin: 20px 0;">
+
+                <button type="submit" class="btn btn-primary">Inizia Degustazione →</button>
+            </form>
+        </div>
+
+        <a href="index.html" class="link-back">← Torna alla Dashboard</a>
+    </div>
+
+    <script type="module">
+        import { supabase } from './js/supabase-config.js';
+
+        // 1. Carica gli eventi all'avvio
+        async function loadEvents() {
+            const select = document.getElementById('evento-select');
+            
+            // Query a Supabase: dammi id e nome degli eventi attivi
+            const { data: events, error } = await supabase
+                .from('events')
+                .select('id, name')
+                .eq('is_active', true)
+                .order('id', { ascending: false });
+
+            if (error) {
+                console.error('Errore eventi:', error);
+                select.innerHTML = '<option>Errore caricamento</option>';
+                return;
+            }
+
+            // Pulisci e riempi la select
+            select.innerHTML = '<option value="" disabled selected>-- Scegli Evento --</option>';
+            events.forEach(event => {
+                const option = document.createElement('option');
+                option.value = event.id;
+                option.textContent = event.name;
+                select.appendChild(option);
+            });
+        }
+
+        loadEvents();
+
+        // 2. Gestione click sulle Card (UI Selection)
+        window.selectCard = function(element, value) {
+            // Rimuovi classe 'active' da tutti
+            document.querySelectorAll('.selection-card').forEach(el => {
+                el.style.border = '2px solid transparent';
+                el.style.backgroundColor = 'var(--card-bg)';
+            });
+            
+            // Attiva quello cliccato
+            element.style.borderColor = 'var(--primary-color)';
+            element.style.backgroundColor = '#2d3748';
+            
+            // Salva valore nell'input nascosto
+            document.getElementById('tipo-scheda').value = value;
+            document.getElementById('selection-error').style.display = 'none';
+        }
+
+        // 3. Gestione Invio: Reindirizza alla pagina giusta
+        document.getElementById('setup-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const eventoId = document.getElementById('evento-select').value;
+            const tipoScheda = document.getElementById('tipo-scheda').value;
+
+            if (!tipoScheda) {
+                document.getElementById('selection-error').style.display = 'block';
+                return;
+            }
+
+            if (!eventoId) {
+                alert("Seleziona un evento!");
+                return;
+            }
+
+            // Salviamo l'evento scelto nel localStorage per usarlo nella pagina dopo
+            localStorage.setItem('hbl_selected_event', eventoId);
+
+            // Reindirizza alla pagina HTML specifica della scheda
+            // Es: se scelgo 'bjcp-sintetica', vado a 'schede/bjcp-sintetica.html'
+            window.location.href = `schede/${tipoScheda}.html`;
+        });
+    </script>
+</body>
+</html>
