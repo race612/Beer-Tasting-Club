@@ -212,3 +212,20 @@ input:focus, select:focus {
     margin-top: 15px; 
     font-weight: bold;
 }
+
+.checkbox-group label, .radio-group label {
+    display: block;
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+.checkbox-group input, .radio-group input {
+    width: auto;
+    margin-right: 10px;
+    transform: scale(1.2); /* Ingrandisce un po' i pallini */
+}
+.radio-group {
+    margin-left: 10px;
+    border-left: 2px solid #374151;
+    padding-left: 10px;
+}

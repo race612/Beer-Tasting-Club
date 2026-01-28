@@ -101,41 +101,50 @@
             </div>
         </div>
     </div>
-
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
         const loading = document.getElementById('loading-profile');
         const content = document.getElementById('profile-content');
         
-        // Carica dati all'avvio
+        // --- CARICAMENTO DATI ---
         async function loadProfile() {
             const { data: { user } } = await supabase.auth.getUser();
 
-            if (!user) {
-                window.location.href = 'index.html'; // Se non loggato, via
-                return;
-            }
+            if (!user) { window.location.href = 'index.html'; return; }
 
-            // Popola i campi con i metadata esistenti
             const meta = user.user_metadata || {};
             
+            // Header
             document.getElementById('display-email').textContent = user.email;
-            
-            // Calcolo Iniziali
-            const nome = meta.first_name || "";
-            const cognome = meta.last_name || "";
-            let initial = "?";
-            if (nome) initial = nome[0].toUpperCase();
-            if (cognome) initial += cognome[0].toUpperCase();
-            document.getElementById('avatar-initials').textContent = initial;
+            const initial = (meta.first_name?.[0] || "") + (meta.last_name?.[0] || "?");
+            document.getElementById('avatar-initials').textContent = initial.toUpperCase();
 
-            // Riempimento campi input
-            document.getElementById('prof-nome').value = nome;
-            document.getElementById('prof-cognome').value = cognome;
-            document.getElementById('prof-qualifica').value = meta.qualifica || "Appassionato";
-            document.getElementById('prof-bjcp').value = meta.bjcp_id || "";
+            // Campi Semplici
+            document.getElementById('prof-nome').value = meta.first_name || "";
+            document.getElementById('prof-cognome').value = meta.last_name || "";
+            document.getElementById('prof-bjcp-id').value = meta.bjcp_id || "";
             document.getElementById('prof-privacy').checked = meta.consensus_public || false;
+            
+            // Homebrewer Status (default 'no' se vuoto)
+            document.getElementById('prof-homebrewer').value = meta.homebrewer_status || "no";
+
+            // Checkbox Ruoli
+            document.getElementById('role-pro').checked = meta.role_pro || false;
+            document.getElementById('role-publican').checked = meta.role_publican || false;
+            document.getElementById('role-sommelier').checked = meta.role_sommelier || false;
+            document.getElementById('role-ubt').checked = meta.role_ubt || false;
+
+            // Radio Button (Cicerone & BJCP)
+            // Seleziona il radio button che ha value uguale a quello salvato
+            if (meta.cicerone_level) {
+                const radio = document.querySelector(`input[name="cicerone"][value="${meta.cicerone_level}"]`);
+                if (radio) radio.checked = true;
+            }
+            if (meta.bjcp_level) {
+                const radio = document.querySelector(`input[name="bjcp"][value="${meta.bjcp_level}"]`);
+                if (radio) radio.checked = true;
+            }
 
             loading.style.display = 'none';
             content.style.display = 'block';
@@ -143,7 +152,7 @@
 
         loadProfile();
 
-        // Salvataggio
+        // --- SALVATAGGIO DATI ---
         document.getElementById('profile-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('save-btn');
@@ -153,11 +162,26 @@
             btn.textContent = "Salvataggio...";
             msg.textContent = "";
 
+            // Recupera valore Radio Button selezionati
+            const ciceroneVal = document.querySelector('input[name="cicerone"]:checked')?.value || "";
+            const bjcpVal = document.querySelector('input[name="bjcp"]:checked')?.value || "";
+
             const updates = {
                 first_name: document.getElementById('prof-nome').value,
                 last_name: document.getElementById('prof-cognome').value,
-                qualifica: document.getElementById('prof-qualifica').value,
-                bjcp_id: document.getElementById('prof-bjcp').value,
+                homebrewer_status: document.getElementById('prof-homebrewer').value,
+                
+                // Ruoli
+                role_pro: document.getElementById('role-pro').checked,
+                role_publican: document.getElementById('role-publican').checked,
+                role_sommelier: document.getElementById('role-sommelier').checked,
+                role_ubt: document.getElementById('role-ubt').checked,
+                
+                // Livelli
+                cicerone_level: ciceroneVal,
+                bjcp_level: bjcpVal,
+                bjcp_id: document.getElementById('prof-bjcp-id').value,
+                
                 consensus_public: document.getElementById('prof-privacy').checked
             };
 
@@ -169,17 +193,16 @@
                 msg.textContent = "Errore: " + error.message;
                 msg.style.color = "red";
             } else {
-                msg.textContent = "✅ Profilo aggiornato con successo!";
+                msg.textContent = "✅ Profilo aggiornato!";
                 msg.style.color = "#10b981";
-                // Ricarica per aggiornare avatar e info in alto
                 setTimeout(() => window.location.reload(), 1000);
             }
             
             btn.disabled = false;
-            btn.textContent = "💾 Salva Modifiche";
+            btn.textContent = "💾 Salva Profilo";
         });
-
-        // Logout dedicato
+        
+        // Logout (uguale a prima)
         document.getElementById('logout-btn-profile').addEventListener('click', async () => {
             await supabase.auth.signOut();
             window.location.href = 'index.html';
