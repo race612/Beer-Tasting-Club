@@ -87,18 +87,24 @@ document.addEventListener('DOMContentLoaded', () => {
             const cognome = document.getElementById('reg-cognome').value;
             const email = document.getElementById('reg-email').value;
             const password = document.getElementById('reg-password').value;
+            // NUOVO CAMPO
+            const homebrewerStatus = document.getElementById('reg-homebrewer').value;
+
             const msgDiv = document.getElementById('signup-message');
 
             msgDiv.textContent = "Registrazione in corso...";
             msgDiv.style.color = "yellow";
             
-            // IL FIX IMPORTANTE E' QUI SOTTO (emailRedirectTo)
             const { error } = await supabase.auth.signUp({
                 email, 
                 password,
                 options: { 
-                    data: { first_name: nome, last_name: cognome },
-                    // Questo forza il link nella mail a puntare al tuo sito corretto
+                    data: { 
+                        first_name: nome, 
+                        last_name: cognome,
+                        // Salviamo lo status qui
+                        homebrewer_status: homebrewerStatus
+                    },
                     emailRedirectTo: 'https://race612.github.io/HBL-Tasting/index.html'
                 }
             });

@@ -30,6 +30,17 @@
                 <input type="password" id="reg-password" required placeholder="Minimo 6 caratteri">
             </div>
             
+            <div class="form-group">
+                <label>Sei un Homebrewer? *</label>
+                <select id="reg-homebrewer" required style="background: #1f2937; color: white;">
+                    <option value="" disabled selected>-- Seleziona --</option>
+                    <option value="no">No</option>
+                    <option value="hbl">Sì, sono già un HBL</option>
+                    <option value="other">Sì, altra regione</option>
+                    <option value="indep">Sì, nessun gruppo HB</option>
+                </select>
+            </div>
+
             <button type="submit" class="btn btn-primary">Crea Account</button>
         </form>
 

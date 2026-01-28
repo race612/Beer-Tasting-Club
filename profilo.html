@@ -27,40 +27,71 @@
             <div class="card">
                 <form id="profile-form">
                     
-                    <div class="form-group">
-                        <label>Nome</label>
-                        <input type="text" id="prof-nome" placeholder="Il tuo nome">
+                    <h4 style="border-bottom: 1px solid #374151; padding-bottom: 5px; margin-top: 0;">Anagrafica</h4>
+                    <div class="grid-2"> <div class="form-group">
+                            <label>Nome</label>
+                            <input type="text" id="prof-nome" placeholder="Nome">
+                        </div>
+                        <div class="form-group">
+                            <label>Cognome</label>
+                            <input type="text" id="prof-cognome" placeholder="Cognome">
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Cognome</label>
-                        <input type="text" id="prof-cognome" placeholder="Il tuo cognome">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Qualifica / Ruolo</label>
-                        <select id="prof-qualifica">
-                            <option value="Appassionato">🍺 Appassionato</option>
-                            <option value="Homebrewer">🏠 Homebrewer</option>
-                            <option value="Sommelier">🍷 Sommelier</option>
-                            <option value="Giudice BJCP">⚖️ Giudice BJCP</option>
-                            <option value="Giudice UBT">🇮🇹 Giudice UBT</option>
+                    <div class="form-group" style="background: #2d3748; padding: 10px; border-radius: 8px;">
+                        <label style="color: var(--primary-color);">Status Homebrewer *</label>
+                        <select id="prof-homebrewer" required>
+                            <option value="no">No</option>
+                            <option value="hbl">Sì, socio HBL</option>
+                            <option value="other">Sì, altra associazione</option>
+                            <option value="indep">Sì, indipendente</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label>BJCP ID (Opzionale)</label>
-                        <input type="text" id="prof-bjcp" placeholder="Es. E1234">
+                    <h4 style="border-bottom: 1px solid #374151; padding-bottom: 5px; margin-top: 20px;">Ruoli & Titoli</h4>
+                    
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="role-pro"> Birraio Professionista</label>
+                        <label><input type="checkbox" id="role-publican"> Publican</label>
+                        <label><input type="checkbox" id="role-sommelier"> Beer Sommelier</label>
+                        <label><input type="checkbox" id="role-ubt"> Giudice UBT</label>
                     </div>
 
-                    <div style="margin: 20px 0; display: flex; align-items: start; gap: 10px;">
-                        <input type="checkbox" id="prof-privacy" style="width: 20px; margin-top: 5px;">
-                        <label for="prof-privacy" style="font-weight: normal; font-size: 0.9em; line-height: 1.4;">
-                            Acconsento a mostrare il mio nome e qualifica nelle schede pubbliche o condivise.
-                        </label>
+                    <div style="margin-top: 15px;">
+                        <label style="font-weight: bold; color: var(--text-muted);">Programma Cicerone®</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="cicerone" value=""> Nessuno</label>
+                            <label><input type="radio" name="cicerone" value="server"> Certified Beer Server</label>
+                            <label><input type="radio" name="cicerone" value="certified"> Certified Cicerone</label>
+                            <label><input type="radio" name="cicerone" value="advanced"> Advanced Cicerone</label>
+                            <label><input type="radio" name="cicerone" value="master"> Master Cicerone</label>
+                        </div>
                     </div>
 
-                    <button type="submit" id="save-btn" class="btn btn-primary">💾 Salva Modifiche</button>
+                    <div style="margin-top: 15px;">
+                        <label style="font-weight: bold; color: var(--text-muted);">Grado BJCP</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="bjcp" value=""> Nessuno</label>
+                            <label><input type="radio" name="bjcp" value="provisional"> Provisional</label>
+                            <label><input type="radio" name="bjcp" value="recognized"> Recognized</label>
+                            <label><input type="radio" name="bjcp" value="certified"> Certified</label>
+                            <label><input type="radio" name="bjcp" value="national"> National</label>
+                            <label><input type="radio" name="bjcp" value="master"> Master</label>
+                            <label><input type="radio" name="bjcp" value="grand_master"> Grand Master</label>
+                        </div>
+                        <input type="text" id="prof-bjcp-id" placeholder="ID BJCP (es. E1234)" style="margin-top: 5px;">
+                    </div>
+
+                    <div style="margin: 20px 0; border-top: 1px solid #374151; padding-top: 10px;">
+                        <div style="display: flex; gap: 10px;">
+                            <input type="checkbox" id="prof-privacy" style="width: 20px; margin-top: 2px;">
+                            <label for="prof-privacy" style="font-weight: normal; font-size: 0.85em;">
+                                Acconsento a mostrare il mio nome e le mie qualifiche nelle schede pubbliche.
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="save-btn" class="btn btn-primary">💾 Salva Profilo</button>
                 </form>
                 <div id="profile-msg"></div>
             </div>
