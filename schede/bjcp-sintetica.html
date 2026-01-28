@@ -91,39 +91,51 @@
             font-size: 1.1rem;
         }
     </style>
-
-<script type="module">
+    
+    <script type="module">
         import { supabase } from '../js/supabase-config.js';
 
         // 1. Recupera Evento
         const eventId = localStorage.getItem('hbl_selected_event');
         if (!eventId) {
-            alert("Nessun evento selezionato. Torna alla home.");
+            alert("Nessun evento selezionato.");
             window.location.href = '../nuova-scheda.html';
         }
 
-        // 2. Calcolo Automatico Totale + LIMITATORE MAX
+        // 2. Setup Input (Numeri Interi e Max Cap)
         const inputs = document.querySelectorAll('.calc-input');
         const totalDisplay = document.getElementById('total-display');
 
         function setupInputListeners() {
             inputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    // A. Logica di limitazione (Il tuo fix richiesto)
-                    const max = parseFloat(this.getAttribute('max'));
-                    const min = parseFloat(this.getAttribute('min')) || 0;
-                    let currentVal = parseFloat(this.value);
+                // Impostiamo attributi HTML per aiutare il browser (tastiera numerica senza punto)
+                input.setAttribute('step', '1');
+                input.setAttribute('pattern', '[0-9]*');
 
-                    // Se l'utente scrive un numero troppo alto, lo forziamo al max
-                    if (currentVal > max) {
-                        this.value = max; 
-                    } 
-                    // Se va sotto zero (non dovrebbe succedere, ma per sicurezza)
-                    else if (currentVal < min) {
+                input.addEventListener('input', function() {
+                    let max = parseInt(this.getAttribute('max'));
+                    let min = parseInt(this.getAttribute('min')) || 0;
+                    
+                    // A. Convertiamo in intero (rimuove decimali)
+                    let val = parseInt(this.value);
+
+                    // B. Se non è un numero (es. campo vuoto), trattalo come 0 temporaneamente per i check
+                    if (isNaN(val)) val = 0;
+
+                    // C. Controlli Limiti
+                    if (val > max) {
+                        val = max;
+                        this.value = max; // Aggiorna visivamente
+                    } else if (val < min) {
+                        val = min;
                         this.value = min;
+                    } 
+                    // D. Se l'utente ha scritto decimali (es. 5.5), correggiamo visivamente
+                    else if (this.value.includes('.') || this.value.includes(',')) {
+                        this.value = val; 
                     }
 
-                    // B. Aggiorna il totale dopo la correzione
+                    // E. Ricalcola somma
                     calculateTotal();
                 });
             });
@@ -132,23 +144,22 @@
         function calculateTotal() {
             let total = 0;
             inputs.forEach(input => {
-                total += parseFloat(input.value) || 0;
+                // parseInt assicura che sommiamo solo interi
+                total += parseInt(input.value) || 0;
             });
             
-            // Aggiorna numero
             totalDisplay.textContent = total;
             
-            // Aggiorna Colore Voto
-            if (total >= 45) totalDisplay.style.color = "#FFD700"; // Oro (Eccezionale)
-            else if (total >= 38) totalDisplay.style.color = "#10b981"; // Verde (Ottima)
-            else if (total >= 30) totalDisplay.style.color = "#f59e0b"; // Ambra (Buona)
-            else totalDisplay.style.color = "#ef4444"; // Rosso (Problematica)
+            // Colori Voto
+            if (total >= 45) totalDisplay.style.color = "#FFD700"; // Oro
+            else if (total >= 38) totalDisplay.style.color = "#10b981"; // Verde
+            else if (total >= 30) totalDisplay.style.color = "#f59e0b"; // Ambra
+            else totalDisplay.style.color = "#ef4444"; // Rosso
         }
 
-        // Avvia i listener
         setupInputListeners();
 
-        // 3. Invio Dati
+        // 3. Invio Dati (Invariato, ma ora invia interi)
         document.getElementById('tasting-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
@@ -163,13 +174,12 @@
                 return;
             }
 
-            // Raccogli i dati numerici
             const scores = {
-                aroma: parseFloat(document.getElementById('score-aroma').value) || 0,
-                appearance: parseFloat(document.getElementById('score-appearance').value) || 0,
-                flavor: parseFloat(document.getElementById('score-flavor').value) || 0,
-                mouthfeel: parseFloat(document.getElementById('score-mouthfeel').value) || 0,
-                overall: parseFloat(document.getElementById('score-overall').value) || 0
+                aroma: parseInt(document.getElementById('score-aroma').value) || 0,
+                appearance: parseInt(document.getElementById('score-appearance').value) || 0,
+                flavor: parseInt(document.getElementById('score-flavor').value) || 0,
+                mouthfeel: parseInt(document.getElementById('score-mouthfeel').value) || 0,
+                overall: parseInt(document.getElementById('score-overall').value) || 0
             };
 
             const finalScore = Object.values(scores).reduce((a, b) => a + b, 0);
@@ -192,10 +202,11 @@
             if (error) {
                 alert("Errore: " + error.message);
                 btn.disabled = false;
+                btn.textContent = "💾 Salva Scheda";
             } else {
-                if(confirm("Salvata! Ne vuoi compilare un'altra subito?")) {
+                if(confirm("Salvata! Ne vuoi compilare un'altra?")) {
                     document.getElementById('tasting-form').reset();
-                    calculateTotal(); // Resetta il totale a 0 visivamente
+                    calculateTotal();
                     btn.disabled = false;
                     btn.textContent = "💾 Salva Scheda";
                     window.scrollTo(0,0);
@@ -205,5 +216,6 @@
             }
         });
     </script>
+
 </body>
 </html>
