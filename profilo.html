@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il mio Profilo - HBL</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="module" src="js/app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div style="margin-bottom: 20px;">
+            <a href="index.html" style="text-decoration: none; font-size: 1.2rem;">🏠 Home</a>
+        </div>
+
+        <h2 style="text-align: center;">Profilo Degustatore</h2>
+
+        <div id="loading-profile" style="text-align: center;">Caricamento dati...</div>
+
+        <div id="profile-content" style="display: none;">
+            
+            <div class="profile-header">
+                <div class="avatar-placeholder" id="avatar-initials">?</div>
+                <h3 id="display-email" style="margin:0; font-size: 1rem; color: var(--text-muted);">email@test.com</h3>
+            </div>
+
+            <div class="card">
+                <form id="profile-form">
+                    
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input type="text" id="prof-nome" placeholder="Il tuo nome">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cognome</label>
+                        <input type="text" id="prof-cognome" placeholder="Il tuo cognome">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Qualifica / Ruolo</label>
+                        <select id="prof-qualifica">
+                            <option value="Appassionato">🍺 Appassionato</option>
+                            <option value="Homebrewer">🏠 Homebrewer</option>
+                            <option value="Sommelier">🍷 Sommelier</option>
+                            <option value="Giudice BJCP">⚖️ Giudice BJCP</option>
+                            <option value="Giudice UBT">🇮🇹 Giudice UBT</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>BJCP ID (Opzionale)</label>
+                        <input type="text" id="prof-bjcp" placeholder="Es. E1234">
+                    </div>
+
+                    <div style="margin: 20px 0; display: flex; align-items: start; gap: 10px;">
+                        <input type="checkbox" id="prof-privacy" style="width: 20px; margin-top: 5px;">
+                        <label for="prof-privacy" style="font-weight: normal; font-size: 0.9em; line-height: 1.4;">
+                            Acconsento a mostrare il mio nome e qualifica nelle schede pubbliche o condivise.
+                        </label>
+                    </div>
+
+                    <button type="submit" id="save-btn" class="btn btn-primary">💾 Salva Modifiche</button>
+                </form>
+                <div id="profile-msg"></div>
+            </div>
+
+            <div style="margin-top: 30px; border-top: 1px solid #374151; padding-top: 20px;">
+                <button id="logout-btn-profile" class="btn btn-outline" style="border-color: var(--danger); color: var(--danger);">Esci dall'account</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { supabase } from './js/supabase-config.js';
+
+        const loading = document.getElementById('loading-profile');
+        const content = document.getElementById('profile-content');
+        
+        // Carica dati all'avvio
+        async function loadProfile() {
+            const { data: { user } } = await supabase.auth.getUser();
+
+            if (!user) {
+                window.location.href = 'index.html'; // Se non loggato, via
+                return;
+            }
+
+            // Popola i campi con i metadata esistenti
+            const meta = user.user_metadata || {};
+            
+            document.getElementById('display-email').textContent = user.email;
+            
+            // Calcolo Iniziali
+            const nome = meta.first_name || "";
+            const cognome = meta.last_name || "";
+            let initial = "?";
+            if (nome) initial = nome[0].toUpperCase();
+            if (cognome) initial += cognome[0].toUpperCase();
+            document.getElementById('avatar-initials').textContent = initial;
+
+            // Riempimento campi input
+            document.getElementById('prof-nome').value = nome;
+            document.getElementById('prof-cognome').value = cognome;
+            document.getElementById('prof-qualifica').value = meta.qualifica || "Appassionato";
+            document.getElementById('prof-bjcp').value = meta.bjcp_id || "";
+            document.getElementById('prof-privacy').checked = meta.consensus_public || false;
+
+            loading.style.display = 'none';
+            content.style.display = 'block';
+        }
+
+        loadProfile();
+
+        // Salvataggio
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('save-btn');
+            const msg = document.getElementById('profile-msg');
+            
+            btn.disabled = true;
+            btn.textContent = "Salvataggio...";
+            msg.textContent = "";
+
+            const updates = {
+                first_name: document.getElementById('prof-nome').value,
+                last_name: document.getElementById('prof-cognome').value,
+                qualifica: document.getElementById('prof-qualifica').value,
+                bjcp_id: document.getElementById('prof-bjcp').value,
+                consensus_public: document.getElementById('prof-privacy').checked
+            };
+
+            const { error } = await supabase.auth.updateUser({
+                data: updates
+            });
+
+            if (error) {
+                msg.textContent = "Errore: " + error.message;
+                msg.style.color = "red";
+            } else {
+                msg.textContent = "✅ Profilo aggiornato con successo!";
+                msg.style.color = "#10b981";
+                // Ricarica per aggiornare avatar e info in alto
+                setTimeout(() => window.location.reload(), 1000);
+            }
+            
+            btn.disabled = false;
+            btn.textContent = "💾 Salva Modifiche";
+        });
+
+        // Logout dedicato
+        document.getElementById('logout-btn-profile').addEventListener('click', async () => {
+            await supabase.auth.signOut();
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
