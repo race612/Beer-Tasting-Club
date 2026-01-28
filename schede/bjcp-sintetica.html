@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BJCP Sintetica - HBL</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <a href="../nuova-scheda.html" style="text-decoration: none; color: var(--text-muted);">← Indietro</a>
+            <img src="../assets/logo-hbl.png" alt="Logo" style="width: 40px;">
+        </div>
+
+        <div class="card">
+            <h2 style="text-align: center; margin-bottom: 5px;">BJCP Sintetica</h2>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-top:0;">Compilazione Rapida</p>
+            
+            <hr style="border-color: #374151; margin: 15px 0;">
+
+            <form id="tasting-form">
+                
+                <div class="form-group">
+                    <label>Nome Birra / Numero Campione</label>
+                    <input type="text" id="beer-name" required placeholder="Es. IPA del Mario o #42">
+                </div>
+
+                <div class="form-group">
+                    <label>Stile (Opzionale)</label>
+                    <input type="text" id="beer-style" placeholder="Es. American IPA">
+                </div>
+
+                <div style="background: #111827; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                    
+                    <div class="score-row">
+                        <label>👃 Aroma (max 12)</label>
+                        <input type="number" id="score-aroma" class="calc-input" min="0" max="12" step="0.5" required>
+                    </div>
+
+                    <div class="score-row">
+                        <label>👀 Aspetto (max 3)</label>
+                        <input type="number" id="score-appearance" class="calc-input" min="0" max="3" step="0.5" required>
+                    </div>
+
+                    <div class="score-row">
+                        <label>👅 Gusto (max 20)</label>
+                        <input type="number" id="score-flavor" class="calc-input" min="0" max="20" step="0.5" required>
+                    </div>
+
+                    <div class="score-row">
+                        <label>👄 Corpo (max 5)</label>
+                        <input type="number" id="score-mouthfeel" class="calc-input" min="0" max="5" step="0.5" required>
+                    </div>
+
+                    <div class="score-row">
+                        <label>🍺 Generale (max 10)</label>
+                        <input type="number" id="score-overall" class="calc-input" min="0" max="10" step="0.5" required>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px; border-top: 1px solid #374151; padding-top: 10px;">
+                        <span style="color: var(--text-muted); font-size: 0.9em;">TOTALE</span>
+                        <div id="total-display" style="font-size: 3rem; font-weight: bold; color: var(--primary-color);">0</div>
+                        <span style="font-size: 0.8em; color: #6b7280;">/ 50 Punti</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Note di degustazione</label>
+                    <textarea id="notes" rows="4" placeholder="Scrivi qui le tue impressioni..."></textarea>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn btn-primary">💾 Salva Scheda</button>
+            </form>
+        </div>
+    </div>
+
+    <style>
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .score-row label { margin-bottom: 0; }
+        .score-row input {
+            width: 80px; /* Input più piccoli */
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+    </style>
+
+    <script type="module">
+        import { supabase } from '../js/supabase-config.js';
+
+        // 1. Recupera Evento e Utente
+        const eventId = localStorage.getItem('hbl_selected_event');
+        
+        // Controllo di sicurezza: se non c'è l'evento, torna indietro
+        if (!eventId) {
+            alert("Nessun evento selezionato. Torna alla home.");
+            window.location.href = '../nuova-scheda.html';
+        }
+
+        // 2. Calcolo Automatico Totale
+        const inputs = document.querySelectorAll('.calc-input');
+        const totalDisplay = document.getElementById('total-display');
+
+        function updateTotal() {
+            let total = 0;
+            inputs.forEach(input => {
+                total += parseFloat(input.value) || 0; // Se vuoto considera 0
+            });
+            totalDisplay.textContent = total;
+            
+            // Cambio colore se il voto è alto (sopra 30 è una buona birra, sopra 38 eccellente)
+            if (total >= 38) totalDisplay.style.color = "#10b981"; // Verde
+            else if (total >= 30) totalDisplay.style.color = "#f59e0b"; // Giallo/Ambra
+            else totalDisplay.style.color = "#ef4444"; // Rosso
+        }
+
+        inputs.forEach(input => input.addEventListener('input', updateTotal));
+
+        // 3. Invio Dati
+        document.getElementById('tasting-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.textContent = "Salvataggio...";
+
+            // Recupera utente attuale
+            const { data: { user } } = await supabase.auth.getUser();
+
+            if (!user) {
+                alert("Sessione scaduta. Rifai il login.");
+                window.location.href = '../index.html';
+                return;
+            }
+
+            // Raccogli i dati numerici
+            const scores = {
+                aroma: parseFloat(document.getElementById('score-aroma').value) || 0,
+                appearance: parseFloat(document.getElementById('score-appearance').value) || 0,
+                flavor: parseFloat(document.getElementById('score-flavor').value) || 0,
+                mouthfeel: parseFloat(document.getElementById('score-mouthfeel').value) || 0,
+                overall: parseFloat(document.getElementById('score-overall').value) || 0
+            };
+
+            const finalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+
+            // Costruisci l'oggetto da inviare a Supabase
+            const payload = {
+                user_id: user.id,
+                event_id: eventId,
+                beer_name: document.getElementById('beer-name').value,
+                sheet_type: 'bjcp_sintetica', // Tagghiamo il tipo di scheda
+                final_score: finalScore,
+                // Salviamo tutto il resto nel campo JSON 'details'
+                details: {
+                    style: document.getElementById('beer-style').value,
+                    notes: document.getElementById('notes').value,
+                    scores: scores // Salviamo i parziali dentro il JSON
+                }
+            };
+
+            // INSERT su Supabase
+            const { error } = await supabase
+                .from('tasting_notes')
+                .insert([payload]);
+
+            if (error) {
+                console.error(error);
+                alert("Errore nel salvataggio: " + error.message);
+                btn.disabled = false;
+                btn.textContent = "💾 Salva Scheda";
+            } else {
+                // Successo!
+                if(confirm("Scheda salvata! Vuoi compilare un'altra birra per questo evento?")) {
+                    // Resetta form ma mantieni evento
+                    document.getElementById('tasting-form').reset();
+                    document.getElementById('total-display').textContent = "0";
+                    btn.disabled = false;
+                    btn.textContent = "💾 Salva Scheda";
+                    window.scrollTo(0,0);
+                } else {
+                    // Torna alla dashboard
+                    window.location.href = '../index.html';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
