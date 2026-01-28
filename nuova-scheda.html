@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container">
-        <div style="text-align: center; margin-bottom: 30px; margin-top: 20px;">
+        <div style="text-align: center; margin-bottom: 20px;">
             <img src="assets/logo-hbl.png" alt="Logo" style="width: 60px;">
             <h3>Nuova Scheda</h3>
         </div>
@@ -17,43 +17,61 @@
         <div class="card">
             <form id="setup-form">
                 
-                <div class="form-group">
-                    <label for="evento-select">📅 Per quale evento?</label>
-                    <select id="evento-select" required>
+                <label style="margin-bottom: 10px; display:block;">Cosa stiamo bevendo?</label>
+                <div class="mode-switch">
+                    <div class="mode-option active" id="mode-event" onclick="setMode('event')">
+                        📅 Evento HBL
+                    </div>
+                    <div class="mode-option" id="mode-free" onclick="setMode('free')">
+                        🏠 Libera / Privata
+                    </div>
+                </div>
+
+                <div class="form-group" id="event-selector-group">
+                    <label for="evento-select">Seleziona la serata:</label>
+                    <select id="evento-select">
                         <option value="">Caricamento eventi...</option>
                     </select>
                 </div>
+
+                <input type="hidden" id="final-event-id">
+
+                <hr style="border: 0; border-top: 1px solid #374151; margin: 20px 0;">
 
                 <div class="form-group">
                     <label>📝 Che scheda usi?</label>
                     <div class="grid-2">
                         <div class="selection-card" onclick="selectCard(this, 'bjcp-sintetica')">
-                            <h4>BJCP Sintetica</h4>
+                            <h4 style="font-size: 1.5rem;">📜</h4> <h4>BJCP Sintetica</h4>
                             <p>Veloce e precisa</p>
                         </div>
                         
                         <div class="selection-card" onclick="selectCard(this, 'hbl-classica')">
+                            <h4 style="font-size: 1.5rem;">🍺</h4>
                             <h4>Scheda HBL</h4>
                             <p>Standard Club</p>
                         </div>
                         
                         <div class="selection-card" onclick="selectCard(this, 'crocette')">
+                            <h4 style="font-size: 1.5rem;">❌</h4>
                             <h4>Crocette</h4>
                             <p>Super rapida</p>
                         </div>
 
                         <div class="selection-card" onclick="selectCard(this, 'bjcp-full')">
+                            <h4 style="font-size: 1.5rem;">⚖️</h4>
                             <h4>BJCP Full</h4>
                             <p>Esame completo</p>
                         </div>
                     </div>
+                    
                     <input type="hidden" id="tipo-scheda" required>
-                    <p id="selection-error" style="color: var(--danger); display: none; margin-top: 5px;">⚠️ Seleziona un tipo di scheda</p>
+                    <p id="selection-error" style="color: var(--danger); display: none; margin-top: 15px; font-weight: bold;">⚠️ Seleziona un tipo di scheda per proseguire</p>
                 </div>
 
-                <hr style="border: 0; border-top: 1px solid #374151; margin: 20px 0;">
-
-                <button type="submit" class="btn btn-primary">Inizia Degustazione →</button>
+                <div style="text-align: center; margin-top: 30px;">
+                    <button type="submit" class="btn btn-primary">Inizia Degustazione →</button>
+                </div>
             </form>
         </div>
 
@@ -63,11 +81,13 @@
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        // 1. Carica gli eventi all'avvio
+        let freeEventId = null; // Qui salveremo l'ID dell'evento "Libero"
+
+        // 1. Carica Eventi e Configura le Modalità
         async function loadEvents() {
             const select = document.getElementById('evento-select');
             
-            // Query a Supabase: dammi id e nome degli eventi attivi
+            // Scarica tutti gli eventi attivi
             const { data: events, error } = await supabase
                 .from('events')
                 .select('id, name')
@@ -76,61 +96,92 @@
 
             if (error) {
                 console.error('Errore eventi:', error);
-                select.innerHTML = '<option>Errore caricamento</option>';
                 return;
             }
 
-            // Pulisci e riempi la select
             select.innerHTML = '<option value="" disabled selected>-- Scegli Evento --</option>';
+            
             events.forEach(event => {
-                const option = document.createElement('option');
-                option.value = event.id;
-                option.textContent = event.name;
-                select.appendChild(option);
+                // Cerchiamo se esiste un evento chiamato "Libero" o "Privato"
+                const nameLower = event.name.toLowerCase();
+                if (nameLower.includes('libero') || nameLower.includes('privato')) {
+                    freeEventId = event.id; // Lo salviamo per dopo
+                } else {
+                    // Aggiungiamo alla tendina SOLO gli eventi veri
+                    const option = document.createElement('option');
+                    option.value = event.id;
+                    option.textContent = event.name;
+                    select.appendChild(option);
+                }
             });
         }
 
         loadEvents();
 
-        // 2. Gestione click sulle Card (UI Selection)
+        // 2. Gestione Tabs (Modalità)
+        window.setMode = function(mode) {
+            const btnEvent = document.getElementById('mode-event');
+            const btnFree = document.getElementById('mode-free');
+            const selectorGroup = document.getElementById('event-selector-group');
+            const select = document.getElementById('evento-select');
+
+            if (mode === 'event') {
+                // Attiva Tab Evento
+                btnEvent.classList.add('active');
+                btnFree.classList.remove('active');
+                selectorGroup.style.display = 'block'; // Mostra tendina
+                select.required = true;
+            } else {
+                // Attiva Tab Libero
+                btnFree.classList.add('active');
+                btnEvent.classList.remove('active');
+                selectorGroup.style.display = 'none'; // Nascondi tendina
+                select.required = false;
+                select.value = ""; // Resetta selezione
+            }
+        }
+
+        // 3. Selezione Scheda (Grafica)
         window.selectCard = function(element, value) {
-            // Rimuovi classe 'active' da tutti
             document.querySelectorAll('.selection-card').forEach(el => {
                 el.style.border = '2px solid transparent';
                 el.style.backgroundColor = 'var(--card-bg)';
             });
-            
-            // Attiva quello cliccato
             element.style.borderColor = 'var(--primary-color)';
             element.style.backgroundColor = '#2d3748';
-            
-            // Salva valore nell'input nascosto
             document.getElementById('tipo-scheda').value = value;
             document.getElementById('selection-error').style.display = 'none';
         }
 
-        // 3. Gestione Invio: Reindirizza alla pagina giusta
+        // 4. Invio Form
         document.getElementById('setup-form').addEventListener('submit', (e) => {
             e.preventDefault();
             
-            const eventoId = document.getElementById('evento-select').value;
-            const tipoScheda = document.getElementById('tipo-scheda').value;
+            const isFreeMode = document.getElementById('mode-free').classList.contains('active');
+            let finalId = null;
 
+            if (isFreeMode) {
+                if (!freeEventId) {
+                    alert("Errore: Non trovo l'ID 'Evento Libero' nel database.");
+                    return;
+                }
+                finalId = freeEventId;
+            } else {
+                finalId = document.getElementById('evento-select').value;
+                if (!finalId) {
+                    alert("Seleziona una serata dal menu!");
+                    return;
+                }
+            }
+
+            const tipoScheda = document.getElementById('tipo-scheda').value;
             if (!tipoScheda) {
                 document.getElementById('selection-error').style.display = 'block';
                 return;
             }
 
-            if (!eventoId) {
-                alert("Seleziona un evento!");
-                return;
-            }
-
-            // Salviamo l'evento scelto nel localStorage per usarlo nella pagina dopo
-            localStorage.setItem('hbl_selected_event', eventoId);
-
-            // Reindirizza alla pagina HTML specifica della scheda
-            // Es: se scelgo 'bjcp-sintetica', vado a 'schede/bjcp-sintetica.html'
+            // Salvataggio e Redirect
+            localStorage.setItem('hbl_selected_event', finalId);
             window.location.href = `schede/${tipoScheda}.html`;
         });
     </script>
