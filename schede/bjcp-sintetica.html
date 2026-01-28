@@ -92,36 +92,61 @@
         }
     </style>
 
-    <script type="module">
+<script type="module">
         import { supabase } from '../js/supabase-config.js';
 
-        // 1. Recupera Evento e Utente
+        // 1. Recupera Evento
         const eventId = localStorage.getItem('hbl_selected_event');
-        
-        // Controllo di sicurezza: se non c'è l'evento, torna indietro
         if (!eventId) {
             alert("Nessun evento selezionato. Torna alla home.");
             window.location.href = '../nuova-scheda.html';
         }
 
-        // 2. Calcolo Automatico Totale
+        // 2. Calcolo Automatico Totale + LIMITATORE MAX
         const inputs = document.querySelectorAll('.calc-input');
         const totalDisplay = document.getElementById('total-display');
 
-        function updateTotal() {
-            let total = 0;
+        function setupInputListeners() {
             inputs.forEach(input => {
-                total += parseFloat(input.value) || 0; // Se vuoto considera 0
+                input.addEventListener('input', function() {
+                    // A. Logica di limitazione (Il tuo fix richiesto)
+                    const max = parseFloat(this.getAttribute('max'));
+                    const min = parseFloat(this.getAttribute('min')) || 0;
+                    let currentVal = parseFloat(this.value);
+
+                    // Se l'utente scrive un numero troppo alto, lo forziamo al max
+                    if (currentVal > max) {
+                        this.value = max; 
+                    } 
+                    // Se va sotto zero (non dovrebbe succedere, ma per sicurezza)
+                    else if (currentVal < min) {
+                        this.value = min;
+                    }
+
+                    // B. Aggiorna il totale dopo la correzione
+                    calculateTotal();
+                });
             });
-            totalDisplay.textContent = total;
-            
-            // Cambio colore se il voto è alto (sopra 30 è una buona birra, sopra 38 eccellente)
-            if (total >= 38) totalDisplay.style.color = "#10b981"; // Verde
-            else if (total >= 30) totalDisplay.style.color = "#f59e0b"; // Giallo/Ambra
-            else totalDisplay.style.color = "#ef4444"; // Rosso
         }
 
-        inputs.forEach(input => input.addEventListener('input', updateTotal));
+        function calculateTotal() {
+            let total = 0;
+            inputs.forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            
+            // Aggiorna numero
+            totalDisplay.textContent = total;
+            
+            // Aggiorna Colore Voto
+            if (total >= 45) totalDisplay.style.color = "#FFD700"; // Oro (Eccezionale)
+            else if (total >= 38) totalDisplay.style.color = "#10b981"; // Verde (Ottima)
+            else if (total >= 30) totalDisplay.style.color = "#f59e0b"; // Ambra (Buona)
+            else totalDisplay.style.color = "#ef4444"; // Rosso (Problematica)
+        }
+
+        // Avvia i listener
+        setupInputListeners();
 
         // 3. Invio Dati
         document.getElementById('tasting-form').addEventListener('submit', async (e) => {
@@ -130,11 +155,10 @@
             btn.disabled = true;
             btn.textContent = "Salvataggio...";
 
-            // Recupera utente attuale
             const { data: { user } } = await supabase.auth.getUser();
 
             if (!user) {
-                alert("Sessione scaduta. Rifai il login.");
+                alert("Sessione scaduta.");
                 window.location.href = '../index.html';
                 return;
             }
@@ -150,42 +174,32 @@
 
             const finalScore = Object.values(scores).reduce((a, b) => a + b, 0);
 
-            // Costruisci l'oggetto da inviare a Supabase
             const payload = {
                 user_id: user.id,
                 event_id: eventId,
                 beer_name: document.getElementById('beer-name').value,
-                sheet_type: 'bjcp_sintetica', // Tagghiamo il tipo di scheda
+                sheet_type: 'bjcp_sintetica',
                 final_score: finalScore,
-                // Salviamo tutto il resto nel campo JSON 'details'
                 details: {
                     style: document.getElementById('beer-style').value,
                     notes: document.getElementById('notes').value,
-                    scores: scores // Salviamo i parziali dentro il JSON
+                    scores: scores
                 }
             };
 
-            // INSERT su Supabase
-            const { error } = await supabase
-                .from('tasting_notes')
-                .insert([payload]);
+            const { error } = await supabase.from('tasting_notes').insert([payload]);
 
             if (error) {
-                console.error(error);
-                alert("Errore nel salvataggio: " + error.message);
+                alert("Errore: " + error.message);
                 btn.disabled = false;
-                btn.textContent = "💾 Salva Scheda";
             } else {
-                // Successo!
-                if(confirm("Scheda salvata! Vuoi compilare un'altra birra per questo evento?")) {
-                    // Resetta form ma mantieni evento
+                if(confirm("Salvata! Ne vuoi compilare un'altra subito?")) {
                     document.getElementById('tasting-form').reset();
-                    document.getElementById('total-display').textContent = "0";
+                    calculateTotal(); // Resetta il totale a 0 visivamente
                     btn.disabled = false;
                     btn.textContent = "💾 Salva Scheda";
                     window.scrollTo(0,0);
                 } else {
-                    // Torna alla dashboard
                     window.location.href = '../index.html';
                 }
             }
