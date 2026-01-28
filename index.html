@@ -13,14 +13,19 @@
         <img src="https://via.placeholder.com/150" alt="Logo HBL" class="logo"> <h1>HBL Tasting Club</h1>
         
         <div id="login-section" style="display:none;">
-            <p>Accedi per compilare le schede</p>
+            <h3>Accedi</h3>
             <form id="login-form">
                 <input type="email" id="email" placeholder="Email" required>
                 <input type="password" id="password" placeholder="Password" required>
                 <button type="submit" class="btn btn-primary">🔐 Accedi</button>
             </form>
+            
             <div id="login-error" style="color: red; margin-top: 10px;"></div>
-            <p><small>Non hai un account? <a href="#" id="signup-btn">Registrati al volo</a></small></p>
+
+            <div style="margin-top: 20px;">
+                <p>Non hai un account? <a href="registrati.html" style="color: #f39c12;">Registrati qui</a></p>
+                <p><small><a href="#" id="forgot-password-link" style="color: #888;">Password dimenticata?</a></small></p>
+            </div>
         </div>
 
         <div id="dashboard-section" style="display:none;">
