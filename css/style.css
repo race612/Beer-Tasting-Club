@@ -409,3 +409,61 @@ input:focus, select:focus {
     font-weight: bold;
     font-size: 1.1rem;
 }
+
+/* --- STILI MANCANTI STORICO --- */
+
+/* Stile base della card storico */
+.history-card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-left: 5px solid var(--primary-color); /* Default border */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    position: relative; /* Necessario per il cestino */
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 5px;
+}
+
+.beer-name { 
+    font-size: 1.2rem; 
+    font-weight: bold; 
+    color: white; 
+    margin: 0; 
+}
+
+.beer-style { 
+    font-size: 0.9rem; 
+    color: var(--text-muted); 
+    font-style: italic; 
+}
+
+.score-badge {
+    background: #111827;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+    border: 1px solid #374151;
+}
+
+.meta-info {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #374151;
+    padding-top: 8px;
+}
+
+/* Colori dinamici per il bordo sinistro in base al voto */
+.border-green { border-left-color: #10b981 !important; }
+.border-gold { border-left-color: #FFD700 !important; }
+.border-red { border-left-color: #ef4444 !important; }
