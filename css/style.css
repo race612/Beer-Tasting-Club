@@ -428,6 +428,7 @@ input:focus, select:focus {
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 5px;
+    padding-right: 45px; /* <--- AGGIUNTA: Crea spazio per il cestino */
 }
 
 .beer-name { 
