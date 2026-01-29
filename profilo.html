@@ -7,36 +7,51 @@
     <link rel="stylesheet" href="css/style.css">
     <script type="module" src="js/app.js"></script>
     <style>
-        /* CSS Specifico per questa pagina */
-        .checkbox-group label {
-            display: block;
-            margin-bottom: 8px;
-            cursor: pointer;
-            font-size: 0.95rem;
-        }
-        .checkbox-group input {
-            width: auto;
-            margin-right: 10px;
-            transform: scale(1.2);
-        }
+        /* CSS Specifico V4 Finale */
         .section-title {
             border-bottom: 1px solid #374151;
             padding-bottom: 5px;
-            margin-top: 25px;
+            margin-top: 30px;
             margin-bottom: 15px;
-            color: var(--primary-color);
-            font-size: 1.1rem;
+            color: var(--primary-color); /* Giallo/Ambra */
+            font-size: 1.2rem;
+            font-weight: bold;
         }
+        
+        /* Griglia Checkbox a 2 colonne */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-grid label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            line-height: 1.2;
+        }
+        
+        .checkbox-grid input {
+            width: auto;
+            margin-right: 10px;
+            transform: scale(1.2);
+            flex-shrink: 0; /* Impedisce al checkbox di schiacciarsi */
+        }
+
+        /* Opzioni Privacy */
         .privacy-option {
             background: #2d3748;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             border: 1px solid #4a5568;
         }
-        .privacy-option label { margin: 0; cursor: pointer; display: flex; align-items: center; }
-        .privacy-option input { width: auto; margin-right: 10px; }
-        .privacy-desc { font-size: 0.8rem; color: #a0aec0; margin-left: 28px; display: block; }
+        .privacy-option label { margin: 0; cursor: pointer; display: flex; align-items: center; font-weight: bold; color: white;}
+        .privacy-option input { width: auto; margin-right: 10px; transform: scale(1.1); }
+        .privacy-desc { font-size: 0.85rem; color: #a0aec0; margin-left: 28px; display: block; margin-top: 3px;}
     </style>
 </head>
 <body>
@@ -59,7 +74,7 @@
             <div class="card">
                 <form id="profile-form">
                     
-                    <h4 class="section-title">Anagrafica & Link</h4>
+                    <h4 class="section-title" style="margin-top: 0;">Chi sono</h4>
                     
                     <div class="grid-2">
                         <div class="form-group">
@@ -82,80 +97,112 @@
                         </select>
                     </div>
 
+                    <h4 class="section-title">Contatti</h4>
+                    
                     <div class="form-group">
-                        <label>BJCP ID (Opzionale)</label>
-                        <input type="text" id="prof-bjcp-id" placeholder="Es. E1234">
+                        <label>Email (Non modificabile)</label>
+                        <input type="text" id="prof-email-readonly" readonly style="background: #111; color: #777;">
                     </div>
 
                     <div class="form-group">
+                        <label>WhatsApp (Numero o Link)</label>
+                        <input type="text" id="prof-whatsapp" placeholder="+39 333...">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Telegram (Username o Link)</label>
+                        <input type="text" id="prof-telegram" placeholder="@username">
+                    </div>
+
+                    <h4 class="section-title">Social</h4>
+
+                    <div class="form-group">
+                        <label>Facebook</label>
+                        <input type="url" id="prof-fb" placeholder="https://facebook.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label>Instagram</label>
+                        <input type="url" id="prof-ig" placeholder="https://instagram.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label>TikTok</label>
+                        <input type="url" id="prof-tiktok" placeholder="https://tiktok.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label>LinkedIn</label>
+                        <input type="url" id="prof-linkedin" placeholder="https://linkedin.com/in/...">
+                    </div>
+
+                    <h4 class="section-title">Ruoli e Titoli</h4>
+                    
+                    <div class="checkbox-grid">
+                        <label><input type="checkbox" id="role-publican"> Publican</label>
+                        <label><input type="checkbox" id="role-pro"> Birraio Professionista</label>
+                        
+                        <label><input type="checkbox" id="role-ubt"> UBT - Unionbirrai Beer Taster</label>
+                        <label><input type="checkbox" id="role-doemens"> Biersommelier Doemens</label>
+                        
+                        <label><input type="checkbox" id="role-sommelier"> Beer Sommelier - Altre Org.</label>
+                        <label><input type="checkbox" id="role-courses"> Altri Corsi di Degustazione</label>
+                    </div>
+
+                    <h4 class="section-title">BJCP - Beer Judge Certification Program</h4>
+                    
+                    <div class="checkbox-grid" id="bjcp-group">
+                        <label><input type="checkbox" class="bjcp-check" value="provisional"> Provisional Judge</label>
+                        <label><input type="checkbox" class="bjcp-check" value="rank_pending"> Rank Pending</label>
+                        
+                        <label><input type="checkbox" class="bjcp-check" value="apprentice"> Apprentice</label>
+                        <label><input type="checkbox" class="bjcp-check" value="recognized"> Recognized</label>
+                        
+                        <label><input type="checkbox" class="bjcp-check" value="certified"> Certified</label>
+                        <label><input type="checkbox" class="bjcp-check" value="national"> National</label>
+                        
+                        <label><input type="checkbox" class="bjcp-check" value="master"> Master</label>
+                        <label><input type="checkbox" class="bjcp-check" value="grand_master"> Grand Master</label>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 15px;">
+                        <label>BJCP ID</label>
+                        <input type="text" id="prof-bjcp-id" placeholder="Es. E1234">
+                    </div>
+
+                    <h4 class="section-title">Cicerone Certification Program</h4>
+                    
+                    <div class="checkbox-grid" id="cicerone-group">
+                        <label><input type="checkbox" class="cicerone-check" value="server"> Certified Beer Server</label>
+                        <label><input type="checkbox" class="cicerone-check" value="certified"> Certified Cicerone</label>
+                        
+                        <label><input type="checkbox" class="cicerone-check" value="advanced"> Advanced Cicerone</label>
+                        <label><input type="checkbox" class="cicerone-check" value="master"> Master Cicerone</label>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 15px;">
                         <label>Link Profilo Cicerone®</label>
                         <input type="url" id="prof-cicerone-link" placeholder="https://www.cicerone.org/users/...">
                     </div>
 
-                    <div class="grid-2">
-                        <div class="form-group">
-                            <label>Facebook (Link)</label>
-                            <input type="url" id="prof-fb" placeholder="https://facebook.com/...">
-                        </div>
-                        <div class="form-group">
-                            <label>Instagram (Link)</label>
-                            <input type="url" id="prof-ig" placeholder="https://instagram.com/...">
-                        </div>
-                    </div>
-
-                    <h4 class="section-title">Ruoli & Titoli</h4>
-
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" id="role-pro"> Birraio Professionista</label>
-                        <label><input type="checkbox" id="role-publican"> Publican</label>
-                        <label><input type="checkbox" id="role-sommelier"> Beer Sommelier</label>
-                        <label><input type="checkbox" id="role-ubt"> Giudice UBT</label>
-                    </div>
-
-                    <div style="margin-top: 20px;">
-                        <label style="font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 10px;">Livello Cicerone®</label>
-                        <div class="checkbox-group" id="cicerone-group">
-                            <label><input type="checkbox" class="cicerone-check" value="server"> Certified Beer Server</label>
-                            <label><input type="checkbox" class="cicerone-check" value="certified"> Certified Cicerone</label>
-                            <label><input type="checkbox" class="cicerone-check" value="advanced"> Advanced Cicerone</label>
-                            <label><input type="checkbox" class="cicerone-check" value="master"> Master Cicerone</label>
-                        </div>
-                    </div>
-
-                    <div style="margin-top: 20px;">
-                        <label style="font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 10px;">Rango BJCP</label>
-                        <div class="checkbox-group" id="bjcp-group">
-                            <label><input type="checkbox" class="bjcp-check" value="provisional"> Provisional</label>
-                            <label><input type="checkbox" class="bjcp-check" value="recognized"> Recognized</label>
-                            <label><input type="checkbox" class="bjcp-check" value="certified"> Certified</label>
-                            <label><input type="checkbox" class="bjcp-check" value="national"> National</label>
-                            <label><input type="checkbox" class="bjcp-check" value="master"> Master</label>
-                            <label><input type="checkbox" class="bjcp-check" value="grand_master"> Grand Master</label>
-                        </div>
-                    </div>
-
-                    <h4 class="section-title">Bio & Esperienze</h4>
+                    <h4 class="section-title">Esperienze e Commenti</h4>
                     <div class="form-group">
-                        <textarea id="prof-bio" rows="4" placeholder="Racconta le tue esperienze, i corsi frequentati o le tue birre preferite..."></textarea>
+                        <textarea id="prof-bio" rows="4" placeholder="Racconta le tue esperienze..."></textarea>
                     </div>
 
                     <h4 class="section-title">Impostazioni Privacy</h4>
-                    <p style="font-size: 0.9em; color: var(--text-muted); margin-bottom: 15px;">Chi può vedere i tuoi dati nelle schede pubbliche?</p>
 
                     <div class="privacy-option">
                         <label>
                             <input type="radio" name="privacy_level" value="min" checked>
                             Condividi solo Nome e Cognome
                         </label>
-                        <span class="privacy-desc">Email e social rimarranno nascosti.</span>
+                        <span class="privacy-desc">Contatti e social rimarranno nascosti.</span>
                     </div>
 
                     <div class="privacy-option">
                         <label>
                             <input type="radio" name="privacy_level" value="mid">
-                            Condividi anche Email
+                            Condividi anche i Contatti
                         </label>
-                        <span class="privacy-desc">Utile per essere contattati da altri soci.</span>
+                        <span class="privacy-desc">Utile per favorire il confronto con altri utenti.</span>
                     </div>
 
                     <div class="privacy-option">
@@ -163,7 +210,7 @@
                             <input type="radio" name="privacy_level" value="full">
                             Profilo Completo
                         </label>
-                        <span class="privacy-desc">Mostra email, social, bio e link Cicerone.</span>
+                        <span class="privacy-desc">Mostra tutte le informazioni presenti in questa pagina.</span>
                     </div>
 
                     <div style="text-align: center; margin-top: 30px;">
@@ -185,8 +232,7 @@
         const loading = document.getElementById('loading-profile');
         const content = document.getElementById('profile-content');
         
-        // --- FUNZIONE DI UTILITÀ: CHECKBOX ESCLUSIVI ---
-        // Fa comportare i checkbox come Radio Button (ne selezioni uno, gli altri si spengono)
+        // Logica Checkbox Esclusivi
         function handleExclusiveCheckbox(className) {
             const boxes = document.querySelectorAll(`.${className}`);
             boxes.forEach(box => {
@@ -199,8 +245,6 @@
                 });
             });
         }
-
-        // Attiviamo la logica per BJCP e Cicerone
         handleExclusiveCheckbox('cicerone-check');
         handleExclusiveCheckbox('bjcp-check');
 
@@ -213,40 +257,53 @@
             
             // Header
             document.getElementById('display-email').textContent = user.email;
+            document.getElementById('prof-email-readonly').value = user.email; // Nuovo campo readonly
+            
             const initial = (meta.first_name?.[0] || "") + (meta.last_name?.[0] || "?");
             document.getElementById('avatar-initials').textContent = initial.toUpperCase();
 
-            // 1. Testi e Link
+            // 1. Chi Sono
             document.getElementById('prof-nome').value = meta.first_name || "";
             document.getElementById('prof-cognome').value = meta.last_name || "";
             document.getElementById('prof-homebrewer').value = meta.homebrewer_status || "no";
-            document.getElementById('prof-bjcp-id').value = meta.bjcp_id || "";
-            document.getElementById('prof-cicerone-link').value = meta.cicerone_link || "";
+
+            // 2. Contatti
+            document.getElementById('prof-whatsapp').value = meta.contact_wa || "";
+            document.getElementById('prof-telegram').value = meta.contact_tg || "";
+
+            // 3. Social
             document.getElementById('prof-fb').value = meta.social_fb || "";
             document.getElementById('prof-ig').value = meta.social_ig || "";
+            document.getElementById('prof-tiktok').value = meta.social_tiktok || "";
+            document.getElementById('prof-linkedin').value = meta.social_linkedin || "";
 
-            // 2. Qualifiche Checkbox
-            document.getElementById('role-pro').checked = meta.role_pro || false;
+            // 4. Ruoli Generici
             document.getElementById('role-publican').checked = meta.role_publican || false;
-            document.getElementById('role-sommelier').checked = meta.role_sommelier || false;
+            document.getElementById('role-pro').checked = meta.role_pro || false;
             document.getElementById('role-ubt').checked = meta.role_ubt || false;
+            document.getElementById('role-doemens').checked = meta.role_doemens || false;
+            document.getElementById('role-sommelier').checked = meta.role_sommelier || false;
+            document.getElementById('role-courses').checked = meta.role_courses || false;
 
-            // 3. Livelli Esclusivi (BJCP & Cicerone)
-            // Cerchiamo il checkbox che ha value = valore salvato e lo attiviamo
-            if (meta.cicerone_level) {
-                const box = document.querySelector(`.cicerone-check[value="${meta.cicerone_level}"]`);
-                if (box) box.checked = true;
-            }
+            // 5. BJCP
             if (meta.bjcp_level) {
                 const box = document.querySelector(`.bjcp-check[value="${meta.bjcp_level}"]`);
                 if (box) box.checked = true;
             }
+            document.getElementById('prof-bjcp-id').value = meta.bjcp_id || "";
 
-            // 4. Bio
+            // 6. Cicerone
+            if (meta.cicerone_level) {
+                const box = document.querySelector(`.cicerone-check[value="${meta.cicerone_level}"]`);
+                if (box) box.checked = true;
+            }
+            document.getElementById('prof-cicerone-link').value = meta.cicerone_link || "";
+
+            // 7. Bio
             document.getElementById('prof-bio').value = meta.bio || "";
 
-            // 5. Privacy (Radio)
-            const privacyVal = meta.privacy_level || "min"; // Default Minimo
+            // 8. Privacy
+            const privacyVal = meta.privacy_level || "min";
             const radio = document.querySelector(`input[name="privacy_level"][value="${privacyVal}"]`);
             if (radio) radio.checked = true;
 
@@ -266,28 +323,39 @@
             btn.textContent = "Salvataggio...";
             msg.textContent = "";
 
-            // Recupera valori Checkbox esclusivi
+            // Checkbox Esclusivi
             const ciceroneVal = document.querySelector('.cicerone-check:checked')?.value || "";
             const bjcpVal = document.querySelector('.bjcp-check:checked')?.value || "";
-            // Recupera Privacy
             const privacyVal = document.querySelector('input[name="privacy_level"]:checked')?.value || "min";
 
             const updates = {
                 first_name: document.getElementById('prof-nome').value,
                 last_name: document.getElementById('prof-cognome').value,
                 homebrewer_status: document.getElementById('prof-homebrewer').value,
-                bjcp_id: document.getElementById('prof-bjcp-id').value,
-                cicerone_link: document.getElementById('prof-cicerone-link').value,
+                
+                // Contatti
+                contact_wa: document.getElementById('prof-whatsapp').value,
+                contact_tg: document.getElementById('prof-telegram').value,
+                
+                // Social
                 social_fb: document.getElementById('prof-fb').value,
                 social_ig: document.getElementById('prof-ig').value,
+                social_tiktok: document.getElementById('prof-tiktok').value,
+                social_linkedin: document.getElementById('prof-linkedin').value,
 
-                role_pro: document.getElementById('role-pro').checked,
+                // Ruoli Generici
                 role_publican: document.getElementById('role-publican').checked,
-                role_sommelier: document.getElementById('role-sommelier').checked,
+                role_pro: document.getElementById('role-pro').checked,
                 role_ubt: document.getElementById('role-ubt').checked,
+                role_doemens: document.getElementById('role-doemens').checked,
+                role_sommelier: document.getElementById('role-sommelier').checked,
+                role_courses: document.getElementById('role-courses').checked,
 
-                cicerone_level: ciceroneVal,
+                // Levels & IDs
                 bjcp_level: bjcpVal,
+                bjcp_id: document.getElementById('prof-bjcp-id').value,
+                cicerone_level: ciceroneVal,
+                cicerone_link: document.getElementById('prof-cicerone-link').value,
 
                 bio: document.getElementById('prof-bio').value,
                 privacy_level: privacyVal
