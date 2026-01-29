@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BJCP Sintetica - HBL</title>
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .score-row label { margin-bottom: 0; }
+        .score-row input {
+            width: 80px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -36,27 +51,27 @@
                     
                     <div class="score-row">
                         <label>👃 Aroma (max 12)</label>
-                        <input type="number" id="score-aroma" class="calc-input" min="0" max="12" step="0.5" required>
+                        <input type="number" id="score-aroma" class="calc-input" min="0" max="12" step="1" required>
                     </div>
 
                     <div class="score-row">
                         <label>👀 Aspetto (max 3)</label>
-                        <input type="number" id="score-appearance" class="calc-input" min="0" max="3" step="0.5" required>
+                        <input type="number" id="score-appearance" class="calc-input" min="0" max="3" step="1" required>
                     </div>
 
                     <div class="score-row">
                         <label>👅 Gusto (max 20)</label>
-                        <input type="number" id="score-flavor" class="calc-input" min="0" max="20" step="0.5" required>
+                        <input type="number" id="score-flavor" class="calc-input" min="0" max="20" step="1" required>
                     </div>
 
                     <div class="score-row">
                         <label>👄 Corpo (max 5)</label>
-                        <input type="number" id="score-mouthfeel" class="calc-input" min="0" max="5" step="0.5" required>
+                        <input type="number" id="score-mouthfeel" class="calc-input" min="0" max="5" step="1" required>
                     </div>
 
                     <div class="score-row">
                         <label>🍺 Generale (max 10)</label>
-                        <input type="number" id="score-overall" class="calc-input" min="0" max="10" step="0.5" required>
+                        <input type="number" id="score-overall" class="calc-input" min="0" max="10" step="1" required>
                     </div>
 
                     <div style="text-align: center; margin-top: 20px; border-top: 1px solid #374151; padding-top: 10px;">
@@ -76,22 +91,6 @@
         </div>
     </div>
 
-    <style>
-        .score-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .score-row label { margin-bottom: 0; }
-        .score-row input {
-            width: 80px; /* Input più piccoli */
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-    </style>
-    
     <script type="module">
         import { supabase } from '../js/supabase-config.js';
 
@@ -102,40 +101,32 @@
             window.location.href = '../nuova-scheda.html';
         }
 
-        // 2. Setup Input (Numeri Interi e Max Cap)
+        // 2. Setup Input (Interi e Max Cap)
         const inputs = document.querySelectorAll('.calc-input');
         const totalDisplay = document.getElementById('total-display');
 
         function setupInputListeners() {
             inputs.forEach(input => {
-                // Impostiamo attributi HTML per aiutare il browser (tastiera numerica senza punto)
                 input.setAttribute('step', '1');
                 input.setAttribute('pattern', '[0-9]*');
 
                 input.addEventListener('input', function() {
                     let max = parseInt(this.getAttribute('max'));
                     let min = parseInt(this.getAttribute('min')) || 0;
-                    
-                    // A. Convertiamo in intero (rimuove decimali)
                     let val = parseInt(this.value);
 
-                    // B. Se non è un numero (es. campo vuoto), trattalo come 0 temporaneamente per i check
                     if (isNaN(val)) val = 0;
 
-                    // C. Controlli Limiti
                     if (val > max) {
                         val = max;
-                        this.value = max; // Aggiorna visivamente
+                        this.value = max; 
                     } else if (val < min) {
                         val = min;
                         this.value = min;
-                    } 
-                    // D. Se l'utente ha scritto decimali (es. 5.5), correggiamo visivamente
-                    else if (this.value.includes('.') || this.value.includes(',')) {
+                    } else if (this.value.includes('.') || this.value.includes(',')) {
                         this.value = val; 
                     }
 
-                    // E. Ricalcola somma
                     calculateTotal();
                 });
             });
@@ -144,22 +135,20 @@
         function calculateTotal() {
             let total = 0;
             inputs.forEach(input => {
-                // parseInt assicura che sommiamo solo interi
                 total += parseInt(input.value) || 0;
             });
             
             totalDisplay.textContent = total;
             
-            // Colori Voto
-            if (total >= 45) totalDisplay.style.color = "#FFD700"; // Oro
-            else if (total >= 38) totalDisplay.style.color = "#10b981"; // Verde
-            else if (total >= 30) totalDisplay.style.color = "#f59e0b"; // Ambra
-            else totalDisplay.style.color = "#ef4444"; // Rosso
+            if (total >= 45) totalDisplay.style.color = "#FFD700";
+            else if (total >= 38) totalDisplay.style.color = "#10b981";
+            else if (total >= 30) totalDisplay.style.color = "#f59e0b";
+            else totalDisplay.style.color = "#ef4444";
         }
 
         setupInputListeners();
 
-        // 3. Invio Dati
+        // 3. INVIO DATI (Logica Popup corretta)
         document.getElementById('tasting-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
@@ -197,10 +186,7 @@
                 }
             };
 
-            const { data, error } = await supabase
-                .from('tasting_notes')
-                .insert([payload])
-                .select(); 
+            const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
 
             if (error) {
                 alert("Errore: " + error.message);
@@ -209,17 +195,16 @@
             } else {
                 const newSheetId = data[0].id;
 
-                // LOGICA SEMPLIFICATA (Solo 1 Popup)
+                // --- UNICO POPUP RIMASTO ---
                 if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) {
-                    // SI -> Vai al dettaglio PDF
+                    // SI
                     window.location.href = `../dettaglio-scheda.html?id=${newSheetId}`;
                 } else {
-                    // NO -> Torna subito alla selezione, senza altre domande
+                    // NO (Nessuna altra domanda)
                     window.location.href = '../nuova-scheda.html';
                 }
             }
         });
     </script>
-
 </body>
 </html>
