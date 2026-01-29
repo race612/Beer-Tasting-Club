@@ -123,23 +123,32 @@
                 else if (note.final_score >= 38) borderClass = 'border-green';
                 else if (note.final_score < 30) borderClass = 'border-red';
 
+                // (Codice precedente...)
+                // Creiamo il link dinamico con l'ID della nota
                 const html = `
-                    <div class="history-card ${borderClass}">
-                        <div class="history-header">
-                            <div>
-                                <h4 class="beer-name">${note.beer_name}</h4>
-                                <span class="beer-style">${style}</span>
+                    <a href="dettaglio-scheda.html?id=${note.id}" style="text-decoration: none; color: inherit;">
+                        <div class="history-card ${borderClass}">
+                            <div class="history-header">
+                                <div>
+                                    <h4 class="beer-name">${note.beer_name}</h4>
+                                    <span class="beer-style">${style}</span>
+                                </div>
+                                <div class="score-badge">
+                                    ${note.final_score}
+                                </div>
                             </div>
-                            <div class="score-badge">
-                                ${note.final_score}
+                            
+                            <div class="meta-info">
+                                <span>📅 ${date}</span>
+                                <span>📍 ${eventName}</span>
+                            </div>
+                            <div style="margin-top: 8px;">
+                                <span style="background: #374151; color: #9ca3af; padding: 2px 6px; border-radius: 4px; font-size: 0.7em; text-transform: uppercase;">
+                                    ${note.sheet_type.replace('_', ' ')}
+                                </span>
                             </div>
                         </div>
-                        
-                        <div class="meta-info">
-                            <span>📅 ${date}</span>
-                            <span>📍 ${eventName}</span>
-                        </div>
-                    </div>
+                    </a>
                 `;
                 
                 container.innerHTML += html;
