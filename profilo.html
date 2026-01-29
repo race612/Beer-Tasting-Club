@@ -6,6 +6,38 @@
     <title>Il mio Profilo - HBL</title>
     <link rel="stylesheet" href="css/style.css">
     <script type="module" src="js/app.js"></script>
+    <style>
+        /* CSS Specifico per questa pagina */
+        .checkbox-group label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        .section-title {
+            border-bottom: 1px solid #374151;
+            padding-bottom: 5px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        .privacy-option {
+            background: #2d3748;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #4a5568;
+        }
+        .privacy-option label { margin: 0; cursor: pointer; display: flex; align-items: center; }
+        .privacy-option input { width: auto; margin-right: 10px; }
+        .privacy-desc { font-size: 0.8rem; color: #a0aec0; margin-left: 28px; display: block; }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -21,14 +53,16 @@
             
             <div class="profile-header">
                 <div class="avatar-placeholder" id="avatar-initials">?</div>
-                <h3 id="display-email" style="margin:0; font-size: 1rem; color: var(--text-muted);">email@test.com</h3>
+                <h3 id="display-email" style="margin:0; font-size: 1rem; color: var(--text-muted);">...</h3>
             </div>
 
             <div class="card">
                 <form id="profile-form">
                     
-                    <h4 style="border-bottom: 1px solid #374151; padding-bottom: 5px; margin-top: 0;">Anagrafica</h4>
-                    <div class="grid-2"> <div class="form-group">
+                    <h4 class="section-title">Anagrafica & Link</h4>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
                             <label>Nome</label>
                             <input type="text" id="prof-nome" placeholder="Nome">
                         </div>
@@ -38,18 +72,39 @@
                         </div>
                     </div>
 
-                    <div class="form-group" style="background: #2d3748; padding: 10px; border-radius: 8px;">
-                        <label style="color: var(--primary-color);">Status Homebrewer *</label>
+                    <div class="form-group">
+                        <label>Sei un Homebrewer? *</label>
                         <select id="prof-homebrewer" required>
                             <option value="no">No</option>
                             <option value="hbl">Sì, socio HBL</option>
-                            <option value="other">Sì, altra associazione</option>
-                            <option value="indep">Sì, indipendente</option>
+                            <option value="other_region">Sì, altra regione</option>
+                            <option value="none">Sì, nessun gruppo</option>
                         </select>
                     </div>
 
-                    <h4 style="border-bottom: 1px solid #374151; padding-bottom: 5px; margin-top: 20px;">Ruoli & Titoli</h4>
-                    
+                    <div class="form-group">
+                        <label>BJCP ID (Opzionale)</label>
+                        <input type="text" id="prof-bjcp-id" placeholder="Es. E1234">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Link Profilo Cicerone®</label>
+                        <input type="url" id="prof-cicerone-link" placeholder="https://www.cicerone.org/users/...">
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Facebook (Link)</label>
+                            <input type="url" id="prof-fb" placeholder="https://facebook.com/...">
+                        </div>
+                        <div class="form-group">
+                            <label>Instagram (Link)</label>
+                            <input type="url" id="prof-ig" placeholder="https://instagram.com/...">
+                        </div>
+                    </div>
+
+                    <h4 class="section-title">Ruoli & Titoli</h4>
+
                     <div class="checkbox-group">
                         <label><input type="checkbox" id="role-pro"> Birraio Professionista</label>
                         <label><input type="checkbox" id="role-publican"> Publican</label>
@@ -57,60 +112,101 @@
                         <label><input type="checkbox" id="role-ubt"> Giudice UBT</label>
                     </div>
 
-                    <div style="margin-top: 15px;">
-                        <label style="font-weight: bold; color: var(--text-muted);">Programma Cicerone®</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="cicerone" value=""> Nessuno</label>
-                            <label><input type="radio" name="cicerone" value="server"> Certified Beer Server</label>
-                            <label><input type="radio" name="cicerone" value="certified"> Certified Cicerone</label>
-                            <label><input type="radio" name="cicerone" value="advanced"> Advanced Cicerone</label>
-                            <label><input type="radio" name="cicerone" value="master"> Master Cicerone</label>
+                    <div style="margin-top: 20px;">
+                        <label style="font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 10px;">Livello Cicerone®</label>
+                        <div class="checkbox-group" id="cicerone-group">
+                            <label><input type="checkbox" class="cicerone-check" value="server"> Certified Beer Server</label>
+                            <label><input type="checkbox" class="cicerone-check" value="certified"> Certified Cicerone</label>
+                            <label><input type="checkbox" class="cicerone-check" value="advanced"> Advanced Cicerone</label>
+                            <label><input type="checkbox" class="cicerone-check" value="master"> Master Cicerone</label>
                         </div>
                     </div>
 
-                    <div style="margin-top: 15px;">
-                        <label style="font-weight: bold; color: var(--text-muted);">Grado BJCP</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="bjcp" value=""> Nessuno</label>
-                            <label><input type="radio" name="bjcp" value="provisional"> Provisional</label>
-                            <label><input type="radio" name="bjcp" value="recognized"> Recognized</label>
-                            <label><input type="radio" name="bjcp" value="certified"> Certified</label>
-                            <label><input type="radio" name="bjcp" value="national"> National</label>
-                            <label><input type="radio" name="bjcp" value="master"> Master</label>
-                            <label><input type="radio" name="bjcp" value="grand_master"> Grand Master</label>
-                        </div>
-                        <input type="text" id="prof-bjcp-id" placeholder="ID BJCP (es. E1234)" style="margin-top: 5px;">
-                    </div>
-
-                    <div style="margin: 20px 0; border-top: 1px solid #374151; padding-top: 10px;">
-                        <div style="display: flex; gap: 10px;">
-                            <input type="checkbox" id="prof-privacy" style="width: 20px; margin-top: 2px;">
-                            <label for="prof-privacy" style="font-weight: normal; font-size: 0.85em;">
-                                Acconsento a mostrare il mio nome e le mie qualifiche nelle schede pubbliche.
-                            </label>
+                    <div style="margin-top: 20px;">
+                        <label style="font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 10px;">Rango BJCP</label>
+                        <div class="checkbox-group" id="bjcp-group">
+                            <label><input type="checkbox" class="bjcp-check" value="provisional"> Provisional</label>
+                            <label><input type="checkbox" class="bjcp-check" value="recognized"> Recognized</label>
+                            <label><input type="checkbox" class="bjcp-check" value="certified"> Certified</label>
+                            <label><input type="checkbox" class="bjcp-check" value="national"> National</label>
+                            <label><input type="checkbox" class="bjcp-check" value="master"> Master</label>
+                            <label><input type="checkbox" class="bjcp-check" value="grand_master"> Grand Master</label>
                         </div>
                     </div>
 
-                    <button type="submit" id="save-btn" class="btn btn-primary">💾 Salva Profilo</button>
+                    <h4 class="section-title">Bio & Esperienze</h4>
+                    <div class="form-group">
+                        <textarea id="prof-bio" rows="4" placeholder="Racconta le tue esperienze, i corsi frequentati o le tue birre preferite..."></textarea>
+                    </div>
+
+                    <h4 class="section-title">Impostazioni Privacy</h4>
+                    <p style="font-size: 0.9em; color: var(--text-muted); margin-bottom: 15px;">Chi può vedere i tuoi dati nelle schede pubbliche?</p>
+
+                    <div class="privacy-option">
+                        <label>
+                            <input type="radio" name="privacy_level" value="min" checked>
+                            Condividi solo Nome e Cognome
+                        </label>
+                        <span class="privacy-desc">Email e social rimarranno nascosti.</span>
+                    </div>
+
+                    <div class="privacy-option">
+                        <label>
+                            <input type="radio" name="privacy_level" value="mid">
+                            Condividi anche Email
+                        </label>
+                        <span class="privacy-desc">Utile per essere contattati da altri soci.</span>
+                    </div>
+
+                    <div class="privacy-option">
+                        <label>
+                            <input type="radio" name="privacy_level" value="full">
+                            Profilo Completo
+                        </label>
+                        <span class="privacy-desc">Mostra email, social, bio e link Cicerone.</span>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button type="submit" id="save-btn" class="btn btn-primary">💾 Salva Profilo</button>
+                    </div>
                 </form>
                 <div id="profile-msg"></div>
             </div>
 
-            <div style="margin-top: 30px; border-top: 1px solid #374151; padding-top: 20px;">
+            <div style="margin-top: 30px; text-align: center;">
                 <button id="logout-btn-profile" class="btn btn-outline" style="border-color: var(--danger); color: var(--danger);">Esci dall'account</button>
             </div>
         </div>
     </div>
+
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
         const loading = document.getElementById('loading-profile');
         const content = document.getElementById('profile-content');
         
+        // --- FUNZIONE DI UTILITÀ: CHECKBOX ESCLUSIVI ---
+        // Fa comportare i checkbox come Radio Button (ne selezioni uno, gli altri si spengono)
+        function handleExclusiveCheckbox(className) {
+            const boxes = document.querySelectorAll(`.${className}`);
+            boxes.forEach(box => {
+                box.addEventListener('change', function() {
+                    if (this.checked) {
+                        boxes.forEach(other => {
+                            if (other !== this) other.checked = false;
+                        });
+                    }
+                });
+            });
+        }
+
+        // Attiviamo la logica per BJCP e Cicerone
+        handleExclusiveCheckbox('cicerone-check');
+        handleExclusiveCheckbox('bjcp-check');
+
         // --- CARICAMENTO DATI ---
         async function loadProfile() {
             const { data: { user } } = await supabase.auth.getUser();
-
             if (!user) { window.location.href = 'index.html'; return; }
 
             const meta = user.user_metadata || {};
@@ -120,31 +216,39 @@
             const initial = (meta.first_name?.[0] || "") + (meta.last_name?.[0] || "?");
             document.getElementById('avatar-initials').textContent = initial.toUpperCase();
 
-            // Campi Semplici
+            // 1. Testi e Link
             document.getElementById('prof-nome').value = meta.first_name || "";
             document.getElementById('prof-cognome').value = meta.last_name || "";
-            document.getElementById('prof-bjcp-id').value = meta.bjcp_id || "";
-            document.getElementById('prof-privacy').checked = meta.consensus_public || false;
-            
-            // Homebrewer Status (default 'no' se vuoto)
             document.getElementById('prof-homebrewer').value = meta.homebrewer_status || "no";
+            document.getElementById('prof-bjcp-id').value = meta.bjcp_id || "";
+            document.getElementById('prof-cicerone-link').value = meta.cicerone_link || "";
+            document.getElementById('prof-fb').value = meta.social_fb || "";
+            document.getElementById('prof-ig').value = meta.social_ig || "";
 
-            // Checkbox Ruoli
+            // 2. Qualifiche Checkbox
             document.getElementById('role-pro').checked = meta.role_pro || false;
             document.getElementById('role-publican').checked = meta.role_publican || false;
             document.getElementById('role-sommelier').checked = meta.role_sommelier || false;
             document.getElementById('role-ubt').checked = meta.role_ubt || false;
 
-            // Radio Button (Cicerone & BJCP)
-            // Seleziona il radio button che ha value uguale a quello salvato
+            // 3. Livelli Esclusivi (BJCP & Cicerone)
+            // Cerchiamo il checkbox che ha value = valore salvato e lo attiviamo
             if (meta.cicerone_level) {
-                const radio = document.querySelector(`input[name="cicerone"][value="${meta.cicerone_level}"]`);
-                if (radio) radio.checked = true;
+                const box = document.querySelector(`.cicerone-check[value="${meta.cicerone_level}"]`);
+                if (box) box.checked = true;
             }
             if (meta.bjcp_level) {
-                const radio = document.querySelector(`input[name="bjcp"][value="${meta.bjcp_level}"]`);
-                if (radio) radio.checked = true;
+                const box = document.querySelector(`.bjcp-check[value="${meta.bjcp_level}"]`);
+                if (box) box.checked = true;
             }
+
+            // 4. Bio
+            document.getElementById('prof-bio').value = meta.bio || "";
+
+            // 5. Privacy (Radio)
+            const privacyVal = meta.privacy_level || "min"; // Default Minimo
+            const radio = document.querySelector(`input[name="privacy_level"][value="${privacyVal}"]`);
+            if (radio) radio.checked = true;
 
             loading.style.display = 'none';
             content.style.display = 'block';
@@ -152,7 +256,7 @@
 
         loadProfile();
 
-        // --- SALVATAGGIO DATI ---
+        // --- SALVATAGGIO ---
         document.getElementById('profile-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('save-btn');
@@ -162,27 +266,31 @@
             btn.textContent = "Salvataggio...";
             msg.textContent = "";
 
-            // Recupera valore Radio Button selezionati
-            const ciceroneVal = document.querySelector('input[name="cicerone"]:checked')?.value || "";
-            const bjcpVal = document.querySelector('input[name="bjcp"]:checked')?.value || "";
+            // Recupera valori Checkbox esclusivi
+            const ciceroneVal = document.querySelector('.cicerone-check:checked')?.value || "";
+            const bjcpVal = document.querySelector('.bjcp-check:checked')?.value || "";
+            // Recupera Privacy
+            const privacyVal = document.querySelector('input[name="privacy_level"]:checked')?.value || "min";
 
             const updates = {
                 first_name: document.getElementById('prof-nome').value,
                 last_name: document.getElementById('prof-cognome').value,
                 homebrewer_status: document.getElementById('prof-homebrewer').value,
-                
-                // Ruoli
+                bjcp_id: document.getElementById('prof-bjcp-id').value,
+                cicerone_link: document.getElementById('prof-cicerone-link').value,
+                social_fb: document.getElementById('prof-fb').value,
+                social_ig: document.getElementById('prof-ig').value,
+
                 role_pro: document.getElementById('role-pro').checked,
                 role_publican: document.getElementById('role-publican').checked,
                 role_sommelier: document.getElementById('role-sommelier').checked,
                 role_ubt: document.getElementById('role-ubt').checked,
-                
-                // Livelli
+
                 cicerone_level: ciceroneVal,
                 bjcp_level: bjcpVal,
-                bjcp_id: document.getElementById('prof-bjcp-id').value,
-                
-                consensus_public: document.getElementById('prof-privacy').checked
+
+                bio: document.getElementById('prof-bio').value,
+                privacy_level: privacyVal
             };
 
             const { error } = await supabase.auth.updateUser({
@@ -193,7 +301,7 @@
                 msg.textContent = "Errore: " + error.message;
                 msg.style.color = "red";
             } else {
-                msg.textContent = "✅ Profilo aggiornato!";
+                msg.textContent = "✅ Profilo salvato correttamente!";
                 msg.style.color = "#10b981";
                 setTimeout(() => window.location.reload(), 1000);
             }
@@ -201,8 +309,8 @@
             btn.disabled = false;
             btn.textContent = "💾 Salva Profilo";
         });
-        
-        // Logout (uguale a prima)
+
+        // Logout
         document.getElementById('logout-btn-profile').addEventListener('click', async () => {
             await supabase.auth.signOut();
             window.location.href = 'index.html';
