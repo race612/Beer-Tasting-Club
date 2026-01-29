@@ -1,6 +1,6 @@
 // js/bjcp-2021.js
 
-// 1. ELENCO STILI ORGANIZZATO PER FAMIGLIE
+// 1. ELENCO STILI (BJCP 2021 Corretto + Local Styles)
 export const bjcpCatalog = [
     {
         family: "1. Standard American Beer",
@@ -28,7 +28,8 @@ export const bjcpCatalog = [
     },
     {
         family: "7. Amber Bitter European Beer",
-        styles: ["7A. Vienna Lager", "7B. Altbier", "7C. Kellerbier"]
+        styles: ["7A. Vienna Lager", "7B. Altbier"] 
+        // 7C Kellerbier RIMOSSO (è in Historical)
     },
     {
         family: "8. Dark European Lager",
@@ -137,24 +138,72 @@ export const bjcpCatalog = [
     {
         family: "34. Specialty Beer",
         styles: ["34A. Commercial Specialty Beer", "34B. Mixed-Style Beer", "34C. Experimental Beer"]
+    },
+    {
+        family: "X. Local Styles (Appendix B)",
+        styles: ["X1. Dorada Pampeana", "X2. IPA Argenta", "X3. Italian Grape Ale", "X4. Catharina Sour", "X5. New Zealand Pilsner"]
     }
 ];
 
-// 2. LISTA STILI CHE RICHIEDONO SPECIFICA (Entry Instructions)
-// Controlliamo l'inizio della stringa (il codice)
-export const stylesRequiringSpec = [
-    "7C", // Kellerbier (Pale/Amber)
-    "9A", // Doppelbock (Pale/Dark)
-    "21B", // Specialty IPA (Type)
-    "23F", // Fruit Lambic (Fruit)
-    "24C", // Biere de Garde (Color/Strength)
-    "25B", // Saison (Strength/Color)
-    "27",  // Historical (Style)
-    "28A", "28B", "28C", // Wild
-    "29A", "29B", "29C", // Fruit
-    "30A", "30B", "30C", // Spiced
-    "31A", "31B", // Alt Grains/Sugar
-    "32A", "32B", // Smoked
-    "33A", "33B", // Wood
-    "34A", "34B", "34C" // Specialty
-];
+// 2. REGOLE SPECIALI DI UI (Configurazione Avanzata)
+export const specialStyleRules = {
+    // 9A. Doppelbock
+    "9A": {
+        type: "options",
+        label: "Variante Colore:",
+        choices: ["Pale", "Dark"] // Flag opzionale
+    },
+
+    // 21B. Specialty IPA
+    "21B": {
+        type: "complex_ipa",
+        dropdownLabel: "Sotto-famiglia:",
+        dropdownOptions: ["", "Belgian IPA", "Black IPA", "Brown IPA", "Brut IPA", "Red IPA", "Rye IPA", "White IPA"],
+        strengthLabel: "Forza:",
+        strengthOptions: ["Session", "Standard", "Double"],
+        defaultStrength: "Standard",
+        textLabel: "Altro / Dettagli:"
+    },
+
+    // 23F. Fruit Lambic
+    "23F": {
+        type: "text_only",
+        placeholder: "Es. Ciliegie, Lamponi...",
+        hint: "⚠️ Ricorda di specificare la frutta utilizzata!"
+    },
+
+    // 24C. Bière de Garde
+    "24C": {
+        type: "options",
+        label: "Variante Colore:",
+        choices: ["Blond", "Amber", "Brown"]
+    },
+
+    // 25B. Saison
+    "25B": {
+        type: "complex_saison",
+        colorLabel: "Colore:",
+        colorOptions: ["Pale", "Dark"],
+        strengthLabel: "Forza:",
+        strengthOptions: ["Table", "Standard", "Super"],
+        defaultStrength: "Standard",
+        textLabel: "Note Aggiuntive (Opzionale):"
+    },
+
+    // 27. Historical Beer
+    "27": {
+        type: "dropdown_plus_text",
+        dropdownLabel: "Stile Storico:",
+        dropdownOptions: ["Kellerbier", "Kentucky Common", "Lichtenhainer", "London Brown Ale", "Piwo Grodziskie", "Pre-Prohibition Lager", "Pre-Prohibition Porter", "Roggenbier", "Sahti"],
+        textLabel: "Altro / Dettagli:"
+    },
+
+    // Generici per categorie creative (richiedono testo obbligatorio)
+    "28A": { type: "text_only", required: true }, "28B": { type: "text_only", required: true }, "28C": { type: "text_only", required: true },
+    "29A": { type: "text_only", required: true }, "29B": { type: "text_only", required: true }, "29C": { type: "text_only", required: true },
+    "30A": { type: "text_only", required: true }, "30B": { type: "text_only", required: true }, "30C": { type: "text_only", required: true },
+    "31A": { type: "text_only", required: true }, "31B": { type: "text_only", required: true },
+    "32A": { type: "text_only", required: true }, "32B": { type: "text_only", required: true },
+    "33A": { type: "text_only", required: true }, "33B": { type: "text_only", required: true },
+    "34A": { type: "text_only", required: true }, "34B": { type: "text_only", required: true }, "34C": { type: "text_only", required: true }
+};

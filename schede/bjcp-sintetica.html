@@ -11,6 +11,43 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="../assets/icon-192.png">
     <link rel="apple-touch-icon" href="../assets/icon-192.png">
+    
+    <style>
+        /* CSS Specifico per i campi dinamici */
+        .dynamic-field-group {
+            margin-top: 10px;
+            background: #374151;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid #f59e0b;
+        }
+        .dynamic-label {
+            font-size: 0.85em; 
+            color: #f59e0b; 
+            margin-bottom: 5px; 
+            display: block; 
+            font-weight: bold;
+        }
+        .dynamic-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .radio-badge label {
+            background: #1f2937;
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: 1px solid #4b5563;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .radio-badge input:checked + span {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        .radio-badge input { margin-right: 5px; }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -23,7 +60,6 @@
         <div class="card">
             <h2 style="text-align: center; margin-bottom: 5px;">BJCP Sintetica</h2>
             <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-top:0;">Compilazione Rapida</p>
-            
             <hr style="border-color: #374151; margin: 15px 0;">
 
             <form id="tasting-form">
@@ -50,41 +86,16 @@
                             <option value="" disabled selected>-- Seleziona uno stile --</option>
                             </select>
 
-                        <div id="bjcp-spec-container" style="display: none; margin-top: 10px; background: #374151; padding: 10px; border-radius: 6px; border-left: 3px solid #f59e0b;">
-                            <label style="font-size: 0.85em; color: #f59e0b; margin-bottom: 5px; display: block;">⚠️ Specifica Richiesta</label>
-                            <input type="text" id="bjcp-spec" placeholder="Es. Lamponi, Rye IPA, Base Helles..." style="font-size: 0.9em;">
-                            <small style="color: #d1d5db; font-size: 0.75em;">Inserisci ingredienti, stile base o varianti.</small>
-                        </div>
+                        <div id="bjcp-dynamic-container"></div>
                     </div>
                 </div>
 
                 <div style="background: #111827; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                    
-                    <div class="score-row">
-                        <label>👃 Aroma (max 12)</label>
-                        <input type="number" id="score-aroma" class="calc-input" min="0" max="12" step="1" required>
-                    </div>
-
-                    <div class="score-row">
-                        <label>👀 Aspetto (max 3)</label>
-                        <input type="number" id="score-appearance" class="calc-input" min="0" max="3" step="1" required>
-                    </div>
-
-                    <div class="score-row">
-                        <label>👅 Gusto (max 20)</label>
-                        <input type="number" id="score-flavor" class="calc-input" min="0" max="20" step="1" required>
-                    </div>
-
-                    <div class="score-row">
-                        <label>👄 Corpo (max 5)</label>
-                        <input type="number" id="score-mouthfeel" class="calc-input" min="0" max="5" step="1" required>
-                    </div>
-
-                    <div class="score-row">
-                        <label>🍺 Generale (max 10)</label>
-                        <input type="number" id="score-overall" class="calc-input" min="0" max="10" step="1" required>
-                    </div>
-
+                    <div class="score-row"><label>👃 Aroma (max 12)</label><input type="number" id="score-aroma" class="calc-input" min="0" max="12" required></div>
+                    <div class="score-row"><label>👀 Aspetto (max 3)</label><input type="number" id="score-appearance" class="calc-input" min="0" max="3" required></div>
+                    <div class="score-row"><label>👅 Gusto (max 20)</label><input type="number" id="score-flavor" class="calc-input" min="0" max="20" required></div>
+                    <div class="score-row"><label>👄 Corpo (max 5)</label><input type="number" id="score-mouthfeel" class="calc-input" min="0" max="5" required></div>
+                    <div class="score-row"><label>🍺 Generale (max 10)</label><input type="number" id="score-overall" class="calc-input" min="0" max="10" required></div>
                     <div style="text-align: center; margin-top: 20px; border-top: 1px solid #374151; padding-top: 10px;">
                         <span style="color: var(--text-muted); font-size: 0.9em;">TOTALE</span>
                         <div id="total-display" style="font-size: 3rem; font-weight: bold; color: var(--primary-color);">0</div>
@@ -104,143 +115,297 @@
 
     <script type="module">
         import { supabase } from '../js/supabase-config.js';
-        // Importiamo catalogo e lista speciali
-        import { bjcpCatalog, stylesRequiringSpec } from '../js/bjcp-2021.js'; 
+        import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js'; 
 
-        // 1. Recupera Evento
         const eventId = localStorage.getItem('hbl_selected_event');
         if (!eventId) {
-            alert("Nessun evento selezionato.");
             window.location.href = '../nuova-scheda.html';
         }
 
-        // 2. ELEMENTI DOM
+        // Elementi DOM
         const systemSelect = document.getElementById('style-system');
         const containerFree = document.getElementById('container-free');
         const containerBjcp = document.getElementById('container-bjcp');
         const inputFree = document.getElementById('style-free');
         const inputBjcp = document.getElementById('style-bjcp');
-        
-        // Elementi per Specifica
-        const specContainer = document.getElementById('bjcp-spec-container');
-        const specInput = document.getElementById('bjcp-spec');
+        const dynamicContainer = document.getElementById('bjcp-dynamic-container');
 
-        // 3. POPOLA SELECT CON OPTGROUPS
+        // 1. POPOLA SELECT BJCP
         bjcpCatalog.forEach(category => {
-            // Crea il gruppo (Titolo Famiglia)
             const group = document.createElement('optgroup');
             group.label = category.family;
-
-            // Crea le opzioni dentro il gruppo
             category.styles.forEach(styleName => {
                 const option = document.createElement('option');
                 option.value = styleName;
                 option.textContent = styleName;
                 group.appendChild(option);
             });
-
             inputBjcp.appendChild(group);
         });
 
-        // 4. CAMBIO SISTEMA (Libero/BJCP)
+        // 2. GESTIONE CAMBIO SISTEMA
         systemSelect.addEventListener('change', (e) => {
             if (e.target.value === 'free') {
                 containerFree.style.display = 'block';
                 inputFree.setAttribute('required', 'true');
-                
                 containerBjcp.style.display = 'none';
                 inputBjcp.removeAttribute('required');
-                inputBjcp.value = ""; 
-                specContainer.style.display = 'none'; // Nascondi spec se cambi sistema
+                inputBjcp.value = "";
+                dynamicContainer.innerHTML = ''; // Pulisci dinamici
             } else {
                 containerBjcp.style.display = 'block';
                 inputBjcp.setAttribute('required', 'true');
-
                 containerFree.style.display = 'none';
                 inputFree.removeAttribute('required');
                 inputFree.value = "";
             }
         });
 
-        // 5. GESTIONE STILI SPECIALI (Mostra campo specifica)
+        // 3. LOGICA UI DINAMICA (Il cuore della richiesta)
         inputBjcp.addEventListener('change', (e) => {
-            const selectedStyle = e.target.value;
-            // Estrai il codice (es. "21B" da "21B. Specialty IPA")
-            const code = selectedStyle.split('.')[0]; 
+            dynamicContainer.innerHTML = ''; // Reset
+            const code = e.target.value.split('.')[0];
+            const rule = specialStyleRules[code];
 
-            // Controlla se il codice è nella lista dei "speciali"
-            if (stylesRequiringSpec.includes(code)) {
-                specContainer.style.display = 'block';
-                specInput.setAttribute('required', 'true'); // Diventa obbligatorio
-            } else {
-                specContainer.style.display = 'none';
-                specInput.removeAttribute('required');
-                specInput.value = "";
+            if (!rule) return;
+
+            // Crea il contenitore grafico
+            const wrapper = document.createElement('div');
+            wrapper.className = 'dynamic-field-group';
+
+            // --- CASO 1: SOLO TESTO (Es. Fruit Lambic) ---
+            if (rule.type === 'text_only') {
+                if (rule.hint) {
+                    const hint = document.createElement('small');
+                    hint.style.color = '#f59e0b';
+                    hint.textContent = rule.hint;
+                    wrapper.appendChild(hint);
+                }
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = 'dyn-text';
+                input.placeholder = rule.placeholder || "Specifica...";
+                if(rule.required) input.required = true;
+                wrapper.appendChild(input);
             }
+
+            // --- CASO 2: OPZIONI RADIO/FLAG (Es. Doppelbock, Biere de Garde) ---
+            else if (rule.type === 'options') {
+                const label = document.createElement('span');
+                label.className = 'dynamic-label';
+                label.textContent = rule.label;
+                wrapper.appendChild(label);
+
+                const row = document.createElement('div');
+                row.className = 'dynamic-row';
+                
+                rule.choices.forEach(choice => {
+                    const labelWrap = document.createElement('label');
+                    labelWrap.className = 'radio-badge';
+                    labelWrap.innerHTML = `<input type="radio" name="dyn-radio" value="${choice}"><span>${choice}</span>`;
+                    row.appendChild(labelWrap);
+                });
+                wrapper.appendChild(row);
+            }
+
+            // --- CASO 3: COMPLEX IPA (Dropdown + Text + Strength) ---
+            else if (rule.type === 'complex_ipa') {
+                // Dropdown Sub-style
+                const lbl1 = document.createElement('span');
+                lbl1.className = 'dynamic-label';
+                lbl1.textContent = rule.dropdownLabel;
+                wrapper.appendChild(lbl1);
+
+                const select = document.createElement('select');
+                select.id = 'dyn-select';
+                select.style.marginBottom = '10px';
+                rule.dropdownOptions.forEach(opt => {
+                    const o = document.createElement('option');
+                    o.value = opt;
+                    o.textContent = opt === "" ? "-- Seleziona (Opzionale) --" : opt;
+                    select.appendChild(o);
+                });
+                wrapper.appendChild(select);
+
+                // Text Fallback
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = 'dyn-text';
+                input.placeholder = "Specifica se altro...";
+                input.style.marginBottom = '10px';
+                
+                // Logica: Se select è vuota, text è required
+                input.required = true; // Default perché select parte vuota
+                select.addEventListener('change', () => {
+                    input.required = (select.value === "");
+                });
+                wrapper.appendChild(input);
+
+                // Strength Radio
+                const lbl2 = document.createElement('span');
+                lbl2.className = 'dynamic-label';
+                lbl2.textContent = rule.strengthLabel;
+                wrapper.appendChild(lbl2);
+                
+                const row = document.createElement('div');
+                row.className = 'dynamic-row';
+                rule.strengthOptions.forEach(opt => {
+                    const isChecked = (opt === rule.defaultStrength) ? 'checked' : '';
+                    const labelWrap = document.createElement('label');
+                    labelWrap.className = 'radio-badge';
+                    labelWrap.innerHTML = `<input type="radio" name="dyn-strength" value="${opt}" ${isChecked}><span>${opt}</span>`;
+                    row.appendChild(labelWrap);
+                });
+                wrapper.appendChild(row);
+            }
+
+            // --- CASO 4: COMPLEX SAISON (Color + Strength + Text) ---
+            else if (rule.type === 'complex_saison') {
+                // Color Radio
+                const lbl1 = document.createElement('span');
+                lbl1.className = 'dynamic-label';
+                lbl1.textContent = rule.colorLabel;
+                wrapper.appendChild(lbl1);
+                
+                const row1 = document.createElement('div');
+                row1.className = 'dynamic-row';
+                rule.colorOptions.forEach(opt => {
+                    const labelWrap = document.createElement('label');
+                    labelWrap.className = 'radio-badge';
+                    labelWrap.innerHTML = `<input type="radio" name="dyn-color" value="${opt}"><span>${opt}</span>`;
+                    row1.appendChild(labelWrap);
+                });
+                wrapper.appendChild(row1);
+
+                // Strength Dropdown (come richiesto "seconda tendina")
+                const lbl2 = document.createElement('span');
+                lbl2.className = 'dynamic-label';
+                lbl2.textContent = rule.strengthLabel;
+                wrapper.appendChild(lbl2);
+
+                const select = document.createElement('select');
+                select.id = 'dyn-strength-select'; // ID diverso per distinguerlo
+                select.style.marginBottom = '10px';
+                rule.strengthOptions.forEach(opt => {
+                    const o = document.createElement('option');
+                    o.value = opt;
+                    o.textContent = opt;
+                    if(opt === rule.defaultStrength) o.selected = true;
+                    select.appendChild(o);
+                });
+                wrapper.appendChild(select);
+
+                // Text Optional
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = 'dyn-text';
+                input.placeholder = "Note (Opzionale)...";
+                wrapper.appendChild(input);
+            }
+
+            // --- CASO 5: HISTORICAL (Dropdown + Text) ---
+            else if (rule.type === 'dropdown_plus_text') {
+                 const lbl = document.createElement('span');
+                 lbl.className = 'dynamic-label';
+                 lbl.textContent = rule.dropdownLabel;
+                 wrapper.appendChild(lbl);
+
+                 const select = document.createElement('select');
+                 select.id = 'dyn-select';
+                 select.style.marginBottom = '10px';
+                 rule.dropdownOptions.forEach(opt => {
+                     const o = document.createElement('option');
+                     o.value = opt;
+                     o.textContent = opt;
+                     select.appendChild(o);
+                 });
+                 wrapper.appendChild(select);
+
+                 const input = document.createElement('input');
+                 input.type = 'text';
+                 input.id = 'dyn-text';
+                 input.placeholder = rule.textLabel;
+                 wrapper.appendChild(input);
+            }
+
+            dynamicContainer.appendChild(wrapper);
         });
 
-        // 6. SETUP CALCOLI
+        // 4. CALCOLO VOTI (Invariato)
         const inputs = document.querySelectorAll('.calc-input');
         const totalDisplay = document.getElementById('total-display');
-
-        function setupInputListeners() {
-            inputs.forEach(input => {
-                input.setAttribute('step', '1');
-                input.setAttribute('pattern', '[0-9]*');
-                input.addEventListener('input', function() {
-                    let max = parseInt(this.getAttribute('max'));
-                    let min = parseInt(this.getAttribute('min')) || 0;
-                    let val = parseInt(this.value);
-                    if (isNaN(val)) val = 0;
-                    if (val > max) { val = max; this.value = max; } 
-                    else if (val < min) { val = min; this.value = min; } 
-                    else if (this.value.includes('.') || this.value.includes(',')) { this.value = val; }
-                    calculateTotal();
-                });
+        inputs.forEach(input => {
+            input.setAttribute('pattern', '[0-9]*');
+            input.addEventListener('input', () => {
+                let max = parseInt(input.getAttribute('max')), min = 0;
+                let val = parseInt(input.value) || 0;
+                if(val > max) { val = max; input.value = max; }
+                let tot = 0;
+                inputs.forEach(i => tot += parseInt(i.value) || 0);
+                totalDisplay.textContent = tot;
+                totalDisplay.style.color = tot >= 45 ? "#FFD700" : tot >= 38 ? "#10b981" : tot >= 30 ? "#f59e0b" : "#ef4444";
             });
-        }
-        function calculateTotal() {
-            let total = 0;
-            inputs.forEach(input => { total += parseInt(input.value) || 0; });
-            totalDisplay.textContent = total;
-            if (total >= 45) totalDisplay.style.color = "#FFD700";
-            else if (total >= 38) totalDisplay.style.color = "#10b981";
-            else if (total >= 30) totalDisplay.style.color = "#f59e0b";
-            else totalDisplay.style.color = "#ef4444";
-        }
-        setupInputListeners();
+        });
 
-        // 7. INVIO DATI
+        // 5. INVIO DATI (Assemblaggio stringa)
         document.getElementById('tasting-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
-            
-            // Determina stile finale
+
             let finalStyle = "";
             if (systemSelect.value === 'free') {
                 finalStyle = inputFree.value;
             } else {
                 finalStyle = inputBjcp.value;
-                // Se c'è una specifica visibile e compilata, aggiungila
-                if (specContainer.style.display !== 'none' && specInput.value) {
-                    finalStyle += ` (${specInput.value})`; 
+                const code = finalStyle.split('.')[0];
+                const rule = specialStyleRules[code];
+                
+                // LOGICA DI CONCATENAZIONE CAMPI DINAMICI
+                if (rule) {
+                    let specs = [];
+                    
+                    // Recupero valori dai vari tipi di input creati dinamicamente
+                    const textVal = document.getElementById('dyn-text')?.value;
+                    const radioVal = document.querySelector('input[name="dyn-radio"]:checked')?.value;
+                    const selectVal = document.getElementById('dyn-select')?.value;
+                    
+                    // Specifici per IPA / Saison
+                    const strengthRadioVal = document.querySelector('input[name="dyn-strength"]:checked')?.value;
+                    const colorRadioVal = document.querySelector('input[name="dyn-color"]:checked')?.value;
+                    const strengthSelectVal = document.getElementById('dyn-strength-select')?.value;
+
+                    // COSTRUZIONE STRINGA
+                    if (rule.type === 'text_only' && textVal) specs.push(textVal);
+                    if (rule.type === 'options' && radioVal) specs.push(radioVal);
+                    
+                    if (rule.type === 'complex_ipa') {
+                        if(selectVal) specs.push(selectVal);
+                        if(textVal) specs.push(textVal);
+                        if(strengthRadioVal) specs.push(strengthRadioVal);
+                    }
+
+                    if (rule.type === 'complex_saison') {
+                        if(colorRadioVal) specs.push(colorRadioVal);
+                        if(strengthSelectVal) specs.push(strengthSelectVal);
+                        if(textVal) specs.push(textVal);
+                    }
+
+                    if (rule.type === 'dropdown_plus_text') {
+                        if(selectVal) specs.push(selectVal);
+                        if(textVal) specs.push(textVal);
+                    }
+
+                    if (specs.length > 0) {
+                        finalStyle += ` (${specs.join(', ')})`;
+                    }
                 }
             }
 
-            if (!finalStyle || finalStyle.length < 3) {
-                alert("Inserisci uno stile valido.");
-                return;
-            }
+            if (!finalStyle || finalStyle.length < 3) { alert("Inserisci uno stile valido."); return; }
 
-            btn.disabled = true;
-            btn.textContent = "Salvataggio...";
-
+            btn.disabled = true; btn.textContent = "Salvataggio...";
             const { data: { user } } = await supabase.auth.getUser();
-            if (!user) {
-                alert("Sessione scaduta.");
-                window.location.href = '../index.html';
-                return;
-            }
+            if (!user) { window.location.href = '../index.html'; return; }
 
             const scores = {
                 aroma: parseInt(document.getElementById('score-aroma').value) || 0,
@@ -250,35 +415,19 @@
                 overall: parseInt(document.getElementById('score-overall').value) || 0
             };
 
-            const finalScore = Object.values(scores).reduce((a, b) => a + b, 0);
-
             const payload = {
-                user_id: user.id,
-                event_id: eventId,
-                beer_name: document.getElementById('beer-name').value,
-                sheet_type: 'bjcp_sintetica',
-                final_score: finalScore,
-                details: {
-                    style: finalStyle,
-                    style_type: systemSelect.value,
-                    notes: document.getElementById('notes').value,
-                    scores: scores
-                }
+                user_id: user.id, event_id: eventId, beer_name: document.getElementById('beer-name').value,
+                sheet_type: 'bjcp_sintetica', final_score: Object.values(scores).reduce((a,b)=>a+b,0),
+                details: { style: finalStyle, style_type: systemSelect.value, notes: document.getElementById('notes').value, scores: scores }
             };
 
             const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
-
-            if (error) {
-                alert("Errore: " + error.message);
-                btn.disabled = false;
-                btn.textContent = "💾 Salva Scheda";
+            if (error) { alert(error.message); btn.disabled = false; return; }
+            
+            if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) {
+                window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
             } else {
-                const newSheetId = data[0].id;
-                if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) {
-                    window.location.href = `../dettaglio-scheda.html?id=${newSheetId}`;
-                } else {
-                    window.location.href = '../nuova-scheda.html';
-                }
+                window.location.href = '../nuova-scheda.html';
             }
         });
     </script>
