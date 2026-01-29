@@ -212,22 +212,23 @@
                 const newSheetId = data[0].id;
 
                 // LOGICA DI REDIRECT
-                // 1. Chiediamo se vuole vedere/scaricare il PDF
                 if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) {
                     // SI -> Vai al dettaglio
                     window.location.href = `../dettaglio-scheda.html?id=${newSheetId}`;
                 } else {
-                    // NO -> Chiediamo se vuole compilare un'altra birra
-                    if(confirm("Vuoi compilare un'altra scheda per questo evento?")) {
-                        // SI -> Resetta il form
+                    // NO -> Chiediamo se vuole compilare un'altra birra per lo stesso evento
+                    // (Opzionale: puoi lasciare questo o toglierlo, ma se dice NO, torna alla selezione)
+                    if(confirm("Vuoi compilare subito un'altra scheda (stesso evento)?")) {
                         document.getElementById('tasting-form').reset();
-                        calculateTotal();
+                        // Resetta visivamente i totali...
+                        document.getElementById('total-display').textContent = "0";
+                        document.getElementById('total-display').style.color = "#ef4444";
                         btn.disabled = false;
                         btn.textContent = "💾 Salva Scheda";
                         window.scrollTo(0,0);
                     } else {
-                        // NO -> Torna alla Home
-                        window.location.href = '../index.html';
+                        // NO -> Torna alla pagina di selezione scheda/evento
+                        window.location.href = '../nuova-scheda.html';
                     }
                 }
             }

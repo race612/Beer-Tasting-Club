@@ -75,56 +75,43 @@
         const container = document.getElementById('history-container');
 
         async function loadHistory() {
-            // 1. Prendi utente loggato
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) {
                 container.innerHTML = '<p>Devi essere loggato.</p>';
                 return;
             }
 
-            // 2. Query al Database
-            // select('*, events(name)') significa: dammi tutte le colonne delle note 
-            // E ANCHE la colonna "name" della tabella collegata "events"
             const { data: notes, error } = await supabase
                 .from('tasting_notes')
                 .select('*, events(name)') 
-                .eq('user_id', user.id) // Solo le mie
-                .order('created_at', { ascending: false }); // Dalla più recente
+                .eq('user_id', user.id) 
+                .order('created_at', { ascending: false });
 
             if (error) {
-                console.error(error);
-                container.innerHTML = `<p style="color:red">Errore caricamento: ${error.message}</p>`;
+                container.innerHTML = `<p style="color:red">Errore: ${error.message}</p>`;
                 return;
             }
 
             if (notes.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 20px;">
-                        <p>Non hai ancora compilato nessuna scheda!</p>
-                        <a href="nuova-scheda.html" class="btn btn-primary">🍺 Inizia ora</a>
-                    </div>`;
+                container.innerHTML = `<div style="text-align: center; padding: 20px;"><p>Nessuna scheda.</p><a href="nuova-scheda.html" class="btn btn-primary">🍺 Inizia ora</a></div>`;
                 return;
             }
 
-            // 3. Genera HTML per ogni scheda
-            container.innerHTML = ''; // Pulisci il "Caricamento..."
+            container.innerHTML = ''; 
             
             notes.forEach(note => {
-                // Recuperiamo i dettagli dal JSON
                 const style = note.details.style || "Stile non spec.";
-                // Formattiamo la data (es: 28/01/2026)
                 const date = new Date(note.created_at).toLocaleDateString('it-IT');
-                // Nome evento (gestiamo il caso in cui l'evento sia stato cancellato)
-                const eventName = note.events ? note.events.name : "Evento sconosciuto";
                 
-                // Colore bordo in base al voto
+                // GESTIONE VISIBILITÀ EVENTO
+                const eventName = note.events ? note.events.name : "";
+                const isFreeEvent = eventName.toLowerCase().includes('libero') || eventName.toLowerCase().includes('privato');
+                
                 let borderClass = '';
                 if (note.final_score >= 45) borderClass = 'border-gold';
                 else if (note.final_score >= 38) borderClass = 'border-green';
                 else if (note.final_score < 30) borderClass = 'border-red';
 
-                // (Codice precedente...)
-                // Creiamo il link dinamico con l'ID della nota
                 const html = `
                     <a href="dettaglio-scheda.html?id=${note.id}" style="text-decoration: none; color: inherit;">
                         <div class="history-card ${borderClass}">
@@ -140,8 +127,9 @@
                             
                             <div class="meta-info">
                                 <span>📅 ${date}</span>
-                                <span>📍 ${eventName}</span>
+                                ${!isFreeEvent ? `<span>📍 ${eventName}</span>` : ''}
                             </div>
+                            
                             <div style="margin-top: 8px;">
                                 <span style="background: #374151; color: #9ca3af; padding: 2px 6px; border-radius: 4px; font-size: 0.7em; text-transform: uppercase;">
                                     ${note.sheet_type.replace('_', ' ')}
@@ -150,12 +138,9 @@
                         </div>
                     </a>
                 `;
-                
                 container.innerHTML += html;
             });
         }
-
-        // Avvia caricamento
         loadHistory();
     </script>
 </body>

@@ -3,26 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dettaglio Scheda - HBL</title>
+    <title>Dettaglio Scheda - HBL Tasting Club</title>
     <link rel="stylesheet" href="css/style.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script type="module" src="js/app.js"></script>
 
     <style>
-        /* STILE PER LA "CARTA" (Simuliamo un A4) */
+        /* STILE CARTA */
         .paper-sheet {
             background: white;
             color: black;
-            padding: 30px; /* Margini foglio */
+            padding: 30px;
             max-width: 800px;
             margin: 20px auto;
             border-radius: 2px;
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            font-family: 'Times New Roman', Times, serif; /* Font più "cartaceo" */
+            font-family: 'Times New Roman', Times, serif;
         }
 
-        /* Intestazione PDF */
         .pdf-header {
             border-bottom: 2px solid #000;
             padding-bottom: 10px;
@@ -34,7 +33,6 @@
 
         .pdf-logo { width: 60px; }
 
-        /* Griglia Voti */
         .score-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -60,7 +58,6 @@
             text-align: right;
         }
 
-        /* Sezione Giudice */
         .judge-box {
             margin-top: 30px;
             border: 1px solid #000;
@@ -70,7 +67,6 @@
             font-size: 0.9rem;
         }
 
-        /* Nascondi elementi di controllo quando si genera il PDF (opzionale se usiamo l'ID specifico) */
         .controls {
             text-align: center;
             margin-bottom: 20px;
@@ -78,6 +74,9 @@
             justify-content: center;
             gap: 10px;
         }
+        
+        /* Utilità per nascondere righe */
+        .hidden-row { display: none !important; }
     </style>
 </head>
 <body>
@@ -101,7 +100,7 @@
             </div>
 
             <div style="margin-bottom: 20px; font-family: sans-serif;">
-                <div style="display: flex; margin-bottom: 5px;">
+                <div id="row-event" style="display: flex; margin-bottom: 5px;">
                     <strong style="width: 120px;">Evento:</strong>
                     <span id="pdf-event">...</span>
                 </div>
@@ -114,14 +113,13 @@
                     <span id="pdf-beer" style="font-weight: bold; font-size: 1.1em;">...</span>
                 </div>
                 <div style="display: flex; margin-bottom: 5px;">
-                    <strong style="width: 120px;">Stile Dichiarato:</strong>
+                    <strong style="width: 120px;">Stile:</strong>
                     <span id="pdf-style">...</span>
                 </div>
             </div>
 
             <h3 style="margin: 0 0 10px 0; color: #000; border-bottom: 1px solid #000; font-family: sans-serif;">Valutazione</h3>
-            <div class="score-grid" id="pdf-scores">
-                </div>
+            <div class="score-grid" id="pdf-scores"></div>
 
             <h3 style="margin: 20px 0 10px 0; color: #000; border-bottom: 1px solid #000; font-family: sans-serif;">Note di Degustazione</h3>
             <div id="pdf-notes" style="white-space: pre-wrap; min-height: 100px; border: 1px solid #eee; padding: 10px;"></div>
@@ -135,18 +133,24 @@
             </div>
             
             <div style="text-align: center; margin-top: 20px; font-size: 0.8rem; color: #999;">
-                Scheda generata digitalmente tramite HBL Tasting App
+                Scheda generata digitalmente tramite App HBL Tasting Club
             </div>
         </div>
-
     </div>
 
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        // 1. Recupera ID dalla URL
         const params = new URLSearchParams(window.location.search);
         const noteId = params.get('id');
+
+        // Mappa per tradurre i codici Cicerone in Nomi Completi
+        const ciceroneMap = {
+            'server': 'Certified Beer Server',
+            'certified': 'Certified Cicerone',
+            'advanced': 'Advanced Cicerone',
+            'master': 'Master Cicerone'
+        };
 
         if (!noteId) {
             alert("Scheda non trovata.");
@@ -154,32 +158,31 @@
         }
 
         async function loadSheet() {
-            // A. Recupera Utente (Per i dati del giudice)
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) { window.location.href = 'index.html'; return; }
 
-            // B. Recupera Scheda dal DB
             const { data: note, error } = await supabase
                 .from('tasting_notes')
                 .select('*, events(name)')
                 .eq('id', noteId)
                 .single();
 
-            if (error) {
-                alert("Errore: " + error.message);
-                return;
+            if (error) { alert("Errore: " + error.message); return; }
+
+            // 1. GESTIONE EVENTO (Nascondi se Libero)
+            const evtName = note.events ? note.events.name : "";
+            // Se contiene "libero" o "privato" (case insensitive), nascondiamo la riga
+            if (evtName.toLowerCase().includes('libero') || evtName.toLowerCase().includes('privato')) {
+                document.getElementById('row-event').classList.add('hidden-row');
+            } else {
+                document.getElementById('pdf-event').textContent = evtName;
             }
 
-            // C. Popola i dati nel "Foglio di Carta"
-            
-            // Info Base
-            document.getElementById('pdf-event').textContent = note.events ? note.events.name : "N/A";
             document.getElementById('pdf-date').textContent = new Date(note.created_at).toLocaleDateString('it-IT');
             document.getElementById('pdf-beer').textContent = note.beer_name;
             document.getElementById('pdf-style').textContent = note.details.style || "-";
             document.getElementById('pdf-notes').textContent = note.details.notes || "Nessuna nota inserita.";
 
-            // Voti (Gestiamo BJCP Sintetica)
             if (note.sheet_type === 'bjcp_sintetica' && note.details.scores) {
                 const s = note.details.scores;
                 const htmlScores = `
@@ -188,24 +191,35 @@
                     <div class="score-item"><span>Gusto</span> <strong>${s.flavor}/20</strong></div>
                     <div class="score-item"><span>Corpo</span> <strong>${s.mouthfeel}/5</strong></div>
                     <div class="score-item"><span>Generale</span> <strong>${s.overall}/10</strong></div>
-                    <div class="score-item" style="grid-column: span 2;"></div> <div class="score-total" style="grid-column: span 2;">TOTALE: ${note.final_score}/50</div>
+                    <div class="score-item" style="grid-column: span 2;"></div>
+                    <div class="score-total" style="grid-column: span 2;">TOTALE: ${note.final_score}/50</div>
                 `;
                 document.getElementById('pdf-scores').innerHTML = htmlScores;
             } else {
-                document.getElementById('pdf-scores').innerHTML = "<div>Dettagli punteggio non supportati per questo tipo di scheda.</div>";
+                document.getElementById('pdf-scores').innerHTML = "<div>Dettagli punteggio non supportati.</div>";
             }
 
-            // D. Popola Info Giudice (User Metadata)
+            // INFO GIUDICE
             const meta = user.user_metadata;
             const fullName = `${meta.first_name || ""} ${meta.last_name || ""}`;
             
-            // Costruiamo la stringa delle qualifiche
             let ranks = [];
+            // A. BJCP
             if (meta.bjcp_level) ranks.push(`BJCP ${meta.bjcp_level.replace('_', ' ')}`);
-            if (meta.cicerone_level) ranks.push(`Cicerone ${meta.cicerone_level}`);
-            if (meta.role_sommelier) ranks.push("Beer Sommelier");
+            
+            // B. CICERONE (Usa la mappa corretta)
+            if (meta.cicerone_level) {
+                const cicName = ciceroneMap[meta.cicerone_level] || meta.cicerone_level;
+                ranks.push(cicName);
+            }
+
+            // C. ALTRI
+            if (meta.role_pro) ranks.push("Birraio Professionista");
+            if (meta.role_publican) ranks.push("Publican");
             if (meta.role_ubt) ranks.push("Giudice UBT");
-            if (ranks.length === 0 && meta.qualifica) ranks.push(meta.qualifica); // Fallback vecchio campo
+            if (meta.role_doemens) ranks.push("Biersommelier Doemens");
+            if (meta.role_sommelier) ranks.push("Beer Sommelier");
+            if (meta.role_courses) ranks.push("Degustatore");
 
             document.getElementById('judge-name').textContent = fullName || user.email;
             document.getElementById('judge-rank').textContent = ranks.join(" • ");
@@ -214,17 +228,14 @@
                 document.getElementById('judge-id').textContent = `BJCP ID: ${meta.bjcp_id}`;
             }
 
-            // Mostra email solo se privacy lo permette (qui stiamo vedendo la NOSTRA scheda, quindi mostriamola)
             document.getElementById('judge-email').textContent = user.email;
 
-            // Mostra tutto
             document.getElementById('loading').style.display = 'none';
             document.getElementById('print-area').style.display = 'block';
         }
 
         loadSheet();
 
-        // 2. GENERAZIONE PDF
         document.getElementById('btn-download').addEventListener('click', () => {
             const element = document.getElementById('print-area');
             const btn = document.getElementById('btn-download');
@@ -233,14 +244,13 @@
             btn.disabled = true;
 
             const opt = {
-                margin:       10, // Margini mm
+                margin:       10,
                 filename:     `Scheda_${document.getElementById('pdf-beer').textContent}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 }, // Alta risoluzione
+                html2canvas:  { scale: 2 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            // Genera e scarica
             html2pdf().set(opt).from(element).save().then(() => {
                 btn.textContent = "📥 Scarica PDF";
                 btn.disabled = false;
