@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <link rel="manifest" href="/HBL-Tasting/manifest.json">
-    <meta name="theme-color" content="#f59e0b">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="HBL Tasting">
-    <link rel="icon" type="image/png" href="../assets/icon-192.png">
-    <link rel="apple-touch-icon" href="../assets/icon-192.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BJCP Sintetica - HBL</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style.css?v=0.5.1">
+    
+    <link rel="manifest" href="/HBL-Tasting/manifest.json">
+    <meta name="theme-color" content="#f59e0b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="../assets/icon-192.png">
+    <link rel="apple-touch-icon" href="../assets/icon-192.png">
 </head>
 <body>
     <div class="container">
@@ -35,8 +34,22 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Stile (Opzionale)</label>
-                    <input type="text" id="beer-style" placeholder="Es. American IPA">
+                    <label>Classificazione Stile</label>
+                    <select id="style-system" style="margin-bottom: 10px; border: 1px solid var(--primary-color);">
+                        <option value="free">📝 Stile Libero (Testo)</option>
+                        <option value="bjcp">⚖️ BJCP 2021 (Lista)</option>
+                    </select>
+
+                    <div id="container-free">
+                        <input type="text" id="style-free" placeholder="Es. Italian Grape Ale" required minlength="3">
+                        <small style="color: #6b7280;">Minimo 3 caratteri.</small>
+                    </div>
+
+                    <div id="container-bjcp" style="display: none;">
+                        <select id="style-bjcp">
+                            <option value="" disabled selected>-- Seleziona uno stile --</option>
+                            </select>
+                    </div>
                 </div>
 
                 <div style="background: #111827; padding: 15px; border-radius: 8px; margin: 20px 0;">
@@ -85,6 +98,7 @@
 
     <script type="module">
         import { supabase } from '../js/supabase-config.js';
+        import { bjcpStyles } from '../js/bjcp-2021.js'; // Importiamo gli stili
 
         // 1. Recupera Evento
         const eventId = localStorage.getItem('hbl_selected_event');
@@ -93,7 +107,45 @@
             window.location.href = '../nuova-scheda.html';
         }
 
-        // 2. Setup Input (Interi e Max Cap)
+        // 2. LOGICA GESTIONE STILI
+        const systemSelect = document.getElementById('style-system');
+        const containerFree = document.getElementById('container-free');
+        const containerBjcp = document.getElementById('container-bjcp');
+        const inputFree = document.getElementById('style-free');
+        const inputBjcp = document.getElementById('style-bjcp');
+
+        // A. Popola la select BJCP
+        bjcpStyles.forEach(style => {
+            const option = document.createElement('option');
+            option.value = style;
+            option.textContent = style;
+            inputBjcp.appendChild(option);
+        });
+
+        // B. Cambio Sistema
+        systemSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'free') {
+                // Mostra Libero
+                containerFree.style.display = 'block';
+                inputFree.setAttribute('required', 'true');
+                
+                // Nascondi BJCP
+                containerBjcp.style.display = 'none';
+                inputBjcp.removeAttribute('required');
+                inputBjcp.value = ""; // Reset
+            } else {
+                // Mostra BJCP
+                containerBjcp.style.display = 'block';
+                inputBjcp.setAttribute('required', 'true');
+
+                // Nascondi Libero
+                containerFree.style.display = 'none';
+                inputFree.removeAttribute('required');
+                inputFree.value = ""; // Reset
+            }
+        });
+
+        // 3. Setup Input Calcoli
         const inputs = document.querySelectorAll('.calc-input');
         const totalDisplay = document.getElementById('total-display');
 
@@ -101,24 +153,14 @@
             inputs.forEach(input => {
                 input.setAttribute('step', '1');
                 input.setAttribute('pattern', '[0-9]*');
-
                 input.addEventListener('input', function() {
                     let max = parseInt(this.getAttribute('max'));
                     let min = parseInt(this.getAttribute('min')) || 0;
                     let val = parseInt(this.value);
-
                     if (isNaN(val)) val = 0;
-
-                    if (val > max) {
-                        val = max;
-                        this.value = max; 
-                    } else if (val < min) {
-                        val = min;
-                        this.value = min;
-                    } else if (this.value.includes('.') || this.value.includes(',')) {
-                        this.value = val; 
-                    }
-
+                    if (val > max) { val = max; this.value = max; } 
+                    else if (val < min) { val = min; this.value = min; } 
+                    else if (this.value.includes('.') || this.value.includes(',')) { this.value = val; }
                     calculateTotal();
                 });
             });
@@ -126,24 +168,34 @@
 
         function calculateTotal() {
             let total = 0;
-            inputs.forEach(input => {
-                total += parseInt(input.value) || 0;
-            });
-            
+            inputs.forEach(input => { total += parseInt(input.value) || 0; });
             totalDisplay.textContent = total;
-            
             if (total >= 45) totalDisplay.style.color = "#FFD700";
             else if (total >= 38) totalDisplay.style.color = "#10b981";
             else if (total >= 30) totalDisplay.style.color = "#f59e0b";
             else totalDisplay.style.color = "#ef4444";
         }
-
         setupInputListeners();
 
-        // 3. INVIO DATI (Logica Popup corretta)
+        // 4. INVIO DATI
         document.getElementById('tasting-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
+            
+            // Determina quale stile salvare
+            let finalStyle = "";
+            if (systemSelect.value === 'free') {
+                finalStyle = inputFree.value;
+            } else {
+                finalStyle = inputBjcp.value;
+            }
+
+            // Validazione Extra sicurezza
+            if (!finalStyle || finalStyle.length < 3) {
+                alert("Inserisci uno stile valido.");
+                return;
+            }
+
             btn.disabled = true;
             btn.textContent = "Salvataggio...";
 
@@ -172,7 +224,8 @@
                 sheet_type: 'bjcp_sintetica',
                 final_score: finalScore,
                 details: {
-                    style: document.getElementById('beer-style').value,
+                    style: finalStyle, // Salviamo lo stile scelto
+                    style_type: systemSelect.value, // Salviamo anche se era Libero o BJCP
                     notes: document.getElementById('notes').value,
                     scores: scores
                 }
@@ -186,13 +239,9 @@
                 btn.textContent = "💾 Salva Scheda";
             } else {
                 const newSheetId = data[0].id;
-
-                // --- UNICO POPUP RIMASTO ---
                 if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) {
-                    // SI
                     window.location.href = `../dettaglio-scheda.html?id=${newSheetId}`;
                 } else {
-                    // NO (Nessuna altra domanda)
                     window.location.href = '../nuova-scheda.html';
                 }
             }
