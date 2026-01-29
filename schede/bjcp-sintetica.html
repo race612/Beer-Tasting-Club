@@ -49,6 +49,12 @@
                         <select id="style-bjcp">
                             <option value="" disabled selected>-- Seleziona uno stile --</option>
                             </select>
+
+                        <div id="bjcp-spec-container" style="display: none; margin-top: 10px; background: #374151; padding: 10px; border-radius: 6px; border-left: 3px solid #f59e0b;">
+                            <label style="font-size: 0.85em; color: #f59e0b; margin-bottom: 5px; display: block;">⚠️ Specifica Richiesta</label>
+                            <input type="text" id="bjcp-spec" placeholder="Es. Lamponi, Rye IPA, Base Helles..." style="font-size: 0.9em;">
+                            <small style="color: #d1d5db; font-size: 0.75em;">Inserisci ingredienti, stile base o varianti.</small>
+                        </div>
                     </div>
                 </div>
 
@@ -98,7 +104,8 @@
 
     <script type="module">
         import { supabase } from '../js/supabase-config.js';
-        import { bjcpStyles } from '../js/bjcp-2021.js'; // Importiamo gli stili
+        // Importiamo catalogo e lista speciali
+        import { bjcpCatalog, stylesRequiringSpec } from '../js/bjcp-2021.js'; 
 
         // 1. Recupera Evento
         const eventId = localStorage.getItem('hbl_selected_event');
@@ -107,45 +114,72 @@
             window.location.href = '../nuova-scheda.html';
         }
 
-        // 2. LOGICA GESTIONE STILI
+        // 2. ELEMENTI DOM
         const systemSelect = document.getElementById('style-system');
         const containerFree = document.getElementById('container-free');
         const containerBjcp = document.getElementById('container-bjcp');
         const inputFree = document.getElementById('style-free');
         const inputBjcp = document.getElementById('style-bjcp');
+        
+        // Elementi per Specifica
+        const specContainer = document.getElementById('bjcp-spec-container');
+        const specInput = document.getElementById('bjcp-spec');
 
-        // A. Popola la select BJCP
-        bjcpStyles.forEach(style => {
-            const option = document.createElement('option');
-            option.value = style;
-            option.textContent = style;
-            inputBjcp.appendChild(option);
+        // 3. POPOLA SELECT CON OPTGROUPS
+        bjcpCatalog.forEach(category => {
+            // Crea il gruppo (Titolo Famiglia)
+            const group = document.createElement('optgroup');
+            group.label = category.family;
+
+            // Crea le opzioni dentro il gruppo
+            category.styles.forEach(styleName => {
+                const option = document.createElement('option');
+                option.value = styleName;
+                option.textContent = styleName;
+                group.appendChild(option);
+            });
+
+            inputBjcp.appendChild(group);
         });
 
-        // B. Cambio Sistema
+        // 4. CAMBIO SISTEMA (Libero/BJCP)
         systemSelect.addEventListener('change', (e) => {
             if (e.target.value === 'free') {
-                // Mostra Libero
                 containerFree.style.display = 'block';
                 inputFree.setAttribute('required', 'true');
                 
-                // Nascondi BJCP
                 containerBjcp.style.display = 'none';
                 inputBjcp.removeAttribute('required');
-                inputBjcp.value = ""; // Reset
+                inputBjcp.value = ""; 
+                specContainer.style.display = 'none'; // Nascondi spec se cambi sistema
             } else {
-                // Mostra BJCP
                 containerBjcp.style.display = 'block';
                 inputBjcp.setAttribute('required', 'true');
 
-                // Nascondi Libero
                 containerFree.style.display = 'none';
                 inputFree.removeAttribute('required');
-                inputFree.value = ""; // Reset
+                inputFree.value = "";
             }
         });
 
-        // 3. Setup Input Calcoli
+        // 5. GESTIONE STILI SPECIALI (Mostra campo specifica)
+        inputBjcp.addEventListener('change', (e) => {
+            const selectedStyle = e.target.value;
+            // Estrai il codice (es. "21B" da "21B. Specialty IPA")
+            const code = selectedStyle.split('.')[0]; 
+
+            // Controlla se il codice è nella lista dei "speciali"
+            if (stylesRequiringSpec.includes(code)) {
+                specContainer.style.display = 'block';
+                specInput.setAttribute('required', 'true'); // Diventa obbligatorio
+            } else {
+                specContainer.style.display = 'none';
+                specInput.removeAttribute('required');
+                specInput.value = "";
+            }
+        });
+
+        // 6. SETUP CALCOLI
         const inputs = document.querySelectorAll('.calc-input');
         const totalDisplay = document.getElementById('total-display');
 
@@ -165,7 +199,6 @@
                 });
             });
         }
-
         function calculateTotal() {
             let total = 0;
             inputs.forEach(input => { total += parseInt(input.value) || 0; });
@@ -177,20 +210,23 @@
         }
         setupInputListeners();
 
-        // 4. INVIO DATI
+        // 7. INVIO DATI
         document.getElementById('tasting-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
             
-            // Determina quale stile salvare
+            // Determina stile finale
             let finalStyle = "";
             if (systemSelect.value === 'free') {
                 finalStyle = inputFree.value;
             } else {
                 finalStyle = inputBjcp.value;
+                // Se c'è una specifica visibile e compilata, aggiungila
+                if (specContainer.style.display !== 'none' && specInput.value) {
+                    finalStyle += ` (${specInput.value})`; 
+                }
             }
 
-            // Validazione Extra sicurezza
             if (!finalStyle || finalStyle.length < 3) {
                 alert("Inserisci uno stile valido.");
                 return;
@@ -200,7 +236,6 @@
             btn.textContent = "Salvataggio...";
 
             const { data: { user } } = await supabase.auth.getUser();
-
             if (!user) {
                 alert("Sessione scaduta.");
                 window.location.href = '../index.html';
@@ -224,8 +259,8 @@
                 sheet_type: 'bjcp_sintetica',
                 final_score: finalScore,
                 details: {
-                    style: finalStyle, // Salviamo lo stile scelto
-                    style_type: systemSelect.value, // Salviamo anche se era Libero o BJCP
+                    style: finalStyle,
+                    style_type: systemSelect.value,
                     notes: document.getElementById('notes').value,
                     scores: scores
                 }

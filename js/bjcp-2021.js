@@ -1,37 +1,160 @@
-// Elenco Stili BJCP 2021
-export const bjcpStyles = [
-    "1A. American Light Lager", "1B. American Lager", "1C. Cream Ale", "1D. American Wheat Beer",
-    "2A. International Pale Lager", "2B. International Amber Lager", "2C. International Dark Lager",
-    "3A. Czech Pale Lager", "3B. Czech Premium Pale Lager", "3C. Czech Amber Lager", "3D. Czech Dark Lager",
-    "4A. Munich Helles", "4B. Festbier", "4C. Helles Bock",
-    "5A. German Leichtbier", "5B. Kölsch", "5C. German Helles Exportbier", "5D. German Pils",
-    "6A. Märzen", "6B. Rauchbier", "6C. Dunkles Bock",
-    "7A. Vienna Lager", "7B. Altbier", "7C. Kellerbier",
-    "8A. Munich Dunkel", "8B. Schwarzbier",
-    "9A. Doppelbock", "9B. Eisbock", "9C. Baltic Porter",
-    "10A. Weissbier", "10B. Dunkles Weissbier", "10C. Weizenbock",
-    "11A. Ordinary Bitter", "11B. Best Bitter", "11C. Strong Bitter",
-    "12A. British Golden Ale", "12B. Australian Sparkling Ale", "12C. English IPA",
-    "13A. Dark Mild", "13B. British Brown Ale", "13C. English Porter",
-    "14A. Scottish Light", "14B. Scottish Heavy", "14C. Scottish Export",
-    "15A. Irish Red Ale", "15B. Irish Stout", "15C. Irish Extra Stout",
-    "16A. Sweet Stout", "16B. Oatmeal Stout", "16C. Tropical Stout", "16D. Foreign Extra Stout",
-    "17A. British Strong Ale", "17B. Old Ale", "17C. Wee Heavy", "17D. English Barleywine",
-    "18A. Blonde Ale", "18B. American Pale Ale",
-    "19A. American Amber Ale", "19B. California Common", "19C. American Brown Ale",
-    "20A. American Porter", "20B. American Stout", "20C. Imperial Stout",
-    "21A. American IPA", "21B. Specialty IPA (Specificare)", "21C. Hazy IPA",
-    "22A. Double IPA", "22B. American Strong Ale", "22C. American Barleywine", "22D. Wheatwine",
-    "23A. Berliner Weisse", "23B. Flanders Red Ale", "23C. Oud Bruin", "23D. Lambic", "23E. Gueuze", "23F. Fruit Lambic", "23G. Gose",
-    "24A. Witbier", "24B. Belgian Pale Ale", "24C. Bière de Garde",
-    "25A. Belgian Blond Ale", "25B. Saison", "25C. Belgian Golden Strong Ale",
-    "26A. Trappist Single", "26B. Belgian Dubbel", "26C. Belgian Tripel", "26D. Belgian Dark Strong Ale",
-    "27. Historical Beer",
-    "28A. Brett Beer", "28B. Mixed-Fermentation Sour Beer", "28C. Wild Specialty Beer",
-    "29A. Fruit Beer", "29B. Fruit and Spice Beer", "29C. Specialty Fruit Beer",
-    "30A. Spice, Herb, or Vegetable Beer", "30B. Autumn Seasonal Beer", "30C. Winter Seasonal Beer",
-    "31A. Alternative Grain Beer", "31B. Alternative Sugar Beer",
-    "32A. Classic Style Smoked Beer", "32B. Specialty Smoked Beer",
-    "33A. Wood-Aged Beer", "33B. Specialty Wood-Aged Beer",
-    "34A. Commercial Specialty Beer", "34B. Mixed-Style Beer", "34C. Experimental Beer"
+// js/bjcp-2021.js
+
+// 1. ELENCO STILI ORGANIZZATO PER FAMIGLIE
+export const bjcpCatalog = [
+    {
+        family: "1. Standard American Beer",
+        styles: ["1A. American Light Lager", "1B. American Lager", "1C. Cream Ale", "1D. American Wheat Beer"]
+    },
+    {
+        family: "2. International Lager",
+        styles: ["2A. International Pale Lager", "2B. International Amber Lager", "2C. International Dark Lager"]
+    },
+    {
+        family: "3. Czech Lager",
+        styles: ["3A. Czech Pale Lager", "3B. Czech Premium Pale Lager", "3C. Czech Amber Lager", "3D. Czech Dark Lager"]
+    },
+    {
+        family: "4. Pale Malty European Lager",
+        styles: ["4A. Munich Helles", "4B. Festbier", "4C. Helles Bock"]
+    },
+    {
+        family: "5. Pale Bitter European Beer",
+        styles: ["5A. German Leichtbier", "5B. Kölsch", "5C. German Helles Exportbier", "5D. German Pils"]
+    },
+    {
+        family: "6. Amber Malty European Lager",
+        styles: ["6A. Märzen", "6B. Rauchbier", "6C. Dunkles Bock"]
+    },
+    {
+        family: "7. Amber Bitter European Beer",
+        styles: ["7A. Vienna Lager", "7B. Altbier", "7C. Kellerbier"]
+    },
+    {
+        family: "8. Dark European Lager",
+        styles: ["8A. Munich Dunkel", "8B. Schwarzbier"]
+    },
+    {
+        family: "9. Strong European Beer",
+        styles: ["9A. Doppelbock", "9B. Eisbock", "9C. Baltic Porter"]
+    },
+    {
+        family: "10. German Wheat Beer",
+        styles: ["10A. Weissbier", "10B. Dunkles Weissbier", "10C. Weizenbock"]
+    },
+    {
+        family: "11. British Bitter",
+        styles: ["11A. Ordinary Bitter", "11B. Best Bitter", "11C. Strong Bitter"]
+    },
+    {
+        family: "12. Pale Commonwealth Beer",
+        styles: ["12A. British Golden Ale", "12B. Australian Sparkling Ale", "12C. English IPA"]
+    },
+    {
+        family: "13. Brown British Beer",
+        styles: ["13A. Dark Mild", "13B. British Brown Ale", "13C. English Porter"]
+    },
+    {
+        family: "14. Scottish Ale",
+        styles: ["14A. Scottish Light", "14B. Scottish Heavy", "14C. Scottish Export"]
+    },
+    {
+        family: "15. Irish Beer",
+        styles: ["15A. Irish Red Ale", "15B. Irish Stout", "15C. Irish Extra Stout"]
+    },
+    {
+        family: "16. Dark British Beer",
+        styles: ["16A. Sweet Stout", "16B. Oatmeal Stout", "16C. Tropical Stout", "16D. Foreign Extra Stout"]
+    },
+    {
+        family: "17. Strong British Ale",
+        styles: ["17A. British Strong Ale", "17B. Old Ale", "17C. Wee Heavy", "17D. English Barleywine"]
+    },
+    {
+        family: "18. Pale American Ale",
+        styles: ["18A. Blonde Ale", "18B. American Pale Ale"]
+    },
+    {
+        family: "19. Amber and Brown American Beer",
+        styles: ["19A. American Amber Ale", "19B. California Common", "19C. American Brown Ale"]
+    },
+    {
+        family: "20. American Porter and Stout",
+        styles: ["20A. American Porter", "20B. American Stout", "20C. Imperial Stout"]
+    },
+    {
+        family: "21. IPA",
+        styles: ["21A. American IPA", "21B. Specialty IPA", "21C. Hazy IPA"]
+    },
+    {
+        family: "22. Strong American Ale",
+        styles: ["22A. Double IPA", "22B. American Strong Ale", "22C. American Barleywine", "22D. Wheatwine"]
+    },
+    {
+        family: "23. European Sour Ale",
+        styles: ["23A. Berliner Weisse", "23B. Flanders Red Ale", "23C. Oud Bruin", "23D. Lambic", "23E. Gueuze", "23F. Fruit Lambic", "23G. Gose"]
+    },
+    {
+        family: "24. Belgian Ale",
+        styles: ["24A. Witbier", "24B. Belgian Pale Ale", "24C. Bière de Garde"]
+    },
+    {
+        family: "25. Strong Belgian Ale",
+        styles: ["25A. Belgian Blond Ale", "25B. Saison", "25C. Belgian Golden Strong Ale"]
+    },
+    {
+        family: "26. Trappist Ale",
+        styles: ["26A. Trappist Single", "26B. Belgian Dubbel", "26C. Belgian Tripel", "26D. Belgian Dark Strong Ale"]
+    },
+    {
+        family: "27. Historical Beer",
+        styles: ["27. Historical Beer"]
+    },
+    {
+        family: "28. American Wild Ale",
+        styles: ["28A. Brett Beer", "28B. Mixed-Fermentation Sour Beer", "28C. Wild Specialty Beer"]
+    },
+    {
+        family: "29. Fruit Beer",
+        styles: ["29A. Fruit Beer", "29B. Fruit and Spice Beer", "29C. Specialty Fruit Beer"]
+    },
+    {
+        family: "30. Spiced Beer",
+        styles: ["30A. Spice, Herb, or Vegetable Beer", "30B. Autumn Seasonal Beer", "30C. Winter Seasonal Beer"]
+    },
+    {
+        family: "31. Alternative Fermentables",
+        styles: ["31A. Alternative Grain Beer", "31B. Alternative Sugar Beer"]
+    },
+    {
+        family: "32. Smoked Beer",
+        styles: ["32A. Classic Style Smoked Beer", "32B. Specialty Smoked Beer"]
+    },
+    {
+        family: "33. Wood Beer",
+        styles: ["33A. Wood-Aged Beer", "33B. Specialty Wood-Aged Beer"]
+    },
+    {
+        family: "34. Specialty Beer",
+        styles: ["34A. Commercial Specialty Beer", "34B. Mixed-Style Beer", "34C. Experimental Beer"]
+    }
+];
+
+// 2. LISTA STILI CHE RICHIEDONO SPECIFICA (Entry Instructions)
+// Controlliamo l'inizio della stringa (il codice)
+export const stylesRequiringSpec = [
+    "7C", // Kellerbier (Pale/Amber)
+    "9A", // Doppelbock (Pale/Dark)
+    "21B", // Specialty IPA (Type)
+    "23F", // Fruit Lambic (Fruit)
+    "24C", // Biere de Garde (Color/Strength)
+    "25B", // Saison (Strength/Color)
+    "27",  // Historical (Style)
+    "28A", "28B", "28C", // Wild
+    "29A", "29B", "29C", // Fruit
+    "30A", "30B", "30C", // Spiced
+    "31A", "31B", // Alt Grains/Sugar
+    "32A", "32B", // Smoked
+    "33A", "33B", // Wood
+    "34A", "34B", "34C" // Specialty
 ];
