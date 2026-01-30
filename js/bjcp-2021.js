@@ -29,7 +29,6 @@ export const bjcpCatalog = [
     {
         family: "7. Amber Bitter European Beer",
         styles: ["7A. Vienna Lager", "7B. Altbier"] 
-        // 7C Kellerbier RIMOSSO (è in Historical)
     },
     {
         family: "8. Dark European Lager",
@@ -145,13 +144,14 @@ export const bjcpCatalog = [
     }
 ];
 
-// 2. REGOLE SPECIALI DI UI (Configurazione Avanzata)
+// 2. REGOLE SPECIALI DI UI
 export const specialStyleRules = {
-    // 9A. Doppelbock
+    // 9A. Doppelbock (MODIFICATO: Default Dark)
     "9A": {
         type: "options",
         label: "Variante Colore:",
-        choices: ["Pale", "Dark"] // Flag opzionale
+        choices: ["Pale", "Dark"],
+        default: "Dark" // <--- NUOVO CAMPO
     },
 
     // 21B. Specialty IPA
@@ -198,7 +198,7 @@ export const specialStyleRules = {
         textLabel: "Altro / Dettagli:"
     },
 
-    // Generici per categorie creative (richiedono testo obbligatorio)
+    // Generici
     "28A": { type: "text_only", required: true }, "28B": { type: "text_only", required: true }, "28C": { type: "text_only", required: true },
     "29A": { type: "text_only", required: true }, "29B": { type: "text_only", required: true }, "29C": { type: "text_only", required: true },
     "30A": { type: "text_only", required: true }, "30B": { type: "text_only", required: true }, "30C": { type: "text_only", required: true },

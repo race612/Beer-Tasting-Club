@@ -468,3 +468,110 @@ input:focus, select:focus {
 .border-green { border-left-color: #10b981 !important; }
 .border-gold { border-left-color: #FFD700 !important; }
 .border-red { border-left-color: #ef4444 !important; }
+
+/* --- UI SELEZIONE SCHEDE (Nuova Scheda) --- */
+.sheet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Due colonne */
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.sheet-card {
+    background: #1f2937;
+    border: 1px solid #374151;
+    border-radius: var(--radius);
+    padding: 20px 10px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 120px;
+}
+
+.sheet-card:not(.disabled):hover {
+    border-color: var(--primary-color);
+    background: #2d3748;
+    transform: translateY(-2px);
+}
+
+.sheet-card.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    border-color: #374151;
+}
+
+.sheet-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.sheet-title {
+    font-weight: bold;
+    font-size: 0.95rem;
+    line-height: 1.2;
+}
+
+.coming-soon-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #ef4444;
+    color: white;
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* --- SEZIONE DIFETTI (BJCP Sintetica) --- */
+.flaws-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 colonne su mobile */
+    gap: 10px;
+    background: #1f2937;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #374151;
+}
+
+.flaw-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.flaw-check-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.flaw-intensity {
+    margin-top: 5px;
+    margin-left: 25px; /* Indenta sotto il testo */
+}
+
+.flaw-select {
+    background: #374151;
+    color: white;
+    border: 1px solid #4b5563;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    padding: 2px 5px;
+    width: 100%;
+}
+
+@media (min-width: 600px) {
+    .flaws-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 colonne su PC */
+    }
+}

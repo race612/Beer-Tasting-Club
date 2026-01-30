@@ -1,193 +1,125 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <link rel="manifest" href="/HBL-Tasting/manifest.json">
-    <meta name="theme-color" content="#f59e0b">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="HBL Tasting">
-    <link rel="icon" type="image/png" href="assets/icon-192.png">
-    <link rel="apple-touch-icon" href="assets/icon-192.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuova Degustazione - HBL</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=0.5.2">
+    <link rel="manifest" href="/HBL-Tasting/manifest.json">
+    <meta name="theme-color" content="#f59e0b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
     <script type="module" src="js/app.js"></script>
 </head>
 <body>
     <div class="container">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <img src="assets/logo-hbl.png" alt="Logo" style="width: 60px;">
+        
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <a href="index.html" style="text-decoration: none; font-size: 1.5rem;">🏠</a>
             <h3>Nuova Scheda</h3>
+            <div style="width: 30px;"></div>
         </div>
 
-        <div class="card">
-            <form id="setup-form">
-                
-                <label style="margin-bottom: 10px; display:block;">Cosa stiamo bevendo?</label>
-                <div class="mode-switch">
-                    <div class="mode-option active" id="mode-free" onclick="setMode('free')">
-                        🏠 Libera / Privata
-                    </div>
-                    <div class="mode-option" id="mode-event" onclick="setMode('event')">
-                        📅 Evento HBL
-                    </div>
-                </div>
-
-                <div class="form-group" id="event-selector-group" style="display: none;">
-                    <label for="evento-select">Seleziona la serata:</label>
-                    <select id="evento-select">
-                        <option value="">Caricamento eventi...</option>
-                    </select>
-                </div>
-
-                <input type="hidden" id="final-event-id">
-
-                <hr style="border: 0; border-top: 1px solid #374151; margin: 20px 0;">
-
-                <div class="form-group">
-                    <label>📝 Che scheda usi?</label>
-                    <div class="grid-2">
-                        <div class="selection-card" onclick="selectCard(this, 'bjcp-sintetica')">
-                            <h4 style="font-size: 1.5rem;">📜</h4>
-                            <h4>BJCP Sintetica</h4>
-                            <p>Veloce e precisa</p>
-                        </div>
-                        
-                        <div class="selection-card" onclick="selectCard(this, 'hbl-classica')">
-                            <h4 style="font-size: 1.5rem;">🍺</h4>
-                            <h4>Scheda HBL</h4>
-                            <p>Standard Club</p>
-                        </div>
-                        
-                        <div class="selection-card" onclick="selectCard(this, 'crocette')">
-                            <h4 style="font-size: 1.5rem;">❌</h4>
-                            <h4>Crocette</h4>
-                            <p>Super rapida</p>
-                        </div>
-
-                        <div class="selection-card" onclick="selectCard(this, 'bjcp-full')">
-                            <h4 style="font-size: 1.5rem;">⚖️</h4>
-                            <h4>BJCP Full</h4>
-                            <p>Esame completo</p>
-                        </div>
-                    </div>
-                    
-                    <input type="hidden" id="tipo-scheda" required>
-                    <p id="selection-error" style="color: var(--danger); display: none; margin-top: 15px; font-weight: bold;">⚠️ Seleziona un tipo di scheda per proseguire</p>
-                </div>
-
-                <div style="text-align: center; margin-top: 30px;">
-                    <button type="submit" class="btn btn-primary">Inizia Degustazione →</button>
-                </div>
-            </form>
+        <div class="form-group">
+            <label>Seleziona Evento</label>
+            <select id="event-select" style="background: #1f2937; color: white;">
+                <option value="">Caricamento eventi...</option>
+            </select>
         </div>
 
-        <a href="index.html" class="link-back">← Torna alla Dashboard</a>
+        <hr style="border-color: #374151; margin: 25px 0;">
+
+        <h3 style="text-align: center; margin-bottom: 10px;">Che scheda vuoi usare?</h3>
+
+        <div class="sheet-grid">
+            
+            <a href="schede/bjcp-sintetica.html" class="sheet-card" onclick="return saveEventContext()">
+                <span class="sheet-icon">⚖️</span>
+                <span class="sheet-title">BJCP<br>Sintetica</span>
+            </a>
+
+            <a href="schede/crocette.html" class="sheet-card" onclick="return saveEventContext()">
+                <span class="sheet-icon">📝</span>
+                <span class="sheet-title">Descrittiva<br>Semplificata</span>
+            </a>
+
+            <div class="sheet-card disabled">
+                <span class="coming-soon-badge">Coming Soon</span>
+                <span class="sheet-icon">📋</span>
+                <span class="sheet-title">BJCP<br>Completa</span>
+            </div>
+
+            <div class="sheet-card disabled">
+                <span class="coming-soon-badge">Coming Soon</span>
+                <span class="sheet-icon">🍺</span>
+                <span class="sheet-title">Scheda<br>HBL</span>
+            </div>
+
+            <div class="sheet-card disabled">
+                <span class="coming-soon-badge">Coming Soon</span>
+                <span class="sheet-icon">📖</span>
+                <span class="sheet-title">Descrittiva<br>Estesa</span>
+            </div>
+
+            <div class="sheet-card disabled">
+                <span class="coming-soon-badge">Coming Soon</span>
+                <span class="sheet-icon">🇮🇹</span>
+                <span class="sheet-title">UBT<br>Birra dell'Anno</span>
+            </div>
+
+        </div>
+
+        <br>
+        <a href="index.html" class="link-back">← Annulla</a>
     </div>
 
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        let freeEventId = null; // ID evento Libero
-
-        // 1. Carica Eventi
+        // Carica eventi
         async function loadEvents() {
-            const select = document.getElementById('evento-select');
-            
+            const select = document.getElementById('event-select');
             const { data: events, error } = await supabase
                 .from('events')
-                .select('id, name')
-                .eq('is_active', true)
-                .order('id', { ascending: false });
+                .select('*')
+                .eq('active', true)
+                .order('date', { ascending: false });
 
             if (error) {
-                console.error('Errore eventi:', error);
+                console.error(error);
+                select.innerHTML = '<option>Errore caricamento</option>';
                 return;
             }
 
-            select.innerHTML = '<option value="" disabled selected>-- Scegli Evento --</option>';
-            
-            events.forEach(event => {
-                const nameLower = event.name.toLowerCase();
-                if (nameLower.includes('libero') || nameLower.includes('privato')) {
-                    freeEventId = event.id;
-                } else {
-                    const option = document.createElement('option');
-                    option.value = event.id;
-                    option.textContent = event.name;
-                    select.appendChild(option);
+            select.innerHTML = '';
+            // Evento Libero sempre presente
+            const freeOption = document.createElement('option');
+            freeOption.value = '2aa78438-2a13-4315-8461-127116b0638e'; // ID del tuo evento libero nel DB
+            freeOption.textContent = '🍺 Utilizzo Libero (Privato)';
+            select.appendChild(freeOption);
+
+            events.forEach(evt => {
+                if(evt.name !== 'Utilizzo Libero') { // Evita duplicati se presente nel DB
+                    const opt = document.createElement('option');
+                    opt.value = evt.id;
+                    opt.textContent = `📅 ${evt.name}`;
+                    select.appendChild(opt);
                 }
             });
         }
-
         loadEvents();
 
-        // 2. Gestione Tabs (Modalità)
-        window.setMode = function(mode) {
-            const btnEvent = document.getElementById('mode-event');
-            const btnFree = document.getElementById('mode-free');
-            const selectorGroup = document.getElementById('event-selector-group');
-            const select = document.getElementById('evento-select');
-
-            if (mode === 'event') {
-                // Attiva Evento
-                btnEvent.classList.add('active');
-                btnFree.classList.remove('active');
-                selectorGroup.style.display = 'block'; 
-                select.required = true;
-            } else {
-                // Attiva Libero
-                btnFree.classList.add('active');
-                btnEvent.classList.remove('active');
-                selectorGroup.style.display = 'none'; 
-                select.required = false;
-                select.value = ""; 
+        // Salva l'evento scelto nel localStorage prima di cambiare pagina
+        window.saveEventContext = function() {
+            const eventId = document.getElementById('event-select').value;
+            if(!eventId) {
+                alert("Seleziona un evento prima di procedere.");
+                return false;
             }
+            localStorage.setItem('hbl_selected_event', eventId);
+            return true;
         }
-
-        // 3. Selezione Scheda Grafica
-        window.selectCard = function(element, value) {
-            document.querySelectorAll('.selection-card').forEach(el => {
-                el.style.border = '2px solid transparent';
-                el.style.backgroundColor = 'var(--card-bg)';
-            });
-            element.style.borderColor = 'var(--primary-color)';
-            element.style.backgroundColor = '#2d3748';
-            document.getElementById('tipo-scheda').value = value;
-            document.getElementById('selection-error').style.display = 'none';
-        }
-
-        // 4. Invio Form
-        document.getElementById('setup-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const isFreeMode = document.getElementById('mode-free').classList.contains('active');
-            let finalId = null;
-
-            if (isFreeMode) {
-                if (!freeEventId) {
-                    alert("Errore tecnico: Non trovo l'ID 'Libero' nel database.");
-                    return;
-                }
-                finalId = freeEventId;
-            } else {
-                finalId = document.getElementById('evento-select').value;
-                if (!finalId) {
-                    alert("Seleziona una serata dal menu!");
-                    return;
-                }
-            }
-
-            const tipoScheda = document.getElementById('tipo-scheda').value;
-            if (!tipoScheda) {
-                document.getElementById('selection-error').style.display = 'block';
-                return;
-            }
-
-            localStorage.setItem('hbl_selected_event', finalId);
-            window.location.href = `schede/${tipoScheda}.html`;
-        });
     </script>
 </body>
 </html>
