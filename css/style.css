@@ -610,15 +610,79 @@ input:focus, select:focus {
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* --- NUOVO STILE DIFETTI (Flaw Cards) --- */
-.flaws-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 colonne mobile */
-    gap: 10px;
+/* --- STILI PER SCHEDA A CROCETTE (Descrittiva) --- */
+.desc-section-title {
+    color: var(--primary-color);
+    border-bottom: 1px solid #374151;
+    padding-bottom: 5px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.desc-group {
+    margin-bottom: 20px;
+}
+
+.desc-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #d1d5db;
+}
+
+/* Griglia dei pulsanti/crocette */
+.options-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Il singolo quadratino/bottone */
+.option-btn {
+    background: #1f2937;
+    border: 1px solid #4b5563;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    flex: 1 1 auto; /* Si adattano alla larghezza */
+    text-align: center;
+    min-width: 80px;
+}
+
+.option-btn:hover {
+    border-color: #9ca3af;
+    background: #374151;
+}
+
+/* Stato Selezionato */
+.option-btn.selected {
+    background: var(--primary-color);
+    color: #000;
+    border-color: var(--primary-color);
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
 }
 
 @media (min-width: 600px) {
     .flaws-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* --- NUOVO STILE DIFETTI (Flaw Cards) --- */
+.flaws-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    background: #111827; /* <--- MODIFICATO: Blu scuro come il resto */
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #374151;
 }
 
 /* Nascondiamo la checkbox vera */

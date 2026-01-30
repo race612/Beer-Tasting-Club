@@ -4,13 +4,288 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descrittiva Semplificata - HBL</title>
-    <link rel="stylesheet" href="../css/style.css?v=0.5.2">
+    <link rel="stylesheet" href="../css/style.css?v=0.5.4">
+    
+    <link rel="manifest" href="/HBL-Tasting/manifest.json">
+    <meta name="theme-color" content="#f59e0b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="../assets/icon-192.png">
+    <link rel="apple-touch-icon" href="../assets/icon-192.png">
+    
+    <style>
+        /* CSS Specifico per campi dinamici Header (Copiato da BJCP) */
+        .dynamic-field-group { margin-top: 10px; background: #374151; padding: 12px; border-radius: 6px; border-left: 3px solid #f59e0b; }
+        .dynamic-label { font-size: 0.85em; color: #f59e0b; margin-bottom: 5px; display: block; font-weight: bold; }
+        .dynamic-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+        .radio-badge label { background: #1f2937; padding: 5px 10px; border-radius: 4px; border: 1px solid #4b5563; cursor: pointer; font-size: 0.9em; }
+        .radio-badge input:checked + span { color: var(--primary-color); font-weight: bold; }
+        .radio-badge input { margin-right: 5px; }
+    </style>
 </head>
 <body>
-    <div class="container" style="text-align: center; padding-top: 50px;">
-        <h1>🚧 Lavori in corso</h1>
-        <p>Questa scheda (Descrittiva a Crocette) sarà disponibile a breve!</p>
-        <a href="../nuova-scheda.html" class="btn btn-secondary">← Torna indietro</a>
+    <div class="container">
+        
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <a href="../nuova-scheda.html" style="text-decoration: none; color: var(--text-muted);">← Indietro</a>
+            <img src="../assets/logo-hbl.png" alt="Logo" style="width: 40px;">
+        </div>
+
+        <div class="card">
+            <h2 style="text-align: center; margin-bottom: 5px;">Descrittiva Semplificata</h2>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-top:0;">Scheda a Crocette</p>
+            <hr style="border-color: #374151; margin: 15px 0;">
+
+            <form id="tasting-form">
+                
+                <div class="form-group">
+                    <label>Nome Birra / Numero Campione</label>
+                    <input type="text" id="beer-name" required placeholder="Es. IPA del Mario o #42">
+                </div>
+
+                <div class="form-group">
+                    <label>Classificazione Stile</label>
+                    <select id="style-system" style="margin-bottom: 10px; border: 1px solid var(--primary-color);">
+                        <option value="free">📝 Stile Libero (Testo)</option>
+                        <option value="bjcp">⚖️ BJCP 2021 (Lista)</option>
+                    </select>
+
+                    <div id="container-free">
+                        <input type="text" id="style-free" placeholder="Es. Italian Grape Ale" required minlength="3">
+                        <small style="color: #6b7280;">Minimo 3 caratteri.</small>
+                    </div>
+
+                    <div id="container-bjcp" style="display: none;">
+                        <select id="style-bjcp">
+                            <option value="" disabled selected>-- Seleziona uno stile --</option>
+                        </select>
+                        <div id="bjcp-dynamic-container"></div>
+                    </div>
+                </div>
+                <hr style="border-color: #374151; margin: 30px 0;">
+
+                <h4 class="desc-section-title">1. Aspetto</h4>
+                
+                <div class="desc-group">
+                    <span class="desc-label">Colore Birra</span>
+                    <div class="options-grid" data-category="appearance_color">
+                        <div class="option-btn">Giallo Paglierino</div>
+                        <div class="option-btn">Giallo Dorato</div>
+                        <div class="option-btn">Ambrato</div>
+                        <div class="option-btn">Ramato</div>
+                        <div class="option-btn">Marrone</div>
+                        <div class="option-btn">Nera</div>
+                    </div>
+                </div>
+
+                <div class="desc-group">
+                    <span class="desc-label">Trasparenza</span>
+                    <div class="options-grid" data-category="appearance_clarity">
+                        <div class="option-btn">Limpida</div>
+                        <div class="option-btn">Velata</div>
+                        <div class="option-btn">Torbida</div>
+                    </div>
+                </div>
+
+                <div class="desc-group">
+                    <span class="desc-label">Schiuma (Quantità)</span>
+                    <div class="options-grid" data-category="head_amount">
+                        <div class="option-btn">Assente</div>
+                        <div class="option-btn">Scarsa</div>
+                        <div class="option-btn">Presente</div>
+                        <div class="option-btn">Abbondante</div>
+                    </div>
+                </div>
+
+                <div class="desc-group">
+                    <span class="desc-label">Schiuma (Persistenza)</span>
+                    <div class="options-grid" data-category="head_retention">
+                        <div class="option-btn">Breve</div>
+                        <div class="option-btn">Medio/Breve</div>
+                        <div class="option-btn">Media</div>
+                        <div class="option-btn">Medio/Lunga</div>
+                        <div class="option-btn">Lunga</div>
+                    </div>
+                </div>
+
+                <div class="desc-group">
+                    <span class="desc-label">Schiuma (Colore)</span>
+                    <div class="options-grid" data-category="head_color">
+                        <div class="option-btn">Bianca</div>
+                        <div class="option-btn">Avorio</div>
+                        <div class="option-btn">Crema</div>
+                        <div class="option-btn">Cappuccino</div>
+                        <div class="option-btn">Marrone</div>
+                        <div class="option-btn">Rosata</div>
+                    </div>
+                </div>
+
+                <div class="desc-group">
+                    <span class="desc-label">Grana Bolle</span>
+                    <div class="options-grid" data-category="head_texture">
+                        <div class="option-btn">Fine</div>
+                        <div class="option-btn">Media</div>
+                        <div class="option-btn">Grossolana</div>
+                    </div>
+                </div>
+
+                <h4 class="desc-section-title">2. Aroma</h4>
+                <p style="color: #666; font-style: italic;">(In attesa di definizione parametri...)</p>
+
+                <h4 class="desc-section-title">3. Gusto</h4>
+                <p style="color: #666; font-style: italic;">(In attesa di definizione parametri...)</p>
+
+                <h4 class="desc-section-title">4. Sensazioni Boccali</h4>
+                <p style="color: #666; font-style: italic;">(In attesa di definizione parametri...)</p>
+
+                <h4 class="desc-section-title">5. Retrogusto</h4>
+                <p style="color: #666; font-style: italic;">(In attesa di definizione parametri...)</p>
+
+                <hr style="border-color: #374151; margin: 30px 0;">
+                <div class="form-group">
+                    <label>Note e Commenti</label>
+                    <textarea id="notes" rows="4" placeholder="Commenti generali sulla bevuta..."></textarea>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn btn-primary">💾 Salva Scheda</button>
+            </form>
+        </div>
     </div>
+
+    <script type="module">
+        import { supabase } from '../js/supabase-config.js';
+        import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js';
+
+        // 1. INIZIALIZZAZIONE (Copia logica BJCP)
+        const eventId = localStorage.getItem('hbl_selected_event') || '2aa78438-2a13-4315-8461-127116b0638e'; // Fallback a libero se manca
+        
+        const systemSelect = document.getElementById('style-system');
+        const containerFree = document.getElementById('container-free');
+        const containerBjcp = document.getElementById('container-bjcp');
+        const inputFree = document.getElementById('style-free');
+        const inputBjcp = document.getElementById('style-bjcp');
+        const dynamicContainer = document.getElementById('bjcp-dynamic-container');
+
+        // Popola Select BJCP
+        bjcpCatalog.forEach(category => {
+            const group = document.createElement('optgroup');
+            group.label = category.family;
+            category.styles.forEach(styleName => {
+                const option = document.createElement('option');
+                option.value = styleName;
+                option.textContent = styleName;
+                group.appendChild(option);
+            });
+            inputBjcp.appendChild(group);
+        });
+
+        // Gestione Cambio Sistema
+        systemSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'free') {
+                containerFree.style.display = 'block'; inputFree.setAttribute('required', 'true');
+                containerBjcp.style.display = 'none'; inputBjcp.removeAttribute('required'); inputBjcp.value = ""; dynamicContainer.innerHTML = '';
+            } else {
+                containerBjcp.style.display = 'block'; inputBjcp.setAttribute('required', 'true');
+                containerFree.style.display = 'none'; inputFree.removeAttribute('required'); inputFree.value = "";
+            }
+        });
+
+        // UI Dinamica Stili Speciali
+        inputBjcp.addEventListener('change', (e) => {
+            dynamicContainer.innerHTML = ''; 
+            const code = e.target.value.split('.')[0];
+            const rule = specialStyleRules[code];
+            if (!rule) return;
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'dynamic-field-group';
+
+            if (rule.type === 'text_only') {
+                if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b">${rule.hint}</small>`;
+                wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" ${rule.required?'required':''}>`;
+            } else if (rule.type === 'options') {
+                wrapper.innerHTML += `<span class="dynamic-label">${rule.label}</span><div class="dynamic-row">` + 
+                rule.choices.map(c => {
+                    const chk = (rule.default && c === rule.default) ? 'checked' : '';
+                    return `<label class="radio-badge"><input type="radio" name="dyn-radio" value="${c}" ${chk}><span>${c}</span></label>`;
+                }).join('') + `</div>`;
+            }
+            // (Ometti qui per brevità gli altri casi complessi ma nel file finale mettili come nel BJCP Sintetico)
+            
+            dynamicContainer.appendChild(wrapper);
+        });
+
+        // 2. LOGICA PULSANTI A CROCETTE (Selezione Singola per Gruppo)
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const parent = this.parentElement;
+                
+                // Deseleziona tutti gli altri fratelli
+                parent.querySelectorAll('.option-btn').forEach(sib => sib.classList.remove('selected'));
+                
+                // Seleziona questo
+                this.classList.add('selected');
+            });
+        });
+
+        // 3. INVIO DATI
+        document.getElementById('tasting-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+
+            // --- COSTRUZIONE STILE FINALE ---
+            let finalStyle = "";
+            if (systemSelect.value === 'free') finalStyle = inputFree.value;
+            else {
+                finalStyle = inputBjcp.value;
+                const code = finalStyle.split('.')[0];
+                const rule = specialStyleRules[code];
+                if (rule) {
+                    let specs = [];
+                    const textVal = document.getElementById('dyn-text')?.value;
+                    const radioVal = document.querySelector('input[name="dyn-radio"]:checked')?.value;
+                    if (textVal) specs.push(textVal);
+                    if (radioVal) specs.push(radioVal);
+                    if (specs.length > 0) finalStyle += ` (${specs.join(', ')})`;
+                }
+            }
+            if (!finalStyle || finalStyle.length < 3) { alert("Inserisci uno stile valido."); return; }
+
+            // --- RACCOLTA DATI CROCETTE ---
+            const descriptiveData = {};
+            document.querySelectorAll('.options-grid').forEach(grid => {
+                const category = grid.getAttribute('data-category');
+                const selected = grid.querySelector('.option-btn.selected');
+                // Salviamo il testo del bottone selezionato, o null se nulla è selezionato
+                descriptiveData[category] = selected ? selected.textContent : null;
+            });
+
+            btn.disabled = true; btn.textContent = "Salvataggio...";
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) { window.location.href = '../index.html'; return; }
+
+            const payload = {
+                user_id: user.id, 
+                event_id: eventId, 
+                beer_name: document.getElementById('beer-name').value,
+                sheet_type: 'desc_crocette', // NUOVO TIPO
+                final_score: 0, // Le schede descrittive non hanno voto numerico per ora
+                details: { 
+                    style: finalStyle, 
+                    style_type: systemSelect.value, 
+                    notes: document.getElementById('notes').value, 
+                    description: descriptiveData // Oggetto JSON con le scelte
+                }
+            };
+
+            const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
+            if (error) { alert(error.message); btn.disabled = false; return; }
+            
+            if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) {
+                window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
+            } else {
+                window.location.href = '../nuova-scheda.html';
+            }
+        });
+    </script>
 </body>
 </html>
