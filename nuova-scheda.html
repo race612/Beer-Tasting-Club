@@ -29,26 +29,23 @@
         </div>
 
         <div id="mode-free">
-            <div class="form-group">
-                <label>Seleziona Evento / Contesto</label>
-                <select id="event-select" style="background: #1f2937; color: white;">
-                    <option value="">Caricamento...</option>
-                </select>
-            </div>
-
-            <hr style="border-color: #374151; margin: 25px 0;">
+            
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-bottom: 25px;">
+                Degustazione libera (Privata / Generica)
+            </p>
 
             <h3 style="text-align: center; margin-bottom: 10px;">Che scheda vuoi usare?</h3>
 
             <div class="sheet-grid">
-                <a href="schede/bjcp-sintetica.html" class="sheet-card" onclick="return saveEventContext()">
+                <a href="schede/bjcp-sintetica.html" class="sheet-card" onclick="return saveFreeContext()">
                     <span class="sheet-icon">⚖️</span>
                     <span class="sheet-title">BJCP<br>Sintetica</span>
                 </a>
-                <a href="schede/crocette.html" class="sheet-card" onclick="return saveEventContext()">
+                <a href="schede/crocette.html" class="sheet-card" onclick="return saveFreeContext()">
                     <span class="sheet-icon">📝</span>
                     <span class="sheet-title">Descrittiva<br>Semplificata</span>
                 </a>
+                
                 <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="sheet-icon">📋</span><span class="sheet-title">BJCP<br>Completa</span></div>
                 <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="sheet-icon">🍺</span><span class="sheet-title">Scheda<br>HBL</span></div>
                 <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="sheet-icon">📖</span><span class="sheet-title">Descrittiva<br>Estesa</span></div>
@@ -62,22 +59,22 @@
             <p style="color: var(--text-muted);" id="coming-soon-text">
                 Stiamo lavorando per integrare questa modalità.
             </p>
-        </div>
+            </div>
 
         <br>
         <a href="index.html" class="link-back">← Annulla</a>
     </div>
 
     <script type="module">
-        import { supabase } from './js/supabase-config.js';
+        // ID dell'evento "Utilizzo Libero" nel tuo database Supabase.
+        // Se non lo conosci, controlla la tabella 'events' su Supabase.
+        const FREE_EVENT_ID = '2aa78438-2a13-4315-8461-127116b0638e'; 
 
         // Logica cambio tab
         window.setMode = function(mode, element) {
-            // 1. Aggiorna stile pulsanti
             document.querySelectorAll('.segmented-option').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
 
-            // 2. Mostra/Nascondi contenuti
             const freeDiv = document.getElementById('mode-free');
             const csDiv = document.getElementById('mode-coming-soon');
             const csText = document.getElementById('coming-soon-text');
@@ -97,35 +94,10 @@
             }
         }
 
-        // Carica eventi (come prima)
-        async function loadEvents() {
-            const select = document.getElementById('event-select');
-            const { data: events, error } = await supabase
-                .from('events').select('*').eq('active', true).order('date', { ascending: false });
-
-            if (error) { select.innerHTML = '<option>Errore</option>'; return; }
-
-            select.innerHTML = '';
-            // Evento Libero fisso
-            const freeOption = document.createElement('option');
-            freeOption.value = '2aa78438-2a13-4315-8461-127116b0638e'; // ID tuo evento libero
-            freeOption.textContent = '🍺 Utilizzo Libero (Privato)';
-            select.appendChild(freeOption);
-
-            events.forEach(evt => {
-                if(evt.name !== 'Utilizzo Libero') {
-                    const opt = document.createElement('option');
-                    opt.value = evt.id; opt.textContent = `📅 ${evt.name}`;
-                    select.appendChild(opt);
-                }
-            });
-        }
-        loadEvents();
-
-        window.saveEventContext = function() {
-            const eventId = document.getElementById('event-select').value;
-            if(!eventId) { alert("Seleziona un evento prima di procedere."); return false; }
-            localStorage.setItem('hbl_selected_event', eventId);
+        // Funzione semplificata per Uso Libero
+        window.saveFreeContext = function() {
+            // Imposta direttamente l'ID dell'evento libero
+            localStorage.setItem('hbl_selected_event', FREE_EVENT_ID);
             return true;
         }
     </script>
