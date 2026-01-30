@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuova Degustazione - HBL</title>
-    <link rel="stylesheet" href="css/style.css?v=0.5.2">
+    <link rel="stylesheet" href="css/style.css?v=0.5.3">
+    
     <link rel="manifest" href="/HBL-Tasting/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,53 +22,46 @@
             <div style="width: 30px;"></div>
         </div>
 
-        <div class="form-group">
-            <label>Seleziona Evento</label>
-            <select id="event-select" style="background: #1f2937; color: white;">
-                <option value="">Caricamento eventi...</option>
-            </select>
+        <div class="segmented-control">
+            <div class="segmented-option active" onclick="setMode('free', this)">Uso Libero</div>
+            <div class="segmented-option" onclick="setMode('sharing', this)">Beer Sharing</div>
+            <div class="segmented-option" onclick="setMode('event', this)">Evento HBL</div>
         </div>
 
-        <hr style="border-color: #374151; margin: 25px 0;">
-
-        <h3 style="text-align: center; margin-bottom: 10px;">Che scheda vuoi usare?</h3>
-
-        <div class="sheet-grid">
-            
-            <a href="schede/bjcp-sintetica.html" class="sheet-card" onclick="return saveEventContext()">
-                <span class="sheet-icon">⚖️</span>
-                <span class="sheet-title">BJCP<br>Sintetica</span>
-            </a>
-
-            <a href="schede/crocette.html" class="sheet-card" onclick="return saveEventContext()">
-                <span class="sheet-icon">📝</span>
-                <span class="sheet-title">Descrittiva<br>Semplificata</span>
-            </a>
-
-            <div class="sheet-card disabled">
-                <span class="coming-soon-badge">Coming Soon</span>
-                <span class="sheet-icon">📋</span>
-                <span class="sheet-title">BJCP<br>Completa</span>
+        <div id="mode-free">
+            <div class="form-group">
+                <label>Seleziona Evento / Contesto</label>
+                <select id="event-select" style="background: #1f2937; color: white;">
+                    <option value="">Caricamento...</option>
+                </select>
             </div>
 
-            <div class="sheet-card disabled">
-                <span class="coming-soon-badge">Coming Soon</span>
-                <span class="sheet-icon">🍺</span>
-                <span class="sheet-title">Scheda<br>HBL</span>
-            </div>
+            <hr style="border-color: #374151; margin: 25px 0;">
 
-            <div class="sheet-card disabled">
-                <span class="coming-soon-badge">Coming Soon</span>
-                <span class="sheet-icon">📖</span>
-                <span class="sheet-title">Descrittiva<br>Estesa</span>
-            </div>
+            <h3 style="text-align: center; margin-bottom: 10px;">Che scheda vuoi usare?</h3>
 
-            <div class="sheet-card disabled">
-                <span class="coming-soon-badge">Coming Soon</span>
-                <span class="sheet-icon">🇮🇹</span>
-                <span class="sheet-title">UBT<br>Birra dell'Anno</span>
+            <div class="sheet-grid">
+                <a href="schede/bjcp-sintetica.html" class="sheet-card" onclick="return saveEventContext()">
+                    <span class="sheet-icon">⚖️</span>
+                    <span class="sheet-title">BJCP<br>Sintetica</span>
+                </a>
+                <a href="schede/crocette.html" class="sheet-card" onclick="return saveEventContext()">
+                    <span class="sheet-icon">📝</span>
+                    <span class="sheet-title">Descrittiva<br>Semplificata</span>
+                </a>
+                <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="sheet-icon">📋</span><span class="sheet-title">BJCP<br>Completa</span></div>
+                <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="sheet-icon">🍺</span><span class="sheet-title">Scheda<br>HBL</span></div>
+                <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="sheet-icon">📖</span><span class="sheet-title">Descrittiva<br>Estesa</span></div>
+                <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="sheet-icon">🇮🇹</span><span class="sheet-title">UBT<br>Birra dell'Anno</span></div>
             </div>
+        </div>
 
+        <div id="mode-coming-soon" style="display: none; text-align: center; padding: 40px 20px;">
+            <div style="font-size: 3rem; margin-bottom: 20px;">🚧</div>
+            <h3>Funzionalità in arrivo!</h3>
+            <p style="color: var(--text-muted);" id="coming-soon-text">
+                Stiamo lavorando per integrare questa modalità.
+            </p>
         </div>
 
         <br>
@@ -77,46 +71,60 @@
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        // Carica eventi
+        // Logica cambio tab
+        window.setMode = function(mode, element) {
+            // 1. Aggiorna stile pulsanti
+            document.querySelectorAll('.segmented-option').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            // 2. Mostra/Nascondi contenuti
+            const freeDiv = document.getElementById('mode-free');
+            const csDiv = document.getElementById('mode-coming-soon');
+            const csText = document.getElementById('coming-soon-text');
+
+            if (mode === 'free') {
+                freeDiv.style.display = 'block';
+                csDiv.style.display = 'none';
+            } else {
+                freeDiv.style.display = 'none';
+                csDiv.style.display = 'block';
+                
+                if(mode === 'sharing') {
+                    csText.textContent = "La modalità Beer Sharing ti permetterà di inserire un codice birra e compilare la scheda senza dover scrivere i dettagli a mano.";
+                } else {
+                    csText.textContent = "La modalità Evento HBL ti mostrerà solo le birre presenti alla serata selezionata.";
+                }
+            }
+        }
+
+        // Carica eventi (come prima)
         async function loadEvents() {
             const select = document.getElementById('event-select');
             const { data: events, error } = await supabase
-                .from('events')
-                .select('*')
-                .eq('active', true)
-                .order('date', { ascending: false });
+                .from('events').select('*').eq('active', true).order('date', { ascending: false });
 
-            if (error) {
-                console.error(error);
-                select.innerHTML = '<option>Errore caricamento</option>';
-                return;
-            }
+            if (error) { select.innerHTML = '<option>Errore</option>'; return; }
 
             select.innerHTML = '';
-            // Evento Libero sempre presente
+            // Evento Libero fisso
             const freeOption = document.createElement('option');
-            freeOption.value = '2aa78438-2a13-4315-8461-127116b0638e'; // ID del tuo evento libero nel DB
+            freeOption.value = '2aa78438-2a13-4315-8461-127116b0638e'; // ID tuo evento libero
             freeOption.textContent = '🍺 Utilizzo Libero (Privato)';
             select.appendChild(freeOption);
 
             events.forEach(evt => {
-                if(evt.name !== 'Utilizzo Libero') { // Evita duplicati se presente nel DB
+                if(evt.name !== 'Utilizzo Libero') {
                     const opt = document.createElement('option');
-                    opt.value = evt.id;
-                    opt.textContent = `📅 ${evt.name}`;
+                    opt.value = evt.id; opt.textContent = `📅 ${evt.name}`;
                     select.appendChild(opt);
                 }
             });
         }
         loadEvents();
 
-        // Salva l'evento scelto nel localStorage prima di cambiare pagina
         window.saveEventContext = function() {
             const eventId = document.getElementById('event-select').value;
-            if(!eventId) {
-                alert("Seleziona un evento prima di procedere.");
-                return false;
-            }
+            if(!eventId) { alert("Seleziona un evento prima di procedere."); return false; }
             localStorage.setItem('hbl_selected_event', eventId);
             return true;
         }

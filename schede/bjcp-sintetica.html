@@ -88,53 +88,59 @@
             "Oxidized", "Phenolic", "Solvent", "Sour/Acidic", "Sulfur", "Vegetal", "Yeasty"
         ];
 
-        // Generazione UI Difetti
+        // Generazione UI Difetti (MODERNA)
         const flawsContainer = document.getElementById('flaws-container');
+        flawsContainer.innerHTML = ''; // Pulisci
+        
         commonFlaws.forEach(flaw => {
-            const div = document.createElement('div');
-            div.className = 'flaw-item';
-            
-            // Checkbox e Label
-            const row = document.createElement('div');
-            row.className = 'flaw-check-row';
+            // Struttura:
+            // Input Checkbox (Nascosto)
+            // Label (Card)
+            //   -> Nome Difetto
+            //   -> Wrapper Select (Nascosto di base, appare se checked)
             
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
-            checkbox.value = flaw;
+            checkbox.className = 'flaw-checkbox-hidden';
             checkbox.id = `flaw-${flaw}`;
-            
-            const label = document.createElement('label');
-            label.htmlFor = `flaw-${flaw}`;
-            label.textContent = flaw;
-            label.style.fontSize = '0.85em';
-            label.style.cursor = 'pointer';
+            checkbox.value = flaw;
 
-            row.appendChild(checkbox);
-            row.appendChild(label);
-            div.appendChild(row);
-
-            // Tendina Intensità (Nascosta)
-            const intensityDiv = document.createElement('div');
-            intensityDiv.className = 'flaw-intensity';
-            intensityDiv.style.display = 'none'; // Default hidden
+            const labelCard = document.createElement('label');
+            labelCard.className = 'flaw-card';
+            labelCard.htmlFor = `flaw-${flaw}`;
             
+            // Titolo
+            const title = document.createElement('span');
+            title.textContent = flaw;
+            labelCard.appendChild(title);
+
+            // Tendina Intensità
+            const intensityWrapper = document.createElement('div');
+            intensityWrapper.className = 'flaw-intensity-wrapper';
+            
+            // Per evitare che cliccare sulla select disattivi la card (bubbling),
+            // dobbiamo gestire l'evento click sulla select.
+            intensityWrapper.addEventListener('click', (e) => {
+                e.preventDefault(); // Ferma comportamento label standard
+                e.stopPropagation(); // Ferma propagazione
+            });
+
             const select = document.createElement('select');
-            select.className = 'flaw-select';
+            select.className = 'flaw-select-modern';
             select.id = `int-${flaw}`;
             select.innerHTML = `
                 <option value="Low">Low</option>
-                <option value="Medium">Med</option>
+                <option value="Medium">Medium</option>
                 <option value="High">High</option>
             `;
-            
-            intensityDiv.appendChild(select);
-            div.appendChild(intensityDiv);
-            flawsContainer.appendChild(div);
+            // IMPORTANTE: Assicuriamo che la select sia cliccabile
+            select.addEventListener('click', (e) => e.stopPropagation());
 
-            // Logica Show/Hide
-            checkbox.addEventListener('change', () => {
-                intensityDiv.style.display = checkbox.checked ? 'block' : 'none';
-            });
+            intensityWrapper.appendChild(select);
+            labelCard.appendChild(intensityWrapper);
+
+            flawsContainer.appendChild(checkbox);
+            flawsContainer.appendChild(labelCard);
         });
 
         // --- (IL RESTO DELLO SCRIPT È IDENTICO A PRIMA: Style, Calc, Submit) ---
