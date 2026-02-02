@@ -65,12 +65,13 @@
         <a href="index.html" class="link-back">← Annulla</a>
     </div>
 
-    <script type="module">
-        // ID dell'evento "Utilizzo Libero" nel tuo database Supabase.
-        // Se non lo conosci, controlla la tabella 'events' su Supabase.
-        const FREE_EVENT_ID = '2aa78438-2a13-4315-8461-127116b0638e'; 
+<script type="module">
+        import { supabase } from './js/supabase-config.js';
 
-        // Logica cambio tab
+        // --- CORREZIONE: ID NUMERICO ---
+        const FREE_EVENT_ID = 1; // <--- Abbiamo messo 1 come verificato da te
+
+        // Logica cambio tab (Modalità)
         window.setMode = function(mode, element) {
             document.querySelectorAll('.segmented-option').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
@@ -94,12 +95,15 @@
             }
         }
 
-        // Funzione semplificata per Uso Libero
+        // Funzione per Uso Libero
         window.saveFreeContext = function() {
-            // Imposta direttamente l'ID dell'evento libero
             localStorage.setItem('hbl_selected_event', FREE_EVENT_ID);
             return true;
         }
+
+        // Carica eventi (Solo se servisse in futuro per la modalità Evento)
+        // Per ora in modalità Libero non serve chiamare il DB per gli eventi,
+        // ma lasciamo la funzione pronta per quando attiverai la tab "Evento".
     </script>
 </body>
 </html>

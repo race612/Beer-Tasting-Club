@@ -217,11 +217,12 @@
         </div>
     </div>
 
-    <script type="module">
+<script type="module">
         import { supabase } from '../js/supabase-config.js';
         import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js';
 
-        const eventId = localStorage.getItem('hbl_selected_event') || '2aa78438-2a13-4315-8461-127116b0638e';
+        // 1. INIZIALIZZAZIONE (Usa 1 come fallback)
+        const eventId = localStorage.getItem('hbl_selected_event') || '1'; 
         
         const systemSelect = document.getElementById('style-system');
         const containerFree = document.getElementById('container-free');
