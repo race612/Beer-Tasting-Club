@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descrittiva Semplificata - HBL</title>
-    <link rel="stylesheet" href="../css/style.css?v=0.5.4">
+    <link rel="stylesheet" href="../css/style.css?v=0.5.5">
     
     <link rel="manifest" href="/HBL-Tasting/manifest.json">
     <meta name="theme-color" content="#f59e0b">
@@ -13,7 +13,6 @@
     <link rel="apple-touch-icon" href="../assets/icon-192.png">
     
     <style>
-        /* CSS Specifico per campi dinamici Header (Copiato da BJCP) */
         .dynamic-field-group { margin-top: 10px; background: #374151; padding: 12px; border-radius: 6px; border-left: 3px solid #f59e0b; }
         .dynamic-label { font-size: 0.85em; color: #f59e0b; margin-bottom: 5px; display: block; font-weight: bold; }
         .dynamic-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
@@ -61,6 +60,7 @@
                         <div id="bjcp-dynamic-container"></div>
                     </div>
                 </div>
+
                 <hr style="border-color: #374151; margin: 30px 0;">
 
                 <h4 class="desc-section-title">1. Aspetto</h4>
@@ -141,6 +141,16 @@
                 <p style="color: #666; font-style: italic;">(In attesa di definizione parametri...)</p>
 
                 <hr style="border-color: #374151; margin: 30px 0;">
+
+                <div class="form-group" style="text-align: center;">
+                    <label style="color: var(--primary-color);">Voto Complessivo (Opzionale)</label>
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+                        <input type="number" id="final-score" min="1" max="10" step="0.5" placeholder="-" 
+                            style="width: 80px; text-align: center; font-size: 1.5rem; font-weight: bold; border: 2px solid var(--primary-color); border-radius: 8px;">
+                        <span style="font-size: 1.2rem; color: #6b7280;">/ 10</span>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label>Note e Commenti</label>
                     <textarea id="notes" rows="4" placeholder="Commenti generali sulla bevuta..."></textarea>
@@ -155,8 +165,8 @@
         import { supabase } from '../js/supabase-config.js';
         import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js';
 
-        // 1. INIZIALIZZAZIONE (Copia logica BJCP)
-        const eventId = localStorage.getItem('hbl_selected_event') || '2aa78438-2a13-4315-8461-127116b0638e'; // Fallback a libero se manca
+        // 1. INIZIALIZZAZIONE 
+        const eventId = localStorage.getItem('hbl_selected_event') || '2aa78438-2a13-4315-8461-127116b0638e';
         
         const systemSelect = document.getElementById('style-system');
         const containerFree = document.getElementById('container-free');
@@ -209,20 +219,16 @@
                     return `<label class="radio-badge"><input type="radio" name="dyn-radio" value="${c}" ${chk}><span>${c}</span></label>`;
                 }).join('') + `</div>`;
             }
-            // (Ometti qui per brevità gli altri casi complessi ma nel file finale mettili come nel BJCP Sintetico)
+            // (Altri casi complessi omessi per brevità, ma se necessario copiali dalla BJCP Sintetica)
             
             dynamicContainer.appendChild(wrapper);
         });
 
-        // 2. LOGICA PULSANTI A CROCETTE (Selezione Singola per Gruppo)
+        // 2. LOGICA PULSANTI A CROCETTE
         document.querySelectorAll('.option-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const parent = this.parentElement;
-                
-                // Deseleziona tutti gli altri fratelli
                 parent.querySelectorAll('.option-btn').forEach(sib => sib.classList.remove('selected'));
-                
-                // Seleziona questo
                 this.classList.add('selected');
             });
         });
@@ -232,7 +238,7 @@
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
 
-            // --- COSTRUZIONE STILE FINALE ---
+            // Stile Finale
             let finalStyle = "";
             if (systemSelect.value === 'free') finalStyle = inputFree.value;
             else {
@@ -250,14 +256,17 @@
             }
             if (!finalStyle || finalStyle.length < 3) { alert("Inserisci uno stile valido."); return; }
 
-            // --- RACCOLTA DATI CROCETTE ---
+            // Raccolta Dati Descrittivi
             const descriptiveData = {};
             document.querySelectorAll('.options-grid').forEach(grid => {
                 const category = grid.getAttribute('data-category');
                 const selected = grid.querySelector('.option-btn.selected');
-                // Salviamo il testo del bottone selezionato, o null se nulla è selezionato
                 descriptiveData[category] = selected ? selected.textContent : null;
             });
+
+            // Raccolta Voto Finale
+            const finalScoreInput = document.getElementById('final-score').value;
+            const finalScore = finalScoreInput ? parseFloat(finalScoreInput) : 0;
 
             btn.disabled = true; btn.textContent = "Salvataggio...";
             const { data: { user } } = await supabase.auth.getUser();
@@ -267,13 +276,13 @@
                 user_id: user.id, 
                 event_id: eventId, 
                 beer_name: document.getElementById('beer-name').value,
-                sheet_type: 'desc_crocette', // NUOVO TIPO
-                final_score: 0, // Le schede descrittive non hanno voto numerico per ora
+                sheet_type: 'desc_crocette', 
+                final_score: finalScore, // Salviamo il voto qui (0 se vuoto)
                 details: { 
                     style: finalStyle, 
                     style_type: systemSelect.value, 
                     notes: document.getElementById('notes').value, 
-                    description: descriptiveData // Oggetto JSON con le scelte
+                    description: descriptiveData 
                 }
             };
 
