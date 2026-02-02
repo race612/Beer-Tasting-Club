@@ -413,6 +413,20 @@ input:focus, select:focus, textarea:focus {
 .privacy-option input { width: auto; margin-right: 10px; transform: scale(1.1); }
 .privacy-desc { font-size: 0.85rem; color: #a0aec0; margin-left: 28px; display: block; margin-top: 3px; }
 
+/* Aggiunge la spunta ✓ davanti al testo quando selezionato */
+.option-btn.selected::before {
+    content: "✓";
+    margin-right: 6px;
+    font-weight: 800;
+    display: inline-block;
+}
+
+/* Opzionale: per i voti numerici, riduciamo un po' il margine perché sono piccoli */
+.vote-btn.selected::before {
+    margin-right: 2px;
+    font-size: 0.8em;
+}
+
 /* PDF - Foglio A4 */
 .paper-sheet {
     background: white;

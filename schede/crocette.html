@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descrittiva Semplificata - HBL</title>
-    <link rel="stylesheet" href="../css/style.css?v=0.5.6">
+    <link rel="stylesheet" href="../css/style.css?v=0.5.7">
     
     <link rel="manifest" href="/HBL-Tasting/manifest.json">
     <meta name="theme-color" content="#f59e0b">
@@ -19,8 +19,6 @@
         .radio-badge label { background: #1f2937; padding: 5px 10px; border-radius: 4px; border: 1px solid #4b5563; cursor: pointer; font-size: 0.9em; }
         .radio-badge input:checked + span { color: var(--primary-color); font-weight: bold; }
         .radio-badge input { margin-right: 5px; }
-        
-        /* Stile specifico per i numeri del voto */
         .vote-btn { min-width: 40px !important; font-weight: bold; font-size: 1.1rem; }
     </style>
 </head>
@@ -156,7 +154,7 @@
                 </div>
 
                 <div class="desc-group">
-                    <span class="desc-label">Descrittori (Seleziona multipla)</span>
+                    <span class="desc-label">Descrittori (Selezione multipla)</span>
                     <div class="options-grid" data-category="aroma_descriptors" data-type="multi">
                         <div class="option-btn">Cereali</div>
                         <div class="option-btn">Caramello</div>
@@ -195,7 +193,7 @@
 
                 <div class="desc-group" style="text-align: center;">
                     <span class="desc-label" style="font-size: 1.1em; color: var(--primary-color);">Voto Complessivo (Opzionale)</span>
-                    <div class="options-grid" data-category="final_vote" style="justify-content: center;">
+                    <div class="options-grid" data-category="final_vote" data-toggle="true" style="justify-content: center;">
                         <div class="option-btn vote-btn">1</div>
                         <div class="option-btn vote-btn">2</div>
                         <div class="option-btn vote-btn">3</div>
@@ -223,7 +221,6 @@
         import { supabase } from '../js/supabase-config.js';
         import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js';
 
-        // 1. INIZIALIZZAZIONE 
         const eventId = localStorage.getItem('hbl_selected_event') || '2aa78438-2a13-4315-8461-127116b0638e';
         
         const systemSelect = document.getElementById('style-system');
@@ -263,10 +260,8 @@
             const code = e.target.value.split('.')[0];
             const rule = specialStyleRules[code];
             if (!rule) return;
-
             const wrapper = document.createElement('div');
             wrapper.className = 'dynamic-field-group';
-
             if (rule.type === 'text_only') {
                 if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b">${rule.hint}</small>`;
                 wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" ${rule.required?'required':''}>`;
@@ -280,19 +275,26 @@
             dynamicContainer.appendChild(wrapper);
         });
 
-        // 2. LOGICA PULSANTI A CROCETTE (Upgrade Multi/Single)
+        // 2. LOGICA PULSANTI A CROCETTE (Multi, Single & Toggle)
         document.querySelectorAll('.option-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const parent = this.parentElement;
                 const isMulti = parent.getAttribute('data-type') === 'multi';
+                const isToggle = parent.getAttribute('data-toggle') === 'true';
 
                 if (isMulti) {
-                    // Modalità Checkbox (Toggle)
+                    // Checkbox behavior
                     this.classList.toggle('selected');
+                } else if (isToggle) {
+                    // Radio Deselezionabile (per il Voto Finale)
+                    if (this.classList.contains('selected')) {
+                        this.classList.remove('selected'); // Deseleziona se già attivo
+                    } else {
+                        parent.querySelectorAll('.option-btn').forEach(sib => sib.classList.remove('selected'));
+                        this.classList.add('selected'); // Attiva
+                    }
                 } else {
-                    // Modalità Radio (Uno solo)
-                    // Se clicco su uno già attivo, lo deseleziono? Solitamente no nei radio, ma opzionale. 
-                    // Qui implementiamo standard radio: clicco e attivo, gli altri si spengono.
+                    // Radio Standard (Obbligatorio uno)
                     parent.querySelectorAll('.option-btn').forEach(sib => sib.classList.remove('selected'));
                     this.classList.add('selected');
                 }
@@ -304,7 +306,6 @@
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
 
-            // Stile
             let finalStyle = "";
             if (systemSelect.value === 'free') finalStyle = inputFree.value;
             else {
@@ -322,26 +323,20 @@
             }
             if (!finalStyle || finalStyle.length < 3) { alert("Inserisci uno stile valido."); return; }
 
-            // Raccolta Dati Griglie
             const descriptiveData = {};
             document.querySelectorAll('.options-grid').forEach(grid => {
                 const category = grid.getAttribute('data-category');
-                // Se è il voto finale, non salvarlo qui ma a parte
                 if (category === 'final_vote') return;
-
                 const isMulti = grid.getAttribute('data-type') === 'multi';
-                
                 if (isMulti) {
-                    // Raccogli tutti i selezionati in un array
                     const selected = Array.from(grid.querySelectorAll('.option-btn.selected')).map(el => el.textContent);
-                    descriptiveData[category] = selected; // Array di stringhe
+                    descriptiveData[category] = selected; 
                 } else {
                     const selected = grid.querySelector('.option-btn.selected');
-                    descriptiveData[category] = selected ? selected.textContent : null; // Stringa singola
+                    descriptiveData[category] = selected ? selected.textContent : null;
                 }
             });
 
-            // Raccolta Voto Finale
             const voteGrid = document.querySelector('.options-grid[data-category="final_vote"]');
             const selectedVote = voteGrid.querySelector('.option-btn.selected');
             const finalScore = selectedVote ? parseInt(selectedVote.textContent) : 0;
