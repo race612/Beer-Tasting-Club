@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuova Degustazione - HBL</title>
-    <link rel="stylesheet" href="css/style.css?v=0.6.0">
+    <title>Nuova Degustazione - Beer Tasting Club</title>
+    <link rel="stylesheet" href="css/style.css?v=0.7.0">
     
     <link rel="manifest" href="/HBL-Tasting/manifest.json">
     <meta name="theme-color" content="#f59e0b">
@@ -25,7 +25,7 @@
         <div class="segmented-control">
             <div class="segmented-option active" onclick="setMode('free', this)">Uso Libero</div>
             <div class="segmented-option" onclick="setMode('sharing', this)">Beer Sharing</div>
-            <div class="segmented-option" onclick="setMode('event', this)">Evento HBL</div>
+            <div class="segmented-option" onclick="setMode('event', this)">Evento</div>
         </div>
 
         <div id="mode-free">
@@ -90,7 +90,7 @@
                 if(mode === 'sharing') {
                     csText.textContent = "La modalità Beer Sharing ti permetterà di inserire un codice birra e compilare la scheda senza dover scrivere i dettagli a mano.";
                 } else {
-                    csText.textContent = "La modalità Evento HBL ti mostrerà solo le birre presenti alla serata selezionata.";
+                    csText.textContent = "La modalità Evento ti mostrerà solo le birre presenti alla serata selezionata.";
                 }
             }
         }

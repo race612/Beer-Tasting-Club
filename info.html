@@ -1,45 +1,61 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info - Beer Tasting Club</title>
+    <link rel="stylesheet" href="css/style.css?v=0.6.0">
     <link rel="manifest" href="/HBL-Tasting/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="HBL Tasting">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Info App - HBL</title>
-    <link rel="stylesheet" href="css/style.css?v=0.6.0">
 </head>
 <body>
-    <div class="container center-screen" style="justify-content: flex-start; padding-top: 40px;">
-        <img src="assets/logo-hbl.png" alt="Logo HBL" class="logo">
-        <h2 style="color: var(--primary-color);">HBL Tasting App</h2>
-        <p style="color: var(--text-muted);">v0.5.0 Alpha</p>
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <img src="assets/logo.png" alt="Beer Tasting Club" class="logo-large">
+            <h1 style="color: var(--primary-color);">Beer Tasting Club</h1>
+            <p style="color: var(--text-muted);">Il tuo compagno digitale di degustazione</p>
+        </div>
 
-        <div class="card" style="text-align: left; margin-top: 20px;">
-            <h4>L'Applicazione</h4>
-            <p>Questa Web App è stata sviluppata per supportare le attività di degustazione del club <strong>Homebrewers Lombardi (HBL)</strong>.</p>
-            <p>Permette di compilare schede di valutazione digitali (BJCP, descrittive, ecc.), salvarle nel proprio storico personale e condividerle con i produttori.</p>
-            
-            <hr style="border-color: #374151;">
+        <div class="card text-content">
+            <h3>Chi siamo</h3>
+            <p>
+                <strong>Beer Tasting Club</strong> è un'applicazione web progressiva (PWA) progettata per appassionati di birra, homebrewer e giudici. 
+                Nasce per semplificare la compilazione delle schede di degustazione, eliminando la carta e digitalizzando il tuo archivio sensoriale.
+            </p>
+            <p>
+                L'app supporta diversi standard di valutazione, inclusi BJCP e schede descrittive semplificate, permettendoti di salvare, modificare ed esportare le tue degustazioni in PDF.
+            </p>
 
-            <h4>Sviluppo</h4>
-            <p>Concept & Sviluppo: <strong>Race612</strong></p>
-            <p>Hosting: GitHub Pages</p>
-            <p>Database: Supabase</p>
+            <hr>
 
-            <hr style="border-color: #374151;">
-
-            <h4>Contatti Club</h4>
-            <p>Per info sulle serate o per unirti a noi:</p>
-            <a href="https://www.homebrewerslombardi.it" target="_blank" class="btn btn-outline">🌐 Sito Web HBL</a>
+            <h3>Credits & Tributi</h3>
+            <p>
+                Questo progetto è stato ideato e sviluppato inizialmente in seno a:
+            </p>
+            <div style="text-align: center; margin: 20px 0;">
+                <h4 style="margin:0; color: #ffffff;">HBL - Homebrewers Lombardi</h4>
+                <small style="color: var(--text-muted);">La community della birra fatta in casa in Lombardia</small>
             </div>
+            <p>
+                Un ringraziamento speciale a tutti i soci HBL per i feedback, i test e la passione condivisa che ha reso possibile la creazione di questo strumento, ora aperto a tutti gli amanti della birra.
+            </p>
 
-        <br>
-        <a href="index.html" class="link-back">← Torna alla Home</a>
+            <hr>
+
+            <h3>Versione</h3>
+            <p>Alpha 0.6.0</p>
+            <ul>
+                <li>Supporto BJCP 2021</li>
+                <li>Schede Descrittive (Crocette)</li>
+                <li>Esportazione PDF</li>
+                <li>Modalità Offline (PWA)</li>
+            </ul>
+        </div>
+
+        <a href="index.html" class="btn btn-primary" style="margin-top: 20px;">🏠 Torna alla Home</a>
     </div>
 </body>
 </html>

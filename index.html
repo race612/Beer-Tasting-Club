@@ -1,59 +1,56 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Beer Tasting Club</title> <link rel="stylesheet" href="css/style.css?v=0.7.0">
     <link rel="manifest" href="/HBL-Tasting/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="HBL Tasting">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HBL Tasting App</title>
-    <link rel="stylesheet" href="css/style.css?v=0.6.0">
-    <script type="module" src="js/app.js"></script>
 </head>
 <body>
-
-    <div class="container center-screen">
-        <img src="assets/logo-hbl.png" alt="Logo HBL" class="logo" style="max-width: 200px;"> <h1>HBL Tasting Club</h1>
+    <div class="container">
         
-        <div id="login-section" style="display:none;">
-            <h3>Accedi</h3>
-            <form id="login-form">
-                <input type="email" id="email" placeholder="Email" required>
-                <input type="password" id="password" placeholder="Password" required>
-                <button type="submit" class="btn btn-primary">🔐 Accedi</button>
-            </form>
-            
-            <div id="login-error" style="color: red; margin-top: 10px;"></div>
+        <header class="home-header">
+            <img src="assets/logo.png" alt="Logo" class="logo-large"> 
+            <h2>Beer Tasting Club</h2>
+            <p style="color: var(--text-muted);">Il tuo diario di degustazione digitale</p>
+        </header>
 
-            <div style="margin-top: 20px;">
-                <p>Non hai un account? <a href="registrati.html" style="color: #f39c12;">Registrati qui</a></p>
-                <p><small><a href="#" id="forgot-password-link" style="color: #888;">Password dimenticata?</a></small></p>
-            </div>
-        </div>
+        <nav class="menu-grid">
+            <a href="nuova-scheda.html" class="menu-item">
+                <span class="menu-icon">🍺</span>
+                <span class="menu-title">Nuova Scheda</span>
+                <span class="menu-desc">Compila una scheda di Degustazione</span>
+            </a>
 
-        <div id="dashboard-section" style="display:none;">
-            <h3>Ciao, <span id="user-email">Birraio</span>! 🍺</h3>
-            
-            <div class="button-group">
-                <a href="nuova-scheda.html" class="btn btn-primary">📝 Compila Nuova Scheda</a>
-                <a href="storico.html" class="btn btn-secondary">📜 Le mie Degustazioni</a>
-                <a href="profilo.html" class="btn btn-outline" style="border-color: #f59e0b; color: #f59e0b;">👤 Il mio Profilo</a>
-                
-                <button id="logout-btn" class="btn btn-outline">Esci</button>
-            </div>
-        </div>
+            <a href="storico.html" class="menu-item">
+                <span class="menu-icon">📚</span>
+                <span class="menu-title">Storico</span>
+                <span class="menu-desc">Le tue Degustazioni passate</span>
+            </a>
 
-        <div id="loading" style="display:block;">Caricamento...</div>
+            <a href="profilo.html" class="menu-item">
+                <span class="menu-icon">👤</span>
+                <span class="menu-title">Profilo</span>
+                <span class="menu-desc">I tuoi dati personali</span>
+            </a>
 
-        <div style="text-align: center; margin-top: 40px; font-size: 0.8rem;">
-            <a href="info.html" style="color: #666;">ℹ️ Info App & Credits</a>
-        </div>
+            <a href="info.html" class="menu-item">
+                <span class="menu-icon">ℹ️</span>
+                <span class="menu-title">Info & Credits</span>
+                <span class="menu-desc">Versione App e Ringraziamenti</span>
+            </a>
+        </nav>
+
+        <footer style="text-align: center; margin-top: 40px; font-size: 0.8rem; color: #4b5563;">
+            &copy; 2026 Beer Tasting Club
+        </footer>
 
     </div>
 
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>

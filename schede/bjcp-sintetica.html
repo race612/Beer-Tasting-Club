@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BJCP Sintetica - HBL</title>
-    <link rel="stylesheet" href="../css/style.css?v=0.6.0">
+    <title>BJCP Sintetica - Beer Tasting Club</title>
+    <link rel="stylesheet" href="../css/style.css?v=0.7.0">
     
     <link rel="manifest" href="/HBL-Tasting/manifest.json">
     <meta name="theme-color" content="#f59e0b">
@@ -26,7 +26,7 @@
         
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
             <a href="../nuova-scheda.html" style="text-decoration: none; color: var(--text-muted);" id="back-link">← Indietro</a>
-            <img src="../assets/logo-hbl.png" alt="Logo" style="width: 40px;">
+            <img src="../assets/logo.png" alt="Logo" style="width: 40px;">
         </div>
 
         <div class="card">
@@ -38,7 +38,7 @@
                 
                 <div class="form-group">
                     <label>Nome Birra / Numero Campione</label>
-                    <input type="text" id="beer-name" required placeholder="Es. IPA del Mario o #42">
+                    <input type="text" id="beer-name" required placeholder="Es. IPA di Mirko o #42">
                 </div>
 
                 <div class="form-group">
@@ -210,10 +210,17 @@
             });
         });
 
-        // Avviso Uscita
+       // Intercetta uscita "Indietro" (CORRETTO)
         document.getElementById('back-link').addEventListener('click', (e) => {
-            if (isDirty && !confirm("⚠️ Stai per uscire senza salvare.\nVuoi davvero procedere? I dati andranno persi.")) {
-                e.preventDefault();
+            if (isDirty) {
+                // Se l'utente clicca ANNULLA, blocchiamo tutto.
+                if (!confirm("⚠️ Stai per uscire senza salvare.\nVuoi davvero procedere? I dati andranno persi.")) {
+                    e.preventDefault();
+                } else {
+                    // Se l'utente clicca OK, disattiviamo il flag isDirty
+                    // così non scatta il secondo avviso del browser (beforeunload).
+                    isDirty = false;
+                }
             }
         });
         window.addEventListener('beforeunload', (e) => { if (isDirty) { e.preventDefault(); e.returnValue = ''; } });

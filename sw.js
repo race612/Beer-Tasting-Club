@@ -4,7 +4,7 @@ const urlsToCache = [
   '/HBL-Tasting/index.html',
   '/HBL-Tasting/css/style.css',
   '/HBL-Tasting/js/app.js',
-  '/HBL-Tasting/assets/logo-hbl.png'
+  '/HBL-Tasting/assets/logo.png'
 ];
 
 // Installazione del Service Worker

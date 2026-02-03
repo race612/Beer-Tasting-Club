@@ -1,7 +1,7 @@
 {
-  "name": "HBL Tasting Club",
-  "short_name": "HBL Tasting",
-  "id": "/HBL-Tasting/?v=0.5.0",
+  "name": "Beer Tasting Club",
+  "short_name": "Beer Tasting",
+  "id": "/HBL-Tasting/?v=0.7.0",
   "start_url": "/HBL-Tasting/index.html",
   "display": "standalone",
   "background_color": "#111827",
@@ -17,6 +17,12 @@
     {
       "src": "assets/icon-512.png",
       "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+    {
+      "src": "assets/icon-1080.png",
+      "sizes": "1080x1080",
       "type": "image/png",
       "purpose": "any maskable"
     }
