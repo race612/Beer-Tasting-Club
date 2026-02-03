@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.7.0">
+    <title>Beer Tasting Club</title>
+    <link rel="stylesheet" href="css/style.css?v=0.8.0">
+    
     <link rel="manifest" href="/HBL-Tasting/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,34 +18,70 @@
         <header class="home-header">
             <img src="assets/logo.png" alt="Logo" class="logo-large">
             <h2>Beer Tasting Club</h2>
-            <p style="color: var(--text-muted);">Il tuo diario digitale di degustazione</p>
+            <p style="color: var(--text-muted);">Il tuo diario di degustazione digitale</p>
         </header>
 
-        <nav class="menu-grid">
-            <a href="nuova-scheda.html" class="menu-item">
-                <span class="material-symbols-outlined icon-large">post_add</span>
-                <span class="menu-title">Nuova Scheda</span>
-                <span class="menu-desc">Compila una scheda BJCP o Descrittiva</span>
-            </a>
+        <div id="auth-view" style="display: none;">
+            
+            <div class="segmented-control">
+                <div class="segmented-option active" id="tab-login">Accedi</div>
+                <div class="segmented-option" id="tab-register">Registrati</div>
+            </div>
 
-            <a href="storico.html" class="menu-item">
-                <span class="material-symbols-outlined icon-large">history</span>
-                <span class="menu-title">Storico</span>
-                <span class="menu-desc">Le tue degustazioni passate</span>
-            </a>
+            <div class="card">
+                <form id="auth-form">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" required placeholder="nome@esempio.com">
+                    </div>
 
-            <a href="profilo.html" class="menu-item">
-                <span class="material-symbols-outlined icon-large">person</span>
-                <span class="menu-title">Profilo</span>
-                <span class="menu-desc">I tuoi dati e qualifiche</span>
-            </a>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div style="position: relative;">
+                            <input type="password" id="password" required placeholder="••••••••" minlength="6">
+                            </div>
+                    </div>
 
-            <a href="info.html" class="menu-item">
-                <span class="material-symbols-outlined icon-large">info</span>
-                <span class="menu-title">Info & Credits</span>
-                <span class="menu-desc">Versione e Ringraziamenti</span>
-            </a>
-        </nav>
+                    <div id="auth-message" style="margin-bottom: 15px; text-align: center; font-size: 0.9rem;"></div>
+
+                    <button type="submit" id="btn-submit" class="btn btn-primary">
+                        <span class="material-symbols-outlined">login</span> Accedi
+                    </button>
+                </form>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="#" id="forgot-password" style="font-size: 0.9rem; color: var(--text-muted); text-decoration: underline;">Password dimenticata?</a>
+            </div>
+        </div>
+
+        <div id="dashboard-view" style="display: none;">
+            <nav class="menu-grid">
+                <a href="nuova-scheda.html" class="menu-item">
+                    <span class="material-symbols-outlined icon-large">post_add</span>
+                    <span class="menu-title">Nuova Scheda</span>
+                    <span class="menu-desc">Compila una scheda BJCP o Descrittiva</span>
+                </a>
+
+                <a href="storico.html" class="menu-item">
+                    <span class="material-symbols-outlined icon-large">history</span>
+                    <span class="menu-title">Storico</span>
+                    <span class="menu-desc">Le tue degustazioni passate</span>
+                </a>
+
+                <a href="profilo.html" class="menu-item">
+                    <span class="material-symbols-outlined icon-large">person</span>
+                    <span class="menu-title">Profilo</span>
+                    <span class="menu-desc">I tuoi dati e qualifiche</span>
+                </a>
+
+                <a href="info.html" class="menu-item">
+                    <span class="material-symbols-outlined icon-large">info</span>
+                    <span class="menu-title">Info & Credits</span>
+                    <span class="menu-desc">Versione e Ringraziamenti</span>
+                </a>
+            </nav>
+        </div>
 
         <footer style="text-align: center; margin-top: 40px; font-size: 0.8rem; color: #4b5563;">
             &copy; 2025 Beer Tasting Club
@@ -52,6 +89,121 @@
 
     </div>
 
-    <script type="module" src="js/app.js"></script>
+    <script type="module">
+        import { supabase } from './js/supabase-config.js';
+
+        // Elementi DOM
+        const authView = document.getElementById('auth-view');
+        const dashboardView = document.getElementById('dashboard-view');
+        
+        const tabLogin = document.getElementById('tab-login');
+        const tabRegister = document.getElementById('tab-register');
+        const btnSubmit = document.getElementById('btn-submit');
+        const authMessage = document.getElementById('auth-message');
+        
+        let isLoginMode = true;
+
+        // 1. CONTROLLO SESSIONE (Il "Gatekeeper")
+        async function checkSession() {
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (session) {
+                // Utente loggato: Mostra Dashboard
+                authView.style.display = 'none';
+                dashboardView.style.display = 'block';
+            } else {
+                // Utente ospite: Mostra Login
+                authView.style.display = 'block';
+                dashboardView.style.display = 'none';
+            }
+        }
+        checkSession();
+
+        // 2. GESTIONE TAB (Accedi / Registrati)
+        tabLogin.addEventListener('click', () => {
+            isLoginMode = true;
+            tabLogin.classList.add('active');
+            tabRegister.classList.remove('active');
+            btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`;
+            authMessage.textContent = '';
+        });
+
+        tabRegister.addEventListener('click', () => {
+            isLoginMode = false;
+            tabRegister.classList.add('active');
+            tabLogin.classList.remove('active');
+            btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`;
+            authMessage.textContent = '';
+        });
+
+        // 3. GESTIONE SUBMIT (Login o Registrazione)
+        document.getElementById('auth-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = `<span class="material-symbols-outlined">sync</span> Attendi...`;
+            authMessage.style.color = 'var(--text-muted)';
+            authMessage.textContent = 'Elaborazione in corso...';
+
+            if (isLoginMode) {
+                // --- LOGIN ---
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) {
+                    authMessage.style.color = 'var(--danger)';
+                    authMessage.textContent = "Errore: " + error.message;
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`;
+                } else {
+                    // Successo! Ricarica la pagina per attivare la dashboard
+                    window.location.reload();
+                }
+
+            } else {
+                // --- REGISTRAZIONE ---
+                const { data, error } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            first_name: "", // Campi vuoti da riempire nel profilo
+                            last_name: ""
+                        }
+                    }
+                });
+
+                if (error) {
+                    authMessage.style.color = 'var(--danger)';
+                    authMessage.textContent = "Errore: " + error.message;
+                } else {
+                    authMessage.style.color = '#10b981'; // Verde
+                    authMessage.textContent = "Registrazione effettuata! Controlla la tua email per confermare.";
+                }
+                
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`;
+            }
+        });
+
+        // 4. RESET PASSWORD (Semplice alert per ora)
+        document.getElementById('forgot-password').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            if (!email) {
+                alert("Inserisci la tua email nel campo sopra per richiedere il reset.");
+                return;
+            }
+            const { error } = await supabase.auth.resetPasswordForEmail(email);
+            if (error) alert(error.message);
+            else alert("Se l'email esiste, riceverai un link di reset.");
+        });
+
+    </script>
 </body>
 </html>
