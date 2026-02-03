@@ -58,6 +58,24 @@
             </div>
         </div>
 
+        <div id="update-password-view" style="display: none;">
+            <div class="card" style="border-left: 5px solid #10b981;">
+                <h3 style="text-align: center;">Imposta Nuova Password</h3>
+                <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-bottom: 20px;">
+                    Inserisci la tua nuova password qui sotto.
+                </p>
+                
+                <div class="form-group">
+                    <label>Nuova Password</label>
+                    <input type="password" id="new-password" placeholder="Nuova password (min 6 car.)" minlength="6">
+                </div>
+                
+                <button id="btn-update-password" class="btn btn-primary">
+                    <span class="material-symbols-outlined">lock_reset</span> Aggiorna Password
+                </button>
+            </div>
+        </div>
+
         <div id="dashboard-view" style="display: none;">
             <nav class="menu-grid">
                 <a href="nuova-scheda.html" class="menu-item">
@@ -110,9 +128,10 @@
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        // Elementi
         const authView = document.getElementById('auth-view');
         const dashboardView = document.getElementById('dashboard-view');
+        const updatePasswordView = document.getElementById('update-password-view');
+        
         const tabLogin = document.getElementById('tab-login');
         const tabRegister = document.getElementById('tab-register');
         const btnSubmit = document.getElementById('btn-submit');
@@ -122,26 +141,58 @@
 
         let isLoginMode = true;
 
-        // 1. Sessione
-        async function checkSession() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
+        // 1. GESTIONE STATO AUTENTICAZIONE (Gatekeeper + Recovery Detector)
+        supabase.auth.onAuthStateChange(async (event, session) => {
+            console.log("Auth Event:", event); // Debug
+
+            if (event === 'PASSWORD_RECOVERY') {
+                // CASO SPECIALE: Utente arriva da link email per reset
                 authView.style.display = 'none';
+                dashboardView.style.display = 'none';
+                updatePasswordView.style.display = 'block';
+            } 
+            else if (event === 'SIGNED_IN' || session) {
+                // Utente loggato normalmente
+                authView.style.display = 'none';
+                updatePasswordView.style.display = 'none';
                 dashboardView.style.display = 'block';
-            } else {
+            } 
+            else {
+                // Utente ospite
                 authView.style.display = 'block';
                 dashboardView.style.display = 'none';
+                updatePasswordView.style.display = 'none';
             }
-        }
-        checkSession();
+        });
 
-        // 2. Tabs
+        // 2. GESTIONE AGGIORNAMENTO PASSWORD (Nuova funzione)
+        document.getElementById('btn-update-password').addEventListener('click', async () => {
+            const newPass = document.getElementById('new-password').value;
+            if (!newPass || newPass.length < 6) {
+                alert("La password deve essere di almeno 6 caratteri.");
+                return;
+            }
+
+            const btn = document.getElementById('btn-update-password');
+            btn.disabled = true; btn.textContent = "Aggiornamento...";
+
+            const { data, error } = await supabase.auth.updateUser({ password: newPass });
+
+            if (error) {
+                alert("Errore: " + error.message);
+                btn.disabled = false; btn.textContent = "Riprova";
+            } else {
+                alert("Password aggiornata con successo! Ora sei loggato.");
+                window.location.href = "index.html"; // Ricarica pulita
+            }
+        });
+
+        // 3. LOGICA LOGIN / REGISTER
         tabLogin.addEventListener('click', () => {
             isLoginMode = true;
             tabLogin.classList.add('active'); tabRegister.classList.remove('active');
             btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`;
-            groupName.style.display = 'none'; 
-            inputName.removeAttribute('required'); // Non richiesto in login
+            groupName.style.display = 'none'; inputName.removeAttribute('required');
             authMessage.textContent = '';
         });
 
@@ -149,12 +200,10 @@
             isLoginMode = false;
             tabRegister.classList.add('active'); tabLogin.classList.remove('active');
             btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`;
-            groupName.style.display = 'block'; 
-            inputName.setAttribute('required', 'true'); // Richiesto in registrazione
+            groupName.style.display = 'block'; inputName.setAttribute('required', 'true');
             authMessage.textContent = '';
         });
 
-        // 3. Submit Login/Register
         document.getElementById('auth-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
@@ -169,13 +218,12 @@
                 if (error) {
                     authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message;
                     btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`;
-                } else {
-                    window.location.reload();
-                }
+                } 
+                // Se successo, onAuthStateChange gestirà il redirect
             } else {
                 const { error } = await supabase.auth.signUp({
                     email, password,
-                    options: { data: { full_name: displayName } } // Salva il nome pubblico
+                    options: { data: { full_name: displayName } }
                 });
                 if (error) {
                     authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message;
@@ -186,7 +234,7 @@
             }
         });
 
-        // 4. Modal Password Logic
+        // 4. MODAL PASSWORD DIMENTICATA
         const modal = document.getElementById('modal-forgot');
         document.getElementById('forgot-link').addEventListener('click', (e) => { e.preventDefault(); modal.style.display = 'flex'; });
         document.getElementById('close-modal').addEventListener('click', () => modal.style.display = 'none');
@@ -198,7 +246,11 @@
             const btn = document.getElementById('btn-send-reset');
             btn.disabled = true; btn.textContent = "Invio...";
             
-            const { error } = await supabase.auth.resetPasswordForEmail(email);
+            // Qui specifichiamo l'URL di redirect corretto per sicurezza, anche se impostato in dashboard
+            const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: 'https://race612.github.io/HBL-Tasting/' 
+            });
+            
             if(error) alert("Errore: " + error.message);
             else { alert("Email di reset inviata!"); modal.style.display = 'none'; }
             
