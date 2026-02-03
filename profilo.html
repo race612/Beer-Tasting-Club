@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profilo - Beer Tasting Club</title>
     <link rel="stylesheet" href="css/style.css?v=0.8.0">
-    
     <link rel="manifest" href="/HBL-Tasting/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,10 +22,20 @@
         </div>
 
         <div class="card">
-            <div class="profile-header-card">
-                <div class="profile-avatar" id="avatar-initials">?</div>
-                <h2 class="profile-name" id="user-name">Caricamento...</h2>
-                <div class="profile-email" id="user-email">...</div>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;">
+                <div class="profile-avatar" id="avatar-initials" style="margin-bottom: 15px;">?</div>
+                
+                <div style="width: 100%; text-align: left;">
+                    <div class="form-group">
+                        <label>Nome Pubblico</label>
+                        <input type="text" id="display-name" placeholder="Il tuo nome">
+                    </div>
+                    <div class="form-group">
+                        <label>Email (Non modificabile)</label>
+                        <input type="email" id="user-email" disabled style="opacity: 0.6; cursor: not-allowed;">
+                    </div>
+                </div>
             </div>
 
             <h3 class="section-title">Qualifiche & Ruoli</h3>
@@ -72,7 +81,7 @@
             </button>
         </div>
 
-        <button id="logout-btn" class="btn btn-danger-outline mt-20" style="justify-content: center;">
+        <button id="logout-btn" class="btn btn-danger-outline mt-20">
             <span class="material-symbols-outlined">logout</span> Esci dall'App
         </button>
     </div>
@@ -80,28 +89,22 @@
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        // 1. CARICAMENTO PROFILO
+        // 1. CARICA DATI
         async function loadProfile() {
             const { data: { user } } = await supabase.auth.getUser();
+            if (!user) { window.location.href = 'index.html'; return; }
 
-            if (!user) {
-                window.location.href = 'index.html';
-                return;
-            }
-
-            // Dati Utente
             const meta = user.user_metadata || {};
-            const email = user.email;
             
-            // UI Header
-            const firstLetter = email.charAt(0).toUpperCase();
-            document.getElementById('avatar-initials').textContent = firstLetter;
+            // Popola Campi
+            document.getElementById('user-email').value = user.email;
+            document.getElementById('display-name').value = meta.full_name || "";
             
-            const fullName = `${meta.first_name || ''} ${meta.last_name || ''}`.trim();
-            document.getElementById('user-name').textContent = fullName || "Utente";
-            document.getElementById('user-email').textContent = email;
+            // Avatar
+            const nameForAvatar = meta.full_name || user.email;
+            document.getElementById('avatar-initials').textContent = nameForAvatar.charAt(0).toUpperCase();
 
-            // UI Checkbox Ruoli
+            // Checkbox
             document.getElementById('role-pro').checked = meta.role_pro || false;
             document.getElementById('role-publican').checked = meta.role_publican || false;
             document.getElementById('role-ubt').checked = meta.role_ubt || false;
@@ -109,16 +112,14 @@
             document.getElementById('role-sommelier').checked = meta.role_sommelier || false;
             document.getElementById('role-courses').checked = meta.role_courses || false;
 
-            // UI Select Levels
+            // Select
             document.getElementById('bjcp-level').value = meta.bjcp_level || "";
             document.getElementById('bjcp-id').value = meta.bjcp_id || "";
             document.getElementById('cicerone-level').value = meta.cicerone_level || "";
         }
-
-        // Avvia al caricamento pagina
         loadProfile();
 
-        // 2. SALVATAGGIO PROFILO
+        // 2. SALVA DATI
         document.getElementById('save-profile').addEventListener('click', async () => {
             const btn = document.getElementById('save-profile');
             const originalText = btn.innerHTML;
@@ -126,6 +127,7 @@
             btn.disabled = true;
 
             const updates = {
+                full_name: document.getElementById('display-name').value, // Aggiorna nome
                 role_pro: document.getElementById('role-pro').checked,
                 role_publican: document.getElementById('role-publican').checked,
                 role_ubt: document.getElementById('role-ubt').checked,
@@ -137,14 +139,14 @@
                 cicerone_level: document.getElementById('cicerone-level').value
             };
 
-            const { error } = await supabase.auth.updateUser({
-                data: updates
-            });
+            const { error } = await supabase.auth.updateUser({ data: updates });
 
-            if (error) {
-                alert("Errore nel salvataggio: " + error.message);
-            } else {
-                alert("Profilo aggiornato con successo! ✅");
+            if (error) alert("Errore: " + error.message);
+            else {
+                alert("Profilo aggiornato! ✅");
+                // Aggiorna anche l'avatar subito
+                const newName = updates.full_name || document.getElementById('user-email').value;
+                document.getElementById('avatar-initials').textContent = newName.charAt(0).toUpperCase();
             }
 
             btn.innerHTML = originalText;
@@ -153,7 +155,7 @@
 
         // 3. LOGOUT
         document.getElementById('logout-btn').addEventListener('click', async () => {
-            if(confirm("Sei sicuro di voler uscire?")) {
+            if(confirm("Vuoi davvero uscire?")) {
                 await supabase.auth.signOut();
                 window.location.href = 'index.html';
             }
