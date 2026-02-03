@@ -26,7 +26,7 @@
     <div class="container">
         
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <a href="../nuova-scheda.html" style="text-decoration: none; color: var(--text-muted);">← Indietro</a>
+            <a href="../nuova-scheda.html" style="text-decoration: none; color: var(--text-muted);" id="back-link">← Indietro</a>
             <img src="../assets/logo-hbl.png" alt="Logo" style="width: 40px;">
         </div>
 
@@ -154,29 +154,32 @@
                 </div>
 
                 <div class="desc-group">
-                    <span class="desc-label">Descrittori (Selezione multipla)</span>
+                    <span class="desc-label">Descrittori (Selezione multipla - Max 24)</span>
                     <div class="options-grid" data-category="aroma_descriptors" data-type="multi">
-                        <div class="option-btn">Cereali</div>
-                        <div class="option-btn">Caramello</div>
-                        <div class="option-btn">Panificati</div>
+                        <div class="option-btn">Cereali / Miele</div>
+                        <div class="option-btn">Panificato / Biscotto</div>
+                        <div class="option-btn">Caramello / Mou</div>
+                        <div class="option-btn">Tostato / Nocciola</div>
+                        <div class="option-btn">Cioccolato / Caffè</div>
                         <div class="option-btn">Erbaceo</div>
                         <div class="option-btn">Floreale</div>
-                        <div class="option-btn">Balsamico</div>
-                        <div class="option-btn">Terroso</div>
-                        <div class="option-btn">Fruttato</div>
                         <div class="option-btn">Agrumato</div>
-                        <div class="option-btn">Frutta Pasta Gialla</div>
-                        <div class="option-btn">Frutta Pasta Bianca</div>
+                        <div class="option-btn">Resinoso / Pino</div>
                         <div class="option-btn">Frutta Tropicale</div>
+                        <div class="option-btn">Frutta Pasta Bianca</div>
+                        <div class="option-btn">Frutta Pasta Gialla</div>
                         <div class="option-btn">Frutti di Bosco</div>
-                        <div class="option-btn">Banana</div>
-                        <div class="option-btn">Tostato</div>
-                        <div class="option-btn">Affumicato</div>
-                        <div class="option-btn">Lattico</div>
-                        <div class="option-btn">Acetico</div>
-                        <div class="option-btn">Animale/Cantina</div>
-                        <div class="option-btn">Chimico</div>
-                        <div class="option-btn">Speziato</div>
+                        <div class="option-btn">Frutta Disidratata</div>
+                        <div class="option-btn">Banana / Bubblegum</div>
+                        <div class="option-btn">Speziato / Pepato</div>
+                        <div class="option-btn">Chiodi di Garofano</div>
+                        <div class="option-btn">Vaniglia / Legnoso</div>
+                        <div class="option-btn">Terroso / Cantina</div>
+                        <div class="option-btn">Cuoio / Animale</div>
+                        <div class="option-btn">Affumicato / Bruciato</div>
+                        <div class="option-btn">Acido / Lattico</div>
+                        <div class="option-btn">Solvente / Alcolico</div>
+                        <div class="option-btn">Vegetale / Solfureo</div>
                     </div>
                 </div>
 
@@ -217,12 +220,15 @@
         </div>
     </div>
 
-<script type="module">
+    <script type="module">
         import { supabase } from '../js/supabase-config.js';
         import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js';
 
-        // 1. INIZIALIZZAZIONE (Usa 1 come fallback)
-        const eventId = localStorage.getItem('hbl_selected_event') || '1'; 
+        // Variabile per controllo modifiche non salvate
+        let isDirty = false;
+
+        // Fallback ID evento = 1 (Libero)
+        const eventId = localStorage.getItem('hbl_selected_event') || '1';
         
         const systemSelect = document.getElementById('style-system');
         const containerFree = document.getElementById('container-free');
@@ -231,6 +237,11 @@
         const inputBjcp = document.getElementById('style-bjcp');
         const dynamicContainer = document.getElementById('bjcp-dynamic-container');
 
+        // Monitoraggio Modifiche (Dirty Check)
+        const form = document.getElementById('tasting-form');
+        form.addEventListener('input', () => isDirty = true);
+        form.addEventListener('change', () => isDirty = true);
+        
         // Popola BJCP
         bjcpCatalog.forEach(category => {
             const group = document.createElement('optgroup');
@@ -255,7 +266,7 @@
             }
         });
 
-        // UI Dinamica
+        // UI Dinamica BJCP
         inputBjcp.addEventListener('change', (e) => {
             dynamicContainer.innerHTML = ''; 
             const code = e.target.value.split('.')[0];
@@ -274,36 +285,51 @@
                 }).join('') + `</div>`;
             }
             dynamicContainer.appendChild(wrapper);
+            
+            // Re-bind listeners per nuovi elementi
+            wrapper.querySelectorAll('input').forEach(i => i.addEventListener('change', () => isDirty = true));
         });
 
-        // 2. LOGICA PULSANTI A CROCETTE (Multi, Single & Toggle)
+        // Logica Pulsanti Crocette
         document.querySelectorAll('.option-btn').forEach(btn => {
             btn.addEventListener('click', function() {
+                isDirty = true; // Segna come modificato
                 const parent = this.parentElement;
                 const isMulti = parent.getAttribute('data-type') === 'multi';
                 const isToggle = parent.getAttribute('data-toggle') === 'true';
 
                 if (isMulti) {
-                    // Checkbox behavior
                     this.classList.toggle('selected');
                 } else if (isToggle) {
-                    // Radio Deselezionabile (per il Voto Finale)
                     if (this.classList.contains('selected')) {
-                        this.classList.remove('selected'); // Deseleziona se già attivo
+                        this.classList.remove('selected');
                     } else {
                         parent.querySelectorAll('.option-btn').forEach(sib => sib.classList.remove('selected'));
-                        this.classList.add('selected'); // Attiva
+                        this.classList.add('selected');
                     }
                 } else {
-                    // Radio Standard (Obbligatorio uno)
                     parent.querySelectorAll('.option-btn').forEach(sib => sib.classList.remove('selected'));
                     this.classList.add('selected');
                 }
             });
         });
 
-        // 3. INVIO DATI
-        document.getElementById('tasting-form').addEventListener('submit', async (e) => {
+        // Intercetta uscita "Indietro"
+        document.getElementById('back-link').addEventListener('click', (e) => {
+            if (isDirty) {
+                if (!confirm("⚠️ Stai per uscire senza salvare.\nVuoi davvero procedere? I dati andranno persi.")) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Intercetta chiusura/refresh
+        window.addEventListener('beforeunload', (e) => {
+            if (isDirty) { e.preventDefault(); e.returnValue = ''; }
+        });
+
+        // INVIO DATI
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
 
@@ -363,6 +389,9 @@
             const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
             if (error) { alert(error.message); btn.disabled = false; return; }
             
+            // SALVATAGGIO OK: RESETTA isDirty
+            isDirty = false;
+
             if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) {
                 window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
             } else {
