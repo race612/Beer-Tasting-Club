@@ -1,6 +1,9 @@
 /* =========================================
-   Beer Tasting Club APP - MASTER STYLE v0.7.0
+   BEER TASTING CLUB - MASTER STYLE v0.7.0
    ========================================= */
+
+/* 1. IMPORTAZIONE GOOGLE ICONS (Material Symbols Outlined) */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
 
 :root {
     --primary-color: #f59e0b; /* Amber 500 */
@@ -21,7 +24,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 20px;
-    padding-bottom: 80px; /* Spazio per scroll su mobile */
+    padding-bottom: 80px;
     line-height: 1.5;
 }
 
@@ -29,25 +32,32 @@ h1, h2, h3, h4 { margin-top: 0; color: white; line-height: 1.2; }
 a { color: var(--primary-color); transition: color 0.2s; }
 a:hover { color: var(--primary-hover); }
 
+/* --- CONFIGURAZIONE ICONE --- */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle; /* Allinea col testo */
+    display: inline-block;
+}
+
+/* Icone Grandi (Menu Home / Nuova Scheda) */
+.icon-large { font-size: 2.5rem !important; margin-bottom: 10px; }
+
+/* Icone Medie (Intestazioni / Bottoni grandi) */
+.icon-medium { font-size: 1.5rem !important; }
+
+/* Icone Piccole (Bottoni inline) */
+.icon-small { font-size: 1.1rem !important; margin-right: 5px; }
+
 /* --- LAYOUT GENERALE --- */
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.card {
-    background-color: var(--card-bg);
-    border-radius: var(--radius);
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    margin-bottom: 20px;
-}
-
+.container { max-width: 600px; margin: 0 auto; }
+.card { background-color: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 20px; }
 hr { border: 0; border-top: 1px solid #374151; margin: 20px 0; }
 
-/* --- PULSANTI E LINK --- */
+/* --- PULSANTI --- */
 .btn {
-    display: block;
+    display: flex; /* Flex per allineare icona e testo */
+    align-items: center;
+    justify-content: center;
     width: 100%;
     padding: 12px;
     border: none;
@@ -58,89 +68,33 @@ hr { border: 0; border-top: 1px solid #374151; margin: 20px 0; }
     text-align: center;
     text-decoration: none;
     transition: all 0.2s;
+    gap: 8px; /* Spazio tra icona e testo */
 }
-
 .btn-primary { background-color: var(--primary-color); color: #000; }
 .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
 .btn-primary:disabled { background-color: #b45309; opacity: 0.7; cursor: not-allowed; transform: none; }
-
 .btn-secondary { background-color: #374151; color: white; }
 .btn-secondary:hover { background-color: #4b5563; }
-
 .btn-outline { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); }
 
-.link-back { display: block; text-align: center; margin-top: 20px; color: var(--text-muted); text-decoration: none; }
+.link-back { display: flex; align-items: center; justify-content: center; margin-top: 20px; color: var(--text-muted); text-decoration: none; gap: 5px; }
 
-/* --- HOMEPAGE & DASHBOARD (Ripristinato) --- */
-.home-header {
-    text-align: center;
-    margin-bottom: 30px;
-    padding: 20px 0;
-}
+/* --- HOME & DASHBOARD --- */
+.home-header { text-align: center; margin-bottom: 30px; padding: 20px 0; }
+.logo-large { width: 120px; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.3)); }
 
-.logo-large {
-    width: 120px;
-    margin-bottom: 15px;
-    filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.3));
-}
-
-.menu-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
-}
-
+.menu-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
 .menu-item {
-    background-color: var(--card-bg);
-    padding: 25px;
-    border-radius: var(--radius);
-    text-align: center;
-    text-decoration: none;
-    color: white;
-    border: 1px solid #374151;
-    transition: all 0.2s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    background-color: var(--card-bg); padding: 25px; border-radius: var(--radius);
+    text-align: center; text-decoration: none; color: white; border: 1px solid #374151;
+    transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
-
-.menu-item:hover {
-    border-color: var(--primary-color);
-    background-color: #2d3748;
-    transform: translateY(-3px);
-}
-
-.menu-icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
-.menu-title { font-size: 1.2rem; font-weight: bold; }
+.menu-item:hover { border-color: var(--primary-color); background-color: #2d3748; transform: translateY(-3px); }
+.menu-title { font-size: 1.2rem; font-weight: bold; margin-top: 5px; }
 .menu-desc { font-size: 0.9rem; color: var(--text-muted); margin-top: 5px; }
 
-/* --- INFO & PAGINE TESTUALI --- */
-.text-content p { margin-bottom: 15px; text-align: justify; }
-.text-content ul { padding-left: 20px; margin-bottom: 20px; color: #d1d5db; }
-.text-content li { margin-bottom: 8px; }
-
-/* --- FORM STYLES --- */
-.form-group { margin-bottom: 15px; }
-label { display: block; margin-bottom: 5px; font-weight: 500; color: var(--text-main); }
-
-input[type="text"], input[type="email"], input[type="password"], input[type="number"], select, textarea {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #4b5563;
-    background-color: #111827;
-    color: white;
-    font-size: 1rem;
-}
-input:focus, select:focus, textarea:focus {
-    outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
-}
-
-/* --- SELEZIONE SCHEDE (Nuova Scheda) --- */
-.segmented-control {
-    display: flex; background: #111827; padding: 5px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #374151;
-}
+/* --- NUOVA SCHEDA --- */
+.segmented-control { display: flex; background: #111827; padding: 5px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #374151; }
 .segmented-option {
     flex: 1; text-align: center; padding: 10px 5px; cursor: pointer; color: #9ca3af;
     border-radius: 6px; transition: all 0.3s ease; font-size: 0.9rem; font-weight: 500; user-select: none;
@@ -156,14 +110,13 @@ input:focus, select:focus, textarea:focus {
 }
 .sheet-card:not(.disabled):hover { border-color: var(--primary-color); background: #2d3748; transform: translateY(-2px); }
 .sheet-card.disabled { opacity: 0.6; cursor: not-allowed; border-color: #374151; }
-.sheet-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
-.sheet-title { font-weight: bold; font-size: 0.95rem; line-height: 1.2; }
+.sheet-title { font-weight: bold; font-size: 0.95rem; line-height: 1.2; margin-top: 8px;}
 .coming-soon-badge {
     position: absolute; top: 5px; right: 5px; background: #ef4444; color: white;
     font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-weight: bold;
 }
 
-/* --- STORICO (Lista) --- */
+/* --- STORICO --- */
 .history-card {
     background-color: var(--card-bg); border-radius: var(--radius); padding: 15px; margin-bottom: 15px;
     border-left: 5px solid var(--primary-color); box-shadow: 0 2px 4px rgba(0,0,0,0.2); position: relative;
@@ -183,72 +136,47 @@ input:focus, select:focus, textarea:focus {
 .border-gold { border-left-color: #FFD700 !important; }
 .border-red { border-left-color: #ef4444 !important; }
 
+/* Cestino (Icona) */
 .delete-btn {
     position: absolute; top: 15px; right: 15px; background: rgba(17, 24, 39, 0.9);
     border: 1px solid var(--danger); color: var(--danger); border-radius: 50%; width: 35px; height: 35px;
-    display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.1rem; z-index: 10; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; transition: all 0.2s;
 }
+.delete-btn .material-symbols-outlined { font-size: 1.2rem; } /* Dimensione specifica icona cestino */
 .delete-btn:hover { background: var(--danger); color: white; transform: scale(1.1); }
 
-/* --- ELEMENTI DINAMICI (BJCP & CROCETTE) --- */
+/* --- CONTROLLI SCHEDA (Dettaglio) --- */
+.controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; }
+
+/* --- ELEMENTI SCHEDE (BJCP & Crocette) --- */
 .desc-section-title {
     color: var(--primary-color); border-bottom: 1px solid #374151; padding-bottom: 5px;
     margin-top: 30px; margin-bottom: 15px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;
 }
 .desc-group { margin-bottom: 20px; }
 .desc-label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: #d1d5db; }
-
-/* Griglia Pulsanti (Radio/Checkbox) */
 .options-grid { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .option-btn {
-    background: #1f2937;
-    border: 1px solid #4b5563;
-    border-radius: 4px;
-    padding: 8px 5px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
-    flex: 1 0 0; /* Larghezza uguale */
-    min-width: 80px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative; /* Per posizionare la spunta */
+    background: #1f2937; border: 1px solid #4b5563; border-radius: 4px; padding: 8px 5px;
+    font-size: 0.85rem; cursor: pointer; transition: all 0.2s; user-select: none;
+    flex: 1 0 0; min-width: 80px; text-align: center; display: flex; align-items: center; justify-content: center; position: relative;
 }
 .option-btn:hover { border-color: #9ca3af; background: #374151; }
-
 .option-btn.selected {
-    background: var(--primary-color);
-    color: #000;
-    border-color: var(--primary-color);
-    font-weight: bold;
-    box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
-    padding-right: 20px; /* Spazio extra per compensare la spunta */
+    background: var(--primary-color); color: #000; border-color: var(--primary-color);
+    font-weight: bold; box-shadow: 0 0 10px rgba(245, 158, 11, 0.3); padding-right: 20px;
 }
-
-/* SPUNTA A DESTRA E PIÙ GRANDE */
-.option-btn.selected::after {
-    content: "✓";
-    font-weight: 800;
-    font-size: 1.2rem; /* 20% più grande */
-    margin-left: 8px;
-    display: inline-block;
-}
-
-/* Voto 1-10 */
+.option-btn.selected::after { content: "✓"; font-weight: 800; font-size: 1.2rem; margin-left: 8px; display: inline-block; }
 .vote-btn { min-width: 40px !important; font-weight: bold; font-size: 1.1rem; }
-.vote-btn.selected::after { margin-left: 2px; font-size: 0.9rem; } /* Spunta più piccola sui numeri */
+.vote-btn.selected::after { margin-left: 2px; font-size: 0.9rem; }
 
-/* Difetti (Flaw Cards) */
+/* Flaws */
 .flaws-grid {
     display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
     background: #111827; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #374151;
 }
 @media (min-width: 600px) { .flaws-grid { grid-template-columns: repeat(3, 1fr); } }
-
 .flaw-checkbox-hidden { display: none; }
 .flaw-card {
     background: #1f2937; border: 1px solid #374151; border-radius: 6px; padding: 10px;
@@ -258,33 +186,27 @@ input:focus, select:focus, textarea:focus {
 .flaw-intensity-wrapper { margin-top: 8px; display: none; animation: fadeIn 0.3s; }
 .flaw-checkbox-hidden:checked + .flaw-card .flaw-intensity-wrapper { display: block; }
 .flaw-select-modern { background: #111827; color: white; border: 1px solid #ef4444; border-radius: 4px; padding: 4px; width: 100%; font-size: 0.8rem; text-align: center; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Input Punti (BJCP) */
+/* Inputs e Info */
 .score-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .score-row label { margin-bottom: 0; }
 .score-row input { width: 80px; text-align: center; font-weight: bold; font-size: 1.1rem; }
-
-@keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-
-/* --- PROFILO & PDF --- */
-.section-title { border-bottom: 1px solid #374151; padding-bottom: 5px; margin-top: 30px; margin-bottom: 15px; color: var(--primary-color); font-size: 1.2rem; font-weight: bold; }
-.checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-.checkbox-grid label { display: flex; align-items: center; cursor: pointer; font-size: 0.9rem; }
-.checkbox-grid input { width: auto; margin-right: 10px; transform: scale(1.2); flex-shrink: 0; }
-.privacy-option { background: #2d3748; padding: 12px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #4a5568; }
-.privacy-option label { margin: 0; cursor: pointer; display: flex; align-items: center; font-weight: bold; color: white; }
-.privacy-option input { width: auto; margin-right: 10px; transform: scale(1.1); }
-.privacy-desc { font-size: 0.85rem; color: #a0aec0; margin-left: 28px; display: block; margin-top: 3px; }
-
-/* PDF Foglio */
-.paper-sheet {
-    background: white; color: black; padding: 30px; max-width: 800px; margin: 20px auto;
-    border-radius: 2px; box-shadow: 0 0 20px rgba(0,0,0,0.5); font-family: 'Times New Roman', Times, serif;
+.form-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-weight: 500; color: var(--text-main); }
+input[type="text"], input[type="email"], input[type="password"], input[type="number"], select, textarea {
+    width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #4b5563; background-color: #111827; color: white; font-size: 1rem;
 }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3); }
+
+/* PDF e Profilo */
+.paper-sheet { background: white; color: black; padding: 30px; max-width: 800px; margin: 20px auto; border-radius: 2px; box-shadow: 0 0 20px rgba(0,0,0,0.5); font-family: 'Times New Roman', Times, serif; }
 .pdf-header { border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
 .pdf-logo { width: 60px; }
 .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; border: 1px solid #000; padding: 10px; }
 .score-item { display: flex; justify-content: space-between; border-bottom: 1px dotted #ccc; padding: 5px 0; }
 .score-total { border-top: 2px solid #000; margin-top: 10px; padding-top: 5px; font-weight: bold; font-size: 1.2rem; text-align: right; }
 .judge-box { margin-top: 30px; border: 1px solid #000; padding: 10px; background: #f9f9f9; font-family: sans-serif; font-size: 0.9rem; }
-.hidden-row { display: none !important; }
+.text-content p { margin-bottom: 15px; text-align: justify; }
+.text-content ul { padding-left: 20px; margin-bottom: 20px; color: #d1d5db; }
+.text-content li { margin-bottom: 8px; }

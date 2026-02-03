@@ -17,7 +17,9 @@
     <div class="container">
         
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <a href="index.html" style="text-decoration: none; font-size: 1.5rem;">🏠</a>
+            <a href="index.html" style="text-decoration: none;">
+                <span class="material-symbols-outlined icon-large">home</span>
+            </a>
             <h3>Nuova Scheda</h3>
             <div style="width: 30px;"></div>
         </div>
@@ -25,7 +27,7 @@
         <div class="segmented-control">
             <div class="segmented-option active" onclick="setMode('free', this)">Uso Libero</div>
             <div class="segmented-option" onclick="setMode('sharing', this)">Beer Sharing</div>
-            <div class="segmented-option" onclick="setMode('event', this)">Evento</div>
+            <div class="segmented-option" onclick="setMode('event', this)">Evento BTC</div>
         </div>
 
         <div id="mode-free">
@@ -38,40 +40,55 @@
 
             <div class="sheet-grid">
                 <a href="schede/bjcp-sintetica.html" class="sheet-card" onclick="return saveFreeContext()">
-                    <span class="sheet-icon">⚖️</span>
+                    <span class="material-symbols-outlined icon-large">balance</span>
                     <span class="sheet-title">BJCP<br>Sintetica</span>
                 </a>
                 <a href="schede/crocette.html" class="sheet-card" onclick="return saveFreeContext()">
-                    <span class="sheet-icon">📝</span>
+                    <span class="material-symbols-outlined icon-large">checklist</span>
                     <span class="sheet-title">Descrittiva<br>Semplificata</span>
                 </a>
                 
-                <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="sheet-icon">📋</span><span class="sheet-title">BJCP<br>Completa</span></div>
-                <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="sheet-icon">🍺</span><span class="sheet-title">Scheda<br>HBL</span></div>
-                <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="sheet-icon">📖</span><span class="sheet-title">Descrittiva<br>Estesa</span></div>
-                <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="sheet-icon">🇮🇹</span><span class="sheet-title">UBT<br>Birra dell'Anno</span></div>
+                <div class="sheet-card disabled">
+                    <span class="coming-soon-badge">Soon</span>
+                    <span class="material-symbols-outlined icon-large">gavel</span>
+                    <span class="sheet-title">BJCP<br>Completa</span>
+                </div>
+                <div class="sheet-card disabled">
+                    <span class="coming-soon-badge">Soon</span>
+                    <span class="material-symbols-outlined icon-large">sports_bar</span>
+                    <span class="sheet-title">Scheda<br>BTC</span>
+                </div>
+                <div class="sheet-card disabled">
+                    <span class="coming-soon-badge">Soon</span>
+                    <span class="material-symbols-outlined icon-large">menu_book</span>
+                    <span class="sheet-title">Descrittiva<br>Estesa</span>
+                </div>
+                <div class="sheet-card disabled">
+                    <span class="coming-soon-badge">Soon</span>
+                    <span class="material-symbols-outlined icon-large">emoji_events</span>
+                    <span class="sheet-title">Concorso<br>BdA</span>
+                </div>
             </div>
         </div>
 
         <div id="mode-coming-soon" style="display: none; text-align: center; padding: 40px 20px;">
-            <div style="font-size: 3rem; margin-bottom: 20px;">🚧</div>
+            <span class="material-symbols-outlined" style="font-size: 4rem; margin-bottom: 20px; color: #f59e0b;">construction</span>
             <h3>Funzionalità in arrivo!</h3>
             <p style="color: var(--text-muted);" id="coming-soon-text">
                 Stiamo lavorando per integrare questa modalità.
             </p>
-            </div>
+        </div>
 
         <br>
-        <a href="index.html" class="link-back">← Annulla</a>
+        <a href="index.html" class="link-back">
+            <span class="material-symbols-outlined">arrow_back</span> Annulla
+        </a>
     </div>
 
-<script type="module">
+    <script type="module">
         import { supabase } from './js/supabase-config.js';
+        const FREE_EVENT_ID = 1; 
 
-        // --- CORREZIONE: ID NUMERICO ---
-        const FREE_EVENT_ID = 1; // <--- Abbiamo messo 1 come verificato da te
-
-        // Logica cambio tab (Modalità)
         window.setMode = function(mode, element) {
             document.querySelectorAll('.segmented-option').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
@@ -81,29 +98,21 @@
             const csText = document.getElementById('coming-soon-text');
 
             if (mode === 'free') {
-                freeDiv.style.display = 'block';
-                csDiv.style.display = 'none';
+                freeDiv.style.display = 'block'; csDiv.style.display = 'none';
             } else {
-                freeDiv.style.display = 'none';
-                csDiv.style.display = 'block';
-                
+                freeDiv.style.display = 'none'; csDiv.style.display = 'block';
                 if(mode === 'sharing') {
                     csText.textContent = "La modalità Beer Sharing ti permetterà di inserire un codice birra e compilare la scheda senza dover scrivere i dettagli a mano.";
                 } else {
-                    csText.textContent = "La modalità Evento ti mostrerà solo le birre presenti alla serata selezionata.";
+                    csText.textContent = "La modalità Evento/Concorso ti mostrerà solo le birre presenti alla serata selezionata.";
                 }
             }
         }
 
-        // Funzione per Uso Libero
         window.saveFreeContext = function() {
             localStorage.setItem('hbl_selected_event', FREE_EVENT_ID);
             return true;
         }
-
-        // Carica eventi (Solo se servisse in futuro per la modalità Evento)
-        // Per ora in modalità Libero non serve chiamare il DB per gli eventi,
-        // ma lasciamo la funzione pronta per quando attiverai la tab "Evento".
     </script>
 </body>
 </html>

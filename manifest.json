@@ -19,7 +19,7 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    }
+    },
     {
       "src": "assets/icon-1080.png",
       "sizes": "1080x1080",
