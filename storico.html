@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le mie Degustazioni - Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.6.0">
+    <title>Storico - Beer Tasting Club</title>
+    <link rel="stylesheet" href="css/style.css?v=0.8.0">
     
     <link rel="manifest" href="/HBL-Tasting/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
-    
-    <script type="module" src="js/app.js"></script>
 </head>
 <body>
     <div class="container">
@@ -28,7 +26,7 @@
         <p class="text-center" style="color: var(--text-muted); margin-bottom: 20px;">Le tue schede salvate</p>
 
         <div id="notes-list">
-            <p style="text-align: center;">Caricamento...</p>
+            <p style="text-align: center; margin-top: 40px;">Caricamento...</p>
         </div>
         
     </div>
@@ -36,105 +34,118 @@
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        const container = document.getElementById('history-container');
-
-        // Funzione per caricare lo storico
         async function loadHistory() {
+            const listContainer = document.getElementById('notes-list');
+            
+            // 1. Controllo Utente
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) {
-                container.innerHTML = '<p>Devi essere loggato.</p>';
+                window.location.href = 'index.html';
                 return;
             }
 
+            // 2. Scarica Dati (Join con Eventi per avere il nome evento)
+            // Ordine decrescente (dal più recente)
             const { data: notes, error } = await supabase
                 .from('tasting_notes')
-                .select('*, events(name)') 
-                .eq('user_id', user.id) 
+                .select('*, events (name)')
+                .eq('user_id', user.id)
                 .order('created_at', { ascending: false });
 
             if (error) {
-                container.innerHTML = `<p style="color:red">Errore caricamento: ${error.message}</p>`;
+                listContainer.innerHTML = `<p style="color:red; text-align:center">Errore: ${error.message}</p>`;
                 return;
             }
 
-            if (notes.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 20px;">
-                        <p>Non hai ancora compilato nessuna scheda!</p>
-                        <a href="nuova-scheda.html" class="btn btn-primary">🍺 Inizia ora</a>
-                    </div>`;
-                return;
-            }
-
-            container.innerHTML = ''; 
-            
-            notes.forEach(note => {
-                const style = note.details.style || "Stile non spec.";
-                const date = new Date(note.created_at).toLocaleDateString('it-IT');
-                const eventName = note.events ? note.events.name : "";
-                const isFreeEvent = eventName.toLowerCase().includes('libero') || eventName.toLowerCase().includes('privato');
-                
-                let borderClass = '';
-                if (note.final_score >= 45) borderClass = 'border-gold';
-                else if (note.final_score >= 38) borderClass = 'border-green';
-                else if (note.final_score < 30) borderClass = 'border-red';
-
-                const html = `
-                    <div class="history-card ${borderClass}">
-                        
-                        <button class="delete-btn" onclick="window.deleteNote('${note.id}', event)">
-                            🗑️
-                        </button>
-
-                        <a href="dettaglio-scheda.html?id=${note.id}" style="text-decoration: none; color: inherit; display: block; padding-right: 30px;">
-                            <div class="history-header">
-                                <div>
-                                    <h4 class="beer-name">${note.beer_name}</h4>
-                                    <span class="beer-style">${style}</span>
-                                </div>
-                                <div class="score-badge">
-                                    ${note.final_score}
-                                </div>
-                            </div>
-                            
-                            <div class="meta-info">
-                                <span>📅 ${date}</span>
-                                ${!isFreeEvent ? `<span>📍 ${eventName}</span>` : ''}
-                            </div>
-                            
-                            <div style="margin-top: 8px;">
-                                <span style="background: #374151; color: #9ca3af; padding: 2px 6px; border-radius: 4px; font-size: 0.7em; text-transform: uppercase;">
-                                    ${note.sheet_type.replace('_', ' ')}
-                                </span>
-                            </div>
-                        </a>
+            if (!notes || notes.length === 0) {
+                listContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; opacity: 0.7;">
+                        <span class="material-symbols-outlined" style="font-size: 3rem; margin-bottom:10px">post_add</span>
+                        <p>Non hai ancora compilato nessuna scheda.</p>
+                        <a href="nuova-scheda.html" class="btn btn-primary" style="margin-top:20px">Nuova Scheda</a>
                     </div>
                 `;
-                container.innerHTML += html;
+                return;
+            }
+
+            // 3. Genera HTML per ogni scheda
+            listContainer.innerHTML = '';
+            
+            notes.forEach(note => {
+                const date = new Date(note.created_at).toLocaleDateString('it-IT');
+                const eventName = note.events ? note.events.name : 'Evento sconosciuto';
+                
+                // Gestione Punteggio e Colori
+                // Se è una scheda descrittiva (crocette) e il voto è 0, mostriamo un'icona
+                let scoreDisplay = note.final_score;
+                let borderClass = '';
+                let badgeColor = '';
+
+                if (note.sheet_type === 'desc_crocette' && (!note.final_score || note.final_score === 0)) {
+                    scoreDisplay = '<span class="material-symbols-outlined" style="font-size:1.2rem">checklist</span>'; // Icona se non c'è voto
+                    borderClass = ''; // Grigio standard
+                } else {
+                    // Colori in base al voto (BJCP style)
+                    if (note.final_score >= 45) { borderClass = 'border-gold'; badgeColor = '#FFD700'; }
+                    else if (note.final_score >= 38) { borderClass = 'border-green'; badgeColor = '#10b981'; }
+                    else if (note.final_score >= 30) { borderClass = ''; badgeColor = '#f59e0b'; } // Amber standard
+                    else { borderClass = 'border-red'; badgeColor = '#ef4444'; }
+                }
+
+                // Creazione Elemento Card
+                const card = document.createElement('div');
+                card.className = `history-card ${borderClass}`;
+                
+                // HTML interno della card
+                card.innerHTML = `
+                    <div class="delete-btn" data-id="${note.id}" title="Elimina scheda">
+                        <span class="material-symbols-outlined">delete</span>
+                    </div>
+                    <div class="card-content" style="cursor: pointer;">
+                        <div class="history-header">
+                            <div>
+                                <h3 class="beer-name">${note.beer_name}</h3>
+                                <div class="beer-style">${note.details.style || 'Stile non spec.'}</div>
+                            </div>
+                            <div class="score-badge" style="color: ${badgeColor}">${scoreDisplay}</div>
+                        </div>
+                        <div class="meta-info">
+                            <span>📅 ${date}</span>
+                            <span>📍 ${eventName}</span>
+                        </div>
+                    </div>
+                `;
+
+                // Aggiungi listener per Click sulla Card (Vai al dettaglio)
+                const contentDiv = card.querySelector('.card-content');
+                contentDiv.addEventListener('click', () => {
+                    window.location.href = `dettaglio-scheda.html?id=${note.id}`;
+                });
+
+                // Aggiungi listener per Eliminazione (Stop Propagation per non aprire la scheda)
+                const deleteBtn = card.querySelector('.delete-btn');
+                deleteBtn.addEventListener('click', async (e) => {
+                    e.stopPropagation(); // IMPORTANTE: Evita che il click apra la scheda
+                    if(confirm(`Sei sicuro di voler eliminare la scheda di "${note.beer_name}"?`)) {
+                        const { error: delError } = await supabase
+                            .from('tasting_notes')
+                            .delete()
+                            .eq('id', note.id);
+                        
+                        if (delError) alert("Errore eliminazione: " + delError.message);
+                        else {
+                            card.remove(); // Rimuovi visivamente
+                            // Se non ci sono più schede, ricarica per mostrare il messaggio vuoto
+                            if (document.querySelectorAll('.history-card').length === 0) loadHistory();
+                        }
+                    }
+                });
+
+                listContainer.appendChild(card);
             });
         }
 
-        // Funzione Eliminazione Globale
-        window.deleteNote = async function(id, event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            if(!confirm("⚠️ Sei sicuro di voler eliminare questa scheda?\nL'operazione non è reversibile.")) {
-                return;
-            }
-
-            const { error } = await supabase
-                .from('tasting_notes')
-                .delete()
-                .eq('id', id);
-
-            if (error) {
-                alert("Errore durante l'eliminazione: " + error.message);
-            } else {
-                loadHistory(); // Ricarica la lista pulita
-            }
-        }
-
+        // Avvia caricamento
         loadHistory();
     </script>
 </body>

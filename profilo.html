@@ -17,7 +17,7 @@
         
         <div class="header-bar">
             <a href="index.html" class="header-link">
-                <span class="material-symbols-outlined">arrow_back</span> Indietro
+                <span class="material-symbols-outlined">arrow_back</span> Home
             </a>
             <img src="assets/logo.png" alt="Logo" class="header-logo">
         </div>
@@ -80,7 +80,7 @@
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        // 1. Controlla Login e Carica Dati
+        // 1. CARICAMENTO PROFILO
         async function loadProfile() {
             const { data: { user } } = await supabase.auth.getUser();
 
@@ -89,20 +89,19 @@
                 return;
             }
 
-            // Popola Header
+            // Dati Utente
             const meta = user.user_metadata || {};
             const email = user.email;
             
-            // Iniziali Avatar
+            // UI Header
             const firstLetter = email.charAt(0).toUpperCase();
             document.getElementById('avatar-initials').textContent = firstLetter;
             
-            // Nome e Email
             const fullName = `${meta.first_name || ''} ${meta.last_name || ''}`.trim();
             document.getElementById('user-name').textContent = fullName || "Utente";
             document.getElementById('user-email').textContent = email;
 
-            // Popola Checkbox Ruoli
+            // UI Checkbox Ruoli
             document.getElementById('role-pro').checked = meta.role_pro || false;
             document.getElementById('role-publican').checked = meta.role_publican || false;
             document.getElementById('role-ubt').checked = meta.role_ubt || false;
@@ -110,19 +109,20 @@
             document.getElementById('role-sommelier').checked = meta.role_sommelier || false;
             document.getElementById('role-courses').checked = meta.role_courses || false;
 
-            // Popola Select Levels
+            // UI Select Levels
             document.getElementById('bjcp-level').value = meta.bjcp_level || "";
             document.getElementById('bjcp-id').value = meta.bjcp_id || "";
             document.getElementById('cicerone-level').value = meta.cicerone_level || "";
         }
 
+        // Avvia al caricamento pagina
         loadProfile();
 
-        // 2. Salva Dati
+        // 2. SALVATAGGIO PROFILO
         document.getElementById('save-profile').addEventListener('click', async () => {
             const btn = document.getElementById('save-profile');
             const originalText = btn.innerHTML;
-            btn.textContent = "Salvataggio...";
+            btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Salvataggio...`;
             btn.disabled = true;
 
             const updates = {
@@ -151,7 +151,7 @@
             btn.disabled = false;
         });
 
-        // 3. Logout
+        // 3. LOGOUT
         document.getElementById('logout-btn').addEventListener('click', async () => {
             if(confirm("Sei sicuro di voler uscire?")) {
                 await supabase.auth.signOut();
