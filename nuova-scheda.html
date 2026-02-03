@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuova Degustazione - Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.7.0">
+    <link rel="stylesheet" href="css/style.css?v=0.8.0">
     
     <link rel="manifest" href="/HBL-Tasting/manifest.json">
     <meta name="theme-color" content="#f59e0b">
@@ -16,13 +16,14 @@
 <body>
     <div class="container">
         
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <a href="index.html" style="text-decoration: none;">
-                <span class="material-symbols-outlined icon-large">home</span>
+        <div class="header-bar">
+            <a href="index.html" class="header-link">
+                <span class="material-symbols-outlined">arrow_back</span> Home
             </a>
-            <h3>Nuova Scheda</h3>
-            <div style="width: 30px;"></div>
+            <img src="assets/logo.png" alt="Logo" class="header-logo">
         </div>
+
+        <h3 class="text-center">Nuova Scheda</h3>
 
         <div class="segmented-control">
             <div class="segmented-option active" onclick="setMode('free', this)">Uso Libero</div>
@@ -80,13 +81,15 @@
         </div>
 
         <br>
-        <a href="index.html" class="link-back">
-            <span class="material-symbols-outlined">arrow_back</span> Annulla
+        <a href="index.html" class="btn btn-outline" style="margin-top:20px">
+             Annulla
         </a>
     </div>
 
     <script type="module">
         import { supabase } from './js/supabase-config.js';
+
+        // FALLBACK ID (Deve corrispondere all'ID "Utilizzo Libero" nel tuo DB)
         const FREE_EVENT_ID = 1; 
 
         window.setMode = function(mode, element) {

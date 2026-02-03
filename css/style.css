@@ -1,13 +1,14 @@
 /* =========================================
-   BEER TASTING CLUB - MASTER STYLE v0.7.0
+   BEER TASTING CLUB - MASTER STYLE v0.8.0
    ========================================= */
 
-/* 1. IMPORTAZIONE GOOGLE ICONS (Material Symbols Outlined) */
+/* 1. IMPORTAZIONE ICONE */
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
 
+/* 2. VARIABILI & COLORI */
 :root {
     --primary-color: #f59e0b; /* Amber 500 */
-    --primary-hover: #d97706;
+    --primary-hover: #d97706; /* Amber 600 */
     --bg-dark: #111827;       /* Gray 900 */
     --card-bg: #1f2937;       /* Gray 800 */
     --text-main: #f3f4f6;     /* Gray 100 */
@@ -29,46 +30,49 @@ body {
 }
 
 h1, h2, h3, h4 { margin-top: 0; color: white; line-height: 1.2; }
-a { color: var(--primary-color); transition: color 0.2s; }
+a { color: var(--primary-color); transition: color 0.2s; text-decoration: none; }
 a:hover { color: var(--primary-hover); }
+hr { border: 0; border-top: 1px solid #374151; margin: 25px 0; }
 
-/* --- CONFIGURAZIONE ICONE --- */
+/* 3. ICONE & UTILITÀ */
 .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    vertical-align: middle; /* Allinea col testo */
-    display: inline-block;
+    vertical-align: middle; display: inline-block; line-height: 1;
+}
+.icon-large { font-size: 2.5rem !important; margin-bottom: 10px; }
+.icon-medium { font-size: 1.5rem !important; }
+.text-center { text-align: center; }
+.mt-20 { margin-top: 20px; }
+
+/* 4. LAYOUT & HEADER UNIFORME */
+.container { max-width: 600px; margin: 0 auto; }
+
+/* Barra in alto standard: Indietro <---> Logo */
+.header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+.header-link {
+    display: flex; align-items: center; gap: 5px;
+    color: var(--text-muted); font-weight: 500; font-size: 0.95rem;
+}
+.header-link:hover { color: white; }
+.header-logo { width: 40px; height: auto; }
+
+.card {
+    background-color: var(--card-bg); border-radius: var(--radius);
+    padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 20px;
 }
 
-/* Icone Grandi (Menu Home / Nuova Scheda) */
-.icon-large { font-size: 2.5rem !important; margin-bottom: 10px; }
-
-/* Icone Medie (Intestazioni / Bottoni grandi) */
-.icon-medium { font-size: 1.5rem !important; }
-
-/* Icone Piccole (Bottoni inline) */
-.icon-small { font-size: 1.1rem !important; margin-right: 5px; }
-
-/* --- LAYOUT GENERALE --- */
-.container { max-width: 600px; margin: 0 auto; }
-.card { background-color: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 20px; }
-hr { border: 0; border-top: 1px solid #374151; margin: 20px 0; }
-
-/* --- PULSANTI --- */
+/* 5. PULSANTI (BTN) */
 .btn {
-    display: flex; /* Flex per allineare icona e testo */
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    transition: all 0.2s;
-    gap: 8px; /* Spazio tra icona e testo */
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; padding: 12px; border: none; border-radius: 8px;
+    font-size: 1rem; font-weight: bold; cursor: pointer; text-decoration: none;
+    transition: all 0.2s; gap: 8px;
 }
 .btn-primary { background-color: var(--primary-color); color: #000; }
 .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
@@ -76,24 +80,34 @@ hr { border: 0; border-top: 1px solid #374151; margin: 20px 0; }
 .btn-secondary { background-color: #374151; color: white; }
 .btn-secondary:hover { background-color: #4b5563; }
 .btn-outline { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); }
+.btn-danger-outline { background: transparent; border: 1px solid var(--danger); color: var(--danger); }
+.btn-danger-outline:hover { background: rgba(239, 68, 68, 0.1); }
 
-.link-back { display: flex; align-items: center; justify-content: center; margin-top: 20px; color: var(--text-muted); text-decoration: none; gap: 5px; }
+/* 6. INPUT & FORM */
+.form-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-weight: 500; color: var(--text-main); }
+input[type="text"], input[type="email"], input[type="password"], input[type="number"], select, textarea {
+    width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #4b5563;
+    background-color: #111827; color: white; font-size: 1rem;
+}
+input:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+}
 
-/* --- HOME & DASHBOARD --- */
+/* 7. HOMEPAGE & DASHBOARD */
 .home-header { text-align: center; margin-bottom: 30px; padding: 20px 0; }
 .logo-large { width: 120px; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.3)); }
-
 .menu-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
 .menu-item {
     background-color: var(--card-bg); padding: 25px; border-radius: var(--radius);
-    text-align: center; text-decoration: none; color: white; border: 1px solid #374151;
-    transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; border: 1px solid #374151; transition: all 0.2s;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;
 }
 .menu-item:hover { border-color: var(--primary-color); background-color: #2d3748; transform: translateY(-3px); }
 .menu-title { font-size: 1.2rem; font-weight: bold; margin-top: 5px; }
 .menu-desc { font-size: 0.9rem; color: var(--text-muted); margin-top: 5px; }
 
-/* --- NUOVA SCHEDA --- */
+/* 8. SELEZIONE SCHEDE */
 .segmented-control { display: flex; background: #111827; padding: 5px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #374151; }
 .segmented-option {
     flex: 1; text-align: center; padding: 10px 5px; cursor: pointer; color: #9ca3af;
@@ -105,18 +119,18 @@ hr { border: 0; border-top: 1px solid #374151; margin: 20px 0; }
 .sheet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
 .sheet-card {
     background: #1f2937; border: 1px solid #374151; border-radius: var(--radius); padding: 20px 10px;
-    text-align: center; text-decoration: none; color: white; transition: all 0.2s; position: relative;
+    text-align: center; color: white; transition: all 0.2s; position: relative;
     overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 120px;
 }
 .sheet-card:not(.disabled):hover { border-color: var(--primary-color); background: #2d3748; transform: translateY(-2px); }
 .sheet-card.disabled { opacity: 0.6; cursor: not-allowed; border-color: #374151; }
-.sheet-title { font-weight: bold; font-size: 0.95rem; line-height: 1.2; margin-top: 8px;}
+.sheet-title { font-weight: bold; font-size: 0.95rem; line-height: 1.2; margin-top: 8px; }
 .coming-soon-badge {
     position: absolute; top: 5px; right: 5px; background: #ef4444; color: white;
     font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; font-weight: bold;
 }
 
-/* --- STORICO --- */
+/* 9. STORICO */
 .history-card {
     background-color: var(--card-bg); border-radius: var(--radius); padding: 15px; margin-bottom: 15px;
     border-left: 5px solid var(--primary-color); box-shadow: 0 2px 4px rgba(0,0,0,0.2); position: relative;
@@ -135,20 +149,40 @@ hr { border: 0; border-top: 1px solid #374151; margin: 20px 0; }
 .border-green { border-left-color: #10b981 !important; }
 .border-gold { border-left-color: #FFD700 !important; }
 .border-red { border-left-color: #ef4444 !important; }
-
-/* Cestino (Icona) */
 .delete-btn {
     position: absolute; top: 15px; right: 15px; background: rgba(17, 24, 39, 0.9);
     border: 1px solid var(--danger); color: var(--danger); border-radius: 50%; width: 35px; height: 35px;
     display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; transition: all 0.2s;
 }
-.delete-btn .material-symbols-outlined { font-size: 1.2rem; } /* Dimensione specifica icona cestino */
 .delete-btn:hover { background: var(--danger); color: white; transform: scale(1.1); }
 
-/* --- CONTROLLI SCHEDA (Dettaglio) --- */
-.controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; }
+/* 10. PROFILO (Header Specifico) - RIPRISTINATO */
+.profile-header-card {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding-bottom: 20px; border-bottom: 1px solid #374151; margin-bottom: 20px;
+}
+.profile-avatar {
+    width: 80px; height: 80px; background: var(--primary-color); color: #000;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; font-weight: bold; margin-bottom: 15px;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+}
+.profile-name { font-size: 1.4rem; font-weight: bold; margin: 0; }
+.profile-email { color: var(--text-muted); font-size: 0.9rem; margin-top: 5px; }
 
-/* --- ELEMENTI SCHEDE (BJCP & Crocette) --- */
+/* Checkbox & Privacy */
+.section-title {
+    border-bottom: 1px solid #374151; padding-bottom: 5px; margin-top: 30px; margin-bottom: 15px;
+    color: var(--primary-color); font-size: 1.2rem; font-weight: bold;
+}
+.checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+.checkbox-grid label { display: flex; align-items: center; cursor: pointer; font-size: 0.9rem; background: #111827; padding: 10px; border-radius: 6px; border: 1px solid #374151; }
+.checkbox-grid input { width: auto; margin-right: 10px; transform: scale(1.2); flex-shrink: 0; }
+.privacy-option { background: #2d3748; padding: 12px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #4a5568; }
+.privacy-option label { margin: 0; cursor: pointer; display: flex; align-items: center; font-weight: bold; color: white; }
+.privacy-option input { width: auto; margin-right: 10px; transform: scale(1.1); }
+
+/* 11. SCHEDE (BJCP & Crocette) */
 .desc-section-title {
     color: var(--primary-color); border-bottom: 1px solid #374151; padding-bottom: 5px;
     margin-top: 30px; margin-bottom: 15px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;
@@ -156,7 +190,6 @@ hr { border: 0; border-top: 1px solid #374151; margin: 20px 0; }
 .desc-group { margin-bottom: 20px; }
 .desc-label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: #d1d5db; }
 .options-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-
 .option-btn {
     background: #1f2937; border: 1px solid #4b5563; border-radius: 4px; padding: 8px 5px;
     font-size: 0.85rem; cursor: pointer; transition: all 0.2s; user-select: none;
@@ -168,6 +201,7 @@ hr { border: 0; border-top: 1px solid #374151; margin: 20px 0; }
     font-weight: bold; box-shadow: 0 0 10px rgba(245, 158, 11, 0.3); padding-right: 20px;
 }
 .option-btn.selected::after { content: "✓"; font-weight: 800; font-size: 1.2rem; margin-left: 8px; display: inline-block; }
+
 .vote-btn { min-width: 40px !important; font-weight: bold; font-size: 1.1rem; }
 .vote-btn.selected::after { margin-left: 2px; font-size: 0.9rem; }
 
@@ -186,27 +220,25 @@ hr { border: 0; border-top: 1px solid #374151; margin: 20px 0; }
 .flaw-intensity-wrapper { margin-top: 8px; display: none; animation: fadeIn 0.3s; }
 .flaw-checkbox-hidden:checked + .flaw-card .flaw-intensity-wrapper { display: block; }
 .flaw-select-modern { background: #111827; color: white; border: 1px solid #ef4444; border-radius: 4px; padding: 4px; width: 100%; font-size: 0.8rem; text-align: center; }
+
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Inputs e Info */
-.score-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.score-row label { margin-bottom: 0; }
-.score-row input { width: 80px; text-align: center; font-weight: bold; font-size: 1.1rem; }
-.form-group { margin-bottom: 15px; }
-label { display: block; margin-bottom: 5px; font-weight: 500; color: var(--text-main); }
-input[type="text"], input[type="email"], input[type="password"], input[type="number"], select, textarea {
-    width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #4b5563; background-color: #111827; color: white; font-size: 1rem;
-}
-input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3); }
+/* 12. INFO & TESTO */
+.text-content p { margin-bottom: 15px; text-align: justify; }
+.text-content ul { padding-left: 20px; margin-bottom: 20px; color: #d1d5db; }
+.text-content li { margin-bottom: 8px; }
 
-/* PDF e Profilo */
-.paper-sheet { background: white; color: black; padding: 30px; max-width: 800px; margin: 20px auto; border-radius: 2px; box-shadow: 0 0 20px rgba(0,0,0,0.5); font-family: 'Times New Roman', Times, serif; }
+/* 13. PDF */
+.paper-sheet {
+    background: white; color: black; padding: 30px; max-width: 800px; margin: 20px auto;
+    border-radius: 2px; box-shadow: 0 0 20px rgba(0,0,0,0.5); font-family: 'Times New Roman', Times, serif;
+}
 .pdf-header { border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
 .pdf-logo { width: 60px; }
 .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; border: 1px solid #000; padding: 10px; }
 .score-item { display: flex; justify-content: space-between; border-bottom: 1px dotted #ccc; padding: 5px 0; }
 .score-total { border-top: 2px solid #000; margin-top: 10px; padding-top: 5px; font-weight: bold; font-size: 1.2rem; text-align: right; }
 .judge-box { margin-top: 30px; border: 1px solid #000; padding: 10px; background: #f9f9f9; font-family: sans-serif; font-size: 0.9rem; }
-.text-content p { margin-bottom: 15px; text-align: justify; }
-.text-content ul { padding-left: 20px; margin-bottom: 20px; color: #d1d5db; }
-.text-content li { margin-bottom: 8px; }
+.score-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.score-row label { margin-bottom: 0; color: white; }
+.score-row input { width: 80px; text-align: center; font-weight: bold; font-size: 1.1rem; }

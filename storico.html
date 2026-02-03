@@ -16,18 +16,21 @@
 </head>
 <body>
     <div class="container">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-            <a href="index.html" style="text-decoration: none; font-size: 1.5rem;">🏠</a>
-            <h3>Il mio Storico</h3>
-            <div style="width: 30px;"></div>
+        
+        <div class="header-bar">
+            <a href="index.html" class="header-link">
+                <span class="material-symbols-outlined">arrow_back</span> Home
+            </a>
+            <img src="assets/logo.png" alt="Logo" class="header-logo">
         </div>
 
-        <div id="history-container">
-            <p style="text-align: center; color: var(--text-muted);">Caricamento schede...</p>
-        </div>
+        <h2 class="text-center">Storico Degustazioni</h2>
+        <p class="text-center" style="color: var(--text-muted); margin-bottom: 20px;">Le tue schede salvate</p>
 
-        <br>
-        <a href="index.html" class="link-back">← Torna alla Home</a>
+        <div id="notes-list">
+            <p style="text-align: center;">Caricamento...</p>
+        </div>
+        
     </div>
 
     <script type="module">

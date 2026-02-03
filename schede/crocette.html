@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descrittiva Semplificata - Beer Tasting Club</title>
-    <link rel="stylesheet" href="../css/style.css?v=0.6.0">
+    <link rel="stylesheet" href="../css/style.css?v=0.8.0">
     
     <link rel="manifest" href="/HBL-Tasting/manifest.json">
     <meta name="theme-color" content="#f59e0b">
@@ -25,9 +25,12 @@
 <body>
     <div class="container">
         
-        <a href="../nuova-scheda.html" style="text-decoration: none; color: var(--text-muted); display:flex; align-items:center; gap:5px;" id="back-link">
-            <span class="material-symbols-outlined">arrow_back</span> Indietro
-        </a>
+        <div class="header-bar">
+            <a href="../nuova-scheda.html" class="header-link" id="back-link">
+                <span class="material-symbols-outlined">arrow_back</span> Indietro
+            </a>
+            <img src="../assets/logo.png" alt="Logo" class="header-logo">
+        </div>
 
         <div class="card">
             <h2 style="text-align: center; margin-bottom: 5px;">Descrittiva Semplificata</h2>
@@ -38,7 +41,7 @@
                 
                 <div class="form-group">
                     <label>Nome Birra / Numero Campione</label>
-                    <input type="text" id="beer-name" required placeholder="Es. IPA di Mirko o #42">
+                    <input type="text" id="beer-name" required placeholder="Es. IPA del Mario o #42">
                 </div>
 
                 <div class="form-group">
@@ -314,24 +317,19 @@
                 }
             });
         });
-        // Intercetta uscita "Indietro" (CORRETTO)
+
+        // AVVISO USCITA CORRETTO (Previene doppio popup)
         document.getElementById('back-link').addEventListener('click', (e) => {
             if (isDirty) {
-                // Se l'utente clicca ANNULLA, blocchiamo tutto.
                 if (!confirm("⚠️ Stai per uscire senza salvare.\nVuoi davvero procedere? I dati andranno persi.")) {
                     e.preventDefault();
                 } else {
-                    // Se l'utente clicca OK, disattiviamo il flag isDirty
-                    // così non scatta il secondo avviso del browser (beforeunload).
+                    // Utente ha confermato di voler uscire, disattiviamo il check
                     isDirty = false;
                 }
             }
         });
-
-        // Intercetta chiusura/refresh
-        window.addEventListener('beforeunload', (e) => {
-            if (isDirty) { e.preventDefault(); e.returnValue = ''; }
-        });
+        window.addEventListener('beforeunload', (e) => { if (isDirty) { e.preventDefault(); e.returnValue = ''; } });
 
         // INVIO DATI
         form.addEventListener('submit', async (e) => {
@@ -394,7 +392,7 @@
             const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
             if (error) { alert(error.message); btn.disabled = false; return; }
             
-            // SALVATAGGIO OK: RESETTA isDirty
+            // RESET DIRTY AL SALVATAGGIO
             isDirty = false;
 
             if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) {
