@@ -12,48 +12,46 @@
     <link rel="apple-touch-icon" href="assets/icon-192.png">
     
     <style>
-        /* STILI SPECIFICI PER PROFILO */
+        /* STILI SPECIFICI PROFILO */
         .profile-section-title {
             color: var(--primary-color);
             border-bottom: 1px solid #374151;
             padding-bottom: 5px;
-            margin-top: 30px;
+            margin-top: 35px;
             margin-bottom: 15px;
             font-size: 1.1rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        /* Testo grigino per le label */
-        .text-muted-small {
-            color: var(--text-muted);
-            font-size: 0.85em;
-            font-weight: normal;
-            margin-left: 5px;
+        .text-muted-small { color: var(--text-muted); font-size: 0.85em; font-weight: normal; margin-left: 5px; }
+
+        /* LIVELLO ACCOUNT BADGE */
+        .account-badge {
+            background: #374151;
+            color: #d1d5db;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            border: 1px solid #4b5563;
         }
 
-        /* Griglia Pulsanti (Chips) */
+        /* GRIGLIE PULSANTI (Chips) - Sempre 2 colonne */
         .chips-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
         
-        /* Layout a colonna singola per testi lunghi (BJCP/Ruoli) */
-        .chips-grid.full-width {
-            grid-template-columns: 1fr; 
-        }
-
-        /* Su tablet/desktop rimettiamo 2 colonne se c'è spazio */
-        @media (min-width: 600px) {
-            .chips-grid.full-width { grid-template-columns: 1fr 1fr; }
-        }
-        
         .chip-btn {
             background: #1f2937;
             border: 1px solid #4b5563;
             border-radius: 8px;
-            padding: 12px 10px;
+            padding: 12px 5px;
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s;
@@ -67,28 +65,21 @@
             line-height: 1.2;
         }
 
-        .chip-btn:hover {
-            border-color: #9ca3af;
-            background: #374151;
-        }
+        .chip-btn:hover { border-color: #9ca3af; background: #374151; }
 
         .chip-btn.selected {
-            background: rgba(245, 158, 11, 0.15); /* Ambra trasparente */
+            background: rgba(245, 158, 11, 0.15);
             border: 1px solid var(--primary-color);
             color: var(--primary-color);
             font-weight: bold;
             box-shadow: 0 0 8px rgba(245, 158, 11, 0.2);
         }
 
-        /* Campi Condizionali (Container nascosti) */
-        .conditional-container {
+        /* Campi Nascosti (Stile pulito, identico ai form-group standard) */
+        .hidden-field {
+            display: none; /* Gestito da JS */
             margin-top: 15px;
-            background: #374151;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 3px solid var(--primary-color);
             animation: fadeIn 0.3s ease-out;
-            display: none;
         }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
@@ -107,7 +98,8 @@
         <div class="card">
             
             <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;">
-                <div class="profile-avatar" id="avatar-initials" style="margin-bottom: 15px;">?</div>
+                <div class="profile-avatar" id="avatar-initials" style="margin-bottom: 10px;">?</div>
+                <div id="account-level-badge" class="account-badge">Degustatore</div>
                 
                 <div style="width: 100%; text-align: left;">
                     <div class="form-group">
@@ -118,45 +110,39 @@
                         <label>Email <span class="text-muted-small">(Non modificabile)</span></label>
                         <input type="email" id="user-email" disabled style="opacity: 0.6; cursor: not-allowed; color: #9ca3af;">
                     </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <label style="margin-bottom: 8px; display:block;">Sei un Homebrewer?</label>
+                        <div class="chips-grid" id="hb-bool-grid">
+                            <div class="chip-btn" data-value="yes">Sì</div>
+                            <div class="chip-btn selected" data-value="no">No</div>
+                        </div>
+                    </div>
+
+                    <div id="hb-club-container" class="hidden-field">
+                        <label style="color: #d1d5db; font-size: 0.9rem; margin-bottom: 5px; display:block;">Associazione o Club:</label>
+                        <select id="hb-club-select">
+                            <option value="solitario">No, sono solitario</option>
+                            <option value="passato">No, ma ne ho fatto parte in passato</option>
+                            <option value="HBL">HBL - HomeBrewers Lombardi</option>
+                            <option value="HBS">HBS - HomeBrewers Sardi</option>
+                            <option value="AHBT">AHBT - Associazione HomeBrewers Ticino</option>
+                            <option value="ABC">ABC - Associazione Birraria Cuneese</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <label style="margin-bottom: 8px; display:block;">Vuoi organizzare eventi e serate?</label>
+                        <div class="chips-grid" id="org-bool-grid">
+                            <div class="chip-btn" data-value="yes">Sì</div>
+                            <div class="chip-btn selected" data-value="no">No</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <h3 class="profile-section-title">Homebrewer</h3>
-            <div style="margin-bottom: 15px;">
-                <label style="margin-bottom: 10px; display:block;">Sei un Birraio Casalingo?</label>
-                <div class="chips-grid" id="hb-bool-grid">
-                    <div class="chip-btn" data-value="yes">Sì</div>
-                    <div class="chip-btn selected" data-value="no">No</div> </div>
-            </div>
-
-            <div id="hb-club-container" class="conditional-container">
-                <label style="color: #d1d5db; font-size: 0.9rem; margin-bottom: 8px; display:block;">Fai parte di un'associazione o un club?</label>
-                <select id="hb-club-select">
-                    <option value="solitario">No, sono solitario</option>
-                    <option value="passato">No, ma ne ho fatto parte in passato</option>
-                    <option value="HBL">HBL - HomeBrewers Lombardi</option>
-                    <option value="HBS">HBS - HomeBrewers Sardi</option>
-                    <option value="AHBT">AHBT - Associazione HomeBrewers Ticino</option>
-                    <option value="ABC">ABC - Associazione Birraria Cuneese</option>
-                </select>
-            </div>
-
-
-            <h3 class="profile-section-title">Qualifiche & Ruoli</h3>
-            <div class="chips-grid full-width" id="roles-grid">
-                <div class="chip-btn" data-role="role_pro">Birraio Professionista</div>
-                <div class="chip-btn" data-role="role_publican">Publican</div>
-                <div class="chip-btn" data-role="role_ubt">UBT - UnionBirrai Beer Taster</div>
-                <div class="chip-btn" data-role="role_doemens">Bier Sommelier Doemens</div>
-                <div class="chip-btn" data-role="role_ais">Sommelier AIS della birra</div>
-                <div class="chip-btn" data-role="role_dieffe">Beer Sommelier Dieffe</div>
-                <div class="chip-btn" data-role="role_other_assoc">Beer Sommelier - Altre associazioni</div>
-                <div class="chip-btn" data-role="role_courses">Altri corsi di degustazione</div>
-            </div>
-
-
             <h3 class="profile-section-title">Livello BJCP</h3>
-            <div class="chips-grid full-width" id="bjcp-grid">
+            <div class="chips-grid" id="bjcp-grid">
                 <div class="chip-btn" data-value="provisional">Provisional Judge</div>
                 <div class="chip-btn" data-value="pending">Rank Pending</div>
                 <div class="chip-btn" data-value="apprentice">Apprentice Judge</div>
@@ -167,25 +153,36 @@
                 <div class="chip-btn" data-value="grand_master">Grand Master Judge</div>
             </div>
 
-            <div id="bjcp-id-container" class="conditional-container">
-                <label style="color: #d1d5db; font-size: 0.9rem;">Il tuo ID BJCP</label>
-                <input type="text" id="bjcp-id" placeholder="Es. E1234" style="margin-top: 5px;">
+            <div id="bjcp-id-container" class="hidden-field">
+                <label>Il tuo ID BJCP</label>
+                <input type="text" id="bjcp-id" placeholder="Es. E1234">
             </div>
 
-
             <h3 class="profile-section-title">Livello Cicerone®</h3>
-            <div class="chips-grid full-width" id="cicerone-grid">
+            <div class="chips-grid" id="cicerone-grid">
                 <div class="chip-btn" data-value="server">Certified Beer Server</div>
                 <div class="chip-btn" data-value="certified">Certified Cicerone</div>
                 <div class="chip-btn" data-value="advanced">Advanced Cicerone</div>
                 <div class="chip-btn" data-value="master">Master Cicerone</div>
             </div>
 
-            <div id="cicerone-link-container" class="conditional-container">
-                <label style="color: #d1d5db; font-size: 0.9rem;">Link al profilo Cicerone</label>
-                <input type="url" id="cicerone-link" placeholder="https://www.cicerone.org/..." style="margin-top: 5px;">
+            <div id="cicerone-link-container" class="hidden-field">
+                <label>Link al profilo Cicerone</label>
+                <input type="url" id="cicerone-link" placeholder="https://www.cicerone.org/..." style="width: 100%;">
             </div>
 
+            <h3 class="profile-section-title">Altre Qualifiche</h3>
+            <div class="chips-grid" id="roles-grid">
+                <div class="chip-btn" data-role="role_pro">Birraio</div>
+                <div class="chip-btn" data-role="role_publican">Publican</div>
+                <div class="chip-btn" data-role="role_ubt">Unionbirrai Beer Taster</div>
+                <div class="chip-btn" data-role="role_doemens">Bier Sommelier Doemens</div>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Altri corsi di degustazione o Qualifiche</label>
+                <textarea id="other-qualifications" rows="3" placeholder="Es. Sommelier AIS, Corsi di degustazione locali, ecc..."></textarea>
+            </div>
 
             <button id="save-profile" class="btn btn-primary mt-20">
                 <span class="material-symbols-outlined">save</span> Salva Profilo
@@ -200,48 +197,27 @@
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
         &copy; 2026 Beer Tasting Club - 
         <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-        
         <p style="text-align: center; margin-top: 5px; font-size: 0.6rem; color: #4b5563;">
-            Crafted with love by 
-            <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
         </p>
     </footer>
 
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        // --- FUNZIONI DI UTILITÀ ---
-
-        // Attiva/Disattiva chip singolo (Toggle Multiplo - per Ruoli)
-        function toggleMultiChip(element) {
-            element.classList.toggle('selected');
-        }
-
-        // Attiva uno, spegni gli altri (Radio con Deselect - per BJCP/Cicerone/Homebrewer)
-        // Se forceSelection è true, non permette di deselezionare l'ultimo rimasto (usato per Sì/No)
+        // --- HELPER FUNCTIONS ---
         function selectSingleChip(containerId, clickedElement, forceSelection = false) {
             const container = document.getElementById(containerId);
-            const isAlreadySelected = clickedElement.classList.contains('selected');
-
-            // Reset visivo di tutti
+            const isSelected = clickedElement.classList.contains('selected');
             container.querySelectorAll('.chip-btn').forEach(btn => btn.classList.remove('selected'));
-
-            if (isAlreadySelected && !forceSelection) {
-                // Se era selezionato e posso deselezionare: non faccio nulla (rimane spento)
-                // Risultato: Nessuna selezione
-            } else {
-                // Se era spento OPPURE devo forzare selezione: lo accendo
-                clickedElement.classList.add('selected');
-            }
+            if (!isSelected || forceSelection) clickedElement.classList.add('selected');
         }
 
-        // Leggi valore Radio (ritorna stringa vuota se nulla selezionato)
         function getSingleValue(containerId) {
-            const selected = document.getElementById(containerId).querySelector('.chip-btn.selected');
-            return selected ? selected.getAttribute('data-value') : "";
+            const el = document.getElementById(containerId).querySelector('.chip-btn.selected');
+            return el ? el.getAttribute('data-value') : "";
         }
 
-        // Imposta valore Radio (al caricamento)
         function setSingleValue(containerId, value) {
             const container = document.getElementById(containerId);
             container.querySelectorAll('.chip-btn').forEach(btn => btn.classList.remove('selected'));
@@ -251,158 +227,141 @@
             }
         }
 
-        // --- LOGICA VISIBILITÀ CONDIZIONALE ---
+        function toggleMultiChip(el) { el.classList.toggle('selected'); }
 
-        // BJCP: ID visibile SOLO se selezionato QUALCOSA e DIVERSO da 'provisional'
+        // --- VISIBILITY CHECKS ---
         function checkBjcpVisibility() {
             const val = getSingleValue('bjcp-grid');
-            const container = document.getElementById('bjcp-id-container');
-            // Condizione: Valore esiste E non è provisional
-            if (val && val !== "" && val !== "provisional") {
-                container.style.display = 'block';
-            } else {
-                container.style.display = 'none';
-            }
+            const el = document.getElementById('bjcp-id-container');
+            // Mostra se diverso da vuoto e diverso da provisional e pending (opzionale, ma tu hai chiesto da Provisional in su non mostrare?)
+            // Rileggendo: "in caso non ci sia nulla ... oppure sia provisional non mostrare"
+            // Quindi mostriamo solo se non è provisional e non è pending (assumo pending sia minore)
+            if (val && val !== "" && val !== "provisional" && val !== "pending") el.style.display = 'block';
+            else el.style.display = 'none';
         }
 
-        // CICERONE: Link visibile se c'è un livello
         function checkCiceroneVisibility() {
             const val = getSingleValue('cicerone-grid');
-            const container = document.getElementById('cicerone-link-container');
-            if (val && val !== "") {
-                container.style.display = 'block';
-            } else {
-                container.style.display = 'none';
-            }
+            const el = document.getElementById('cicerone-link-container');
+            if (val && val !== "") el.style.display = 'block'; else el.style.display = 'none';
         }
 
-        // HOMEBREWER: Select visibile se 'yes'
-        function checkHomebrewerVisibility() {
+        function checkHbVisibility() {
             const val = getSingleValue('hb-bool-grid');
-            const container = document.getElementById('hb-club-container');
-            if (val === 'yes') {
-                container.style.display = 'block';
-            } else {
-                container.style.display = 'none';
-            }
+            const el = document.getElementById('hb-club-container');
+            if (val === 'yes') el.style.display = 'block'; else el.style.display = 'none';
         }
 
-        // --- 1. CARICAMENTO DATI ---
+        // --- 1. LOAD DATA ---
         async function loadProfile() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) { window.location.href = 'index.html'; return; }
-
             const meta = user.user_metadata || {};
-            
-            // Info Base
+
+            // Header
             document.getElementById('user-email').value = user.email;
             document.getElementById('display-name').value = meta.full_name || "";
+            const name = meta.full_name || user.email;
+            document.getElementById('avatar-initials').textContent = name.charAt(0).toUpperCase();
             
-            // Avatar
-            const nameForAvatar = meta.full_name || user.email;
-            document.getElementById('avatar-initials').textContent = nameForAvatar.charAt(0).toUpperCase();
+            // Badge Livello (Load da DB o calcolo al volo, meglio mostrarlo subito)
+            document.getElementById('account-level-badge').textContent = meta.account_level || "Degustatore";
 
-            // --- Homebrewer ---
-            const isHb = meta.is_homebrewer === true ? 'yes' : 'no'; // Default No
+            // Homebrewer
+            const isHb = meta.is_homebrewer === true ? 'yes' : 'no';
             setSingleValue('hb-bool-grid', isHb);
             document.getElementById('hb-club-select').value = meta.homebrewer_club || 'solitario';
-            checkHomebrewerVisibility();
+            checkHbVisibility();
 
-            // Listener HB
-            document.getElementById('hb-bool-grid').querySelectorAll('.chip-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    selectSingleChip('hb-bool-grid', btn, true); // true = obbligatorio uno dei due
-                    checkHomebrewerVisibility();
-                });
-            });
+            // Organizer
+            const isOrg = meta.is_organizer === true ? 'yes' : 'no';
+            setSingleValue('org-bool-grid', isOrg);
 
-            // --- Ruoli (Multipli) ---
-            const rolesGrid = document.getElementById('roles-grid');
-            rolesGrid.querySelectorAll('.chip-btn').forEach(btn => {
-                const roleKey = btn.getAttribute('data-role');
-                if (meta[roleKey] === true) btn.classList.add('selected');
-                btn.addEventListener('click', () => toggleMultiChip(btn));
-            });
-
-            // --- BJCP (Singolo Deselezionabile) ---
+            // BJCP
             setSingleValue('bjcp-grid', meta.bjcp_level || "");
             document.getElementById('bjcp-id').value = meta.bjcp_id || "";
             checkBjcpVisibility();
 
-            document.getElementById('bjcp-grid').querySelectorAll('.chip-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    selectSingleChip('bjcp-grid', btn); // false = posso deselezionare
-                    checkBjcpVisibility();
-                });
-            });
-
-            // --- Cicerone (Singolo Deselezionabile) ---
+            // Cicerone
             setSingleValue('cicerone-grid', meta.cicerone_level || "");
             document.getElementById('cicerone-link').value = meta.cicerone_link || "";
             checkCiceroneVisibility();
 
+            // Altre Qualifiche (4 fisse)
+            const rolesGrid = document.getElementById('roles-grid');
+            rolesGrid.querySelectorAll('.chip-btn').forEach(btn => {
+                const k = btn.getAttribute('data-role');
+                if (meta[k] === true) btn.classList.add('selected');
+                btn.addEventListener('click', () => toggleMultiChip(btn));
+            });
+
+            // Campo Testo Libero
+            document.getElementById('other-qualifications').value = meta.other_qualifications || "";
+
+            // Listeners
+            document.getElementById('hb-bool-grid').querySelectorAll('.chip-btn').forEach(btn => {
+                btn.addEventListener('click', () => { selectSingleChip('hb-bool-grid', btn, true); checkHbVisibility(); });
+            });
+            document.getElementById('org-bool-grid').querySelectorAll('.chip-btn').forEach(btn => {
+                btn.addEventListener('click', () => selectSingleChip('org-bool-grid', btn, true));
+            });
+            document.getElementById('bjcp-grid').querySelectorAll('.chip-btn').forEach(btn => {
+                btn.addEventListener('click', () => { selectSingleChip('bjcp-grid', btn); checkBjcpVisibility(); });
+            });
             document.getElementById('cicerone-grid').querySelectorAll('.chip-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    selectSingleChip('cicerone-grid', btn);
-                    checkCiceroneVisibility();
-                });
+                btn.addEventListener('click', () => { selectSingleChip('cicerone-grid', btn); checkCiceroneVisibility(); });
             });
         }
         loadProfile();
 
-        // --- 2. SALVATAGGIO ---
+        // --- 2. SAVE & CALCULATE LEVEL ---
         document.getElementById('save-profile').addEventListener('click', async () => {
             const btn = document.getElementById('save-profile');
             const originalText = btn.innerHTML;
             btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Salvataggio...`;
             btn.disabled = true;
 
-            // Raccogli ruoli multipli
+            // Raccogli Dati
+            const isHb = getSingleValue('hb-bool-grid') === 'yes';
+            const isOrg = getSingleValue('org-bool-grid') === 'yes';
+            const isBirraio = document.querySelector('.chip-btn[data-role="role_pro"]').classList.contains('selected');
+
+            // CALCOLO LIVELLO ACCOUNT
+            // Logica: Event Master (se org) > Produttore (se hb o birraio) > Degustatore (default)
+            let newLevel = "Degustatore";
+            if (isHb || isBirraio) newLevel = "Produttore";
+            if (isOrg) newLevel = "Event Master";
+
             const rolesUpdates = {};
             document.getElementById('roles-grid').querySelectorAll('.chip-btn').forEach(btn => {
-                const key = btn.getAttribute('data-role');
-                rolesUpdates[key] = btn.classList.contains('selected');
+                rolesUpdates[btn.getAttribute('data-role')] = btn.classList.contains('selected');
             });
 
-            // Homebrewer Data
-            const isHb = getSingleValue('hb-bool-grid') === 'yes';
-            const club = isHb ? document.getElementById('hb-club-select').value : null;
-
-            // BJCP Data
             const bjcpLevel = getSingleValue('bjcp-grid');
-            // Se non c'è livello o è provisional, non salvo l'ID (o lo salvo vuoto)
-            const bjcpId = (bjcpLevel && bjcpLevel !== 'provisional') ? document.getElementById('bjcp-id').value : "";
-
-            // Cicerone Data
-            const ciceroneLevel = getSingleValue('cicerone-grid');
-            const ciceroneLink = ciceroneLevel ? document.getElementById('cicerone-link').value : "";
-
             const updates = {
                 full_name: document.getElementById('display-name').value,
-                
-                // Ruoli
-                ...rolesUpdates,
-
-                // HB
+                account_level: newLevel,
                 is_homebrewer: isHb,
-                homebrewer_club: club,
-
-                // BJCP
+                homebrewer_club: isHb ? document.getElementById('hb-club-select').value : null,
+                is_organizer: isOrg,
                 bjcp_level: bjcpLevel,
-                bjcp_id: bjcpId,
-
-                // Cicerone
-                cicerone_level: ciceroneLevel,
-                cicerone_link: ciceroneLink
+                bjcp_id: (bjcpLevel && bjcpLevel !== 'provisional' && bjcpLevel !== 'pending') ? document.getElementById('bjcp-id').value : "",
+                cicerone_level: getSingleValue('cicerone-grid'),
+                cicerone_link: getSingleValue('cicerone-grid') ? document.getElementById('cicerone-link').value : "",
+                ...rolesUpdates,
+                other_qualifications: document.getElementById('other-qualifications').value
             };
 
             const { error } = await supabase.auth.updateUser({ data: updates });
 
-            if (error) alert("Errore: " + error.message);
-            else {
+            if (error) {
+                alert("Errore: " + error.message);
+            } else {
                 alert("Profilo aggiornato! ✅");
+                // Aggiorna UI subito
                 const newName = updates.full_name || document.getElementById('user-email').value;
                 document.getElementById('avatar-initials').textContent = newName.charAt(0).toUpperCase();
+                document.getElementById('account-level-badge').textContent = newLevel;
             }
 
             btn.innerHTML = originalText;
