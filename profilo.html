@@ -36,11 +36,10 @@
             margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-weight: 600;
             border: 1px solid #4b5563;
         }
 
-        /* GRIGLIE PULSANTI (Chips) - Sempre 2 colonne */
+        /* GRIGLIE PULSANTI (Chips) */
         .chips-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -75,9 +74,9 @@
             box-shadow: 0 0 8px rgba(245, 158, 11, 0.2);
         }
 
-        /* Campi Nascosti (Stile pulito, identico ai form-group standard) */
+        /* Campi Nascosti - Ora hanno stile neutro, invisibili finché non attivati */
         .hidden-field {
-            display: none; /* Gestito da JS */
+            display: none; 
             margin-top: 15px;
             animation: fadeIn 0.3s ease-out;
         }
@@ -99,7 +98,10 @@
             
             <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;">
                 <div class="profile-avatar" id="avatar-initials" style="margin-bottom: 10px;">?</div>
-                <div id="account-level-badge" class="account-badge">Degustatore</div>
+                
+                <div class="account-badge">
+                    Level: <span id="account-level-val" style="font-weight: bold; color: white;">Taster</span>
+                </div>
                 
                 <div style="width: 100%; text-align: left;">
                     <div class="form-group">
@@ -120,7 +122,7 @@
                     </div>
 
                     <div id="hb-club-container" class="hidden-field">
-                        <label style="color: #d1d5db; font-size: 0.9rem; margin-bottom: 5px; display:block;">Associazione o Club:</label>
+                        <label style="margin-bottom: 5px; display:block;">Associazione o Club:</label>
                         <select id="hb-club-select">
                             <option value="solitario">No, sono solitario</option>
                             <option value="passato">No, ma ne ho fatto parte in passato</option>
@@ -153,7 +155,7 @@
                 <div class="chip-btn" data-value="grand_master">Grand Master Judge</div>
             </div>
 
-            <div id="bjcp-id-container" class="hidden-field">
+            <div id="bjcp-id-container" class="hidden-field form-group">
                 <label>Il tuo ID BJCP</label>
                 <input type="text" id="bjcp-id" placeholder="Es. E1234">
             </div>
@@ -166,7 +168,7 @@
                 <div class="chip-btn" data-value="master">Master Cicerone</div>
             </div>
 
-            <div id="cicerone-link-container" class="hidden-field">
+            <div id="cicerone-link-container" class="hidden-field form-group">
                 <label>Link al profilo Cicerone</label>
                 <input type="url" id="cicerone-link" placeholder="https://www.cicerone.org/..." style="width: 100%;">
             </div>
@@ -182,6 +184,39 @@
             <div class="form-group" style="margin-top: 15px;">
                 <label>Altri corsi di degustazione o Qualifiche</label>
                 <textarea id="other-qualifications" rows="3" placeholder="Es. Sommelier AIS, Corsi di degustazione locali, ecc..."></textarea>
+            </div>
+
+            <h3 class="profile-section-title">Contatti e Social</h3>
+            <div class="form-group">
+                <label>Numero WhatsApp</label>
+                <input type="text" id="social-whatsapp" placeholder="+39 333...">
+            </div>
+            <div class="form-group">
+                <label>Username Telegram</label>
+                <input type="text" id="social-telegram" placeholder="@username">
+            </div>
+            <div class="form-group">
+                <label>Link Facebook</label>
+                <input type="url" id="social-facebook" placeholder="https://facebook.com/...">
+            </div>
+            <div class="form-group">
+                <label>Link Instagram</label>
+                <input type="text" id="social-instagram" placeholder="@username o Link">
+            </div>
+            <div class="form-group">
+                <label>Link LinkedIn</label>
+                <input type="url" id="social-linkedin" placeholder="https://linkedin.com/in/...">
+            </div>
+
+            <h3 class="profile-section-title">Privacy</h3>
+            <div class="form-group">
+                <label>Scegli che dati condividere quando esporti o salvi una scheda</label>
+                <select id="privacy-share">
+                    <option value="name_only">Solo nome pubblico o nickname</option>
+                    <option value="name_contact">Nome, Mail e info di contatto/Social</option>
+                    <option value="name_bjcp">Nome, Mail e Livello BJCP</option>
+                    <option value="full">Profilo Completo - Tutte le info inserite saranno condivise</option>
+                </select>
             </div>
 
             <button id="save-profile" class="btn btn-primary mt-20">
@@ -233,10 +268,9 @@
         function checkBjcpVisibility() {
             const val = getSingleValue('bjcp-grid');
             const el = document.getElementById('bjcp-id-container');
-            // Mostra se diverso da vuoto e diverso da provisional e pending (opzionale, ma tu hai chiesto da Provisional in su non mostrare?)
-            // Rileggendo: "in caso non ci sia nulla ... oppure sia provisional non mostrare"
-            // Quindi mostriamo solo se non è provisional e non è pending (assumo pending sia minore)
-            if (val && val !== "" && val !== "provisional" && val !== "pending") el.style.display = 'block';
+            // Nascosto SOLO se vuoto o Provisional. 
+            // Mostrato per Pending, Apprentice, Recognized, etc.
+            if (val && val !== "" && val !== "provisional") el.style.display = 'block';
             else el.style.display = 'none';
         }
 
@@ -264,8 +298,8 @@
             const name = meta.full_name || user.email;
             document.getElementById('avatar-initials').textContent = name.charAt(0).toUpperCase();
             
-            // Badge Livello (Load da DB o calcolo al volo, meglio mostrarlo subito)
-            document.getElementById('account-level-badge').textContent = meta.account_level || "Degustatore";
+            // Badge Livello
+            document.getElementById('account-level-val').textContent = meta.account_level || "Taster";
 
             // Homebrewer
             const isHb = meta.is_homebrewer === true ? 'yes' : 'no';
@@ -287,7 +321,7 @@
             document.getElementById('cicerone-link').value = meta.cicerone_link || "";
             checkCiceroneVisibility();
 
-            // Altre Qualifiche (4 fisse)
+            // Altre Qualifiche
             const rolesGrid = document.getElementById('roles-grid');
             rolesGrid.querySelectorAll('.chip-btn').forEach(btn => {
                 const k = btn.getAttribute('data-role');
@@ -297,6 +331,16 @@
 
             // Campo Testo Libero
             document.getElementById('other-qualifications').value = meta.other_qualifications || "";
+
+            // Socials
+            document.getElementById('social-whatsapp').value = meta.social_whatsapp || "";
+            document.getElementById('social-telegram').value = meta.social_telegram || "";
+            document.getElementById('social-facebook').value = meta.social_facebook || "";
+            document.getElementById('social-instagram').value = meta.social_instagram || "";
+            document.getElementById('social-linkedin').value = meta.social_linkedin || "";
+
+            // Privacy
+            document.getElementById('privacy-share').value = meta.privacy_share_level || "name_only";
 
             // Listeners
             document.getElementById('hb-bool-grid').querySelectorAll('.chip-btn').forEach(btn => {
@@ -326,10 +370,9 @@
             const isOrg = getSingleValue('org-bool-grid') === 'yes';
             const isBirraio = document.querySelector('.chip-btn[data-role="role_pro"]').classList.contains('selected');
 
-            // CALCOLO LIVELLO ACCOUNT
-            // Logica: Event Master (se org) > Produttore (se hb o birraio) > Degustatore (default)
-            let newLevel = "Degustatore";
-            if (isHb || isBirraio) newLevel = "Produttore";
+            // CALCOLO LIVELLO ACCOUNT (English)
+            let newLevel = "Taster";
+            if (isHb || isBirraio) newLevel = "Brewer";
             if (isOrg) newLevel = "Event Master";
 
             const rolesUpdates = {};
@@ -338,18 +381,33 @@
             });
 
             const bjcpLevel = getSingleValue('bjcp-grid');
+            
             const updates = {
                 full_name: document.getElementById('display-name').value,
                 account_level: newLevel,
                 is_homebrewer: isHb,
                 homebrewer_club: isHb ? document.getElementById('hb-club-select').value : null,
                 is_organizer: isOrg,
+                
                 bjcp_level: bjcpLevel,
-                bjcp_id: (bjcpLevel && bjcpLevel !== 'provisional' && bjcpLevel !== 'pending') ? document.getElementById('bjcp-id').value : "",
+                // Salva ID se livello esiste e NON è provisional (quindi pending e superiori)
+                bjcp_id: (bjcpLevel && bjcpLevel !== 'provisional') ? document.getElementById('bjcp-id').value : "",
+                
                 cicerone_level: getSingleValue('cicerone-grid'),
                 cicerone_link: getSingleValue('cicerone-grid') ? document.getElementById('cicerone-link').value : "",
+                
                 ...rolesUpdates,
-                other_qualifications: document.getElementById('other-qualifications').value
+                other_qualifications: document.getElementById('other-qualifications').value,
+
+                // Socials
+                social_whatsapp: document.getElementById('social-whatsapp').value,
+                social_telegram: document.getElementById('social-telegram').value,
+                social_facebook: document.getElementById('social-facebook').value,
+                social_instagram: document.getElementById('social-instagram').value,
+                social_linkedin: document.getElementById('social-linkedin').value,
+
+                // Privacy
+                privacy_share_level: document.getElementById('privacy-share').value
             };
 
             const { error } = await supabase.auth.updateUser({ data: updates });
@@ -358,10 +416,9 @@
                 alert("Errore: " + error.message);
             } else {
                 alert("Profilo aggiornato! ✅");
-                // Aggiorna UI subito
                 const newName = updates.full_name || document.getElementById('user-email').value;
                 document.getElementById('avatar-initials').textContent = newName.charAt(0).toUpperCase();
-                document.getElementById('account-level-badge').textContent = newLevel;
+                document.getElementById('account-level-val').textContent = newLevel;
             }
 
             btn.innerHTML = originalText;
