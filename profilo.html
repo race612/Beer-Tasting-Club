@@ -10,6 +10,70 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
+    
+    <style>
+        /* STILI SPECIFICI PER PROFILO (Chips & Grids) */
+        .profile-section-title {
+            color: var(--primary-color);
+            border-bottom: 1px solid #374151;
+            padding-bottom: 5px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Griglia Pulsanti (Simile a scheda degustazione) */
+        .chips-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .chip-btn {
+            background: #1f2937;
+            border: 1px solid #4b5563;
+            border-radius: 8px;
+            padding: 12px 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            color: #d1d5db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 50px;
+            user-select: none;
+        }
+
+        .chip-btn:hover {
+            border-color: #9ca3af;
+            background: #374151;
+        }
+
+        .chip-btn.selected {
+            background: rgba(245, 158, 11, 0.15); /* Ambra trasparente */
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.2);
+        }
+
+        /* Badge ID BJCP (Condizionale) */
+        #bjcp-id-container {
+            margin-top: 15px;
+            background: #374151;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary-color);
+            animation: fadeIn 0.3s ease-out;
+            display: none; /* Nascosto di default */
+        }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -38,42 +102,37 @@
                 </div>
             </div>
 
-            <h3 class="section-title">Qualifiche & Ruoli</h3>
-            <div class="checkbox-grid">
-                <label><input type="checkbox" id="role-pro"> Birraio Pro</label>
-                <label><input type="checkbox" id="role-publican"> Publican</label>
-                <label><input type="checkbox" id="role-ubt"> Giudice UBT</label>
-                <label><input type="checkbox" id="role-doemens"> Doemens</label>
-                <label><input type="checkbox" id="role-sommelier"> Beer Sommelier</label>
-                <label><input type="checkbox" id="role-courses"> Degustatore</label>
+            <h3 class="profile-section-title">Qualifiche & Ruoli</h3>
+            <div class="chips-grid" id="roles-grid">
+                <div class="chip-btn" data-role="role_pro">Birraio Pro</div>
+                <div class="chip-btn" data-role="role_publican">Publican</div>
+                <div class="chip-btn" data-role="role_ubt">Giudice UBT</div>
+                <div class="chip-btn" data-role="role_doemens">Doemens</div>
+                <div class="chip-btn" data-role="role_sommelier">Beer Sommelier</div>
+                <div class="chip-btn" data-role="role_courses">Degustatore</div>
             </div>
 
-            <h3 class="section-title">Livelli Certificazioni</h3>
-            <div class="form-group">
-                <label>Livello BJCP</label>
-                <select id="bjcp-level">
-                    <option value="">Nessuno / Non specificato</option>
-                    <option value="provisional">Provisional</option>
-                    <option value="recognized">Recognized</option>
-                    <option value="certified">Certified</option>
-                    <option value="national">National</option>
-                    <option value="master">Master</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>ID BJCP (Opzionale)</label>
-                <input type="text" id="bjcp-id" placeholder="Es. E1234">
+            <h3 class="profile-section-title">Livello BJCP</h3>
+            <div class="chips-grid" id="bjcp-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                <div class="chip-btn" data-value="">Nessuno</div>
+                <div class="chip-btn" data-value="provisional">Provisional</div>
+                <div class="chip-btn" data-value="recognized">Recognized</div>
+                <div class="chip-btn" data-value="certified">Certified</div>
+                <div class="chip-btn" data-value="national">National</div>
+                <div class="chip-btn" data-value="master">Master</div>
             </div>
 
-            <div class="form-group">
-                <label>Livello Cicerone®</label>
-                <select id="cicerone-level">
-                    <option value="">Nessuno / Non specificato</option>
-                    <option value="server">Certified Beer Server</option>
-                    <option value="certified">Certified Cicerone</option>
-                    <option value="advanced">Advanced Cicerone</option>
-                    <option value="master">Master Cicerone</option>
-                </select>
+            <div id="bjcp-id-container">
+                <label style="color: #d1d5db; font-size: 0.9rem;">Il tuo ID BJCP</label>
+                <input type="text" id="bjcp-id" placeholder="Es. E1234" style="margin-top: 5px;">
+            </div>
+
+            <h3 class="profile-section-title">Livello Cicerone®</h3>
+            <div class="chips-grid" id="cicerone-grid"> <div class="chip-btn" data-value="" style="grid-column: span 2;">Nessuno / Non specificato</div>
+                <div class="chip-btn" data-value="server">Cert. Beer Server</div>
+                <div class="chip-btn" data-value="certified">Certified Cicerone</div>
+                <div class="chip-btn" data-value="advanced">Advanced Cicerone</div>
+                <div class="chip-btn" data-value="master">Master Cicerone</div>
             </div>
 
             <button id="save-profile" class="btn btn-primary mt-20">
@@ -85,26 +144,73 @@
             <span class="material-symbols-outlined">logout</span> Esci dall'App
         </button>
     </div>
+
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
-            &copy; 2026 Beer Tasting Club - 
-            <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-            
-            <p style="text-align: center; margin-top: 5px; font-size: 0.6rem; color: #4b5563;">
-                Crafted with love by 
-                <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
-            </p>
-        </footer>
+        &copy; 2026 Beer Tasting Club - 
+        <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
+        
+        <p style="text-align: center; margin-top: 5px; font-size: 0.6rem; color: #4b5563;">
+            Crafted with love by 
+            <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        </p>
+    </footer>
+
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        // 1. CARICA DATI
+        let currentUserMeta = {};
+
+        // --- FUNZIONI DI UTILITÀ PER CHIPS ---
+        
+        // Attiva/Disattiva chip singolo (Toggle Multiplo)
+        function toggleChip(element) {
+            element.classList.toggle('selected');
+        }
+
+        // Attiva uno, spegni gli altri (Radio Singolo)
+        function selectSingleChip(containerId, selectedElement) {
+            const container = document.getElementById(containerId);
+            container.querySelectorAll('.chip-btn').forEach(btn => btn.classList.remove('selected'));
+            selectedElement.classList.add('selected');
+        }
+
+        // Leggi valore Radio
+        function getSingleValue(containerId) {
+            const selected = document.getElementById(containerId).querySelector('.chip-btn.selected');
+            return selected ? selected.getAttribute('data-value') : "";
+        }
+
+        // Imposta valore Radio (al caricamento)
+        function setSingleValue(containerId, value) {
+            const container = document.getElementById(containerId);
+            // Reset
+            container.querySelectorAll('.chip-btn').forEach(btn => btn.classList.remove('selected'));
+            // Trova e attiva
+            const target = container.querySelector(`.chip-btn[data-value="${value}"]`) || container.querySelector(`.chip-btn[data-value=""]`);
+            if (target) target.classList.add('selected');
+        }
+
+        // --- LOGICA BJCP VISIBILITY ---
+        function checkBjcpVisibility() {
+            const val = getSingleValue('bjcp-grid');
+            const container = document.getElementById('bjcp-id-container');
+            if (val && val !== "") {
+                container.style.display = 'block';
+            } else {
+                container.style.display = 'none';
+                document.getElementById('bjcp-id').value = ""; // Pulisci se nascondi
+            }
+        }
+
+        // --- 1. CARICAMENTO DATI ---
         async function loadProfile() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) { window.location.href = 'index.html'; return; }
 
             const meta = user.user_metadata || {};
+            currentUserMeta = meta; // Cache
             
-            // Popola Campi
+            // Info Base
             document.getElementById('user-email').value = user.email;
             document.getElementById('display-name').value = meta.full_name || "";
             
@@ -112,39 +218,59 @@
             const nameForAvatar = meta.full_name || user.email;
             document.getElementById('avatar-initials').textContent = nameForAvatar.charAt(0).toUpperCase();
 
-            // Checkbox
-            document.getElementById('role-pro').checked = meta.role_pro || false;
-            document.getElementById('role-publican').checked = meta.role_publican || false;
-            document.getElementById('role-ubt').checked = meta.role_ubt || false;
-            document.getElementById('role-doemens').checked = meta.role_doemens || false;
-            document.getElementById('role-sommelier').checked = meta.role_sommelier || false;
-            document.getElementById('role-courses').checked = meta.role_courses || false;
+            // Ruoli (Multipli)
+            const rolesGrid = document.getElementById('roles-grid');
+            rolesGrid.querySelectorAll('.chip-btn').forEach(btn => {
+                const roleKey = btn.getAttribute('data-role');
+                if (meta[roleKey] === true) btn.classList.add('selected');
+                
+                // Click Listener
+                btn.addEventListener('click', () => toggleChip(btn));
+            });
 
-            // Select
-            document.getElementById('bjcp-level').value = meta.bjcp_level || "";
+            // BJCP (Singolo)
+            setSingleValue('bjcp-grid', meta.bjcp_level || "");
             document.getElementById('bjcp-id').value = meta.bjcp_id || "";
-            document.getElementById('cicerone-level').value = meta.cicerone_level || "";
+            checkBjcpVisibility(); // Controlla subito se mostrare ID
+
+            // Click Listener BJCP
+            document.getElementById('bjcp-grid').querySelectorAll('.chip-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    selectSingleChip('bjcp-grid', btn);
+                    checkBjcpVisibility(); // Controlla al click
+                });
+            });
+
+            // Cicerone (Singolo)
+            setSingleValue('cicerone-grid', meta.cicerone_level || "");
+            
+            // Click Listener Cicerone
+            document.getElementById('cicerone-grid').querySelectorAll('.chip-btn').forEach(btn => {
+                btn.addEventListener('click', () => selectSingleChip('cicerone-grid', btn));
+            });
         }
         loadProfile();
 
-        // 2. SALVA DATI
+        // --- 2. SALVATAGGIO ---
         document.getElementById('save-profile').addEventListener('click', async () => {
             const btn = document.getElementById('save-profile');
             const originalText = btn.innerHTML;
             btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Salvataggio...`;
             btn.disabled = true;
 
+            // Raccogli ruoli
+            const rolesUpdates = {};
+            document.getElementById('roles-grid').querySelectorAll('.chip-btn').forEach(btn => {
+                const key = btn.getAttribute('data-role');
+                rolesUpdates[key] = btn.classList.contains('selected');
+            });
+
             const updates = {
-                full_name: document.getElementById('display-name').value, // Aggiorna nome
-                role_pro: document.getElementById('role-pro').checked,
-                role_publican: document.getElementById('role-publican').checked,
-                role_ubt: document.getElementById('role-ubt').checked,
-                role_doemens: document.getElementById('role-doemens').checked,
-                role_sommelier: document.getElementById('role-sommelier').checked,
-                role_courses: document.getElementById('role-courses').checked,
-                bjcp_level: document.getElementById('bjcp-level').value,
+                full_name: document.getElementById('display-name').value,
+                ...rolesUpdates, // Spread dei ruoli
+                bjcp_level: getSingleValue('bjcp-grid'),
                 bjcp_id: document.getElementById('bjcp-id').value,
-                cicerone_level: document.getElementById('cicerone-level').value
+                cicerone_level: getSingleValue('cicerone-grid')
             };
 
             const { error } = await supabase.auth.updateUser({ data: updates });
@@ -152,7 +278,6 @@
             if (error) alert("Errore: " + error.message);
             else {
                 alert("Profilo aggiornato! ✅");
-                // Aggiorna anche l'avatar subito
                 const newName = updates.full_name || document.getElementById('user-email').value;
                 document.getElementById('avatar-initials').textContent = newName.charAt(0).toUpperCase();
             }
@@ -161,7 +286,7 @@
             btn.disabled = false;
         });
 
-        // 3. LOGOUT
+        // --- 3. LOGOUT ---
         document.getElementById('logout-btn').addEventListener('click', async () => {
             if(confirm("Vuoi davvero uscire?")) {
                 await supabase.auth.signOut();
