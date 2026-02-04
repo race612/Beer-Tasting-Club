@@ -1,5 +1,5 @@
 /* =========================================
-   BEER TASTING CLUB - MASTER STYLE v0.8.0
+   BEER TASTING CLUB - MASTER STYLE v0.8.1
    ========================================= */
 
 /* 1. IMPORTAZIONE ICONE */
@@ -97,66 +97,30 @@ input:focus, select:focus, textarea:focus {
 /* 7. HOMEPAGE & DASHBOARD */
 .home-header { text-align: center; margin-bottom: 30px; padding: 15px 0; }
 .logo-large { width: 180px; filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.3)); }
-/* ... (Codice precedente: .home-header, .logo-large rimangono uguali) ... */
-
-/* MENU GRID - MODERNO & COMPATTO (Layout Orizzontale) */
-.menu-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* Una colonna (lista) */
-    gap: 12px; /* Spazio ridotto tra i pulsanti */
-}
-
-/* Opzionale: su Tablet/PC li mettiamo a due colonne */
-@media (min-width: 600px) {
-    .menu-grid { grid-template-columns: 1fr 1fr; }
-}
+.home-slogan {  text-align: center; font-weight: bold; margin: 0;}
+/* --- MENU LISTA COMPATTA (Verticale su tutti i device) --- */
+.menu-grid { display: grid; gap: 10px; }
 
 .menu-item {
-    background-color: var(--card-bg);
-    border: 1px solid #374151;
-    border-radius: var(--radius);
-    padding: 15px 20px; /* Padding ridotto per essere più compatto */
-    text-decoration: none;
-    color: white;
-    transition: all 0.2s;
-
-    /* SETUP GRIGLIA INTERNA */
-    display: grid;
-    grid-template-areas: 
-        "icon title"
-        "icon desc";
-    grid-template-columns: auto 1fr; /* Colonna 1: Icona, Colonna 2: Testo */
-    column-gap: 18px; /* Spazio tra icona e testo */
-    align-items: center; /* Centratura verticale */
-    text-align: left; /* Testo allineato a sinistra */
+    background: var(--card-bg); border: 1px solid #374151; border-radius: var(--radius);
+    padding: 12px 16px; text-decoration: none; color: white; transition: all 0.2s;
+    /* Layout Grid: Icona a SX, Testi a DX */
+    display: grid; 
+    grid-template-areas: "icon title" "icon desc";
+    grid-template-columns: auto 1fr; column-gap: 15px; 
+    align-items: center; text-align: left;
 }
+.menu-item:hover { border-color: var(--primary-color); background: #2d3748; transform: translateX(4px); }
 
-.menu-item:hover {
-    border-color: var(--primary-color);
-    background-color: #2d3748;
-    transform: translateX(5px); /* Effetto scorrimento laterale */
+/* Posizionamento Elementi Interni */
+.menu-item .icon-large { 
+    grid-area: icon; font-size: 2rem !important; margin: 0; color: var(--primary-color); 
 }
-
-/* Gestione Icona (Area 'icon') */
-.menu-item .icon-large {
-    grid-area: icon;
-    font-size: 2rem !important; /* Ridotto da 2.5rem a 2rem */
-    margin-bottom: 0; /* Rimosso margine inferiore */
-    color: var(--primary-color); /* Icona colorata per risaltare */
+.menu-title { 
+    grid-area: title; font-size: 1.1rem; font-weight: bold; margin: 0; align-self: end; 
 }
-
-/* Gestione Titolo (Area 'title') */
-.menu-title {
-    grid-area: title;
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin: 0;
-    line-height: 1.2;
-    align-self: end; /* Spinge verso il basso vicino alla descrizione */
-}
-
-/* Gestione Descrizione (Area 'desc') */
-.menu-desc {grid-area: desc; font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.2; align-self: start; /* Spinge verso l'alto vicino al titolo */
+.menu-desc { 
+    grid-area: desc; font-size: 0.85rem; color: var(--text-muted); margin: 0; align-self: start; 
 }
 
 /* 8. SELEZIONE SCHEDE */
