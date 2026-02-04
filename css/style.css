@@ -95,17 +95,69 @@ input:focus, select:focus, textarea:focus {
 }
 
 /* 7. HOMEPAGE & DASHBOARD */
-.home-header { text-align: center; margin-bottom: 30px; padding: 20px 0; }
-.logo-large { width: 180px; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.3)); }
-.menu-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-.menu-item {
-    background-color: var(--card-bg); padding: 25px; border-radius: var(--radius);
-    text-align: center; border: 1px solid #374151; transition: all 0.2s;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;
+.home-header { text-align: center; margin-bottom: 30px; padding: 15px 0; }
+.logo-large { width: 180px; filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.3)); }
+/* ... (Codice precedente: .home-header, .logo-large rimangono uguali) ... */
+
+/* MENU GRID - MODERNO & COMPATTO (Layout Orizzontale) */
+.menu-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Una colonna (lista) */
+    gap: 12px; /* Spazio ridotto tra i pulsanti */
 }
-.menu-item:hover { border-color: var(--primary-color); background-color: #2d3748; transform: translateY(-3px); }
-.menu-title { font-size: 1.2rem; font-weight: bold; margin-top: 5px; }
-.menu-desc { font-size: 0.9rem; color: var(--text-muted); margin-top: 5px; }
+
+/* Opzionale: su Tablet/PC li mettiamo a due colonne */
+@media (min-width: 600px) {
+    .menu-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.menu-item {
+    background-color: var(--card-bg);
+    border: 1px solid #374151;
+    border-radius: var(--radius);
+    padding: 15px 20px; /* Padding ridotto per essere più compatto */
+    text-decoration: none;
+    color: white;
+    transition: all 0.2s;
+
+    /* SETUP GRIGLIA INTERNA */
+    display: grid;
+    grid-template-areas: 
+        "icon title"
+        "icon desc";
+    grid-template-columns: auto 1fr; /* Colonna 1: Icona, Colonna 2: Testo */
+    column-gap: 18px; /* Spazio tra icona e testo */
+    align-items: center; /* Centratura verticale */
+    text-align: left; /* Testo allineato a sinistra */
+}
+
+.menu-item:hover {
+    border-color: var(--primary-color);
+    background-color: #2d3748;
+    transform: translateX(5px); /* Effetto scorrimento laterale */
+}
+
+/* Gestione Icona (Area 'icon') */
+.menu-item .icon-large {
+    grid-area: icon;
+    font-size: 2rem !important; /* Ridotto da 2.5rem a 2rem */
+    margin-bottom: 0; /* Rimosso margine inferiore */
+    color: var(--primary-color); /* Icona colorata per risaltare */
+}
+
+/* Gestione Titolo (Area 'title') */
+.menu-title {
+    grid-area: title;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0;
+    line-height: 1.2;
+    align-self: end; /* Spinge verso il basso vicino alla descrizione */
+}
+
+/* Gestione Descrizione (Area 'desc') */
+.menu-desc {grid-area: desc; font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.2; align-self: start; /* Spinge verso l'alto vicino al titolo */
+}
 
 /* 8. SELEZIONE SCHEDE */
 .segmented-control { display: flex; background: #111827; padding: 5px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #374151; }
