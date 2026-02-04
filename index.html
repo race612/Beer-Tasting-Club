@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.8.1">
+    <link rel="stylesheet" href="css/style.css?v=0.8.3">
     <link rel="manifest" href="/HBL-Tasting/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -49,7 +49,6 @@
 
             <div style="text-align: center; margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
                 <a href="#" id="forgot-link" class="auth-link-styled">Password dimenticata?</a>
-                
                 <a href="#" id="resend-link" class="auth-link-styled" style="display: none;">Rinvia email di verifica</a>
             </div>
         </div>
@@ -105,99 +104,111 @@
         </footer>
     </div>
 
+    <div id="pwa-toast" class="pwa-toast">
+        <span class="material-symbols-outlined" style="color: var(--primary-color);">download</span>
+        <span style="font-weight: bold; font-size: 0.9rem;">Installa App</span>
+    </div>
+
     <div id="modal-forgot" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <button class="modal-close" id="close-modal"><span class="material-symbols-outlined">close</span></button>
-            
             <h3 id="modal-title" style="color: var(--primary-color);">Reset Password</h3>
-            <p id="modal-desc" style="font-size: 0.9rem; color: #d1d5db; margin-bottom: 20px;">
-                Inserisci la tua email.
-            </p>
-            
-            <div class="form-group">
-                <input type="email" id="modal-email" placeholder="nome@esempio.com">
-            </div>
-            
-            <button id="btn-modal-action" class="btn btn-primary">
-                <span class="material-symbols-outlined">send</span> Invia Link
-            </button>
+            <p id="modal-desc" style="font-size: 0.9rem; color: #d1d5db; margin-bottom: 20px;">...</p>
+            <div class="form-group"><input type="email" id="modal-email" placeholder="nome@esempio.com"></div>
+            <button id="btn-modal-action" class="btn btn-primary"><span class="material-symbols-outlined">send</span> Invia</button>
         </div>
     </div>
 
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
+        // --- 0. PWA INSTALLATION LOGIC ---
+        // Registrazione Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker registered', reg))
+                    .catch(err => console.log('Service Worker registration failed', err));
+            });
+        }
+
+        // Gestione Evento Installazione
+        let deferredPrompt;
+        const pwaToast = document.getElementById('pwa-toast');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Impedisce al browser di mostrare subito il banner nativo (così decidiamo noi quando)
+            e.preventDefault();
+            deferredPrompt = e;
+            // Mostra il nostro Toast flottante
+            pwaToast.classList.add('show');
+        });
+
+        pwaToast.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                // Mostra il prompt nativo del browser
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response: ${outcome}`);
+                deferredPrompt = null;
+                // Nascondi il toast
+                pwaToast.classList.remove('show');
+            }
+        });
+
+        // Nascondi se già in modalità App
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            pwaToast.style.display = 'none';
+        }
+
+        // --- 1. AUTH LOGIC (Standard) ---
         const authView = document.getElementById('auth-view');
         const dashboardView = document.getElementById('dashboard-view');
         const updatePasswordView = document.getElementById('update-password-view');
-        
-        // --- 1. CONTROLLO HASH (Recovery) ---
         const hash = window.location.hash;
+
         if (hash && hash.includes('type=recovery')) {
-            authView.style.display = 'none';
-            dashboardView.style.display = 'none';
-            updatePasswordView.style.display = 'block';
+            authView.style.display = 'none'; dashboardView.style.display = 'none'; updatePasswordView.style.display = 'block';
         }
 
-        // --- 2. LISTENER AUTH ---
         supabase.auth.onAuthStateChange(async (event, session) => {
             if (updatePasswordView.style.display === 'block') return;
-
             if (event === 'PASSWORD_RECOVERY') {
                 authView.style.display = 'none'; dashboardView.style.display = 'none'; updatePasswordView.style.display = 'block';
-            } 
-            else if (event === 'SIGNED_IN' || session) {
+            } else if (event === 'SIGNED_IN' || session) {
                 authView.style.display = 'none'; updatePasswordView.style.display = 'none'; dashboardView.style.display = 'block';
-            } 
-            else {
+            } else {
                 authView.style.display = 'block'; dashboardView.style.display = 'none'; updatePasswordView.style.display = 'none';
             }
         });
 
-        // --- LOGICA TAB (Login/Register) & LINK VISIBILITY ---
+        // --- 2. UI TABS & FORM ---
         const tabLogin = document.getElementById('tab-login');
         const tabRegister = document.getElementById('tab-register');
         const btnSubmit = document.getElementById('btn-submit');
         const groupName = document.getElementById('group-name');
         const inputName = document.getElementById('display-name');
         const authMessage = document.getElementById('auth-message');
-        
-        // Elementi Link
         const linkForgot = document.getElementById('forgot-link');
         const linkResend = document.getElementById('resend-link');
-
         let isLoginMode = true;
 
         tabLogin.addEventListener('click', () => {
             isLoginMode = true;
-            tabLogin.classList.add('active'); 
-            tabRegister.classList.remove('active');
-            
-            // UI Login
+            tabLogin.classList.add('active'); tabRegister.classList.remove('active');
             btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`;
-            groupName.style.display = 'none'; 
-            inputName.removeAttribute('required');
+            groupName.style.display = 'none'; inputName.removeAttribute('required');
             authMessage.textContent = '';
-
-            // Gestione Link: Login = Mostra Password Dimenticata, Nascondi Verifica
-            linkForgot.style.display = 'inline-block';
-            linkResend.style.display = 'none';
+            linkForgot.style.display = 'inline-block'; linkResend.style.display = 'none';
         });
 
         tabRegister.addEventListener('click', () => {
             isLoginMode = false;
-            tabRegister.classList.add('active'); 
-            tabLogin.classList.remove('active');
-            
-            // UI Register
+            tabRegister.classList.add('active'); tabLogin.classList.remove('active');
             btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`;
-            groupName.style.display = 'block'; 
-            inputName.setAttribute('required', 'true');
+            groupName.style.display = 'block'; inputName.setAttribute('required', 'true');
             authMessage.textContent = '';
-            linkForgot.style.display = 'none'; 
-            
-            // RICHIESTA UTENTE: Mostra "Rinvia email" solo su Registrati
-            linkResend.style.display = 'inline-block';
+            linkResend.style.display = 'inline-block'; // Mostra solo su Register
         });
 
         document.getElementById('auth-form').addEventListener('submit', async (e) => {
@@ -205,114 +216,63 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const displayName = inputName.value;
-            
             btnSubmit.disabled = true; btnSubmit.textContent = "Elaborazione...";
             authMessage.style.color = 'var(--text-muted)';
             
             if (isLoginMode) {
                 const { error } = await supabase.auth.signInWithPassword({ email, password });
-                if (error) {
-                    authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message;
-                    btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`;
-                } 
+                if (error) { authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message; btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`; }
             } else {
                 const { error } = await supabase.auth.signUp({
-                    email, password,
-                    options: { 
-                        emailRedirectTo: 'https://race612.github.io/HBL-Tasting/',
-                        data: { full_name: displayName } 
-                    }
+                    email, password, options: { emailRedirectTo: 'https://race612.github.io/HBL-Tasting/', data: { full_name: displayName } }
                 });
-                if (error) {
-                    authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message;
-                } else {
-                    authMessage.style.color = '#10b981'; authMessage.textContent = "Registrazione OK! Controlla la mail.";
-                }
+                if (error) { authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message; }
+                else { authMessage.style.color = '#10b981'; authMessage.textContent = "Registrazione OK! Controlla la mail."; }
                 btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`;
             }
         });
 
-        // --- 4. GESTIONE MODAL (Reset Password & Rinvio Conferma) ---
+        // --- 3. MODAL LOGIC ---
         const modal = document.getElementById('modal-forgot');
         const modalTitle = document.getElementById('modal-title');
         const modalDesc = document.getElementById('modal-desc');
         const btnModalAction = document.getElementById('btn-modal-action');
-        let modalMode = 'reset'; // 'reset' o 'resend'
+        let modalMode = 'reset';
 
-        // Apri Modal per PASSWORD
         document.getElementById('forgot-link').addEventListener('click', (e) => { 
-            e.preventDefault(); 
-            modalMode = 'reset';
-            modalTitle.textContent = "Reset Password";
-            modalDesc.textContent = "Inserisci la tua email per ricevere il link di ripristino.";
-            btnModalAction.innerHTML = `<span class="material-symbols-outlined">lock_reset</span> Invia Link Reset`;
-            modal.style.display = 'flex'; 
+            e.preventDefault(); modalMode = 'reset'; modalTitle.textContent = "Reset Password"; 
+            modalDesc.textContent = "Inserisci la email per il ripristino."; 
+            btnModalAction.innerHTML = `<span class="material-symbols-outlined">lock_reset</span> Invia Link`; modal.style.display = 'flex'; 
         });
 
-        // Apri Modal per RINVIO CONFERMA
         document.getElementById('resend-link').addEventListener('click', (e) => { 
-            e.preventDefault(); 
-            modalMode = 'resend';
-            modalTitle.textContent = "Rinvio Conferma";
-            modalDesc.textContent = "Inserisci l'email usata per la registrazione.";
-            btnModalAction.innerHTML = `<span class="material-symbols-outlined">mail</span> Invia Nuova Mail`;
-            modal.style.display = 'flex'; 
+            e.preventDefault(); modalMode = 'resend'; modalTitle.textContent = "Rinvio Conferma"; 
+            modalDesc.textContent = "Inserisci l'email usata per la registrazione."; 
+            btnModalAction.innerHTML = `<span class="material-symbols-outlined">mail</span> Rinvia Mail`; modal.style.display = 'flex'; 
         });
 
         document.getElementById('close-modal').addEventListener('click', () => modal.style.display = 'none');
         
-        // Azione Pulsante Modal
         btnModalAction.addEventListener('click', async () => {
             const email = document.getElementById('modal-email').value;
-            if(!email) { alert("Inserisci una email!"); return; }
-            
-            btnModalAction.disabled = true; btnModalAction.textContent = "Elaborazione...";
-            
+            if(!email) return alert("Inserisci email!");
+            btnModalAction.disabled = true;
             let error = null;
-
             if (modalMode === 'reset') {
-                const res = await supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: 'https://race612.github.io/HBL-Tasting/' 
-                });
-                error = res.error;
+                const res = await supabase.auth.resetPasswordForEmail(email, { redirectTo: 'https://race612.github.io/HBL-Tasting/' }); error = res.error;
             } else {
-                // RINVIO EMAIL CONFERMA
-                const res = await supabase.auth.resend({
-                    type: 'signup',
-                    email: email,
-                    options: {
-                        emailRedirectTo: 'https://race612.github.io/HBL-Tasting/'
-                    }
-                });
-                error = res.error;
+                const res = await supabase.auth.resend({ type: 'signup', email, options: { emailRedirectTo: 'https://race612.github.io/HBL-Tasting/' } }); error = res.error;
             }
-            
-            if(error) alert("Errore: " + error.message);
-            else { 
-                alert(modalMode === 'reset' ? "Email di reset inviata!" : "Email di conferma rinviata!"); 
-                modal.style.display = 'none'; 
-            }
-            
-            btnModalAction.disabled = false; 
-            // Ripristina testo base (verrà sovrascritto alla prossima apertura, ma per pulizia)
-            btnModalAction.innerHTML = `<span class="material-symbols-outlined">send</span> Invia`;
+            if(error) alert("Errore: " + error.message); else { alert("Operazione completata!"); modal.style.display = 'none'; }
+            btnModalAction.disabled = false;
         });
 
-        // --- 5. UPDATE PASSWORD ---
+        // --- 4. UPDATE PASSWORD ---
         document.getElementById('btn-update-password').addEventListener('click', async () => {
             const newPass = document.getElementById('new-password').value;
-            if (!newPass || newPass.length < 6) { alert("Password troppo corta."); return; }
-
-            const btn = document.getElementById('btn-update-password');
-            btn.disabled = true; btn.textContent = "Aggiornamento...";
-
+            if (!newPass || newPass.length < 6) return alert("Password troppo corta.");
             const { error } = await supabase.auth.updateUser({ password: newPass });
-
-            if (error) { alert("Errore: " + error.message); btn.disabled = false; btn.textContent = "Riprova"; } 
-            else { 
-                alert("Password aggiornata! Verrai reindirizzato.");
-                window.location.hash = ''; window.location.reload();
-            }
+            if (error) alert("Errore: " + error.message); else { alert("Password aggiornata!"); window.location.hash = ''; window.location.reload(); }
         });
     </script>
 </body>

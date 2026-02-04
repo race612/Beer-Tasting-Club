@@ -311,3 +311,34 @@ input:focus, select:focus, textarea:focus {
 .auth-link-styled:hover {
     color: var(--primary-hover) !important;
 }
+
+/* --- PWA FLOATING TOAST --- */
+.pwa-toast {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px); /* Nascosto in basso */
+    background: #1f2937; /* Colore card scuro */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 9999;
+    border: 1px solid var(--primary-color);
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Effetto rimbalzo */
+}
+
+.pwa-toast.show {
+    transform: translateX(-50%) translateY(0); /* Visibile */
+    opacity: 1;
+}
+
+.pwa-toast:hover {
+    background: #374151;
+    transform: translateX(-50%) scale(1.05);
+}
