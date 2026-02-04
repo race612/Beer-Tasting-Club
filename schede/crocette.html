@@ -13,6 +13,7 @@
     <link rel="apple-touch-icon" href="../assets/icon-192.png">
     
     <style>
+        /* STILI BASE */
         .dynamic-field-group { margin-top: 10px; background: #374151; padding: 12px; border-radius: 6px; border-left: 3px solid #f59e0b; }
         .dynamic-label { font-size: 0.85em; color: #f59e0b; margin-bottom: 5px; display: block; font-weight: bold; }
         .dynamic-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
@@ -21,36 +22,68 @@
         .radio-badge input { margin-right: 5px; }
         .vote-btn { min-width: 40px !important; font-weight: bold; font-size: 1.1rem; }
         
-        /* Stile per i sottotitoli interni (es. Schiuma) */
         .desc-subsection-title {
-            color: #d1d5db;
-            font-size: 1rem;
-            font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            padding-left: 5px;
-            border-left: 3px solid var(--primary-color);
+            color: #d1d5db; font-size: 1rem; font-weight: bold; margin-top: 20px; margin-bottom: 10px;
+            padding-left: 5px; border-left: 3px solid var(--primary-color);
         }
 
-        /* Stile per sezione difetti (Collapsible) */
-        details.flaws-section {
-            background: #2d1b1b; /* Rossiccio scuro */
-            border: 1px solid #ef4444;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 20px;
-        }
-        details.flaws-section summary {
-            color: #ef4444;
-            font-weight: bold;
-            cursor: pointer;
-            list-style: none; /* Rimuove marker default */
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        /* DIFETTI */
+        details.flaws-section { background: #2d1b1b; border: 1px solid #ef4444; border-radius: 8px; padding: 10px; margin-bottom: 20px; }
+        details.flaws-section summary { color: #ef4444; font-weight: bold; cursor: pointer; list-style: none; display: flex; align-items: center; gap: 10px; }
         details.flaws-section summary::-webkit-details-marker { display: none; }
         details.flaws-section[open] summary { margin-bottom: 15px; border-bottom: 1px solid #ef4444; padding-bottom: 5px; }
+
+        /* --- NUOVI STILI SLIDER (UX MIGLIORATA) --- */
+        .slider-group {
+            background: #1f2937;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #374151;
+            margin-bottom: 15px;
+        }
+        
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .slider-label { font-weight: bold; color: #d1d5db; font-size: 0.95rem; }
+        
+        /* Il valore dinamico (es. "Media") */
+        .slider-value { 
+            color: var(--primary-color); 
+            font-weight: bold; 
+            font-size: 0.95rem;
+            background: rgba(245, 158, 11, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* Input Range Customization */
+        input[type=range] {
+            -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; height: 30px; /* Aumentata area touch */
+        }
+        
+        /* La barra (Track) */
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 6px; cursor: pointer;
+            background: #4b5563; border-radius: 3px;
+        }
+        
+        /* Il pallino (Thumb) */
+        input[type=range]::-webkit-slider-thumb {
+            height: 24px; width: 24px; border-radius: 50%;
+            background: var(--primary-color); cursor: pointer;
+            -webkit-appearance: none; margin-top: -9px; /* Centra rispetto alla track */
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+            border: 2px solid #fff;
+        }
+        
+        input[type=range]:focus::-webkit-slider-runnable-track { background: #6b7280; }
     </style>
 </head>
 <body>
@@ -128,7 +161,7 @@
                 <h5 class="desc-subsection-title">Caratteristiche Schiuma</h5>
 
                 <div class="desc-group">
-                    <span class="desc-label">Presenza</span>
+                    <span class="desc-label">Presenza (Quantità)</span>
                     <div class="options-grid" data-category="head_amount">
                         <div class="option-btn">Assente</div>
                         <div class="option-btn">Scarsa</div>
@@ -137,15 +170,13 @@
                     </div>
                 </div>
 
-                <div class="desc-group">
-                    <span class="desc-label">Persistenza</span>
-                    <div class="options-grid" data-category="head_retention">
-                        <div class="option-btn">Breve</div>
-                        <div class="option-btn">Medio/Breve</div>
-                        <div class="option-btn">Media</div>
-                        <div class="option-btn">Medio/Lunga</div>
-                        <div class="option-btn">Lunga</div>
+                <div class="slider-group">
+                    <div class="slider-header">
+                        <span class="slider-label">Persistenza Schiuma</span>
+                        <span class="slider-value" id="val-head-ret">Media</span>
                     </div>
+                    <input type="range" min="1" max="5" value="3" class="range-slider" 
+                           data-target="val-head-ret" data-category="head_retention" data-type="persistence">
                 </div>
 
                 <div class="desc-group">
@@ -175,26 +206,22 @@
 
                 <h4 class="desc-section-title">2. Aroma</h4>
                 
-                <div class="desc-group">
-                    <span class="desc-label">Intensità</span>
-                    <div class="options-grid" data-category="aroma_intensity">
-                        <div class="option-btn">Bassa</div>
-                        <div class="option-btn">Medio/Bassa</div>
-                        <div class="option-btn">Media</div>
-                        <div class="option-btn">Medio/Alta</div>
-                        <div class="option-btn">Alta</div>
+                <div class="slider-group">
+                    <div class="slider-header">
+                        <span class="slider-label">Intensità</span>
+                        <span class="slider-value" id="val-aroma-int">Media</span>
                     </div>
+                    <input type="range" min="1" max="5" value="3" class="range-slider" 
+                           data-target="val-aroma-int" data-category="aroma_intensity" data-type="intensity">
                 </div>
 
-                <div class="desc-group">
-                    <span class="desc-label">Persistenza</span>
-                    <div class="options-grid" data-category="aroma_persistence">
-                        <div class="option-btn">Breve</div>
-                        <div class="option-btn">Medio/Breve</div>
-                        <div class="option-btn">Media</div>
-                        <div class="option-btn">Medio/Lunga</div>
-                        <div class="option-btn">Lunga</div>
+                <div class="slider-group">
+                    <div class="slider-header">
+                        <span class="slider-label">Persistenza</span>
+                        <span class="slider-value" id="val-aroma-pers">Media</span>
                     </div>
+                    <input type="range" min="1" max="5" value="3" class="range-slider" 
+                           data-target="val-aroma-pers" data-category="aroma_persistence" data-type="persistence">
                 </div>
 
                 <div class="desc-group">
@@ -240,26 +267,22 @@
                     </div>
                 </div>
 
-                <div class="desc-group">
-                    <span class="desc-label">Intensità</span>
-                    <div class="options-grid" data-category="taste_intensity">
-                        <div class="option-btn">Bassa</div>
-                        <div class="option-btn">Medio/Bassa</div>
-                        <div class="option-btn">Media</div>
-                        <div class="option-btn">Medio/Alta</div>
-                        <div class="option-btn">Alta</div>
+                <div class="slider-group">
+                    <div class="slider-header">
+                        <span class="slider-label">Intensità</span>
+                        <span class="slider-value" id="val-taste-int">Media</span>
                     </div>
+                    <input type="range" min="1" max="5" value="3" class="range-slider" 
+                           data-target="val-taste-int" data-category="taste_intensity" data-type="intensity">
                 </div>
 
-                <div class="desc-group">
-                    <span class="desc-label">Persistenza</span>
-                    <div class="options-grid" data-category="taste_persistence">
-                        <div class="option-btn">Breve</div>
-                        <div class="option-btn">Medio/Breve</div>
-                        <div class="option-btn">Media</div>
-                        <div class="option-btn">Medio/Lunga</div>
-                        <div class="option-btn">Lunga</div>
+                <div class="slider-group">
+                    <div class="slider-header">
+                        <span class="slider-label">Persistenza</span>
+                        <span class="slider-value" id="val-taste-pers">Media</span>
                     </div>
+                    <input type="range" min="1" max="5" value="3" class="range-slider" 
+                           data-target="val-taste-pers" data-category="taste_persistence" data-type="persistence">
                 </div>
 
                 <div class="desc-group">
@@ -336,26 +359,22 @@
                     </div>
                 </div>
 
-                <div class="desc-group">
-                    <span class="desc-label">Intensità</span>
-                    <div class="options-grid" data-category="aftertaste_intensity">
-                        <div class="option-btn">Bassa</div>
-                        <div class="option-btn">Medio/Bassa</div>
-                        <div class="option-btn">Media</div>
-                        <div class="option-btn">Medio/Alta</div>
-                        <div class="option-btn">Alta</div>
+                <div class="slider-group">
+                    <div class="slider-header">
+                        <span class="slider-label">Intensità</span>
+                        <span class="slider-value" id="val-after-int">Media</span>
                     </div>
+                    <input type="range" min="1" max="5" value="3" class="range-slider" 
+                           data-target="val-after-int" data-category="aftertaste_intensity" data-type="intensity">
                 </div>
 
-                <div class="desc-group">
-                    <span class="desc-label">Persistenza</span>
-                    <div class="options-grid" data-category="aftertaste_persistence">
-                        <div class="option-btn">Breve</div>
-                        <div class="option-btn">Medio/Breve</div>
-                        <div class="option-btn">Media</div>
-                        <div class="option-btn">Medio/Lunga</div>
-                        <div class="option-btn">Lunga</div>
+                <div class="slider-group">
+                    <div class="slider-header">
+                        <span class="slider-label">Persistenza</span>
+                        <span class="slider-value" id="val-after-pers">Media</span>
                     </div>
+                    <input type="range" min="1" max="5" value="3" class="range-slider" 
+                           data-target="val-after-pers" data-category="aftertaste_persistence" data-type="persistence">
                 </div>
 
                 <div class="desc-group">
@@ -452,38 +471,32 @@
         import { supabase } from '../js/supabase-config.js';
         import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js';
 
-        // Variabile per controllo modifiche non salvate
         let isDirty = false;
-
-        // Fallback ID evento = 1 (Libero)
         const eventId = localStorage.getItem('hbl_selected_event') || '1';
         
+        // --- LOGICA BJCP E SISTEMA STILI (Invariata) ---
         const systemSelect = document.getElementById('style-system');
         const containerFree = document.getElementById('container-free');
         const containerBjcp = document.getElementById('container-bjcp');
         const inputFree = document.getElementById('style-free');
         const inputBjcp = document.getElementById('style-bjcp');
         const dynamicContainer = document.getElementById('bjcp-dynamic-container');
-
-        // Monitoraggio Modifiche (Dirty Check)
         const form = document.getElementById('tasting-form');
+        
         form.addEventListener('input', () => isDirty = true);
         form.addEventListener('change', () => isDirty = true);
         
-        // Popola BJCP
         bjcpCatalog.forEach(category => {
             const group = document.createElement('optgroup');
             group.label = category.family;
             category.styles.forEach(styleName => {
                 const option = document.createElement('option');
-                option.value = styleName;
-                option.textContent = styleName;
+                option.value = styleName; option.textContent = styleName;
                 group.appendChild(option);
             });
             inputBjcp.appendChild(group);
         });
 
-        // Cambio Sistema
         systemSelect.addEventListener('change', (e) => {
             if (e.target.value === 'free') {
                 containerFree.style.display = 'block'; inputFree.setAttribute('required', 'true');
@@ -494,7 +507,6 @@
             }
         });
 
-        // UI Dinamica BJCP
         inputBjcp.addEventListener('change', (e) => {
             dynamicContainer.innerHTML = ''; 
             const code = e.target.value.split('.')[0];
@@ -513,15 +525,33 @@
                 }).join('') + `</div>`;
             }
             dynamicContainer.appendChild(wrapper);
-            
-            // Re-bind listeners per nuovi elementi
             wrapper.querySelectorAll('input').forEach(i => i.addEventListener('change', () => isDirty = true));
         });
 
-        // Logica Pulsanti Crocette
+        // --- NUOVA LOGICA SLIDER (Range) ---
+        // Mappe per convertire numero (1-5) in testo
+        const intensityMap = [null, 'Bassa', 'Medio/Bassa', 'Media', 'Medio/Alta', 'Alta'];
+        const persistenceMap = [null, 'Breve', 'Medio/Breve', 'Media', 'Medio/Lunga', 'Lunga'];
+
+        document.querySelectorAll('.range-slider').forEach(range => {
+            range.addEventListener('input', (e) => {
+                const val = e.target.value;
+                const targetId = e.target.getAttribute('data-target');
+                const type = e.target.getAttribute('data-type');
+                const labelSpan = document.getElementById(targetId);
+                
+                // Aggiorna testo in tempo reale
+                if (type === 'intensity') labelSpan.textContent = intensityMap[val];
+                else labelSpan.textContent = persistenceMap[val];
+                
+                isDirty = true;
+            });
+        });
+
+        // --- LOGICA PULSANTI (Crocette) ---
         document.querySelectorAll('.option-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                isDirty = true; // Segna come modificato
+                isDirty = true;
                 const parent = this.parentElement;
                 const isMulti = parent.getAttribute('data-type') === 'multi';
                 const isToggle = parent.getAttribute('data-toggle') === 'true';
@@ -529,9 +559,8 @@
                 if (isMulti) {
                     this.classList.toggle('selected');
                 } else if (isToggle) {
-                    if (this.classList.contains('selected')) {
-                        this.classList.remove('selected');
-                    } else {
+                    if (this.classList.contains('selected')) this.classList.remove('selected');
+                    else {
                         parent.querySelectorAll('.option-btn').forEach(sib => sib.classList.remove('selected'));
                         this.classList.add('selected');
                     }
@@ -542,24 +571,20 @@
             });
         });
 
-        // AVVISO USCITA CORRETTO (Previene doppio popup)
+        // Avviso Uscita
         document.getElementById('back-link').addEventListener('click', (e) => {
-            if (isDirty) {
-                if (!confirm("⚠️ Stai per uscire senza salvare.\nVuoi davvero procedere? I dati andranno persi.")) {
-                    e.preventDefault();
-                } else {
-                    // Utente ha confermato di voler uscire, disattiviamo il check
-                    isDirty = false;
-                }
-            }
+            if (isDirty && !confirm("⚠️ Stai per uscire senza salvare.\nVuoi davvero procedere?")) {
+                e.preventDefault();
+            } else isDirty = false;
         });
         window.addEventListener('beforeunload', (e) => { if (isDirty) { e.preventDefault(); e.returnValue = ''; } });
 
-        // INVIO DATI
+        // --- INVIO DATI ---
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
 
+            // 1. Stile
             let finalStyle = "";
             if (systemSelect.value === 'free') finalStyle = inputFree.value;
             else {
@@ -578,6 +603,8 @@
             if (!finalStyle || finalStyle.length < 3) { alert("Inserisci uno stile valido."); return; }
 
             const descriptiveData = {};
+
+            // 2. Raccogli Dati da Griglie (Pulsanti)
             document.querySelectorAll('.options-grid').forEach(grid => {
                 const category = grid.getAttribute('data-category');
                 if (category === 'final_vote') return;
@@ -591,6 +618,16 @@
                 }
             });
 
+            // 3. Raccogli Dati da Slider (Converti Numero -> Testo)
+            document.querySelectorAll('.range-slider').forEach(range => {
+                const category = range.getAttribute('data-category');
+                const type = range.getAttribute('data-type');
+                const val = range.value;
+                // Salva il testo (es. "Media") invece del numero (3)
+                descriptiveData[category] = (type === 'intensity') ? intensityMap[val] : persistenceMap[val];
+            });
+
+            // 4. Voto
             const voteGrid = document.querySelector('.options-grid[data-category="final_vote"]');
             const selectedVote = voteGrid.querySelector('.option-btn.selected');
             const finalScore = selectedVote ? parseInt(selectedVote.textContent) : 0;
@@ -616,9 +653,7 @@
             const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
             if (error) { alert(error.message); btn.disabled = false; return; }
             
-            // RESET DIRTY AL SALVATAGGIO
             isDirty = false;
-
             if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) {
                 window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
             } else {
