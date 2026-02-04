@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beer Tasting Club</title>
     <link rel="stylesheet" href="css/style.css?v=0.8.1">
-    <link rel="manifest" href="/HBL-Tasting/manifest.json">
+    <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
@@ -72,29 +72,32 @@
             <nav class="menu-grid">
                 <a href="nuova-scheda.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">post_add</span>
-                    <span class="menu-title">Nuova Scheda</span>
-                    <span class="menu-desc">Compila una scheda BJCP o Descrittiva</span>
+                    <span class="menu-title">Nuova Scheda di Degustazione</span>
+                    <span class="menu-desc">Compila una scheda per una nuova birra</span>
                 </a>
                 <a href="storico.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">history</span>
-                    <span class="menu-title">Storico</span>
-                    <span class="menu-desc">Le tue degustazioni passate</span>
+                    <span class="menu-title">Storico Degustazioni</span>
+                    <span class="menu-desc">Un archivio di tutte le tue degustazioni</span>
                 </a>
                 <a href="profilo.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">person</span>
                     <span class="menu-title">Profilo</span>
-                    <span class="menu-desc">I tuoi dati e qualifiche</span>
+                    <span class="menu-desc">I tuoi dati personali ed il tuo profilo pubblico</span>
                 </a>
                 <a href="info.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">info</span>
                     <span class="menu-title">Info & Credits</span>
-                    <span class="menu-desc">Versione e Ringraziamenti</span>
+                    <span class="menu-desc">Versione App e Ringraziamenti</span>
                 </a>
             </nav>
         </div>
 
-        <footer style="text-align: center; margin-top: 40px; font-size: 0.8rem; color: #4b5563;">
-            &copy; 2026 Beer Tasting Club
+        <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
+            &copy; 2026 Beer Tasting Club - <a href="privacy.html" class="menu-item">Info Privacy e Cookie</a>
+            <p style="text-align: center; margin-top: 5px; font-size: 0.6rem; color: #4b5563;">
+                Crafted with love by - <a href="https://www.linkedin.com/in/mirko-caiani/" class="menu-item">Mirko Caiani</a>
+            </p>
         </footer>
     </div>
 
@@ -225,7 +228,7 @@
                 const { error } = await supabase.auth.signUp({
                     email, password,
                     options: { 
-                        emailRedirectTo: 'https://race612.github.io/HBL-Tasting/',
+                        emailRedirectTo: 'https://race612.github.io/Beer-Tasting-Club/',
                         data: { full_name: displayName } 
                     }
                 });
@@ -252,7 +255,7 @@
             
             // LINK CORRETTO FORZATO QUI SOTTO
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: 'https://race612.github.io/HBL-Tasting/' 
+                redirectTo: 'https://race612.github.io/Beer-Tasting-Club/' 
             });
             
             if(error) alert("Errore: " + error.message);

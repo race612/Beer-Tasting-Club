@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Salviamo lo status qui
                         homebrewer_status: homebrewerStatus
                     },
-                    emailRedirectTo: 'https://race612.github.io/HBL-Tasting/index.html'
+                    emailRedirectTo: 'https://race612.github.io/Beer-Tasting-Club/index.html'
                 }
             });
 
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!email) return;
 
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: 'https://race612.github.io/HBL-Tasting/index.html',
+                redirectTo: 'https://race612.github.io/Beer-Tasting-Club/index.html',
             });
 
             if (error) alert("Errore: " + error.message);
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 type: 'signup',
                 email: email,
                 options: {
-                    emailRedirectTo: 'https://race612.github.io/HBL-Tasting/index.html'
+                    emailRedirectTo: 'https://race612.github.io/Beer-Tasting-Club/index.html'
                 }
             });
 

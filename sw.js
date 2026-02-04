@@ -1,10 +1,10 @@
-const CACHE_NAME = 'hbl-tasting-v1';
+const CACHE_NAME = 'Beer-Tasting-Club-v2';
 const urlsToCache = [
-  '/HBL-Tasting/',
-  '/HBL-Tasting/index.html',
-  '/HBL-Tasting/css/style.css',
-  '/HBL-Tasting/js/app.js',
-  '/HBL-Tasting/assets/logo.png'
+  '/Beer-Tasting-Club/',
+  '/Beer-Tasting-Club/index.html',
+  '/Beer-Tasting-Club/css/style.css',
+  '/Beer-Tasting-Club/js/app.js',
+  '/Beer-Tasting-Club/assets/logo.png'
 ];
 
 // Installazione del Service Worker
