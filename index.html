@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beer Tasting Club</title>
     <link rel="stylesheet" href="css/style.css?v=0.8.1">
-    <link rel="manifest" href="/HBL-Tasting/manifest.json">
+    <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
@@ -16,8 +16,7 @@
         
         <header class="home-header">
             <img src="assets/logo.png" alt="Logo" class="logo-large">
-            <h2>Beer Tasting Club</h2>
-            <p style="color: var(--text-muted);">Il tuo diario di degustazione digitale</p>
+            <p class="home-slogan">IL TUO COMPAGNO DIGITALE DI DEGUSTAZIONE</p>
         </header>
 
         <div id="auth-view" style="display: none;">
@@ -30,7 +29,7 @@
                 <form id="auth-form">
                     <div class="form-group" id="group-name" style="display: none;">
                         <label>Nome Pubblico</label>
-                        <input type="text" id="display-name" placeholder="Nome e Cognome o Nickname">
+                        <input type="text" id="display-name" placeholder="Nome e Cognome oppure Nickname">
                     </div>
                     <div class="form-group">
                         <label>Email</label>
@@ -46,13 +45,8 @@
                     </button>
                 </form>
             </div>
-
-            <div style="text-align: center; margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="text-align: center; margin-top: 20px;">
                 <a href="#" id="forgot-link" style="font-size: 0.9rem; color: var(--text-muted); text-decoration: underline;">Password dimenticata?</a>
-                
-                <a href="#" id="resend-link" style="font-size: 0.85rem; color: var(--primary-color); opacity: 0.8;">
-                    Non hai ricevuto la mail di conferma?
-                </a>
             </div>
         </div>
 
@@ -62,10 +56,12 @@
                 <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-bottom: 20px;">
                     Inserisci la tua nuova password qui sotto.
                 </p>
+                
                 <div class="form-group">
                     <label>Nuova Password</label>
                     <input type="password" id="new-password" placeholder="Nuova password (min 6 car.)" minlength="6">
                 </div>
+                
                 <button id="btn-update-password" class="btn btn-primary">
                     <span class="material-symbols-outlined">lock_reset</span> Aggiorna Password
                 </button>
@@ -76,23 +72,23 @@
             <nav class="menu-grid">
                 <a href="nuova-scheda.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">post_add</span>
-                    <span class="menu-title">Nuova Scheda</span>
-                    <span class="menu-desc">Compila una scheda BJCP o Descrittiva</span>
+                    <span class="menu-title">Nuova Scheda di Degustazione</span>
+                    <span class="menu-desc">Compila una scheda per una nuova birra</span>
                 </a>
                 <a href="storico.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">history</span>
-                    <span class="menu-title">Storico</span>
-                    <span class="menu-desc">Le tue degustazioni passate</span>
+                    <span class="menu-title">Storico Degustazioni</span>
+                    <span class="menu-desc">Un archivio di tutte le tue degustazioni</span>
                 </a>
                 <a href="profilo.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">person</span>
                     <span class="menu-title">Profilo</span>
-                    <span class="menu-desc">I tuoi dati e qualifiche</span>
+                    <span class="menu-desc">I tuoi dati personali ed il tuo profilo pubblico</span>
                 </a>
                 <a href="info.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">info</span>
                     <span class="menu-title">Info & Credits</span>
-                    <span class="menu-desc">Versione e Ringraziamenti</span>
+                    <span class="menu-desc">Versione App e Ringraziamenti</span>
                 </a>
             </nav>
         </div>
@@ -100,6 +96,7 @@
         <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
             &copy; 2026 Beer Tasting Club - 
             <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
+            
             <p style="text-align: center; margin-top: 5px; font-size: 0.6rem; color: #4b5563;">
                 Crafted with love by 
                 <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
@@ -110,17 +107,14 @@
     <div id="modal-forgot" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <button class="modal-close" id="close-modal"><span class="material-symbols-outlined">close</span></button>
-            
-            <h3 id="modal-title" style="color: var(--primary-color);">Reset Password</h3>
-            <p id="modal-desc" style="font-size: 0.9rem; color: #d1d5db; margin-bottom: 20px;">
-                Inserisci la tua email.
+            <h3 style="color: var(--primary-color);">Reset Password</h3>
+            <p style="font-size: 0.9rem; color: #d1d5db; margin-bottom: 20px;">
+                Inserisci la tua email. Ti invieremo un link per reimpostare la password.
             </p>
-            
             <div class="form-group">
                 <input type="email" id="modal-email" placeholder="nome@esempio.com">
             </div>
-            
-            <button id="btn-modal-action" class="btn btn-primary">
+            <button id="btn-send-reset" class="btn btn-primary">
                 <span class="material-symbols-outlined">send</span> Invia Link
             </button>
         </div>
@@ -133,30 +127,67 @@
         const dashboardView = document.getElementById('dashboard-view');
         const updatePasswordView = document.getElementById('update-password-view');
         
-        // --- 1. CONTROLLO HASH (Recovery) ---
+        // --- 1. CONTROLLO MANUALE URL PER RECOVERY ---
+        // Questo è il fix critico: controlla se l'URL contiene il token di recovery
+        // e forza la visualizzazione della schermata giusta PRIMA ancora che Supabase risponda.
         const hash = window.location.hash;
         if (hash && hash.includes('type=recovery')) {
+            console.log("Recovery detected via Hash!");
             authView.style.display = 'none';
             dashboardView.style.display = 'none';
             updatePasswordView.style.display = 'block';
         }
 
-        // --- 2. LISTENER AUTH ---
+        // --- 2. LISTENER SUPABASE ---
         supabase.auth.onAuthStateChange(async (event, session) => {
+            console.log("Auth Event:", event); 
+
+            // Se abbiamo già rilevato manualmente il recovery, non facciamo nulla qui
+            // per evitare sfarfallii o cambi pagina indesiderati.
             if (updatePasswordView.style.display === 'block') return;
 
             if (event === 'PASSWORD_RECOVERY') {
-                authView.style.display = 'none'; dashboardView.style.display = 'none'; updatePasswordView.style.display = 'block';
+                authView.style.display = 'none';
+                dashboardView.style.display = 'none';
+                updatePasswordView.style.display = 'block';
             } 
             else if (event === 'SIGNED_IN' || session) {
-                authView.style.display = 'none'; updatePasswordView.style.display = 'none'; dashboardView.style.display = 'block';
+                authView.style.display = 'none';
+                updatePasswordView.style.display = 'none';
+                dashboardView.style.display = 'block';
             } 
             else {
-                authView.style.display = 'block'; dashboardView.style.display = 'none'; updatePasswordView.style.display = 'none';
+                authView.style.display = 'block';
+                dashboardView.style.display = 'none';
+                updatePasswordView.style.display = 'none';
             }
         });
 
-        // --- 3. LOGICA TAB (Login/Register) ---
+        // --- 3. AGGIORNA PASSWORD ---
+        document.getElementById('btn-update-password').addEventListener('click', async () => {
+            const newPass = document.getElementById('new-password').value;
+            if (!newPass || newPass.length < 6) {
+                alert("La password deve essere di almeno 6 caratteri.");
+                return;
+            }
+
+            const btn = document.getElementById('btn-update-password');
+            btn.disabled = true; btn.textContent = "Aggiornamento...";
+
+            const { data, error } = await supabase.auth.updateUser({ password: newPass });
+
+            if (error) {
+                alert("Errore: " + error.message);
+                btn.disabled = false; btn.textContent = "Riprova";
+            } else {
+                alert("Password aggiornata! Verrai reindirizzato.");
+                // Rimuovi l'hash dall'URL per pulizia e ricarica
+                window.location.hash = '';
+                window.location.reload();
+            }
+        });
+
+        // --- 4. LOGICA LOGIN / REGISTER ---
         const tabLogin = document.getElementById('tab-login');
         const tabRegister = document.getElementById('tab-register');
         const btnSubmit = document.getElementById('btn-submit');
@@ -200,7 +231,7 @@
                 const { error } = await supabase.auth.signUp({
                     email, password,
                     options: { 
-                        emailRedirectTo: 'https://race612.github.io/HBL-Tasting/',
+                        emailRedirectTo: 'https://race612.github.io/Beer-Tasting-Club/',
                         data: { full_name: displayName } 
                     }
                 });
@@ -213,87 +244,27 @@
             }
         });
 
-        // --- 4. GESTIONE MODAL (Reset Password & Rinvio Conferma) ---
+        // --- 5. MODAL PASSWORD DIMENTICATA ---
         const modal = document.getElementById('modal-forgot');
-        const modalTitle = document.getElementById('modal-title');
-        const modalDesc = document.getElementById('modal-desc');
-        const btnModalAction = document.getElementById('btn-modal-action');
-        let modalMode = 'reset'; // 'reset' o 'resend'
-
-        // Apri Modal per PASSWORD
-        document.getElementById('forgot-link').addEventListener('click', (e) => { 
-            e.preventDefault(); 
-            modalMode = 'reset';
-            modalTitle.textContent = "Reset Password";
-            modalDesc.textContent = "Inserisci la tua email per ricevere il link di ripristino.";
-            btnModalAction.innerHTML = `<span class="material-symbols-outlined">lock_reset</span> Invia Link Reset`;
-            modal.style.display = 'flex'; 
-        });
-
-        // Apri Modal per RINVIO CONFERMA
-        document.getElementById('resend-link').addEventListener('click', (e) => { 
-            e.preventDefault(); 
-            modalMode = 'resend';
-            modalTitle.textContent = "Rinvio Conferma";
-            modalDesc.textContent = "Inserisci l'email usata per la registrazione.";
-            btnModalAction.innerHTML = `<span class="material-symbols-outlined">mail</span> Invia Nuova Mail`;
-            modal.style.display = 'flex'; 
-        });
-
+        document.getElementById('forgot-link').addEventListener('click', (e) => { e.preventDefault(); modal.style.display = 'flex'; });
         document.getElementById('close-modal').addEventListener('click', () => modal.style.display = 'none');
         
-        // Azione Pulsante Modal
-        btnModalAction.addEventListener('click', async () => {
+        document.getElementById('btn-send-reset').addEventListener('click', async () => {
             const email = document.getElementById('modal-email').value;
             if(!email) { alert("Inserisci una email!"); return; }
             
-            btnModalAction.disabled = true; btnModalAction.textContent = "Elaborazione...";
+            const btn = document.getElementById('btn-send-reset');
+            btn.disabled = true; btn.textContent = "Invio...";
             
-            let error = null;
-
-            if (modalMode === 'reset') {
-                const res = await supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: 'https://race612.github.io/HBL-Tasting/' 
-                });
-                error = res.error;
-            } else {
-                // RINVIO EMAIL CONFERMA
-                const res = await supabase.auth.resend({
-                    type: 'signup',
-                    email: email,
-                    options: {
-                        emailRedirectTo: 'https://race612.github.io/HBL-Tasting/'
-                    }
-                });
-                error = res.error;
-            }
+            // LINK CORRETTO FORZATO QUI SOTTO
+            const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: 'https://race612.github.io/Beer-Tasting-Club/' 
+            });
             
             if(error) alert("Errore: " + error.message);
-            else { 
-                alert(modalMode === 'reset' ? "Email di reset inviata!" : "Email di conferma rinviata!"); 
-                modal.style.display = 'none'; 
-            }
+            else { alert("Email di reset inviata!"); modal.style.display = 'none'; }
             
-            btnModalAction.disabled = false; 
-            // Ripristina testo base (verrà sovrascritto alla prossima apertura, ma per pulizia)
-            btnModalAction.innerHTML = `<span class="material-symbols-outlined">send</span> Invia`;
-        });
-
-        // --- 5. UPDATE PASSWORD ---
-        document.getElementById('btn-update-password').addEventListener('click', async () => {
-            const newPass = document.getElementById('new-password').value;
-            if (!newPass || newPass.length < 6) { alert("Password troppo corta."); return; }
-
-            const btn = document.getElementById('btn-update-password');
-            btn.disabled = true; btn.textContent = "Aggiornamento...";
-
-            const { error } = await supabase.auth.updateUser({ password: newPass });
-
-            if (error) { alert("Errore: " + error.message); btn.disabled = false; btn.textContent = "Riprova"; } 
-            else { 
-                alert("Password aggiornata! Verrai reindirizzato.");
-                window.location.hash = ''; window.location.reload();
-            }
+            btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">send</span> Invia Link`;
         });
     </script>
 </body>
