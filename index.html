@@ -17,7 +17,7 @@
         <header class="home-header">
             <img src="assets/logo.png" alt="Logo" class="logo-large">
             <h2>Beer Tasting Club</h2>
-            <p style="color: var(--text-muted);">Il tuo diario di degustazione digitale</p>
+            <p class="home-slogan">IL TUO COMPAGNO DIGITALE DI DEGUSTAZIONE</p>
         </header>
 
         <div id="auth-view" style="display: none;">
@@ -47,12 +47,10 @@
                 </form>
             </div>
 
-            <div style="text-align: center; margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
-                <a href="#" id="forgot-link" style="font-size: 0.9rem; color: var(--text-muted); text-decoration: underline;">Password dimenticata?</a>
+            <div style="text-align: center; margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
+                <a href="#" id="forgot-link" class="auth-link-styled">Password dimenticata?</a>
                 
-                <a href="#" id="resend-link" style="font-size: 0.85rem; color: var(--primary-color); opacity: 0.8;">
-                    Non hai ricevuto la mail di conferma?
-                </a>
+                <a href="#" id="resend-link" class="auth-link-styled" style="display: none;">Rinvia email di verifica</a>
             </div>
         </div>
 
@@ -156,29 +154,50 @@
             }
         });
 
-        // --- 3. LOGICA TAB (Login/Register) ---
+        // --- LOGICA TAB (Login/Register) & LINK VISIBILITY ---
         const tabLogin = document.getElementById('tab-login');
         const tabRegister = document.getElementById('tab-register');
         const btnSubmit = document.getElementById('btn-submit');
         const groupName = document.getElementById('group-name');
         const inputName = document.getElementById('display-name');
         const authMessage = document.getElementById('auth-message');
+        
+        // Elementi Link
+        const linkForgot = document.getElementById('forgot-link');
+        const linkResend = document.getElementById('resend-link');
+
         let isLoginMode = true;
 
         tabLogin.addEventListener('click', () => {
             isLoginMode = true;
-            tabLogin.classList.add('active'); tabRegister.classList.remove('active');
+            tabLogin.classList.add('active'); 
+            tabRegister.classList.remove('active');
+            
+            // UI Login
             btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`;
-            groupName.style.display = 'none'; inputName.removeAttribute('required');
+            groupName.style.display = 'none'; 
+            inputName.removeAttribute('required');
             authMessage.textContent = '';
+
+            // Gestione Link: Login = Mostra Password Dimenticata, Nascondi Verifica
+            linkForgot.style.display = 'inline-block';
+            linkResend.style.display = 'none';
         });
 
         tabRegister.addEventListener('click', () => {
             isLoginMode = false;
-            tabRegister.classList.add('active'); tabLogin.classList.remove('active');
+            tabRegister.classList.add('active'); 
+            tabLogin.classList.remove('active');
+            
+            // UI Register
             btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`;
-            groupName.style.display = 'block'; inputName.setAttribute('required', 'true');
+            groupName.style.display = 'block'; 
+            inputName.setAttribute('required', 'true');
             authMessage.textContent = '';
+            linkForgot.style.display = 'none'; 
+            
+            // RICHIESTA UTENTE: Mostra "Rinvia email" solo su Registrati
+            linkResend.style.display = 'inline-block';
         });
 
         document.getElementById('auth-form').addEventListener('submit', async (e) => {

@@ -259,8 +259,6 @@ input:focus, select:focus, textarea:focus {
 .score-row label { margin-bottom: 0; color: white; }
 .score-row input { width: 80px; text-align: center; font-weight: bold; font-size: 1.1rem; }
 
-/* ... TUTTO IL CSS PRECEDENTE ... */
-
 /* =========================================
    16. MODAL (POPUP) STYLES
    ========================================= */
@@ -293,3 +291,23 @@ input:focus, select:focus, textarea:focus {
 
 /* Animazione comparsa */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Nuovo Slogan */
+.home-slogan {
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* Link di Autenticazione Uniformati */
+.auth-link-styled {
+    font-size: 0.9rem;
+    color: var(--primary-color) !important; /* Forza colore Ambra */
+    text-decoration: underline;
+    cursor: pointer;
+    display: inline-block;
+    margin: 5px 0;
+    transition: color 0.2s;
+}
+.auth-link-styled:hover {
+    color: var(--primary-hover) !important;
+}
