@@ -60,7 +60,7 @@ hr { border: 0; border-top: 1px solid #374151; margin: 25px 0; }
     color: var(--text-muted); font-weight: 500; font-size: 0.95rem;
 }
 .header-link:hover { color: white; }
-.header-logo { width: 40px; height: auto; }
+.header-logo { width: 65px; height: auto; }
 
 .card {
     background-color: var(--card-bg); border-radius: var(--radius);
@@ -96,7 +96,7 @@ input:focus, select:focus, textarea:focus {
 
 /* 7. HOMEPAGE & DASHBOARD */
 .home-header { text-align: center; margin-bottom: 30px; padding: 20px 0; }
-.logo-large { width: 120px; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.3)); }
+.logo-large { width: 180px; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.3)); }
 .menu-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
 .menu-item {
     background-color: var(--card-bg); padding: 25px; border-radius: var(--radius);
