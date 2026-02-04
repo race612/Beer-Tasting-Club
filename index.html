@@ -107,8 +107,16 @@
     </div>
 
     <div id="pwa-toast" class="pwa-toast">
-        <span class="material-symbols-outlined" style="color: var(--primary-color);">download</span>
-        <span style="font-weight: bold; font-size: 0.9rem;">Installa App</span>
+        <div id="pwa-install-trigger" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            <span class="material-symbols-outlined" style="color: var(--primary-color);">download</span>
+            <span style="font-weight: bold; font-size: 0.9rem;">Installa App</span>
+        </div>
+        
+        <div style="width: 1px; height: 18px; background: #4b5563; margin: 0 8px;"></div>
+        
+        <button id="pwa-close-btn" style="background: none; border: none; padding: 0; cursor: pointer; color: #9ca3af; display: flex;">
+            <span class="material-symbols-outlined" style="font-size: 1.1rem;">close</span>
+        </button>
     </div>
 
     <div id="modal-forgot" class="modal-overlay" style="display: none;">
@@ -133,20 +141,43 @@
                 navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err));
             });
         }
+
         let deferredPrompt;
         const pwaToast = document.getElementById('pwa-toast');
+        const installTrigger = document.getElementById('pwa-install-trigger');
+        const closeBtn = document.getElementById('pwa-close-btn');
+
         window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault(); deferredPrompt = e; pwaToast.classList.add('show');
-        });
-        pwaToast.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                await deferredPrompt.userChoice;
-                deferredPrompt = null; pwaToast.classList.remove('show');
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Controlla se l'utente ha già chiuso il toast in precedenza
+            const isDismissed = localStorage.getItem('btc_pwa_dismissed');
+            
+            // Mostra solo se non è stato chiuso, se non è standalone e su mobile/desktop supportato
+            if (!isDismissed && !window.matchMedia('(display-mode: standalone)').matches) {
+                pwaToast.classList.add('show');
             }
         });
-        if (window.matchMedia('(display-mode: standalone)').matches) pwaToast.style.display = 'none';
 
+        // 1. Click su "Installa App"
+        installTrigger.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response: ${outcome}`);
+                deferredPrompt = null;
+                pwaToast.classList.remove('show');
+            }
+        });
+
+        // 2. Click su "X" (Chiudi)
+        closeBtn.addEventListener('click', () => {
+            pwaToast.classList.remove('show');
+            // Salva la preferenza: non mostrare più il toast in questo browser
+            localStorage.setItem('btc_pwa_dismissed', 'true');
+        });
+        
         // --- 1. AUTH LOGIC ---
         const authView = document.getElementById('auth-view');
         const dashboardView = document.getElementById('dashboard-view');
