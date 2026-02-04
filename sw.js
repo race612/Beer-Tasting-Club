@@ -1,44 +1,43 @@
-const CACHE_NAME = 'Beer-Tasting-Club-v2';
-const urlsToCache = [
-  '/Beer-Tasting-Club/',
-  '/Beer-Tasting-Club/index.html',
-  '/Beer-Tasting-Club/css/style.css',
-  '/Beer-Tasting-Club/js/app.js',
-  '/Beer-Tasting-Club/assets/logo.png'
+const CACHE_NAME = 'btc-cache-v1';
+const ASSETS_TO_CACHE = [
+  './',
+  './index.html',
+  './css/style.css',
+  './js/app.js', // Se esiste
+  './assets/logo.png',
+  './assets/icon-192.png'
 ];
 
-// Installazione del Service Worker
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
-      })
+// 1. Installazione del Service Worker
+self.addEventListener('install', (e) => {
+  console.log('[Service Worker] Install');
+  e.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log('[Service Worker] Caching all: app shell and content');
+      return cache.addAll(ASSETS_TO_CACHE);
+    })
   );
 });
 
-// Attivazione e pulizia vecchie cache
-self.addEventListener('activate', event => {
-    event.waitUntil(
-        caches.keys().then(cacheNames => {
-            return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (cacheName !== CACHE_NAME) {
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
-    );
+// 2. Attivazione e Pulizia Vecchie Cache
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then((keyList) => {
+      return Promise.all(keyList.map((key) => {
+        if (key !== CACHE_NAME) {
+          console.log('[Service Worker] Removing old cache', key);
+          return caches.delete(key);
+        }
+      }));
+    })
+  );
 });
 
-// Fetch: Strategia Network First (Cerca online, se fallisce usa la cache)
-// Questo è ideale per un'app che usa Supabase e deve essere sempre aggiornata
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.match(event.request);
+// 3. Gestione Richieste (Offline First)
+self.addEventListener('fetch', (e) => {
+  e.respondWith(
+    caches.match(e.request).then((response) => {
+      return response || fetch(e.request);
     })
   );
 });
