@@ -28,44 +28,38 @@
         <div class="segmented-control">
             <div class="segmented-option active" onclick="setMode('free', this)">Uso Libero</div>
             <div class="segmented-option" onclick="setMode('sharing', this)">Beer Sharing</div>
-            <div class="segmented-option" onclick="setMode('event', this)">Evento BTC</div>
+            <div class="segmented-option" onclick="setMode('event', this)">Evento</div>
         </div>
 
         <div id="mode-free">
-            
-            <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-bottom: 25px;">
-                Degustazione libera (Privata / Generica)
-            </p>
-
             <h3 style="text-align: center; margin-bottom: 10px;">Che scheda vuoi usare?</h3>
 
             <div class="sheet-grid">
-                <a href="schede/bjcp-sintetica.html" class="sheet-card" onclick="return saveFreeContext()">
-                    <span class="material-symbols-outlined icon-large">balance</span>
-                    <span class="sheet-title">BJCP<br>Sintetica</span>
-                </a>
                 <a href="schede/crocette.html" class="sheet-card" onclick="return saveFreeContext()">
                     <span class="material-symbols-outlined icon-large">checklist</span>
                     <span class="sheet-title">Descrittiva<br>Semplificata</span>
                 </a>
-                
                 <div class="sheet-card disabled">
-                    <span class="coming-soon-badge">Soon</span>
+                    <span class="coming-soon-badge">Coming Soon</span>
+                    <span class="material-symbols-outlined icon-large">menu_book</span>
+                    <span class="sheet-title">Descrittiva<br>Estesa</span>
+                </div>
+                <a href="schede/bjcp-sintetica.html" class="sheet-card" onclick="return saveFreeContext()">
+                    <span class="material-symbols-outlined icon-large">balance</span>
+                    <span class="sheet-title">BJCP<br>Sintetica</span>
+                </a>
+                <div class="sheet-card disabled">
+                    <span class="coming-soon-badge">Coming Soon</span>
                     <span class="material-symbols-outlined icon-large">gavel</span>
                     <span class="sheet-title">BJCP<br>Completa</span>
                 </div>
                 <div class="sheet-card disabled">
-                    <span class="coming-soon-badge">Soon</span>
+                    <span class="coming-soon-badge">Coming Soon</span>
                     <span class="material-symbols-outlined icon-large">sports_bar</span>
-                    <span class="sheet-title">Scheda<br>BTC</span>
+                    <span class="sheet-title">Scheda<br>HBL</span>
                 </div>
                 <div class="sheet-card disabled">
-                    <span class="coming-soon-badge">Soon</span>
-                    <span class="material-symbols-outlined icon-large">menu_book</span>
-                    <span class="sheet-title">Descrittiva<br>Estesa</span>
-                </div>
-                <div class="sheet-card disabled">
-                    <span class="coming-soon-badge">Soon</span>
+                    <span class="coming-soon-badge">Coming Soon</span>
                     <span class="material-symbols-outlined icon-large">emoji_events</span>
                     <span class="sheet-title">Concorso<br>BdA</span>
                 </div>
