@@ -8,4 +8,68 @@
                 Stiamo lavorando per integrare questa pagina.
             </p>
     </div>
+/* =========================================
+ A. Titolare del Trattamento
+
+        Devi indicare chiaramente chi raccoglie i dati.
+        Se sei un privato: Nome, Cognome e un indirizzo di contatto (o email dedicata alla privacy).
+
+B. Tipologia di Dati e Finalità
+    
+        Nel tuo documento devi specificare perché raccogli quei dati.
+        
+        Email:
+            Finalità: Registrazione, autenticazione, recupero password e mantenimento dello storico (archiviazione).
+            Base Giuridica: Esecuzione di un contratto (fornire il servizio dell'app) o legittimo interesse.
+            Nota: Specifica chiaramente che non viene usata per marketing/newsletter (questo ti evita di dover chiedere un consenso specifico per il marketing).
+        
+        Nome, Cognome, Qualifiche (Opzionali):
+            Finalità: Personalizzazione del servizio (compilazione automatica delle schede PDF/condivise).
+            Base Giuridica: Consenso dell'utente (dato che sono facoltativi e inseriti volontariamente) o esecuzione del contratto (funzionalità dell'app).
+
+C. Condivisione dei Dati e Terze Parti
+
+        Anche se tu non vendi i dati, la tua app si appoggia a servizi terzi?
+        Hosting/Database: Dove sono salvati i dati? (es. Supabase). Devi indicare che questi fornitori potrebbero avere accesso tecnico ai dati per ospitarli. 
+        Se i server sono fuori dall'UE, la questione si complica (servono clausole specifiche), ma se usi server UE sei più tranquillo.
+
+        Invio Email (Transazionali): Usi un servizio esterno per mandare la mail di recupero password (es. SendGrid, Mailgun)? Va menzionato. No solo Supabase!
+
+D. Diritti dell'Utente
+        Devi garantire (e scrivere che garantisci) i diritti GDPR, tra cui:
+            Diritto di accesso (vedere i propri dati).
+            Diritto alla cancellazione ("diritto all'oblio").
+            Diritto alla portabilità (scaricare i dati, cosa che la tua app già fa con i PDF).
+
+E. Cookie Policy
+        La gestione dei cookie dipende dalla tecnologia che usi.
+        
+        Cookie Tecnici (Essenziali)
+        L'app utilizza sicuramente cookie o Local Storage per mantenere l'utente loggato (sessione).
+        Obbligo: Informativa. Devi dire che usi cookie tecnici per il funzionamento del sito.
+        Consenso: Non è richiesto il banner di blocco preventivo per i soli cookie tecnici. L'utente non deve "accettare" per loggarsi, perché sono necessari al servizio.
+
+        Cookie di Profilazione o Analitici
+        Se usi Google Analytics o simili per vedere quante persone usano l'app, anche se anonimizzati, potresti dover mettere il banner dei cookie.
+
+        Profilazione: Se non fai pubblicità e non tracci il comportamento per vendere dati, non ne hai bisogno.
+
+        Ti basta un link alla "Cookie Policy" nel footer che dice "Questo sito utilizza solo cookie tecnici necessari al funzionamento".
+
+F. Funzionalità di Condivisione (Punto di Attenzione)
+        I dati personali (nome, qualifiche) servono per "scaricare/condividere le schede". 
+        Nella Privacy Policy, dovrebbe esserci una riga che spiega che:
+            "Qualora l'utente decida volontariamente di generare un PDF o condividere una scheda di degustazione tramite le funzionalità dell'app, i dati inseriti nel profilo (Nome, Qualifiche) saranno visibili nel documento generato."
+        Questo tutela te dal fatto che l'utente diffonda i propri dati tramite la tua app.
+        
+=========================================*/
+
+
+    <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
+            &copy; 2026 Beer Tasting Club - <a href="privacy.html">Info Privacy e Cookie</a>
+            <p style="text-align: center; margin-top: 5px; font-size: 0.6rem; color: #4b5563;">
+                Crafted with love by - <a href="https://www.linkedin.com/in/mirko-caiani/">Mirko Caiani</a>
+            </p>
+    </footer>
 </body>
+</html>
