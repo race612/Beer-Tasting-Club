@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Info - Beer Tasting Club</title>
+    <title>Info & Contatti - Beer Tasting Club</title>
     <link rel="stylesheet" href="css/style.css?v=0.8.1">
     
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
@@ -11,6 +11,46 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
+
+    <style>
+        .contact-form-card {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            text-align: center; /* Centro tutto per questo layout ridotto */
+        }
+        
+        .contact-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #d1d5db;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-align: left;
+        }
+
+        .contact-select, .contact-input {
+            width: 100%;
+            padding: 12px;
+            background: #111827;
+            border: 1px solid #4b5563;
+            border-radius: 6px;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .contact-select:focus, .contact-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .hidden-field { display: none; animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -33,17 +73,48 @@
                 Nasce per digitalizzare e semplificare la compilazione delle schede di degustazione, riducendo la carta utilizzata durante le serate e gli eventi e conservando in un unico posto tutte le tue schede di degustazione.
             </p>
             <p>
-                L'app supporta diversi standard di valutazione, come ad esempio BJCP e schedi di concorsi nazionali, permettendoti di salvare, modificare ed esportare le tue degustazioni in PDF.
+                L'app supporta diversi standard di valutazione, come ad esempio BJCP e schede di concorsi nazionali, permettendoti di salvare, modificare ed esportare le tue degustazioni in PDF.
             </p>
             <p>
-                L'obbiettivo è mettere a disposzione dell'utente sempre più strumenti utili alla valutazione della birra in ogni sua forma.
+                L'obiettivo è mettere a disposizione dell'utente sempre più strumenti utili alla valutazione della birra in ogni sua forma.
             </p>
+
+            <hr>
+
+            <h3 class="text-center" style="color: var(--primary-color); margin-top: 30px;">Contattaci</h3>
+            <p style="text-align: center; margin-bottom: 20px; font-size: 0.9em; color: #9ca3af;">
+                Seleziona il motivo del contatto e clicca sul pulsante per aprire la tua app di posta elettronica.
+            </p>
+
+            <div class="contact-form-card">
+                <form id="contact-form">
+                    <label class="contact-label">Qual è il motivo del contatto?</label>
+                    <select id="contact-reason" class="contact-select" required>
+                        <option value="" disabled selected>-- Seleziona un motivo --</option>
+                        <option value="Assistenza">Assistenza</option>
+                        <option value="Segnalazione Bug">Segnalazione Bug</option>
+                        <option value="Proposta Feature">Proposta Feature ed Integrazioni</option>
+                        <option value="Privacy">Domande sulla Privacy</option>
+                        <option value="Altro">Altro...</option>
+                    </select>
+
+                    <div id="other-reason-container" class="hidden-field">
+                        <label class="contact-label">Specifica l'oggetto della mail:</label>
+                        <input type="text" id="contact-other-reason" class="contact-input" placeholder="Scrivi qui l'oggetto...">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                        <span class="material-symbols-outlined">mail</span> Scrivi Email
+                    </button>
+                </form>
+            </div>
 
             <hr>
 
             <h3>Credits & Sponsor</h3>
             <p>
-                Questo progetto è stato ideato e sviluppato da:
+                Questo progetto è stato ideato e sviluppato da: 
+                <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: var(--primary-color); text-decoration: underline;">Mirko Caiani</a>.
             </p>
             <p>
                 Un ringraziamento speciale a:
@@ -60,13 +131,13 @@
             <hr>
 
             <h3>Versione</h3>
-            <p><strong>V 0.8.1 Alpha</strong></p>
+            <p><strong>V 0.8.3 Alpha</strong></p>
 
             <p><strong>Principali novità di questa versione:</strong></p>
             <ul>
                 <li>Supporto BJCP 2021</li>
-                <li>Nuova Scheda Descrittiva (Crocette)</li>
-                <li>Nuove Icone Material Design</li>
+                <li>Nuova Scheda Descrittiva (Crocette & Slider)</li>
+                <li>Profilo Utente Avanzato</li>
                 <li>Esportazione PDF</li>
             </ul>
         </div>
@@ -74,12 +145,44 @@
         <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
             &copy; 2026 Beer Tasting Club - 
             <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-            
             <p style="text-align: center; margin-top: 5px; font-size: 0.6rem; color: #4b5563;">
                 Crafted with love by 
                 <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
             </p>
         </footer>
     </div>
+
+    <script>
+        // LOGICA "ALTRO" E INVIO MAIL
+        const reasonSelect = document.getElementById('contact-reason');
+        const otherContainer = document.getElementById('other-reason-container');
+        const otherInput = document.getElementById('contact-other-reason');
+
+        reasonSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'Altro') {
+                otherContainer.style.display = 'block';
+                otherInput.setAttribute('required', 'true');
+            } else {
+                otherContainer.style.display = 'none';
+                otherInput.removeAttribute('required');
+                otherInput.value = '';
+            }
+        });
+
+        document.getElementById('contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            let reason = reasonSelect.value;
+            if (reason === 'Altro') {
+                reason = otherInput.value;
+            }
+
+            // Costruzione Oggetto (Il corpo rimane vuoto per l'utente)
+            const subject = encodeURIComponent(`Contatto da BTC - ${reason}`);
+            
+            // Apertura Client Mail
+            window.location.href = `mailto:therealbeerko@gmail.com?subject=${subject}`;
+        });
+    </script>
 </body>
 </html>
