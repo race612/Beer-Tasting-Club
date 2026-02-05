@@ -73,21 +73,43 @@
 
         <div id="dashboard-view" style="display: none;">
             <nav class="menu-grid">
+                
                 <a href="nuova-scheda.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">post_add</span>
                     <span class="menu-title">Nuova Degustazione</span>
                     <span class="menu-desc">Compila una scheda per una nuova birra</span>
                 </a>
+                
                 <a href="storico.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">history</span>
                     <span class="menu-title">Le mie degustazioni</span>
                     <span class="menu-desc">Un archivio delle tue degustazioni passate</span>
                 </a>
+
+                <a href="miebirre.html" class="menu-item" id="nav-my-beers" style="display: none;">
+                    <span class="material-symbols-outlined icon-large">sports_bar</span>
+                    <span class="menu-title">Le mie birre</span>
+                    <span class="menu-desc">Un archivio delle tue birre prodotte</span>
+                </a>
+
+                <a href="mieieventi.html" class="menu-item" id="nav-my-events" style="display: none;">
+                    <span class="material-symbols-outlined icon-large">event</span>
+                    <span class="menu-title">I miei Eventi</span>
+                    <span class="menu-desc">Un archivio dei tuoi eventi</span>
+                </a>
+
+                <a href="tools.html" class="menu-item">
+                    <span class="material-symbols-outlined icon-large">handyman</span>
+                    <span class="menu-title">Tools & Utility</span>
+                    <span class="menu-desc">Strumenti e materiale di approfondimento</span>
+                </a>
+
                 <a href="profilo.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">person</span>
                     <span class="menu-title">Profilo Personale</span>
-                    <span class="menu-desc">I tuoi dati e impostazioni/span>
+                    <span class="menu-desc">I tuoi dati e impostazioni</span>
                 </a>
+
                 <a href="info.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">info</span>
                     <span class="menu-title">Info & Contatti</span>
@@ -111,9 +133,7 @@
             <span class="material-symbols-outlined" style="color: var(--primary-color);">download</span>
             <span style="font-weight: bold; font-size: 0.9rem;">Installa App</span>
         </div>
-        
         <div style="width: 1px; height: 18px; background: #4b5563; margin: 0 8px;"></div>
-        
         <button id="pwa-close-btn" style="background: none; border: none; padding: 0; cursor: pointer; color: #9ca3af; display: flex;">
             <span class="material-symbols-outlined" style="font-size: 1.1rem;">close</span>
         </button>
@@ -132,57 +152,31 @@
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
-        // URL COSTANTE per i redirect
         const APP_URL = 'https://race612.github.io/Beer-Tasting-Club/';
 
-        // --- 0. PWA INSTALLATION LOGIC ---
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err));
-            });
-        }
-
+        // PWA Logic (Invariata)
+        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err)); }); }
         let deferredPrompt;
         const pwaToast = document.getElementById('pwa-toast');
         const installTrigger = document.getElementById('pwa-install-trigger');
         const closeBtn = document.getElementById('pwa-close-btn');
-
         window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            
-            // Controlla se l'utente ha già chiuso il toast in precedenza
+            e.preventDefault(); deferredPrompt = e;
             const isDismissed = localStorage.getItem('btc_pwa_dismissed');
-            
-            // Mostra solo se non è stato chiuso, se non è standalone e su mobile/desktop supportato
-            if (!isDismissed && !window.matchMedia('(display-mode: standalone)').matches) {
-                pwaToast.classList.add('show');
-            }
+            if (!isDismissed && !window.matchMedia('(display-mode: standalone)').matches) { pwaToast.classList.add('show'); }
         });
+        installTrigger.addEventListener('click', async () => { if (deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; pwaToast.classList.remove('show'); } });
+        closeBtn.addEventListener('click', () => { pwaToast.classList.remove('show'); localStorage.setItem('btc_pwa_dismissed', 'true'); });
 
-        // 1. Click su "Installa App"
-        installTrigger.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User response: ${outcome}`);
-                deferredPrompt = null;
-                pwaToast.classList.remove('show');
-            }
-        });
-
-        // 2. Click su "X" (Chiudi)
-        closeBtn.addEventListener('click', () => {
-            pwaToast.classList.remove('show');
-            // Salva la preferenza: non mostrare più il toast in questo browser
-            localStorage.setItem('btc_pwa_dismissed', 'true');
-        });
-        
-        // --- 1. AUTH LOGIC ---
+        // AUTH & DASHBOARD LOGIC
         const authView = document.getElementById('auth-view');
         const dashboardView = document.getElementById('dashboard-view');
         const updatePasswordView = document.getElementById('update-password-view');
         const hash = window.location.hash;
+
+        // Nav Items condizionali
+        const navMyBeers = document.getElementById('nav-my-beers');
+        const navMyEvents = document.getElementById('nav-my-events');
 
         if (hash && hash.includes('type=recovery')) {
             authView.style.display = 'none'; dashboardView.style.display = 'none'; updatePasswordView.style.display = 'block';
@@ -190,112 +184,53 @@
 
         supabase.auth.onAuthStateChange(async (event, session) => {
             if (updatePasswordView.style.display === 'block') return;
+            
             if (event === 'PASSWORD_RECOVERY') {
                 authView.style.display = 'none'; dashboardView.style.display = 'none'; updatePasswordView.style.display = 'block';
             } else if (event === 'SIGNED_IN' || session) {
+                // UTENTE LOGGATO: Controllo Livello Account
+                const user = session.user;
+                const level = user.user_metadata.account_level || 'Taster'; // Default
+
+                // Reset visualizzazione
+                navMyBeers.style.display = 'none';
+                navMyEvents.style.display = 'none';
+
+                // Logica Brewer (Vede "Le mie birre")
+                if (level === 'Brewer' || level === 'Event Master') {
+                    navMyBeers.style.display = 'grid'; // Usa 'grid' perché .menu-item è display:grid nel CSS
+                }
+
+                // Logica Event Master (Vede "I miei eventi")
+                if (level === 'Event Master') {
+                    navMyEvents.style.display = 'grid';
+                }
+
                 authView.style.display = 'none'; updatePasswordView.style.display = 'none'; dashboardView.style.display = 'block';
             } else {
                 authView.style.display = 'block'; dashboardView.style.display = 'none'; updatePasswordView.style.display = 'none';
             }
         });
 
-        // --- 2. UI TABS & LINK VISIBILITY ---
-        const tabLogin = document.getElementById('tab-login');
-        const tabRegister = document.getElementById('tab-register');
-        const btnSubmit = document.getElementById('btn-submit');
-        const groupName = document.getElementById('group-name');
-        const inputName = document.getElementById('display-name');
-        const authMessage = document.getElementById('auth-message');
-        const linkForgot = document.getElementById('forgot-link');
-        const linkResend = document.getElementById('resend-link');
-        let isLoginMode = true;
+        // TABS, LOGIN FORM, MODALS (Codice invariato, compatto per leggibilità)
+        const tabLogin = document.getElementById('tab-login'); const tabRegister = document.getElementById('tab-register'); const btnSubmit = document.getElementById('btn-submit');
+        const groupName = document.getElementById('group-name'); const inputName = document.getElementById('display-name'); const authMessage = document.getElementById('auth-message');
+        const linkForgot = document.getElementById('forgot-link'); const linkResend = document.getElementById('resend-link'); let isLoginMode = true;
 
-        tabLogin.addEventListener('click', () => {
-            isLoginMode = true;
-            tabLogin.classList.add('active'); tabRegister.classList.remove('active');
-            btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`;
-            groupName.style.display = 'none'; inputName.removeAttribute('required');
-            authMessage.textContent = '';
-            // MOSTRA Forgot, NASCONDI Resend
-            linkForgot.style.display = 'inline-block'; 
-            linkResend.style.display = 'none';
-        });
+        tabLogin.addEventListener('click', () => { isLoginMode = true; tabLogin.classList.add('active'); tabRegister.classList.remove('active'); btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`; groupName.style.display = 'none'; inputName.removeAttribute('required'); authMessage.textContent = ''; linkForgot.style.display = 'inline-block'; linkResend.style.display = 'none'; });
+        tabRegister.addEventListener('click', () => { isLoginMode = false; tabRegister.classList.add('active'); tabLogin.classList.remove('active'); btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`; groupName.style.display = 'block'; inputName.setAttribute('required', 'true'); authMessage.textContent = ''; linkForgot.style.display = 'none'; linkResend.style.display = 'inline-block'; });
 
-        tabRegister.addEventListener('click', () => {
-            isLoginMode = false;
-            tabRegister.classList.add('active'); tabLogin.classList.remove('active');
-            btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`;
-            groupName.style.display = 'block'; inputName.setAttribute('required', 'true');
-            authMessage.textContent = '';
-            // NASCONDI Forgot, MOSTRA Resend
-            linkForgot.style.display = 'none'; 
-            linkResend.style.display = 'inline-block';
-        });
+        document.getElementById('auth-form').addEventListener('submit', async (e) => { e.preventDefault(); const email = document.getElementById('email').value; const password = document.getElementById('password').value; const displayName = inputName.value; btnSubmit.disabled = true; btnSubmit.textContent = "Elaborazione..."; authMessage.style.color = 'var(--text-muted)';
+            if (isLoginMode) { const { error } = await supabase.auth.signInWithPassword({ email, password }); if (error) { authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message; btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`; } } 
+            else { const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: APP_URL, data: { full_name: displayName } } }); if (error) { authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message; } else { authMessage.style.color = '#10b981'; authMessage.textContent = "Registrazione OK! Controlla la mail."; } btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`; } });
 
-        document.getElementById('auth-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const displayName = inputName.value;
-            btnSubmit.disabled = true; btnSubmit.textContent = "Elaborazione...";
-            authMessage.style.color = 'var(--text-muted)';
-            
-            if (isLoginMode) {
-                const { error } = await supabase.auth.signInWithPassword({ email, password });
-                if (error) { authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message; btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`; }
-            } else {
-                const { error } = await supabase.auth.signUp({
-                    email, password, options: { emailRedirectTo: APP_URL, data: { full_name: displayName } }
-                });
-                if (error) { authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message; }
-                else { authMessage.style.color = '#10b981'; authMessage.textContent = "Registrazione OK! Controlla la mail."; }
-                btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`;
-            }
-        });
-
-        // --- 3. MODAL LOGIC ---
-        const modal = document.getElementById('modal-forgot');
-        const modalTitle = document.getElementById('modal-title');
-        const modalDesc = document.getElementById('modal-desc');
-        const btnModalAction = document.getElementById('btn-modal-action');
-        let modalMode = 'reset';
-
-        document.getElementById('forgot-link').addEventListener('click', (e) => { 
-            e.preventDefault(); modalMode = 'reset'; modalTitle.textContent = "Reset Password"; 
-            modalDesc.textContent = "Inserisci la email per il ripristino."; 
-            btnModalAction.innerHTML = `<span class="material-symbols-outlined">lock_reset</span> Invia Link`; modal.style.display = 'flex'; 
-        });
-
-        document.getElementById('resend-link').addEventListener('click', (e) => { 
-            e.preventDefault(); modalMode = 'resend'; modalTitle.textContent = "Rinvio Conferma"; 
-            modalDesc.textContent = "Inserisci l'email usata per la registrazione."; 
-            btnModalAction.innerHTML = `<span class="material-symbols-outlined">mail</span> Rinvia Mail`; modal.style.display = 'flex'; 
-        });
-
+        const modal = document.getElementById('modal-forgot'); const modalTitle = document.getElementById('modal-title'); const modalDesc = document.getElementById('modal-desc'); const btnModalAction = document.getElementById('btn-modal-action'); let modalMode = 'reset';
+        document.getElementById('forgot-link').addEventListener('click', (e) => { e.preventDefault(); modalMode = 'reset'; modalTitle.textContent = "Reset Password"; modalDesc.textContent = "Inserisci la email per il ripristino."; btnModalAction.innerHTML = `<span class="material-symbols-outlined">lock_reset</span> Invia Link`; modal.style.display = 'flex'; });
+        document.getElementById('resend-link').addEventListener('click', (e) => { e.preventDefault(); modalMode = 'resend'; modalTitle.textContent = "Rinvio Conferma"; modalDesc.textContent = "Inserisci l'email usata per la registrazione."; btnModalAction.innerHTML = `<span class="material-symbols-outlined">mail</span> Rinvia Mail`; modal.style.display = 'flex'; });
         document.getElementById('close-modal').addEventListener('click', () => modal.style.display = 'none');
-        
-        btnModalAction.addEventListener('click', async () => {
-            const email = document.getElementById('modal-email').value;
-            if(!email) return alert("Inserisci email!");
-            btnModalAction.disabled = true;
-            let error = null;
-            if (modalMode === 'reset') {
-                const res = await supabase.auth.resetPasswordForEmail(email, { redirectTo: APP_URL }); error = res.error;
-            } else {
-                const res = await supabase.auth.resend({ type: 'signup', email, options: { emailRedirectTo: APP_URL } }); error = res.error;
-            }
-            if(error) alert("Errore: " + error.message); else { alert("Operazione completata!"); modal.style.display = 'none'; }
-            btnModalAction.disabled = false; 
-            btnModalAction.innerHTML = `<span class="material-symbols-outlined">send</span> Invia`;
-        });
+        btnModalAction.addEventListener('click', async () => { const email = document.getElementById('modal-email').value; if(!email) return alert("Inserisci email!"); btnModalAction.disabled = true; let error = null; if (modalMode === 'reset') { const res = await supabase.auth.resetPasswordForEmail(email, { redirectTo: APP_URL }); error = res.error; } else { const res = await supabase.auth.resend({ type: 'signup', email, options: { emailRedirectTo: APP_URL } }); error = res.error; } if(error) alert("Errore: " + error.message); else { alert("Operazione completata!"); modal.style.display = 'none'; } btnModalAction.disabled = false; btnModalAction.innerHTML = `<span class="material-symbols-outlined">send</span> Invia`; });
 
-        // --- 4. UPDATE PASSWORD ---
-        document.getElementById('btn-update-password').addEventListener('click', async () => {
-            const newPass = document.getElementById('new-password').value;
-            if (!newPass || newPass.length < 6) return alert("Password troppo corta.");
-            const { error } = await supabase.auth.updateUser({ password: newPass });
-            if (error) alert("Errore: " + error.message); else { alert("Password aggiornata!"); window.location.hash = ''; window.location.reload(); }
-        });
+        document.getElementById('btn-update-password').addEventListener('click', async () => { const newPass = document.getElementById('new-password').value; if (!newPass || newPass.length < 6) return alert("Password troppo corta."); const { error } = await supabase.auth.updateUser({ password: newPass }); if (error) alert("Errore: " + error.message); else { alert("Password aggiornata!"); window.location.hash = ''; window.location.reload(); } });
     </script>
 </body>
 </html>
