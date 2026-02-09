@@ -30,14 +30,16 @@
         </div>
     </div>
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
-            &copy; 2026 Beer Tasting Club - 
-            <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-            
-            <p style="text-align: center; margin-top: 5px; font-size: 0.6rem; color: #4b5563;">
+        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
+        <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
+    
+        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            <span class="material-symbols-outlined" style="font-size: 0.8rem; color: #ef4444;">favorite</span>
                 Crafted with love by 
                 <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
-            </p>
-        </footer>
+            <span class="material-symbols-outlined" style="font-size: 0.8rem; color: #f59e0b;">sports_bar</span>
+        </p>
+    </footer>
     <script type="module">
         import { supabase } from './js/supabase-config.js';
 
@@ -154,6 +156,43 @@
 
         // Avvia caricamento
         loadHistory();
+        import { APP_VERSION } from './js/config.js'; // Assicurati che il percorso sia corretto (es. ../js/config.js nelle sottocartelle)
+
+    // 1. MOSTRA VERSIONE NEL FOOTER
+    const footerVer = document.getElementById('footer-version');
+    if (footerVer) footerVer.textContent = `v${APP_VERSION}`;
+
+    // 2. GESTIONE AGGIORNAMENTI (Service Worker)
+    const updateToast = document.getElementById('update-toast');
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js').then(reg => { // Attenzione al percorso ./sw.js o ../sw.js
+            
+            // Se c'è un aggiornamento in attesa
+            reg.addEventListener('updatefound', () => {
+                const newWorker = reg.installing;
+                
+                newWorker.addEventListener('statechange', () => {
+                    // Se il nuovo SW è installato E c'è già un SW attivo (non è la prima visita)
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        // Mostra notifica
+                        if(updateToast) updateToast.classList.add('show');
+                    }
+                });
+            });
+        });
+    }
+
+    // Click sul Toast -> Ricarica la pagina per attivare la nuova versione
+    if(updateToast) {
+        updateToast.addEventListener('click', () => {
+            window.location.reload();
+        });
+    }
     </script>
+    <div id="update-toast" class="update-toast">
+        <span class="material-symbols-outlined">system_update</span>
+        Nuova versione! Clicca qui.
+    </div>
 </body>
 </html>

@@ -3,54 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Info & Contatti - Beer Tasting Club</title>
+    <title>Info - Beer Tasting Club</title>
     <link rel="stylesheet" href="css/style.css?v=0.8.1">
-    
-    <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
+    <link rel="manifest" href="/HBL-Tasting/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
-
-    <style>
-        .contact-form-card {
-            background: #1f2937;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            text-align: center; /* Centro tutto per questo layout ridotto */
-        }
-        
-        .contact-label {
-            display: block;
-            margin-bottom: 8px;
-            color: #d1d5db;
-            font-size: 0.95rem;
-            font-weight: 500;
-            text-align: left;
-        }
-
-        .contact-select, .contact-input {
-            width: 100%;
-            padding: 12px;
-            background: #111827;
-            border: 1px solid #4b5563;
-            border-radius: 6px;
-            color: white;
-            font-size: 1rem;
-            margin-bottom: 15px;
-        }
-
-        .contact-select:focus, .contact-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-
-        .hidden-field { display: none; animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -59,87 +18,42 @@
             <a href="index.html" class="header-link">
                 <span class="material-symbols-outlined">arrow_back</span> Home
             </a>
+            <img src="assets/logo.png" alt="Logo" class="header-logo">
         </div>
 
         <div style="text-align: center; margin-bottom: 30px;">
             <img src="assets/logo.png" alt="Beer Tasting Club" class="logo-large">
-            <p class="home-slogan">IL TUO COMPAGNO DIGITALE DI DEGUSTAZIONE</p>
+            <h1 style="color: var(--primary-color);">Beer Tasting Club</h1>
+            <p style="color: var(--text-muted);">Il tuo compagno digitale di degustazione</p>
         </div>
 
         <div class="card text-content">
-            <h3 class="text-center">Cos'è Beer Tasting Club?</h3>
+            <h3>Chi siamo</h3>
             <p>
-                <strong>Beer Tasting Club</strong> è una web app progettata per appassionati di birra, homebrewer e degustatori. 
-                Nasce per digitalizzare e semplificare la compilazione delle schede di degustazione, riducendo la carta utilizzata durante le serate e gli eventi e conservando in un unico posto tutte le tue schede di degustazione.
-            </p>
-            <p>
-                L'app supporta diversi standard di valutazione, come ad esempio BJCP e schede di concorsi nazionali, permettendoti di salvare, modificare ed esportare le tue degustazioni in PDF.
-            </p>
-            <p>
-                L'obiettivo è mettere a disposizione dell'utente sempre più strumenti utili alla valutazione della birra in ogni sua forma.
+                <strong>Beer Tasting Club</strong> è un'applicazione web progressiva (PWA) progettata per appassionati di birra, homebrewer e giudici. 
+                Nasce per semplificare la compilazione delle schede di degustazione, eliminando la carta e digitalizzando il tuo archivio sensoriale.
             </p>
 
             <hr>
 
-            <h3 class="text-center" style="color: var(--primary-color); margin-top: 30px;">Contattaci</h3>
-            <p style="text-align: center; margin-bottom: 20px; font-size: 0.9em; color: #9ca3af;">
-                Seleziona il motivo del contatto e clicca sul pulsante per aprire la tua app di posta elettronica.
-            </p>
-
-            <div class="contact-form-card">
-                <form id="contact-form">
-                    <label class="contact-label">Qual è il motivo del contatto?</label>
-                    <select id="contact-reason" class="contact-select" required>
-                        <option value="" disabled selected>-- Seleziona un motivo --</option>
-                        <option value="Assistenza">Assistenza</option>
-                        <option value="Segnalazione Bug">Segnalazione Bug</option>
-                        <option value="Proposta Feature">Proposta Feature ed Integrazioni</option>
-                        <option value="Privacy">Domande sulla Privacy</option>
-                        <option value="Altro">Altro...</option>
-                    </select>
-
-                    <div id="other-reason-container" class="hidden-field">
-                        <label class="contact-label">Specifica l'oggetto della mail:</label>
-                        <input type="text" id="contact-other-reason" class="contact-input" placeholder="Scrivi qui l'oggetto...">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
-                        <span class="material-symbols-outlined">mail</span> Scrivi Email
-                    </button>
-                </form>
-            </div>
-
-            <hr>
-
-            <h3>Credits & Sponsor</h3>
-            <p>
-                Questo progetto è stato ideato e sviluppato da: 
-                <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: var(--primary-color); text-decoration: underline;">Mirko Caiani</a>.
-            </p>
-            <p>
-                Un ringraziamento speciale a:
-            </p>
+            <h3>Credits & Tributi</h3>
             <div style="text-align: center; margin: 20px 0;">
-                <img src="assets/Logo-HBL-Bianco.png" alt="HBL - Homebrewers Lombardi" class="logo-large">
                 <h4 style="margin:0; color: #ffffff;">HBL - Homebrewers Lombardi</h4>
                 <small style="color: var(--text-muted);">La community della birra fatta in casa in Lombardia</small>
             </div>
-            <p>
-                Un ringraziamento a tutti i soci HBL per i feedback e la passione condivisa per questo fantastico hobby. Spero questa app possa aiutare molti di voi a condividere ancora meglio le vostre birre e le vostre conoscenze.
-            </p>
 
             <hr>
 
-            <h3>Versione</h3>
-            <p><strong>V 0.8.3 Alpha</strong></p>
-
-            <p><strong>Principali novità di questa versione:</strong></p>
-            <ul>
-                <li>Supporto BJCP 2021</li>
-                <li>Nuova Scheda Descrittiva (Crocette & Slider)</li>
-                <li>Profilo Utente Avanzato</li>
-                <li>Esportazione PDF</li>
-            </ul>
+            <h3>Versione & Changelog</h3>
+            <p>Versione installata: <strong id="app-version-display" style="color: var(--primary-color);">...</strong></p>
+            
+            <div id="changelog-container" style="background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; font-size: 0.9rem;">
+                <p>Caricamento note di rilascio...</p>
+            </div>
+            
+            <button id="btn-show-history" class="btn btn-outline" style="margin-top: 10px; font-size: 0.8rem; display: none;">
+                <span class="material-symbols-outlined">history</span> Mostra versioni precedenti
+            </button>
         </div>
 
         <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
@@ -152,37 +66,110 @@
         </footer>
     </div>
 
-    <script>
-        // LOGICA "ALTRO" E INVIO MAIL
-        const reasonSelect = document.getElementById('contact-reason');
-        const otherContainer = document.getElementById('other-reason-container');
-        const otherInput = document.getElementById('contact-other-reason');
+    <script type="module">
+        import { APP_VERSION } from './js/config.js';
 
-        reasonSelect.addEventListener('change', (e) => {
-            if (e.target.value === 'Altro') {
-                otherContainer.style.display = 'block';
-                otherInput.setAttribute('required', 'true');
-            } else {
-                otherContainer.style.display = 'none';
-                otherInput.removeAttribute('required');
-                otherInput.value = '';
+        // 1. Mostra versione corrente da config.js
+        document.getElementById('app-version-display').textContent = APP_VERSION;
+
+        // 2. Carica e Renderizza Changelog
+        async function loadChangelog() {
+            try {
+                const response = await fetch('changelog.json');
+                const data = await response.json();
+                const container = document.getElementById('changelog-container');
+                const btnHistory = document.getElementById('btn-show-history');
+
+                if (!data || data.length === 0) {
+                    container.innerHTML = "<p>Nessun dato disponibile.</p>";
+                    return;
+                }
+
+                container.innerHTML = ''; // Pulisci "Caricamento..."
+
+                // Funzione per creare HTML di una release
+                const createReleaseHTML = (item, isLatest = false) => {
+                    const color = isLatest ? 'var(--primary-color)' : '#9ca3af';
+                    const badge = isLatest ? ' (Corrente)' : '';
+                    let html = `
+                        <div class="release-item" style="margin-bottom: 20px; ${!isLatest ? 'display:none;' : ''}" class="${!isLatest ? 'history-item' : ''}">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                                <h4 style="margin:0; color:${color};">${item.version}${badge}</h4>
+                                <small style="color:#6b7280;">${item.date}</small>
+                            </div>
+                            <ul style="margin-top:5px; padding-left:20px; color:#d1d5db;">
+                                ${item.changes.map(c => `<li>${c}</li>`).join('')}
+                            </ul>
+                            ${isLatest ? '<hr style="border-color:#374151; margin:15px 0;">' : ''}
+                        </div>
+                    `;
+                    return html;
+                };
+
+                // Renderizza l'ultima versione (indice 0)
+                container.innerHTML += createReleaseHTML(data[0], true);
+
+                // Se ci sono altre versioni, renderizzale ma nascoste
+                if (data.length > 1) {
+                    for (let i = 1; i < data.length; i++) {
+                        container.innerHTML += createReleaseHTML(data[i], false);
+                    }
+                    
+                    // Mostra il pulsante "Mostra Altro"
+                    btnHistory.style.display = 'flex';
+                    
+                    btnHistory.addEventListener('click', () => {
+                        const historyItems = container.querySelectorAll('.release-item');
+                        historyItems.forEach(item => item.style.display = 'block');
+                        btnHistory.style.display = 'none'; // Nascondi pulsante dopo click
+                    });
+                }
+
+            } catch (error) {
+                console.error("Errore changelog:", error);
+                document.getElementById('changelog-container').innerHTML = "<p>Errore caricamento changelog.</p>";
             }
-        });
+        }
 
-        document.getElementById('contact-form').addEventListener('submit', (e) => {
-            e.preventDefault();
+        loadChangelog();
 
-            let reason = reasonSelect.value;
-            if (reason === 'Altro') {
-                reason = otherInput.value;
-            }
+        import { APP_VERSION } from './js/config.js'; // Assicurati che il percorso sia corretto (es. ../js/config.js nelle sottocartelle)
 
-            // Costruzione Oggetto (Il corpo rimane vuoto per l'utente)
-            const subject = encodeURIComponent(`Contatto da BTC - ${reason}`);
+    // 1. MOSTRA VERSIONE NEL FOOTER
+    const footerVer = document.getElementById('footer-version');
+    if (footerVer) footerVer.textContent = `v${APP_VERSION}`;
+
+    // 2. GESTIONE AGGIORNAMENTI (Service Worker)
+    const updateToast = document.getElementById('update-toast');
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js').then(reg => { // Attenzione al percorso ./sw.js o ../sw.js
             
-            // Apertura Client Mail
-            window.location.href = `mailto:therealbeerko@gmail.com?subject=${subject}`;
+            // Se c'è un aggiornamento in attesa
+            reg.addEventListener('updatefound', () => {
+                const newWorker = reg.installing;
+                
+                newWorker.addEventListener('statechange', () => {
+                    // Se il nuovo SW è installato E c'è già un SW attivo (non è la prima visita)
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        // Mostra notifica
+                        if(updateToast) updateToast.classList.add('show');
+                    }
+                });
+            });
         });
+    }
+
+    // Click sul Toast -> Ricarica la pagina per attivare la nuova versione
+    if(updateToast) {
+        updateToast.addEventListener('click', () => {
+            window.location.reload();
+        });
+    }
     </script>
+    <div id="update-toast" class="update-toast">
+        <span class="material-symbols-outlined">system_update</span>
+        Nuova versione! Clicca qui.
+    </div>
 </body>
 </html>

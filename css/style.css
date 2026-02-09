@@ -342,3 +342,39 @@ input:focus, select:focus, textarea:focus {
     background: #374151;
     transform: translateX(-50%) scale(1.05);
 }
+
+/* --- TOAST AGGIORNAMENTO DISPONIBILE --- */
+.update-toast {
+    position: fixed;
+    bottom: 25px;
+    right: 25px; /* In basso a destra */
+    background: var(--primary-color);
+    color: black;
+    padding: 15px 20px;
+    border-radius: 50px; /* Pillola */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 10000;
+    transform: translateY(150px); /* Nascosto sotto */
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid #fff;
+}
+
+.update-toast.show {
+    transform: translateY(0); /* Visibile */
+}
+
+.update-toast:hover {
+    transform: scale(1.05);
+}
+
+/* Versione nel footer */
+.footer-ver {
+    font-size: 0.7em; 
+    opacity: 0.6; 
+    margin-left: 5px;
+}
