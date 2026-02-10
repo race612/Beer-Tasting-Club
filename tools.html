@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tools & Utility - Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.8.7">
+    <link rel="stylesheet" href="css/style.css?v=0.8.8">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -28,9 +28,8 @@
 
         /* STILI CONVERTITORE "SIMULTANEO" */
         .conv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .conv-full { grid-column: 1 / -1; }
         .conv-item { display: flex; flex-direction: column; gap: 5px; }
-        .conv-item label { color: var(--text-muted); font-size: 0.85rem; font-weight: 500; }
+        .conv-item label { color: var(--text-muted); font-size: 0.8rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .conv-item input { padding: 12px; border-radius: 6px; border: 1px solid #4b5563; background: #1f2937; color: white; font-size: 1rem; width: 100%; box-sizing: border-box; }
         .conv-item input:focus { border-color: var(--primary-color); outline: none; background: #374151; }
 
@@ -72,7 +71,7 @@
                     <span class="material-symbols-outlined tool-icon">calculate</span>
                     <div class="tool-info">
                         <h3>Convertitore</h3>
-                        <p>Gravità, Volumi, Temp, Colore.</p>
+                        <p>Gravità, Volumi, Pressione, Temp.</p>
                     </div>
                 </div>
 
@@ -89,6 +88,14 @@
                     <div class="tool-info">
                         <h3>BJCP Vitals</h3>
                         <p>Dati tecnici e range per ogni stile.</p>
+                    </div>
+                </div>
+
+                <div class="tool-card" onclick="openTool('spillatura')">
+                    <span class="material-symbols-outlined tool-icon">tap_and_play</span>
+                    <div class="tool-info">
+                        <h3>Valori Spillatura</h3>
+                        <p>Consigli Pressione/Temp per stile.</p>
                     </div>
                 </div>
 
@@ -135,12 +142,16 @@
                         <input type="number" id="serv-pint-uk" placeholder="1">
                     </div>
                     <div class="conv-item">
-                        <label>Mezza Pinta UK</label>
+                        <label>Mezza Pinta UK (284ml)</label>
                         <input type="number" id="serv-half-uk" placeholder="2">
                     </div>
-                    <div class="conv-item conv-full">
-                        <label>Pinta USA (16oz)</label>
+                    <div class="conv-item">
+                        <label>Pinta USA (473ml)</label>
                         <input type="number" id="serv-pint-us" placeholder="1">
+                    </div>
+                    <div class="conv-item">
+                        <label>Oncia Fluida (29.6ml)</label>
+                        <input type="number" id="serv-floz" placeholder="12">
                     </div>
                 </div>
             </div>
@@ -164,9 +175,27 @@
                         <label>Galloni UK</label>
                         <input type="number" id="prod-gal-uk" placeholder="5">
                     </div>
-                    <div class="conv-item conv-full">
+                    <div class="conv-item">
                         <label>Barili USA (BBL)</label>
                         <input type="number" id="prod-bbl" placeholder="0.19">
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-box">
+                <h4 class="tool-header"><span class="material-symbols-outlined">speed</span> Pressione</h4>
+                <div class="conv-grid">
+                    <div class="conv-item">
+                        <label>Bar</label>
+                        <input type="number" id="pres-bar" placeholder="2.0">
+                    </div>
+                    <div class="conv-item">
+                        <label>PSI</label>
+                        <input type="number" id="pres-psi" placeholder="29">
+                    </div>
+                    <div class="conv-item">
+                        <label>Atm</label>
+                        <input type="number" id="pres-atm" placeholder="1.9">
                     </div>
                 </div>
             </div>
@@ -196,7 +225,7 @@
                         <label>EBC</label>
                         <input type="number" id="col-ebc" placeholder="10">
                     </div>
-                    <div class="conv-item conv-full">
+                    <div class="conv-item">
                         <label>Lovibond (°L)</label>
                         <input type="number" id="col-lov" placeholder="4">
                     </div>
@@ -231,6 +260,12 @@
             <p style="color: var(--text-muted);">Database stili e range tecnici.<br>In arrivo nel prossimo aggiornamento!</p>
         </div>
 
+        <div id="view-spillatura" class="tool-container" style="display: none; text-align: center; padding: 40px;">
+            <span class="material-symbols-outlined" style="font-size: 4rem; color: #f59e0b; margin-bottom: 20px;">tap_and_play</span>
+            <h3>Valori Spillatura</h3>
+            <p style="color: var(--text-muted);">Consigli su pressione e temperatura.<br>In arrivo nel prossimo aggiornamento!</p>
+        </div>
+
         <div id="view-quiz" class="tool-container" style="display: none; text-align: center; padding: 40px;">
             <span class="material-symbols-outlined" style="font-size: 4rem; color: #f59e0b; margin-bottom: 20px;">school</span>
             <h3>Beer Quiz</h3>
@@ -255,9 +290,12 @@
 
         // NAV
         window.openTool = function(toolName) {
-            ['menu', 'converter', 'color', 'bjcp', 'quiz'].forEach(v => document.getElementById(`view-${v}`).style.display = 'none');
+            ['menu', 'converter', 'color', 'bjcp', 'spillatura', 'quiz'].forEach(v => document.getElementById(`view-${v}`).style.display = 'none');
             document.getElementById(`view-${toolName}`).style.display = 'block';
-            const titleMap = { 'converter': 'Convertitore', 'bjcp': 'BJCP Vitals', 'color': 'Color Tool', 'quiz': 'Beer Quiz' };
+            const titleMap = { 
+                'converter': 'Convertitore', 'bjcp': 'BJCP Vitals', 'color': 'Color Tool', 
+                'spillatura': 'Valori Spillatura', 'quiz': 'Beer Quiz' 
+            };
             document.getElementById('page-title').textContent = titleMap[toolName];
             document.getElementById('page-subtitle').style.display = 'none';
             const backBtn = document.getElementById('dynamic-back-btn');
@@ -266,7 +304,7 @@
         }
 
         window.showMenu = function() {
-            ['converter', 'color', 'bjcp', 'quiz'].forEach(v => document.getElementById(`view-${v}`).style.display = 'none');
+            ['converter', 'color', 'bjcp', 'spillatura', 'quiz'].forEach(v => document.getElementById(`view-${v}`).style.display = 'none');
             document.getElementById('view-menu').style.display = 'block';
             document.getElementById('page-title').textContent = 'Strumenti';
             document.getElementById('page-subtitle').style.display = 'block';
@@ -276,8 +314,6 @@
         }
 
         /* --- LOGICA CONVERTITORE MULTIPLO --- */
-        
-        // Helper per evitare loop infiniti durante l'aggiornamento
         let isCalculating = false; 
 
         // 1. GRAVITA'
@@ -287,20 +323,15 @@
         g_sg.addEventListener('input', () => {
             if(isCalculating) return; isCalculating = true;
             const sg = parseFloat(g_sg.value);
-            if(!isNaN(sg)) {
-                // Formula: Plato = (-1 * 616.868) + (1111.14 * sg) – (630.272 * sg^2) + (135.997 * sg^3) 
-                // O approx standard: (sg - 1) * 1000 / 4
-                g_plato.value = ((sg - 1) * 1000 / 4).toFixed(2);
-            } else g_plato.value = '';
+            if(!isNaN(sg)) g_plato.value = ((sg - 1) * 1000 / 4).toFixed(2);
+            else g_plato.value = '';
             isCalculating = false;
         });
-
         g_plato.addEventListener('input', () => {
             if(isCalculating) return; isCalculating = true;
             const p = parseFloat(g_plato.value);
-            if(!isNaN(p)) {
-                g_sg.value = (1 + (p / (258.6 - ((p/258.2)*227.1)))).toFixed(3);
-            } else g_sg.value = '';
+            if(!isNaN(p)) g_sg.value = (1 + (p / (258.6 - ((p/258.2)*227.1)))).toFixed(3);
+            else g_sg.value = '';
             isCalculating = false;
         });
 
@@ -310,24 +341,23 @@
             l: document.getElementById('serv-l'),
             pint_uk: document.getElementById('serv-pint-uk'),
             half_uk: document.getElementById('serv-half-uk'),
-            pint_us: document.getElementById('serv-pint-us')
+            pint_us: document.getElementById('serv-pint-us'),
+            floz: document.getElementById('serv-floz')
         };
 
         function updateServVol(source) {
             if(isCalculating) return; isCalculating = true;
             const val = parseFloat(s_inputs[source].value);
-            if(isNaN(val)) {
-                Object.values(s_inputs).forEach(el => el.value = '');
-                isCalculating = false; return;
-            }
+            if(isNaN(val)) { Object.values(s_inputs).forEach(el => el.value = ''); isCalculating = false; return; }
 
-            // Convert to Liters (Base)
+            // Base Liters
             let liters = 0;
             if(source === 'l') liters = val;
             else if(source === 'cl') liters = val / 100;
             else if(source === 'pint_uk') liters = val * 0.568261;
             else if(source === 'half_uk') liters = val * 0.284131;
             else if(source === 'pint_us') liters = val * 0.473176;
+            else if(source === 'floz') liters = val * 0.0295735;
 
             // Distribute
             if(source !== 'l') s_inputs.l.value = liters.toFixed(3);
@@ -335,6 +365,7 @@
             if(source !== 'pint_uk') s_inputs.pint_uk.value = (liters / 0.568261).toFixed(2);
             if(source !== 'half_uk') s_inputs.half_uk.value = (liters / 0.284131).toFixed(2);
             if(source !== 'pint_us') s_inputs.pint_us.value = (liters / 0.473176).toFixed(2);
+            if(source !== 'floz') s_inputs.floz.value = (liters / 0.0295735).toFixed(1);
             
             isCalculating = false;
         }
@@ -352,12 +383,8 @@
         function updateProdVol(source) {
             if(isCalculating) return; isCalculating = true;
             const val = parseFloat(p_inputs[source].value);
-            if(isNaN(val)) {
-                Object.values(p_inputs).forEach(el => el.value = '');
-                isCalculating = false; return;
-            }
+            if(isNaN(val)) { Object.values(p_inputs).forEach(el => el.value = ''); isCalculating = false; return; }
 
-            // Convert to Liters (Base)
             let liters = 0;
             if(source === 'l') liters = val;
             else if(source === 'hl') liters = val * 100;
@@ -365,7 +392,6 @@
             else if(source === 'gal_uk') liters = val * 4.54609;
             else if(source === 'bbl') liters = val * 117.347;
 
-            // Distribute
             if(source !== 'l') p_inputs.l.value = liters.toFixed(1);
             if(source !== 'hl') p_inputs.hl.value = (liters / 100).toFixed(3);
             if(source !== 'gal_us') p_inputs.gal_us.value = (liters / 3.78541).toFixed(2);
@@ -376,10 +402,34 @@
         }
         Object.keys(p_inputs).forEach(k => p_inputs[k].addEventListener('input', () => updateProdVol(k)));
 
-        // 4. TEMPERATURA
+        // 4. PRESSIONE
+        const pr_inputs = {
+            bar: document.getElementById('pres-bar'),
+            psi: document.getElementById('pres-psi'),
+            atm: document.getElementById('pres-atm')
+        };
+
+        function updatePressure(source) {
+            if(isCalculating) return; isCalculating = true;
+            const val = parseFloat(pr_inputs[source].value);
+            if(isNaN(val)) { Object.values(pr_inputs).forEach(el => el.value = ''); isCalculating = false; return; }
+
+            let bar = 0;
+            if(source === 'bar') bar = val;
+            else if(source === 'psi') bar = val / 14.5038;
+            else if(source === 'atm') bar = val / 0.986923;
+
+            if(source !== 'bar') pr_inputs.bar.value = bar.toFixed(2);
+            if(source !== 'psi') pr_inputs.psi.value = (bar * 14.5038).toFixed(1);
+            if(source !== 'atm') pr_inputs.atm.value = (bar * 0.986923).toFixed(2);
+
+            isCalculating = false;
+        }
+        Object.keys(pr_inputs).forEach(k => pr_inputs[k].addEventListener('input', () => updatePressure(k)));
+
+        // 5. TEMPERATURA
         const t_c = document.getElementById('temp-c');
         const t_f = document.getElementById('temp-f');
-
         t_c.addEventListener('input', () => {
             if(isCalculating) return; isCalculating = true;
             const c = parseFloat(t_c.value);
@@ -393,7 +443,7 @@
             isCalculating = false;
         });
 
-        // 5. COLORE (CONVERTITORE TESTUALE)
+        // 6. COLORE (CONVERTITORE TESTUALE)
         const c_srm = document.getElementById('col-srm');
         const c_ebc = document.getElementById('col-ebc');
         const c_lov = document.getElementById('col-lov');
@@ -401,10 +451,7 @@
         function updateColText(source) {
             if(isCalculating) return; isCalculating = true;
             const val = parseFloat(document.getElementById(`col-${source}`).value);
-            if(isNaN(val)) {
-                [c_srm, c_ebc, c_lov].forEach(el => el.value = '');
-                isCalculating = false; return;
-            }
+            if(isNaN(val)) { [c_srm, c_ebc, c_lov].forEach(el => el.value = ''); isCalculating = false; return; }
 
             let srm = 0;
             if(source === 'srm') srm = val;
@@ -422,74 +469,46 @@
 
         /* --- LOGICA COLOR TOOL (VISUAL) --- */
         const refPoints = [
-            { srm: 1, hex: [240, 238, 188] },  // #f0eebc
-            { srm: 2, hex: [233, 214, 125] },  // #e9d67d
-            { srm: 4, hex: [220, 178, 54] },   // #dcb236
-            { srm: 5, hex: [213, 164, 53] },   // #d5a435
-            { srm: 7, hex: [200, 139, 45] },   // #c88b2d
-            { srm: 9, hex: [187, 117, 49] },   // #bb7531
-            { srm: 13, hex: [167, 88, 46] },   // #a7582e
-            { srm: 17, hex: [152, 70, 38] },   // #984626
-            { srm: 22, hex: [129, 49, 36] },   // #813124
-            { srm: 27, hex: [104, 37, 25] },   // #682519
-            { srm: 34, hex: [80, 17, 19] },    // #501113
-            { srm: 44, hex: [49, 18, 20] },    // #311214
-            { srm: 50, hex: [0, 0, 0] }        // #000000
+            { srm: 1, hex: [240, 238, 188] }, { srm: 2, hex: [233, 214, 125] }, { srm: 4, hex: [220, 178, 54] },
+            { srm: 5, hex: [213, 164, 53] }, { srm: 7, hex: [200, 139, 45] }, { srm: 9, hex: [187, 117, 49] },
+            { srm: 13, hex: [167, 88, 46] }, { srm: 17, hex: [152, 70, 38] }, { srm: 22, hex: [129, 49, 36] },
+            { srm: 27, hex: [104, 37, 25] }, { srm: 34, hex: [80, 17, 19] }, { srm: 44, hex: [49, 18, 20] },
+            { srm: 50, hex: [0, 0, 0] }
         ];
 
         function getColorForSRM(srm) {
             if (srm <= 1) return `rgb(${refPoints[0].hex.join(',')})`;
             if (srm >= 50) return `rgb(${refPoints[refPoints.length-1].hex.join(',')})`;
-
-            let prev = refPoints[0];
-            let next = refPoints[refPoints.length-1];
-
+            let prev = refPoints[0]; let next = refPoints[refPoints.length-1];
             for (let i = 0; i < refPoints.length - 1; i++) {
-                if (srm >= refPoints[i].srm && srm <= refPoints[i+1].srm) {
-                    prev = refPoints[i];
-                    next = refPoints[i+1];
-                    break;
-                }
+                if (srm >= refPoints[i].srm && srm <= refPoints[i+1].srm) { prev = refPoints[i]; next = refPoints[i+1]; break; }
             }
-
-            const range = next.srm - prev.srm;
-            const dist = srm - prev.srm;
-            const ratio = dist / range;
-
+            const range = next.srm - prev.srm; const dist = srm - prev.srm; const ratio = dist / range;
             const r = Math.round(prev.hex[0] + (next.hex[0] - prev.hex[0]) * ratio);
             const g = Math.round(prev.hex[1] + (next.hex[1] - prev.hex[1]) * ratio);
             const b = Math.round(prev.hex[2] + (next.hex[2] - prev.hex[2]) * ratio);
-
             return `rgb(${r}, ${g}, ${b})`;
         }
 
         function getDescForSRM(srm) {
-            if (srm < 2) return "Giallo Paglierino";
-            if (srm < 4) return "Giallo";
-            if (srm < 7) return "Dorato";
-            if (srm < 11) return "Ambrato";
-            if (srm < 16) return "Ambrato Carico / Ramato";
-            if (srm < 22) return "Marrone";
-            if (srm < 30) return "Marrone Scuro";
-            return "Nero";
+            if (srm < 2) return "Giallo Paglierino"; if (srm < 4) return "Giallo"; if (srm < 7) return "Dorato";
+            if (srm < 11) return "Ambrato"; if (srm < 16) return "Ambrato Carico / Ramato"; if (srm < 22) return "Marrone";
+            if (srm < 30) return "Marrone Scuro"; return "Nero";
         }
 
         function updateColor() {
             const srm = parseFloat(document.getElementById('color-slider').value);
             const ebc = (srm * 1.97).toFixed(1);
             const lov = ((srm + 0.76) / 1.3546).toFixed(1);
-            
             document.getElementById('val-srm').textContent = srm.toFixed(1);
             document.getElementById('val-ebc').textContent = ebc;
             document.getElementById('val-lov').textContent = lov;
-            
             document.getElementById('color-desc').textContent = getDescForSRM(srm);
             document.getElementById('beer-glass-preview').style.backgroundColor = getColorForSRM(srm);
         }
-
         document.getElementById('color-slider').addEventListener('input', updateColor);
 
-        // 5. SW UPDATE
+        // SW UPDATE
         const updateToast = document.getElementById('update-toast');
         if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').then(reg => { if (reg.waiting && updateToast) updateToast.classList.add('show'); reg.addEventListener('updatefound', () => { const n = reg.installing; n.addEventListener('statechange', () => { if (n.state === 'installed' && navigator.serviceWorker.controller && updateToast) updateToast.classList.add('show'); }); }); });
         if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
