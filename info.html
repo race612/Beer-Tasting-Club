@@ -28,27 +28,54 @@
         </div>
 
         <div class="card text-content">
+            
             <h3>Chi siamo</h3>
             <p>
                 <strong>Beer Tasting Club</strong> è un'applicazione web progressiva (PWA) progettata per appassionati di birra, homebrewer e giudici. 
                 Nasce per semplificare la compilazione delle schede di degustazione, eliminando la carta e digitalizzando il tuo archivio sensoriale.
             </p>
 
-            <hr>
+            <hr style="border-color: #374151; margin: 25px 0;">
+
+            <h3>Contattaci</h3>
+            <p style="font-size: 0.9em; color: var(--text-muted);">Hai suggerimenti o hai trovato un bug?</p>
+            
+            <div class="form-group">
+                <label>Oggetto della richiesta</label>
+                <select id="contact-subject" style="background: #1f2937; color: white; border: 1px solid #4b5563; padding: 12px; width: 100%; border-radius: 8px; font-size: 1rem;">
+                    <option value="Info Generali">ℹ️ Informazioni Generali</option>
+                    <option value="Bug Report">🐛 Segnalazione Bug / Errore</option>
+                    <option value="Feature Request">💡 Suggerimento Nuova Funzione</option>
+                    <option value="Collaborazione">🤝 Collaborazione / Eventi</option>
+                    <option value="Supporto Account">🔐 Problemi Account</option>
+                </select>
+            </div>
+            
+            <button id="btn-contact-mail" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                <span class="material-symbols-outlined">mail</span> Scrivi Email
+            </button>
+
+            <hr style="border-color: #374151; margin: 25px 0;">
 
             <h3>Credits & Tributi</h3>
-            <div style="text-align: center; margin: 20px 0;">
-                <h4 style="margin:0; color: #ffffff;">HBL - Homebrewers Lombardi</h4>
+            <div style="text-align: center; margin: 20px 0; background: #1f2937; padding: 20px; border-radius: 12px; border: 1px solid #374151;">
+                <p style="color: var(--text-muted); font-size: 0.8em; margin-bottom: 15px; text-transform: uppercase;">In collaborazione con</p>
+                
+                <img src="assets/Logo-HBL-Bianco.png" alt="HBL Logo" style="max-width: 180px; height: auto; display: block; margin: 0 auto 10px auto;">
+                
+                <h4 style="margin: 10px 0 5px 0; color: #ffffff;">Homebrewers Lombardi</h4>
                 <small style="color: var(--text-muted);">La community della birra fatta in casa in Lombardia</small>
             </div>
 
-            <hr>
+            <hr style="border-color: #374151; margin: 25px 0;">
 
             <h3>Versione & Changelog</h3>
             <p>Versione installata: <strong id="app-version-display" style="color: var(--primary-color);">...</strong></p>
             
-            <div id="changelog-container" style="background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; font-size: 0.9rem;">
-                <p>Caricamento note di rilascio...</p>
+            <div id="changelog-container" style="background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; font-size: 0.9rem; min-height: 50px;">
+                <div style="text-align: center; color: var(--text-muted);">
+                    <span class="material-symbols-outlined" style="animation: spin 1s infinite;">refresh</span> Caricamento...
+                </div>
             </div>
             
             <button id="btn-show-history" class="btn btn-outline" style="margin-top: 10px; font-size: 0.8rem; display: none;">
@@ -75,34 +102,48 @@
         // 1. IMPORT (TASSATIVAMENTE IN CIMA)
         import { APP_VERSION } from './js/config.js';
 
-        // 2. LOGICA VERSIONE PAGINA
-        // Mostra versione corrente nella sezione Changelog
+        // 2. MOSTRA VERSIONE
         document.getElementById('app-version-display').textContent = APP_VERSION;
-        
-        // Mostra versione nel footer
         const footerVer = document.getElementById('footer-version');
         if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
 
-        // 3. LOGICA CHANGELOG
+        // 3. LOGICA CONTATTI (MAILTO)
+        document.getElementById('btn-contact-mail').addEventListener('click', () => {
+            const subject = document.getElementById('contact-subject').value;
+            const appVer = APP_VERSION; // Includiamo la versione nel soggetto
+            // Sostituisci questa email con quella reale dove vuoi ricevere i messaggi
+            const emailDestinatario = "m.caiani@gmail.com"; 
+            
+            const finalSubject = encodeURIComponent(`[BTC v${appVer}] ${subject}`);
+            const body = encodeURIComponent("Scrivi qui il tuo messaggio...");
+            
+            window.location.href = `mailto:${emailDestinatario}?subject=${finalSubject}&body=${body}`;
+        });
+
+        // 4. LOGICA CHANGELOG
         async function loadChangelog() {
+            const container = document.getElementById('changelog-container');
+            const btnHistory = document.getElementById('btn-show-history');
+
             try {
-                const response = await fetch('changelog.json');
+                // Aggiungiamo un timestamp per evitare che il JSON venga cachato dal browser durante i test
+                const response = await fetch(`changelog.json?t=${new Date().getTime()}`);
+                
+                if (!response.ok) throw new Error("File non trovato (404)");
+                
                 const data = await response.json();
-                const container = document.getElementById('changelog-container');
-                const btnHistory = document.getElementById('btn-show-history');
 
                 if (!data || data.length === 0) {
                     container.innerHTML = "<p>Nessun dato disponibile.</p>";
                     return;
                 }
 
-                container.innerHTML = ''; // Pulisci "Caricamento..."
+                container.innerHTML = ''; 
 
-                // Funzione per creare HTML di una release
                 const createReleaseHTML = (item, isLatest = false) => {
                     const color = isLatest ? 'var(--primary-color)' : '#9ca3af';
                     const badge = isLatest ? ' (Corrente)' : '';
-                    let html = `
+                    return `
                         <div class="release-item" style="margin-bottom: 20px; ${!isLatest ? 'display:none;' : ''}" class="${!isLatest ? 'history-item' : ''}">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
                                 <h4 style="margin:0; color:${color};">${item.version}${badge}</h4>
@@ -114,48 +155,45 @@
                             ${isLatest ? '<hr style="border-color:#374151; margin:15px 0;">' : ''}
                         </div>
                     `;
-                    return html;
                 };
 
-                // Renderizza l'ultima versione (indice 0)
                 container.innerHTML += createReleaseHTML(data[0], true);
 
-                // Se ci sono altre versioni, renderizzale ma nascoste
                 if (data.length > 1) {
                     for (let i = 1; i < data.length; i++) {
                         container.innerHTML += createReleaseHTML(data[i], false);
                     }
-                    
-                    // Mostra il pulsante "Mostra Altro"
                     btnHistory.style.display = 'flex';
-                    
                     btnHistory.addEventListener('click', () => {
                         const historyItems = container.querySelectorAll('.release-item');
                         historyItems.forEach(item => item.style.display = 'block');
-                        btnHistory.style.display = 'none'; // Nascondi pulsante dopo click
+                        btnHistory.style.display = 'none';
                     });
                 }
 
             } catch (error) {
                 console.error("Errore changelog:", error);
-                document.getElementById('changelog-container').innerHTML = "<p>Errore caricamento changelog.</p>";
+                container.innerHTML = `
+                    <div style="color: #ef4444; text-align: center;">
+                        <span class="material-symbols-outlined">error</span><br>
+                        Errore caricamento note.<br>
+                        <small>${error.message}</small>
+                    </div>`;
             }
         }
 
         loadChangelog();
 
-        // 4. GESTIONE AGGIORNAMENTI (Service Worker) ROBUSTA
+        // 5. GESTIONE AGGIORNAMENTI (Service Worker Robusto)
         const updateToast = document.getElementById('update-toast');
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                
-                // A) Controllo se c'è un aggiornamento GIA' in attesa
+                // A) Aggiornamento GIA' in attesa
                 if (reg.waiting) {
                     if(updateToast) updateToast.classList.add('show');
                 }
-
-                // B) Controllo se un aggiornamento viene trovato ORA
+                // B) Aggiornamento trovato ORA
                 reg.addEventListener('updatefound', () => {
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
@@ -167,7 +205,6 @@
             }).catch(err => console.log('SW failed', err));
         }
 
-        // Click -> Forza aggiornamento
         if(updateToast) {
             updateToast.addEventListener('click', () => {
                 if (navigator.serviceWorker.controller) {

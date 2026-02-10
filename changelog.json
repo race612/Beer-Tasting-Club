@@ -1,6 +1,6 @@
 [
-    // modificare versione in js/config.js e cambiare CACHE_NAME in sw.js
     {
+        "_comment":"modificare versione in js/config.js e cambiare CACHE_NAME in sw.js",
         "version": "0.5.0 Alpha",
         "date": "10 Feb 2026",
         "changes": [
@@ -14,7 +14,7 @@
         "date": "8 Feb 2026",
         "changes": [
             "Implementazione sistema di Login e Registrazione.",
-            "Nuova gestione Password Dimenticata e Rinvio Email.",
+            "Nuova gestione Password Dimenticata e Rinvio Email."
         ]
     },
     {
