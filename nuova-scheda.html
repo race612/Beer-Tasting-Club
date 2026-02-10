@@ -4,17 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuova Degustazione - Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.8.1">
+    <link rel="stylesheet" href="css/style.css?v=0.8.2">
     
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
+    <style>
+        /* Stile Input Ricerca */
+        .sharing-search-box {
+            display: flex; gap: 10px; margin-bottom: 20px;
+        }
+        .sharing-search-box input {
+            flex: 1; text-transform: uppercase; font-family: monospace; letter-spacing: 2px;
+            font-size: 1.2rem; text-align: center;
+        }
+        #beer-preview-card {
+            background: #1f2937; border-left: 4px solid var(--primary-color);
+            padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        
         <div class="header-bar">
             <a href="index.html" class="header-link">
                 <span class="material-symbols-outlined">arrow_back</span> Home
@@ -30,83 +44,143 @@
             <div class="segmented-option" onclick="setMode('event', this)">Evento</div>
         </div>
 
-        <div id="mode-free">
-            <h3 style="text-align: center; margin-bottom: 10px;">Che scheda vuoi usare?</h3>
+        <div id="sharing-container" style="display: none; margin-top: 20px;">
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 10px;">Inserisci il codice univoco della birra (6 caratteri)</p>
+            <div class="sharing-search-box">
+                <input type="text" id="sharing-id-input" placeholder="CODICE" maxlength="6">
+                <button class="btn btn-primary" id="btn-search-beer" style="width: auto;">
+                    <span class="material-symbols-outlined">search</span>
+                </button>
+            </div>
+            
+            <div id="beer-preview-card">
+                <h3 id="preview-name" style="margin: 0; color: white;">...</h3>
+                <div id="preview-producer" style="color: var(--text-muted); font-size: 0.9em;">...</div>
+                <div id="preview-style" style="color: var(--primary-color); margin-top: 5px; font-weight: bold;">...</div>
+            </div>
+        </div>
+
+        <div id="sheet-selection-container">
+            <h3 style="text-align: center; margin-bottom: 10px;" id="select-title">Che scheda vuoi usare?</h3>
 
             <div class="sheet-grid">
-                <a href="schede/crocette.html" class="sheet-card" onclick="return saveFreeContext()">
+                <a href="schede/crocette.html" class="sheet-card">
                     <span class="material-symbols-outlined icon-large">checklist</span>
                     <span class="sheet-title">Descrittiva<br>Semplificata</span>
                 </a>
-                <div class="sheet-card disabled">
-                    <span class="coming-soon-badge">Coming Soon</span>
-                    <span class="material-symbols-outlined icon-large">menu_book</span>
-                    <span class="sheet-title">Descrittiva<br>Estesa</span>
-                </div>
-                <a href="schede/bjcp-sintetica.html" class="sheet-card" onclick="return saveFreeContext()">
+                <a href="schede/bjcp-sintetica.html" class="sheet-card">
                     <span class="material-symbols-outlined icon-large">balance</span>
                     <span class="sheet-title">BJCP<br>Sintetica</span>
                 </a>
-                <div class="sheet-card disabled">
-                    <span class="coming-soon-badge">Coming Soon</span>
-                    <span class="material-symbols-outlined icon-large">gavel</span>
-                    <span class="sheet-title">BJCP<br>Completa</span>
-                </div>
-                <div class="sheet-card disabled">
-                    <span class="coming-soon-badge">Coming Soon</span>
-                    <span class="material-symbols-outlined icon-large">sports_bar</span>
-                    <span class="sheet-title">Scheda<br>HBL</span>
-                </div>
-                <div class="sheet-card disabled">
-                    <span class="coming-soon-badge">Coming Soon</span>
-                    <span class="material-symbols-outlined icon-large">emoji_events</span>
-                    <span class="sheet-title">Concorso<br>BdA</span>
-                </div>
+                
+                <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="material-symbols-outlined icon-large">menu_book</span><span class="sheet-title">Descrittiva<br>Estesa</span></div>
+                <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="material-symbols-outlined icon-large">gavel</span><span class="sheet-title">BJCP<br>Completa</span></div>
             </div>
         </div>
 
         <div id="mode-coming-soon" style="display: none; text-align: center; padding: 40px 20px;">
             <span class="material-symbols-outlined" style="font-size: 4rem; margin-bottom: 20px; color: #f59e0b;">construction</span>
-            <h3>Funzionalità in arrivo!</h3>
-            <p style="color: var(--text-muted);" id="coming-soon-text">
-                Stiamo lavorando per integrare questa modalità.
-            </p>
+            <h3>Eventi</h3>
+            <p style="color: var(--text-muted);">La modalità Evento/Concorso arriverà presto.</p>
         </div>
 
         <br>
     </div>
 
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
-        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
-        <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
-        </p>
+        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span>
     </footer>
 
-    <div id="update-toast" class="update-toast">
-        <span class="material-symbols-outlined">system_update</span>
-        Nuova versione! Clicca qui.
-    </div>
+    <div id="update-toast" class="update-toast"><span class="material-symbols-outlined">system_update</span> Nuova versione!</div>
 
     <script type="module">
-        // 1. IMPORT (TASSATIVAMENTE IN CIMA)
         import { supabase } from './js/supabase-config.js';
         import { APP_VERSION } from './js/config.js';
 
-        // 2. VERSION & UPDATE LOGIC (Robust)
-        const footerVer = document.getElementById('footer-version');
-        if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
+        // Version
+        document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
 
+        // Reset contesti all'avvio
+        localStorage.removeItem('btc_context_beer'); 
+        localStorage.removeItem('btc_context_mode'); // 'free' o 'sharing'
+
+        // UI Logic
+        window.setMode = function(mode, element) {
+            document.querySelectorAll('.segmented-option').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            const sheetContainer = document.getElementById('sheet-selection-container');
+            const sharingContainer = document.getElementById('sharing-container');
+            const eventContainer = document.getElementById('mode-coming-soon');
+            const previewCard = document.getElementById('beer-preview-card');
+
+            // Reset visibilità
+            sharingContainer.style.display = 'none';
+            eventContainer.style.display = 'none';
+            sheetContainer.style.display = 'block'; // Default visibile per Free
+            previewCard.style.display = 'none';
+
+            if (mode === 'free') {
+                localStorage.setItem('btc_context_mode', 'free');
+                localStorage.removeItem('btc_context_beer');
+            } 
+            else if (mode === 'sharing') {
+                localStorage.setItem('btc_context_mode', 'sharing');
+                sheetContainer.style.display = 'none'; // Nascondi schede finché non cerca
+                sharingContainer.style.display = 'block';
+                document.getElementById('sharing-id-input').value = "";
+            } 
+            else {
+                sheetContainer.style.display = 'none';
+                eventContainer.style.display = 'block';
+            }
+        }
+
+        // INIT Default
+        localStorage.setItem('btc_context_mode', 'free');
+
+        // LOGICA RICERCA BIRRA
+        document.getElementById('btn-search-beer').addEventListener('click', async () => {
+            const code = document.getElementById('sharing-id-input').value.toUpperCase().trim();
+            if(code.length !== 6) { alert("Il codice deve essere di 6 caratteri."); return; }
+
+            const btn = document.getElementById('btn-search-beer');
+            btn.disabled = true;
+
+            const { data, error } = await supabase
+                .from('my_beers')
+                .select('*')
+                .eq('sharing_id', code)
+                .single();
+
+            btn.disabled = false;
+
+            if (error || !data) {
+                alert("Birra non trovata! Controlla il codice.");
+                return;
+            }
+
+            // Birra trovata!
+            // 1. Mostra anteprima
+            const preview = document.getElementById('beer-preview-card');
+            document.getElementById('preview-name').textContent = data.name;
+            document.getElementById('preview-producer').textContent = data.producer;
+            document.getElementById('preview-style').textContent = data.style_name;
+            preview.style.display = 'block';
+
+            // 2. Salva nel Context
+            localStorage.setItem('btc_context_beer', JSON.stringify(data));
+
+            // 3. Sblocca le schede
+            document.getElementById('sheet-selection-container').style.display = 'block';
+            document.getElementById('select-title').textContent = "Birra Trovata! Ora scegli la scheda:";
+        });
+
+        // SW UPDATE
         const updateToast = document.getElementById('update-toast');
-
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                // A) Aggiornamento GIA' in attesa
-                if (reg.waiting) {
-                    if(updateToast) updateToast.classList.add('show');
-                }
-                // B) Aggiornamento trovato ORA
+                if (reg.waiting) if(updateToast) updateToast.classList.add('show');
                 reg.addEventListener('updatefound', () => {
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
@@ -115,45 +189,9 @@
                         }
                     });
                 });
-            }).catch(err => console.log('SW failed', err));
-        }
-
-        // Click -> Aggiorna
-        if(updateToast) {
-            updateToast.addEventListener('click', () => {
-                if (navigator.serviceWorker.controller) {
-                    window.location.reload();
-                }
             });
         }
-
-        // 3. LOGICA PAGINA (Modalità & Selezione)
-        const FREE_EVENT_ID = 1; 
-
-        window.setMode = function(mode, element) {
-            document.querySelectorAll('.segmented-option').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-
-            const freeDiv = document.getElementById('mode-free');
-            const csDiv = document.getElementById('mode-coming-soon');
-            const csText = document.getElementById('coming-soon-text');
-
-            if (mode === 'free') {
-                freeDiv.style.display = 'block'; csDiv.style.display = 'none';
-            } else {
-                freeDiv.style.display = 'none'; csDiv.style.display = 'block';
-                if(mode === 'sharing') {
-                    csText.textContent = "La modalità Beer Sharing ti permetterà di inserire un codice birra e compilare la scheda senza dover scrivere i dettagli a mano.";
-                } else {
-                    csText.textContent = "La modalità Evento/Concorso ti mostrerà solo le birre presenti alla serata selezionata.";
-                }
-            }
-        }
-
-        window.saveFreeContext = function() {
-            localStorage.setItem('hbl_selected_event', FREE_EVENT_ID);
-            return true;
-        }
+        if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
     </script>
 </body>
 </html>
