@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descrittiva Semplificata - Beer Tasting Club</title>
-    <link rel="stylesheet" href="../css/style.css?v=0.9.1">
+    <link rel="stylesheet" href="../css/style.css?v=0.9.3">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,9 +12,9 @@
     <link rel="apple-touch-icon" href="../assets/icon-192.png">
     
     <style>
-        /* --- STILI SPECIFICI COMPATTEZZA E UX --- */
+        /* --- STILI BASE --- */
         
-        /* 1. Accordion */
+        /* 1. Accordion Standardizzato */
         details.section-accordion {
             background: #111827;
             border: 1px solid #374151;
@@ -23,7 +23,7 @@
             overflow: hidden;
         }
         details.section-accordion summary {
-            padding: 12px 15px; /* Ridotto leggermente */
+            padding: 12px 15px;
             background: #1f2937;
             cursor: pointer;
             font-weight: bold;
@@ -38,27 +38,33 @@
             border-bottom-color: #374151;
             background: rgba(245, 158, 11, 0.05);
         }
-        details.section-accordion summary::after { content: '+'; font-size: 1.2rem; color: #9ca3af; }
-        details.section-accordion[open] summary::after { content: '-'; }
+        /* Icona freccia accordion */
+        details.section-accordion summary::after { content: 'expand_more'; font-family: 'Material Symbols Outlined'; font-size: 1.5rem; color: #9ca3af; }
+        details.section-accordion[open] summary::after { content: 'expand_less'; }
+        
+        /* Titoli con Icone */
+        .summary-title { display: flex; align-items: center; gap: 10px; }
+        .summary-title .material-symbols-outlined { font-size: 1.3rem; }
+
         .accordion-content { padding: 15px; }
 
-        /* 2. Pulsanti Descrittori Ottimizzati */
+        /* 2. Pulsanti Descrittori */
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
-            gap: 6px; /* Gap ridotto */
+            grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+            gap: 8px;
         }
         .option-btn {
             background: #1f2937;
             border: 1px solid #4b5563;
             border-radius: 6px;
-            padding: 6px 2px;
+            padding: 8px 4px;
             font-size: 0.75rem;
             cursor: pointer;
             text-align: center;
             color: #d1d5db;
             user-select: none;
-            min-height: 44px; /* Altezza ridotta */
+            min-height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -66,43 +72,48 @@
             word-break: break-word;
             hyphens: auto;
             position: relative;
+            transition: all 0.1s ease-in-out;
         }
         .option-btn.selected {
-            background: rgba(245, 158, 11, 0.15);
-            border: 1px solid var(--primary-color);
-            color: var(--primary-color);
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #000;
             font-weight: bold;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
         }
         .option-btn.selected::after {
-            content: '✓'; position: absolute; top: 1px; right: 2px; font-size: 0.6rem; color: var(--primary-color);
+            content: 'check'; /* Icona Material come testo se font caricato o carattere unicode */
+            font-family: 'Material Symbols Outlined';
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            font-size: 1.2rem;
+            color: #fff;
+            background: #10b981; /* Verde conferma */
+            border-radius: 50%;
+            padding: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        /* 3. Slider Compact (SENZA RIQUADRO) */
-        .slider-group {
-            background: transparent; /* Niente sfondo */
-            padding: 0;              /* Niente padding */
-            border: none;            /* Niente bordo */
-            margin-bottom: 20px;     /* Spazio sotto */
-            margin-top: 10px;
-        }
+        /* 3. Slider Compact */
+        .slider-group { background: transparent; padding: 0; border: none; margin-bottom: 20px; margin-top: 10px; }
         .slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .slider-label { font-size: 0.9rem; color: #d1d5db; }
         .slider-value { color: var(--primary-color); font-weight: bold; font-size: 0.9rem; }
-        
-        input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; cursor: pointer; height: 30px; margin: 0; }
-        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: #4b5563; border-radius: 3px; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; height: 20px; width: 20px; border-radius: 50%; background: var(--primary-color); cursor: pointer; margin-top: -7px; box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid #fff; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; height: 30px; margin: 0; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; background: #4b5563; border-radius: 3px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: var(--primary-color); margin-top: -7px; box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid #fff; }
 
-        /* 4. Slider Voto Finale (Manteniamo il box per evidenza ma pulito) */
-        .final-score-box {
-            text-align: center;
-            background: #111827;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #374151;
-            margin-bottom: 20px;
+        /* 4. Voto Finale */
+        .final-score-box { text-align: center; background: #111827; padding: 15px; border-radius: 12px; border: 1px solid #374151; margin-bottom: 20px; position: relative; }
+        .final-score-display { font-size: 3.5rem; font-weight: bold; color: #6b7280; margin: 10px 0; display: block; line-height: 1; min-height: 60px; }
+        .reset-score-btn {
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444;
+            border-radius: 50%; width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; display: none; /* Nascosto se non c'è voto */
         }
-        .final-score-display { font-size: 3rem; font-weight: bold; color: var(--primary-color); margin: 5px 0; display: block; line-height: 1; }
 
         /* Altri stili */
         .desc-label { display: block; color: #9ca3af; font-size: 0.85rem; margin-bottom: 5px; margin-top: 15px; font-weight: 500; }
@@ -111,10 +122,6 @@
         .chip-btn { background: #1f2937; border: 1px solid #4b5563; border-radius: 8px; padding: 10px 5px; font-size: 0.85rem; cursor: pointer; text-align: center; color: #d1d5db; }
         .chip-btn.selected { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--primary-color); color: var(--primary-color); font-weight: bold; }
         .chip-btn.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
-        
-        details.flaws-section { background: #2d1b1b; border: 1px solid #ef4444; border-radius: 8px; margin-bottom: 20px; overflow: hidden;}
-        details.flaws-section summary { color: #ef4444; background: #2d1b1b; }
-        details.flaws-section[open] summary { background: rgba(239, 68, 68, 0.1); }
     </style>
 </head>
 <body>
@@ -135,7 +142,7 @@
             <form id="tasting-form">
                 
                 <details class="section-accordion" open>
-                    <summary>🍺 Dati Birra</summary>
+                    <summary><div class="summary-title"><span class="material-symbols-outlined">sports_bar</span> Dati Birra</div></summary>
                     <div class="accordion-content">
                         <div class="form-group">
                             <label>Nome Birra</label>
@@ -183,113 +190,137 @@
                 </details>
 
                 <details class="section-accordion">
-                    <summary>1. Aspetto</summary>
+                    <summary><div class="summary-title"><span class="material-symbols-outlined">visibility</span> 1. Aspetto</div></summary>
                     <div class="accordion-content">
-                        <span class="desc-label" style="margin-top:0">Colore</span>
+                        <span class="desc-label" style="margin-top:0">Colore Birra</span>
                         <div class="options-grid" data-category="aspect_color">
-                            <div class="option-btn">Paglierino</div><div class="option-btn">Dorato</div><div class="option-btn">Ambrato</div><div class="option-btn">Ramato</div><div class="option-btn">Rubino</div><div class="option-btn">Marrone</div><div class="option-btn">Scuro</div><div class="option-btn">Nera</div>
+                            <div class="option-btn">Giallo Paglierino</div><div class="option-btn">Giallo Dorato</div><div class="option-btn">Ambrato</div><div class="option-btn">Ramato</div><div class="option-btn">Rosso Rubino</div><div class="option-btn">Marrone</div><div class="option-btn">Marrone Scuro</div><div class="option-btn">Nera</div>
                         </div>
                         
-                        <span class="desc-label">Limpidezza</span>
+                        <span class="desc-label">Trasparenza</span>
                         <div class="options-grid" data-category="aspect_clarity">
-                            <div class="option-btn">Brillante</div><div class="option-btn">Limpida</div><div class="option-btn">Velata</div><div class="option-btn">Torbida</div><div class="option-btn">Opaca</div>
+                            <div class="option-btn">Brillante</div><div class="option-btn">Limpida</div><div class="option-btn">Poco Velata</div><div class="option-btn">Velata</div><div class="option-btn">Torbida</div><div class="option-btn">Opaca</div>
                         </div>
 
                         <hr style="border-color: #374151; margin: 15px 0;">
                         <span class="desc-label" style="color:var(--primary-color)">Schiuma</span>
                         
-                        <span class="desc-label">Quantità</span>
+                        <span class="desc-label">Presenza</span>
                         <div class="options-grid" data-category="head_amount">
                             <div class="option-btn">Assente</div><div class="option-btn">Scarsa</div><div class="option-btn">Presente</div><div class="option-btn">Abbondante</div>
                         </div>
 
-                        <div class="slider-group">
+                        <div class="slider-group" style="margin-top:10px;">
                             <div class="slider-header"><span class="slider-label">Persistenza</span><span class="slider-value" id="val-head-ret">Media</span></div>
                             <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-head-ret" data-category="head_retention" data-type="persistence">
                         </div>
 
-                        <span class="desc-label">Colore</span>
+                        <span class="desc-label">Colore Schiuma</span>
                         <div class="options-grid" data-category="head_color">
-                            <div class="option-btn">Bianca</div><div class="option-btn">Avorio</div><div class="option-btn">Crema</div><div class="option-btn">Beige</div><div class="option-btn">Cappuccino</div><div class="option-btn">Marrone</div>
+                            <div class="option-btn">Bianca</div><div class="option-btn">Bianco Sporco</div><div class="option-btn">Avorio</div><div class="option-btn">Crema</div><div class="option-btn">Beige</div><div class="option-btn">Cappuccino</div><div class="option-btn">Marrone</div><div class="option-btn">Rosato</div>
+                        </div>
+                        
+                        <span class="desc-label">Grana Bolle</span>
+                        <div class="options-grid" data-category="head_texture">
+                            <div class="option-btn">Finissima</div><div class="option-btn">Fine</div><div class="option-btn">Media</div><div class="option-btn">Grossolana</div><div class="option-btn">Molto Grossolana</div>
                         </div>
                     </div>
                 </details>
 
                 <details class="section-accordion">
-                    <summary>2. Aroma</summary>
+                    <summary><div class="summary-title"><span class="material-symbols-outlined">local_florist</span> 2. Aroma</div></summary>
                     <div class="accordion-content">
                         <div class="slider-group" style="margin-top:0;">
                             <div class="slider-header"><span class="slider-label">Intensità</span><span class="slider-value" id="val-aroma-int">Media</span></div>
                             <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-aroma-int" data-category="aroma_intensity" data-type="intensity">
                         </div>
                         
-                        <span class="desc-label">Descrittori (Multipla)</span>
+                        <div class="slider-group">
+                            <div class="slider-header"><span class="slider-label">Persistenza</span><span class="slider-value" id="val-aroma-pers">Media</span></div>
+                            <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-aroma-pers" data-category="aroma_persistence" data-type="persistence">
+                        </div>
+                        
+                        <span class="desc-label">Descrizione (Multipla)</span>
                         <div class="options-grid" data-category="aroma_descriptors" data-type="multi">
-                            <div class="option-btn">Cereale</div><div class="option-btn">Miele</div><div class="option-btn">Pane</div><div class="option-btn">Caramello</div><div class="option-btn">Tostato</div><div class="option-btn">Cioccolato</div><div class="option-btn">Caffè</div><div class="option-btn">Affumicato</div><div class="option-btn">Frutta Bianca</div><div class="option-btn">Frutta Gialla</div><div class="option-btn">Tropicale</div><div class="option-btn">Frutti Rossi</div><div class="option-btn">Agrumi</div><div class="option-btn">Banana</div><div class="option-btn">Secca</div><div class="option-btn">Legno</div><div class="option-btn">Erbaceo</div><div class="option-btn">Floreale</div><div class="option-btn">Resina</div><div class="option-btn">Spezie</div><div class="option-btn">Lattico</div><div class="option-btn">Funky</div>
+                            <div class="option-btn">Cereali</div><div class="option-btn">Miele</div><div class="option-btn">Panificati</div><div class="option-btn">Caramello</div><div class="option-btn">Tostato</div><div class="option-btn">Cioccolato</div><div class="option-btn">Caffè</div><div class="option-btn">Affumicato</div><div class="option-btn">Frutta P. Bianca</div><div class="option-btn">Frutta P. Gialla</div><div class="option-btn">Frutta Tropicale</div><div class="option-btn">Frutti di Bosco</div><div class="option-btn">Agrumato</div><div class="option-btn">Banana</div><div class="option-btn">Frutta Disidr.</div><div class="option-btn">Vaniglia/Legno</div><div class="option-btn">Erbaceo</div><div class="option-btn">Floreale</div><div class="option-btn">Balsamico</div><div class="option-btn">Terroso</div><div class="option-btn">Speziato</div><div class="option-btn">Lattico</div><div class="option-btn">Acetico</div><div class="option-btn">Animale/Cantina</div>
                         </div>
                     </div>
                 </details>
 
                 <details class="section-accordion">
-                    <summary>3. Gusto</summary>
+                    <summary><div class="summary-title"><span class="material-symbols-outlined">restaurant</span> 3. Gusto</div></summary>
                     <div class="accordion-content">
-                        <span class="desc-label" style="margin-top:0">Bilanciamento</span>
+                        <span class="desc-label" style="margin-top:0">Gusto Base</span>
                         <div class="options-grid" data-category="taste_basic" data-type="multi">
                             <div class="option-btn">Dolce</div><div class="option-btn">Salato</div><div class="option-btn">Acido</div><div class="option-btn">Amaro</div><div class="option-btn">Umami</div>
                         </div>
 
-                        <div class="slider-group">
+                        <div class="slider-group" style="margin-top:10px;">
                             <div class="slider-header"><span class="slider-label">Intensità</span><span class="slider-value" id="val-taste-int">Media</span></div>
                             <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-taste-int" data-category="taste_intensity" data-type="intensity">
                         </div>
+                        
+                        <div class="slider-group">
+                            <div class="slider-header"><span class="slider-label">Persistenza</span><span class="slider-value" id="val-taste-pers">Media</span></div>
+                            <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-taste-pers" data-category="taste_persistence" data-type="persistence">
+                        </div>
 
-                        <span class="desc-label">Descrittori (Multipla)</span>
+                        <span class="desc-label">Descrizione (Multipla)</span>
                         <div class="options-grid" data-category="taste_descriptors" data-type="multi">
-                            <div class="option-btn">Cereale</div><div class="option-btn">Miele</div><div class="option-btn">Pane</div><div class="option-btn">Caramello</div><div class="option-btn">Tostato</div><div class="option-btn">Cioccolato</div><div class="option-btn">Caffè</div><div class="option-btn">Affumicato</div><div class="option-btn">Frutta Bianca</div><div class="option-btn">Frutta Gialla</div><div class="option-btn">Tropicale</div><div class="option-btn">Frutti Rossi</div><div class="option-btn">Agrumi</div><div class="option-btn">Banana</div><div class="option-btn">Secca</div><div class="option-btn">Legno</div><div class="option-btn">Erbaceo</div><div class="option-btn">Floreale</div><div class="option-btn">Resina</div><div class="option-btn">Spezie</div><div class="option-btn">Lattico</div><div class="option-btn">Funky</div>
+                            <div class="option-btn">Cereali</div><div class="option-btn">Miele</div><div class="option-btn">Panificati</div><div class="option-btn">Caramello</div><div class="option-btn">Tostato</div><div class="option-btn">Cioccolato</div><div class="option-btn">Caffè</div><div class="option-btn">Affumicato</div><div class="option-btn">Frutta P. Bianca</div><div class="option-btn">Frutta P. Gialla</div><div class="option-btn">Frutta Tropicale</div><div class="option-btn">Frutti di Bosco</div><div class="option-btn">Agrumato</div><div class="option-btn">Banana</div><div class="option-btn">Frutta Disidr.</div><div class="option-btn">Vaniglia/Legno</div><div class="option-btn">Erbaceo</div><div class="option-btn">Floreale</div><div class="option-btn">Balsamico</div><div class="option-btn">Terroso</div><div class="option-btn">Speziato</div><div class="option-btn">Lattico</div><div class="option-btn">Acetico</div><div class="option-btn">Animale/Cantina</div>
                         </div>
                     </div>
                 </details>
 
                 <details class="section-accordion">
-                    <summary>4. Bocca</summary>
+                    <summary><div class="summary-title"><span class="material-symbols-outlined">water_drop</span> 4. Bocca</div></summary>
                     <div class="accordion-content">
                         <span class="desc-label" style="margin-top:0">Corpo</span>
                         <div class="options-grid" data-category="mouth_body">
-                            <div class="option-btn">Acquoso</div><div class="option-btn">Esile</div><div class="option-btn">Medio</div><div class="option-btn">Pieno</div><div class="option-btn">Masticabile</div>
+                            <div class="option-btn">Acquoso</div><div class="option-btn">Esile</div><div class="option-btn">Medio</div><div class="option-btn">Corposo</div>
                         </div>
                         
                         <span class="desc-label">Carbonazione</span>
                         <div class="options-grid" data-category="mouth_carb">
-                            <div class="option-btn">Piatta</div><div class="option-btn">Bassa</div><div class="option-btn">Media</div><div class="option-btn">Alta</div><div class="option-btn">Esuberante</div>
+                            <div class="option-btn">Bassa</div><div class="option-btn">Media</div><div class="option-btn">Alta</div><div class="option-btn">Fastidiosa</div>
                         </div>
 
-                        <span class="desc-label">Altro</span>
+                        <span class="desc-label">Altre Sensazioni</span>
                         <div class="options-grid" data-category="mouth_other" data-type="multi">
-                            <div class="option-btn">Astringente</div><div class="option-btn">Calore Alcol</div><div class="option-btn">Metallico</div><div class="option-btn">Piccante</div><div class="option-btn">Oleoso</div>
+                            <div class="option-btn">Metallico</div><div class="option-btn">Astringente</div><div class="option-btn">Calore Alcolico</div>
                         </div>
                     </div>
                 </details>
 
                 <details class="section-accordion">
-                    <summary>5. Retrogusto</summary>
+                    <summary><div class="summary-title"><span class="material-symbols-outlined">history</span> 5. Retrogusto</div></summary>
                     <div class="accordion-content">
-                        <div class="slider-group" style="margin-top:0">
+                        <span class="desc-label" style="margin-top:0">Gusto Base</span>
+                        <div class="options-grid" data-category="aftertaste_basic" data-type="multi">
+                            <div class="option-btn">Dolce</div><div class="option-btn">Salato</div><div class="option-btn">Acido</div><div class="option-btn">Amaro</div><div class="option-btn">Umami</div>
+                        </div>
+
+                        <div class="slider-group">
+                            <div class="slider-header"><span class="slider-label">Intensità</span><span class="slider-value" id="val-after-int">Media</span></div>
+                            <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-after-int" data-category="aftertaste_intensity" data-type="intensity">
+                        </div>
+                        <div class="slider-group">
                             <div class="slider-header"><span class="slider-label">Persistenza</span><span class="slider-value" id="val-after-pers">Media</span></div>
                             <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-after-pers" data-category="aftertaste_persistence" data-type="persistence">
                         </div>
                         
-                        <span class="desc-label">Finale</span>
+                        <span class="desc-label">Descrizione (Multipla)</span>
                         <div class="options-grid" data-category="aftertaste_descriptors" data-type="multi">
-                            <div class="option-btn">Secco</div><div class="option-btn">Dolce</div><div class="option-btn">Amaro</div><div class="option-btn">Acido</div><div class="option-btn">Fruttato</div><div class="option-btn">Tostato</div>
+                            <div class="option-btn">Cereali</div><div class="option-btn">Miele</div><div class="option-btn">Panificati</div><div class="option-btn">Caramello</div><div class="option-btn">Tostato</div><div class="option-btn">Cioccolato</div><div class="option-btn">Caffè</div><div class="option-btn">Affumicato</div><div class="option-btn">Frutta P. Bianca</div><div class="option-btn">Frutta P. Gialla</div><div class="option-btn">Frutta Tropicale</div><div class="option-btn">Frutti di Bosco</div><div class="option-btn">Agrumato</div><div class="option-btn">Banana</div><div class="option-btn">Frutta Disidr.</div><div class="option-btn">Vaniglia/Legno</div><div class="option-btn">Erbaceo</div><div class="option-btn">Floreale</div><div class="option-btn">Balsamico</div><div class="option-btn">Terroso</div><div class="option-btn">Speziato</div><div class="option-btn">Lattico</div><div class="option-btn">Acetico</div><div class="option-btn">Animale/Cantina</div>
                         </div>
                     </div>
                 </details>
 
-                <details class="flaws-section">
-                    <summary>⚠️ Difetti / Off-Flavors</summary>
+                <details class="section-accordion" style="border-color:#ef4444;">
+                    <summary style="color:#ef4444;"><div class="summary-title"><span class="material-symbols-outlined">warning</span> Difetti / Off-Flavors</div></summary>
                     <div class="accordion-content">
                         <div class="options-grid" data-category="flaws" data-type="multi">
-                            <div class="option-btn">Diacetile</div><div class="option-btn">DMS</div><div class="option-btn">Acetaldeide</div><div class="option-btn">Luce</div><div class="option-btn">Cartone</div><div class="option-btn">Fenolico</div><div class="option-btn">Solvente</div><div class="option-btn">Formaggio</div>
+                            <div class="option-btn">Diacetile</div><div class="option-btn">DMS</div><div class="option-btn">Acetaldeide</div><div class="option-btn">Luce (3-MBT)</div><div class="option-btn">Ossidazione</div><div class="option-btn">Fenolico</div><div class="option-btn">Solvente</div><div class="option-btn">Acido Isovalerico</div>
                         </div>
                     </div>
                 </details>
@@ -297,12 +328,16 @@
                 <hr style="border-color: #374151; margin: 30px 0;">
 
                 <div class="final-score-box">
+                    <button type="button" id="reset-score-btn" class="reset-score-btn" title="Rimuovi Voto">
+                        <span class="material-symbols-outlined">delete</span>
+                    </button>
+                    
                     <span class="desc-label" style="font-size: 1rem; color: #fff;">Voto Complessivo</span>
-                    <span id="final-score-display" class="final-score-display">6.0</span>
+                    <span style="font-size: 0.8rem; color: #9ca3af;">(Opzionale)</span>
+                    
+                    <span id="final-score-display" class="final-score-display">-</span>
+                    
                     <input type="range" id="final-score-slider" min="1" max="10" step="0.5" value="6">
-                    <div style="display:flex; justify-content:space-between; margin-top:5px; color:#6b7280; font-size:0.8rem;">
-                        <span>Lavandino</span><span>Top</span>
-                    </div>
                 </div>
 
                 <div class="form-group">
@@ -381,6 +416,7 @@
         const persistenceMap = [null, 'Breve', 'Medio/Breve', 'Media', 'Medio/Lunga', 'Lunga'];
         
         document.querySelectorAll('.range-slider').forEach(range => {
+            if(range.id === 'final-score-slider') return; 
             range.addEventListener('input', (e) => {
                 const val = e.target.value;
                 const targetId = e.target.getAttribute('data-target');
@@ -392,17 +428,38 @@
             });
         });
 
+        // LOGICA VOTO FINALE
         const scoreSlider = document.getElementById('final-score-slider');
         const scoreDisplay = document.getElementById('final-score-display');
+        const resetScoreBtn = document.getElementById('reset-score-btn');
+        
+        let currentScore = null; // Stato iniziale nullo
+
         function updateScoreColor(val) {
             scoreDisplay.textContent = val;
             if (val >= 9) scoreDisplay.style.color = "#FFD700";
             else if (val >= 7.5) scoreDisplay.style.color = "#10b981";
             else if (val >= 6) scoreDisplay.style.color = "#f59e0b";
             else scoreDisplay.style.color = "#ef4444";
+            
+            resetScoreBtn.style.display = 'flex'; // Mostra tasto reset
         }
-        scoreSlider.addEventListener('input', (e) => { updateScoreColor(e.target.value); isDirty = true; });
-        updateScoreColor(6.0);
+        
+        scoreSlider.addEventListener('input', (e) => {
+            currentScore = parseFloat(e.target.value);
+            updateScoreColor(currentScore);
+            isDirty = true;
+        });
+
+        resetScoreBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            currentScore = null;
+            scoreDisplay.textContent = "-";
+            scoreDisplay.style.color = "#6b7280"; // Colore neutro
+            resetScoreBtn.style.display = 'none'; // Nascondi reset
+            scoreSlider.value = 6; // Reset visivo slider al centro
+            isDirty = true;
+        });
 
         /* --- 4. CONTEXT & BEER SHARING --- */
         let contextBeer = null;
@@ -526,7 +583,8 @@
                 descriptiveData[category] = (type === 'intensity') ? intensityMap[range.value] : persistenceMap[range.value];
             });
 
-            const finalScore = parseFloat(scoreSlider.value);
+            // Voto Finale: Se null invia 0
+            const finalScoreToSend = currentScore !== null ? currentScore : 0;
 
             btn.disabled = true; btn.textContent = "Salvataggio...";
             const { data: { user } } = await supabase.auth.getUser();
@@ -540,7 +598,7 @@
                 packaging: contextBeer ? contextBeer.packaging : getChipValue('group-packaging'),
                 linked_beer_code: linkedBeerCode, 
                 sheet_type: 'desc_crocette',
-                final_score: finalScore,
+                final_score: finalScoreToSend,
                 details: { style: finalStyle, style_type: styleType, notes: document.getElementById('notes').value, description: descriptiveData }
             };
 
