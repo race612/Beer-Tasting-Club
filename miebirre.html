@@ -12,88 +12,26 @@
     <link rel="apple-touch-icon" href="assets/icon-192.png">
     
     <style>
-        /* CHIPS STYLE (Uguale al Profilo) */
-        .chips-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 5px;
-        }
-        
-        .chip-btn {
-            background: #1f2937;
-            border: 1px solid #4b5563;
-            border-radius: 8px;
-            padding: 12px 5px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            color: #d1d5db;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            user-select: none;
-        }
-
+        /* CHIPS STYLE */
+        .chips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
+        .chip-btn { background: #1f2937; border: 1px solid #4b5563; border-radius: 8px; padding: 12px 5px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; text-align: center; color: #d1d5db; display: flex; align-items: center; justify-content: center; user-select: none; }
         .chip-btn:hover { border-color: #9ca3af; background: #374151; }
-
-        .chip-btn.selected {
-            background: rgba(245, 158, 11, 0.15);
-            border: 1px solid var(--primary-color);
-            color: var(--primary-color);
-            font-weight: bold;
-        }
+        .chip-btn.selected { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--primary-color); color: var(--primary-color); font-weight: bold; }
 
         /* CARD BIRRA */
-        .beer-card {
-            background: #1f2937;
-            border-left: 4px solid var(--primary-color);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            position: relative;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
-        }
+        .beer-card { background: #1f2937; border-left: 4px solid var(--primary-color); border-radius: 8px; padding: 15px; margin-bottom: 15px; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.2s; }
         .beer-card:active { transform: scale(0.98); }
-
-        .beer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        /* ID BADGE (Più grande e cliccabile) */
-        .beer-id-badge {
-            background: #111827;
-            color: var(--primary-color);
-            font-family: monospace;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: bold;
-            border: 1px dashed #6b7280;
-            cursor: copy;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+        .beer-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        
+        /* ID BADGE */
+        .beer-id-badge { background: #111827; color: var(--primary-color); font-family: monospace; padding: 6px 10px; border-radius: 6px; font-size: 1rem; font-weight: bold; border: 1px dashed #6b7280; cursor: copy; display: flex; align-items: center; gap: 5px; }
         .beer-id-badge:active { background: #374151; }
-
+        
         .beer-producer { color: var(--text-muted); font-size: 0.95rem; margin-top: 2px; }
         .beer-packaging { color: var(--text-muted); font-size: 0.85rem; margin-top: 2px; font-style: italic; opacity: 0.8; }
 
         /* FAB */
-        .fab-add {
-            position: fixed; bottom: 80px; right: 20px;
-            width: 56px; height: 56px;
-            background: var(--primary-color); color: black;
-            border-radius: 50%; border: none;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            cursor: pointer; z-index: 100;
-        }
+        .fab-add { position: fixed; bottom: 80px; right: 20px; width: 56px; height: 56px; background: var(--primary-color); color: black; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); cursor: pointer; z-index: 100; }
     </style>
 </head>
 <body>
@@ -118,7 +56,9 @@
         <div id="view-add" style="display: none; margin-top: 20px;">
             <div class="card">
                 <form id="beer-form">
-                    <input type="hidden" id="edit-beer-id"> <div class="form-group">
+                    <input type="hidden" id="edit-beer-id"> 
+
+                    <div class="form-group">
                         <label>Nome Birra</label>
                         <input type="text" id="beer-name" required placeholder="Es. American IPA">
                     </div>
@@ -143,7 +83,7 @@
                         </select>
 
                         <div id="container-free">
-                            <input type="text" id="style-free" placeholder="Es. Italian Grape Ale" required minlength="3">
+                            <input type="text" id="style-free" placeholder="Es. Italian Grape Ale" minlength="3">
                         </div>
 
                         <div id="container-bjcp" style="display: none;">
@@ -199,7 +139,81 @@
         // 1. Footer Version
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
 
-        // 2. State & Nav Logic
+        // 2. Chip Helper
+        function setupChipGroup(groupId) {
+            const container = document.getElementById(groupId);
+            container.querySelectorAll('.chip-btn').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    if (chip.classList.contains('selected')) {
+                        chip.classList.remove('selected');
+                    } else {
+                        container.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected'));
+                        chip.classList.add('selected');
+                    }
+                });
+            });
+        }
+        setupChipGroup('group-producer-type');
+        setupChipGroup('group-packaging');
+
+        function getChipValue(groupId) {
+            const el = document.getElementById(groupId).querySelector('.chip-btn.selected');
+            return el ? el.getAttribute('data-value') : null;
+        }
+        function setChipValue(groupId, val) {
+            const el = document.querySelector(`#${groupId} .chip-btn[data-value="${val}"]`);
+            if(el) el.classList.add('selected');
+        }
+
+        // 3. BJCP Logic
+        const systemSelect = document.getElementById('style-system');
+        const containerFree = document.getElementById('container-free');
+        const containerBjcp = document.getElementById('container-bjcp');
+        const inputFree = document.getElementById('style-free');
+        const inputBjcp = document.getElementById('style-bjcp');
+        const dynamicContainer = document.getElementById('bjcp-dynamic-container');
+
+        bjcpCatalog.forEach(category => {
+            const group = document.createElement('optgroup');
+            group.label = category.family;
+            category.styles.forEach(styleName => {
+                const option = document.createElement('option');
+                option.value = styleName; option.textContent = styleName;
+                group.appendChild(option);
+            });
+            inputBjcp.appendChild(group);
+        });
+
+        systemSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'free') {
+                containerFree.style.display = 'block'; 
+                inputFree.setAttribute('required', 'true');
+                containerBjcp.style.display = 'none'; 
+                inputBjcp.removeAttribute('required');
+            } else {
+                containerBjcp.style.display = 'block'; 
+                inputBjcp.setAttribute('required', 'true');
+                containerFree.style.display = 'none'; 
+                inputFree.removeAttribute('required');
+            }
+        });
+
+        inputBjcp.addEventListener('change', (e) => {
+            dynamicContainer.innerHTML = ''; 
+            const code = e.target.value.split('.')[0];
+            const rule = specialStyleRules[code];
+            if (!rule) return;
+            const wrapper = document.createElement('div');
+            if (rule.type === 'text_only') {
+                 wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" style="width:100%; padding:10px; margin-top:5px; background:#111827; border:1px solid #4b5563; color:white; border-radius:4px;">`;
+            } else if (rule.type === 'options') {
+                wrapper.innerHTML += `<div style="display:flex; gap:10px; margin-top:5px; flex-wrap:wrap;">` + 
+                rule.choices.map(c => `<label style="background:#111827; padding:5px 10px; border-radius:4px;"><input type="radio" name="dyn-radio" value="${c}"> ${c}</label>`).join('') + `</div>`;
+            }
+            dynamicContainer.appendChild(wrapper);
+        });
+
+        // 4. Form Logic
         let currentView = 'list'; 
 
         window.openForm = function(beerToEdit = null) {
@@ -212,7 +226,7 @@
             document.getElementById('page-title').textContent = beerToEdit ? "Modifica Birra" : "Nuova Birra";
             document.getElementById('page-subtitle').style.display = 'none';
 
-            // Reset Form
+            // RESET
             document.getElementById('beer-form').reset();
             document.getElementById('edit-beer-id').value = "";
             document.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected'));
@@ -220,7 +234,7 @@
             document.getElementById('style-system').dispatchEvent(new Event('change'));
 
             if (beerToEdit) {
-                // POPOLA FORM (Edit Mode)
+                // POPULATE
                 document.getElementById('edit-beer-id').value = beerToEdit.id;
                 document.getElementById('beer-name').value = beerToEdit.name;
                 document.getElementById('beer-producer').value = beerToEdit.producer;
@@ -248,7 +262,8 @@
             document.getElementById('fab-add').style.display = 'flex';
             document.getElementById('page-title').textContent = "Le mie Birre";
             document.getElementById('page-subtitle').style.display = 'block';
-            loadBeers(); // Ricarica lista per vedere modifiche
+            
+            loadBeers(); // IMPORTANT: Refresh list
         }
 
         function updateNav() {
@@ -264,76 +279,7 @@
         }
         updateNav(); 
 
-        // 3. Chip Helper
-        function setupChipGroup(groupId) {
-            const container = document.getElementById(groupId);
-            container.querySelectorAll('.chip-btn').forEach(chip => {
-                chip.addEventListener('click', () => {
-                    if (chip.classList.contains('selected')) {
-                        chip.classList.remove('selected');
-                    } else {
-                        container.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected'));
-                        chip.classList.add('selected');
-                    }
-                });
-            });
-        }
-        setupChipGroup('group-producer-type');
-        setupChipGroup('group-packaging');
-
-        function getChipValue(groupId) {
-            const el = document.getElementById(groupId).querySelector('.chip-btn.selected');
-            return el ? el.getAttribute('data-value') : null;
-        }
-        function setChipValue(groupId, val) {
-            const el = document.querySelector(`#${groupId} .chip-btn[data-value="${val}"]`);
-            if(el) el.classList.add('selected');
-        }
-
-        // 4. BJCP Logic
-        const systemSelect = document.getElementById('style-system');
-        const containerFree = document.getElementById('container-free');
-        const containerBjcp = document.getElementById('container-bjcp');
-        const inputBjcp = document.getElementById('style-bjcp');
-        const dynamicContainer = document.getElementById('bjcp-dynamic-container');
-
-        bjcpCatalog.forEach(category => {
-            const group = document.createElement('optgroup');
-            group.label = category.family;
-            category.styles.forEach(styleName => {
-                const option = document.createElement('option');
-                option.value = styleName; option.textContent = styleName;
-                group.appendChild(option);
-            });
-            inputBjcp.appendChild(group);
-        });
-
-        systemSelect.addEventListener('change', (e) => {
-            if (e.target.value === 'free') {
-                containerFree.style.display = 'block'; document.getElementById('style-free').setAttribute('required', 'true');
-                containerBjcp.style.display = 'none'; inputBjcp.removeAttribute('required');
-            } else {
-                containerBjcp.style.display = 'block'; inputBjcp.setAttribute('required', 'true');
-                containerFree.style.display = 'none'; document.getElementById('style-free').removeAttribute('required');
-            }
-        });
-
-        inputBjcp.addEventListener('change', (e) => {
-            dynamicContainer.innerHTML = ''; 
-            const code = e.target.value.split('.')[0];
-            const rule = specialStyleRules[code];
-            if (!rule) return;
-            const wrapper = document.createElement('div');
-            if (rule.type === 'text_only') {
-                 wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" style="width:100%; padding:10px; margin-top:5px; background:#111827; border:1px solid #4b5563; color:white; border-radius:4px;">`;
-            } else if (rule.type === 'options') {
-                wrapper.innerHTML += `<div style="display:flex; gap:10px; margin-top:5px; flex-wrap:wrap;">` + 
-                rule.choices.map(c => `<label style="background:#111827; padding:5px 10px; border-radius:4px;"><input type="radio" name="dyn-radio" value="${c}"> ${c}</label>`).join('') + `</div>`;
-            }
-            dynamicContainer.appendChild(wrapper);
-        });
-
-        // 5. Sharing ID Generator
+        // 5. Sharing ID & Copy
         function generateSharingId() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let result = '';
@@ -341,7 +287,6 @@
             return result;
         }
 
-        // 6. COPY CLIPBOARD
         window.copyId = function(id, event) {
             event.stopPropagation();
             navigator.clipboard.writeText(id).then(() => {
@@ -349,7 +294,7 @@
             });
         }
 
-        // 7. LOAD LIST
+        // 6. LOAD BEERS
         async function loadBeers() {
             const container = document.getElementById('beer-list-container');
             const { data: { user } } = await supabase.auth.getUser();
@@ -428,7 +373,7 @@
             });
         }
 
-        // 8. SAVE (LOGICA CORRETTA INSERT/UPDATE)
+        // 7. SAVE BEER
         document.getElementById('beer-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-save');
@@ -437,7 +382,7 @@
             const { data: { user } } = await supabase.auth.getUser();
             const editId = document.getElementById('edit-beer-id').value;
 
-            // Raccolta Dati (Stile)
+            // Stile Logic
             let styleName = "";
             let styleDetails = null;
             if (systemSelect.value === 'free') styleName = document.getElementById('style-free').value;
@@ -451,7 +396,6 @@
                 if(detailsArr.length > 0) styleDetails = detailsArr.join(', ');
             }
 
-            // PAYLOAD BASE (Comune a Insert e Update)
             const basePayload = {
                 name: document.getElementById('beer-name').value,
                 producer: document.getElementById('beer-producer').value,
@@ -465,45 +409,36 @@
             let error = null;
 
             if (editId) {
-                // --- UPDATE ---
-                // NON includiamo sharing_id o user_id, solo i dati modificati
+                // UPDATE (Solo dati, no ID)
                 const res = await supabase.from('my_beers').update(basePayload).eq('id', editId);
                 error = res.error;
             } else {
-                // --- INSERT ---
-                // Generiamo Sharing ID e aggiungiamo User ID
+                // INSERT
                 let sharingId = generateSharingId();
-                let unique = false; 
-                let attempts = 0;
-                
-                // Tentativi per ID univoco
+                let unique = false; let attempts = 0;
                 while(!unique && attempts < 5) {
                     const { data } = await supabase.from('my_beers').select('id').eq('sharing_id', sharingId);
                     if (!data || data.length === 0) unique = true;
                     else { sharingId = generateSharingId(); attempts++; }
                 }
 
-                const insertPayload = {
-                    ...basePayload,
-                    user_id: user.id,
-                    sharing_id: sharingId
-                };
-
+                const insertPayload = { ...basePayload, user_id: user.id, sharing_id: sharingId };
                 const res = await supabase.from('my_beers').insert([insertPayload]);
                 error = res.error;
             }
 
             if (error) {
                 alert("Errore: " + error.message);
+                btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">save</span> Salva Birra`;
             } else {
-                closeForm(); // Chiude il form e ricarica la lista
+                closeForm(); // Ricarica la lista
+                btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">save</span> Salva Birra`;
             }
-            btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">save</span> Salva Birra`;
         });
 
         loadBeers();
 
-        // 9. SW Update
+        // 8. SW Update
         const updateToast = document.getElementById('update-toast');
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
