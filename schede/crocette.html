@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descrittiva Semplificata - Beer Tasting Club</title>
-    <link rel="stylesheet" href="../css/style.css?v=0.9.4">
+    <link rel="stylesheet" href="../css/style.css?v=0.9.5">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -39,26 +39,21 @@
             border-bottom-color: #374151;
             background: rgba(245, 158, 11, 0.05);
         }
-        /* Icona freccia */
         details.section-accordion summary::after { content: 'expand_more'; font-family: 'Material Symbols Outlined'; font-size: 1.5rem; color: #9ca3af; }
         details.section-accordion[open] summary::after { content: 'expand_less'; }
         
-        /* Titoli e Badge */
         .summary-title { display: flex; align-items: center; gap: 10px; flex: 1; }
         .summary-title .material-symbols-outlined { font-size: 1.3rem; }
         .optional-badge { font-size: 0.75rem; color: #6b7280; font-weight: normal; margin-left: 10px; }
-        
-        /* Badge "Completa" */
         .completed-badge {
             font-size: 0.75rem; color: #10b981; background: rgba(16, 185, 129, 0.1);
             padding: 2px 6px; border-radius: 4px; border: 1px solid #10b981;
             display: none; align-items: center; gap: 4px; margin-right: 10px;
         }
         details.section-accordion.completed:not([open]) .completed-badge { display: inline-flex; }
-
         .accordion-content { padding: 15px; }
 
-        /* 2. Pulsanti Descrittori (FIXED UX) */
+        /* 2. Pulsanti Descrittori (FIX TESTO FERMO) */
         .options-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
@@ -66,7 +61,7 @@
         }
         .option-btn {
             background: #1f2937;
-            border: 1px solid #4b5563;
+            border: 1px solid #4b5563; /* Bordo base */
             border-radius: 6px;
             padding: 8px 4px;
             font-size: 0.75rem;
@@ -82,7 +77,7 @@
             word-break: break-word;
             hyphens: auto;
             position: relative;
-            transition: background 0.1s, border-color 0.1s;
+            transition: all 0.1s ease-in-out;
         }
         
         /* Stato Selezionato */
@@ -90,12 +85,11 @@
             background: var(--primary-color);
             border-color: var(--primary-color);
             color: #000;
-            /* RIMOSSO FONT-WEIGHT BOLD PER EVITARE SPOSTAMENTI */
-            font-weight: normal; 
+            font-weight: bold; /* Bold richiesto */
             box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
         }
         
-        /* Spunta Grande in alto a destra */
+        /* Spunta Grande in alto a destra - Posizione Assoluta per non spostare il testo */
         .option-btn.selected::after {
             content: 'check';
             font-family: 'Material Symbols Outlined';
@@ -109,34 +103,34 @@
             padding: 2px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.5);
             font-weight: bold;
+            z-index: 10;
         }
 
-        /* 3. Slider Compact & Titles */
+        /* 3. Slider Compact & Titles Uniformi */
         .slider-group { background: transparent; padding: 0; border: none; margin-bottom: 20px; margin-top: 15px; }
         .slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
         
-        /* STESSO STILE DEI TITOLI DESCRIZIONE */
-        .slider-label, .desc-label { 
-            display: block; color: #9ca3af; font-size: 0.85rem; margin-bottom: 8px; font-weight: 500; 
+        /* Classe unica per titoli descrittori e slider */
+        .desc-label, .slider-label { 
+            display: block; color: #9ca3af; font-size: 0.85rem; margin-bottom: 8px; font-weight: 500; margin-top: 15px; 
         }
+        /* Rimuovi margine top se è il primo elemento */
+        .accordion-content > .desc-label:first-child, 
+        .accordion-content > .slider-group:first-child .slider-label { margin-top: 0; }
+
         .slider-value { color: var(--primary-color); font-weight: bold; font-size: 0.9rem; }
         
-        input[type=range] { appearance: none; -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; height: 30px; margin: 0; }
+        /* Webkit fix */
+        input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; cursor: pointer; height: 30px; margin: 0; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; background: #4b5563; border-radius: 3px; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: var(--primary-color); margin-top: -7px; box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid #fff; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; height: 20px; width: 20px; border-radius: 50%; background: var(--primary-color); margin-top: -7px; box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid #fff; }
 
         /* 4. Voto Finale */
         .final-score-box { text-align: center; position: relative; }
         .final-score-display { font-size: 3.5rem; font-weight: bold; color: #6b7280; margin: 10px 0; display: block; line-height: 1; min-height: 60px; }
         
         .reset-score-link {
-            display: inline-block;
-            margin-top: 10px;
-            color: #ef4444;
-            text-decoration: underline;
-            font-size: 0.85rem;
-            cursor: pointer;
-            display: none; /* Nascosto default */
+            display: inline-block; margin-top: 10px; color: #ef4444; text-decoration: underline; font-size: 0.85rem; cursor: pointer; display: none;
         }
 
         /* Altri stili */
@@ -162,7 +156,7 @@
             <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-top:0;">Scheda Rapida</p>
             <hr style="border-color: #374151; margin: 15px 0;">
 
-            <form id="tasting-form">
+            <form id="tasting-form" novalidate>
                 
                 <details class="section-accordion" open id="sec-data">
                     <summary>
@@ -170,7 +164,7 @@
                     </summary>
                     <div class="accordion-content">
                         <div class="form-group">
-                            <label>Nome Birra</label>
+                            <label>Nome Birra *</label>
                             <input type="text" id="beer-name" required placeholder="Es. IPA">
                         </div>
 
@@ -184,7 +178,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Stile</label>
+                            <label>Stile *</label>
                             <select id="style-system" style="margin-bottom: 10px; border: 1px solid var(--primary-color);">
                                 <option value="free">📝 Stile Libero</option>
                                 <option value="bjcp">⚖️ BJCP 2021</option>
@@ -216,11 +210,11 @@
 
                 <details class="section-accordion" id="sec-1">
                     <summary>
-                        <div class="summary-title"><span class="material-symbols-outlined">visibility</span> 1. Aspetto</div>
+                        <div class="summary-title"><span class="material-symbols-outlined">visibility</span> Esame Visivo</div>
                         <span class="completed-badge">Completa ✓</span>
                     </summary>
                     <div class="accordion-content">
-                        <span class="desc-label" style="margin-top:0">Colore Birra</span>
+                        <span class="desc-label">Colore Birra</span>
                         <div class="options-grid" data-category="aspect_color">
                             <div class="option-btn">Giallo Paglierino</div><div class="option-btn">Giallo Dorato</div><div class="option-btn">Ambrato</div><div class="option-btn">Ramato</div><div class="option-btn">Rosso Rubino</div><div class="option-btn">Marrone</div><div class="option-btn">Marrone Scuro</div><div class="option-btn">Nera</div>
                         </div>
@@ -257,11 +251,11 @@
 
                 <details class="section-accordion" id="sec-2">
                     <summary>
-                        <div class="summary-title"><span class="material-symbols-outlined">scents</span> 2. Aroma</div>
+                        <div class="summary-title"><span class="material-symbols-outlined">local_florist</span> Esame Olfattivo</div>
                         <span class="completed-badge">Completa ✓</span>
                     </summary>
                     <div class="accordion-content">
-                        <div class="slider-group" style="margin-top:0;">
+                        <div class="slider-group">
                             <div class="slider-header"><span class="slider-label">Intensità</span><span class="slider-value" id="val-aroma-int">Media</span></div>
                             <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-aroma-int" data-category="aroma_intensity" data-type="intensity">
                         </div>
@@ -280,11 +274,11 @@
 
                 <details class="section-accordion" id="sec-3">
                     <summary>
-                        <div class="summary-title"><span class="material-symbols-outlined">restaurant</span> 3. Gusto</div>
+                        <div class="summary-title"><span class="material-symbols-outlined">restaurant</span> Esame Gustativo</div>
                         <span class="completed-badge">Completa ✓</span>
                     </summary>
                     <div class="accordion-content">
-                        <span class="desc-label" style="margin-top:0">Gusto Base</span>
+                        <span class="desc-label">Gusto Base</span>
                         <div class="options-grid" data-category="taste_basic" data-type="multi">
                             <div class="option-btn">Dolce</div><div class="option-btn">Salato</div><div class="option-btn">Acido</div><div class="option-btn">Amaro</div><div class="option-btn">Umami</div>
                         </div>
@@ -308,11 +302,11 @@
 
                 <details class="section-accordion" id="sec-4">
                     <summary>
-                        <div class="summary-title"><span class="material-symbols-outlined">face</span> 4. Bocca</div>
+                        <div class="summary-title"><span class="material-symbols-outlined">face</span> Sensazioni Boccali</div>
                         <span class="completed-badge">Completa ✓</span>
                     </summary>
                     <div class="accordion-content">
-                        <span class="desc-label" style="margin-top:0">Corpo</span>
+                        <span class="desc-label">Corpo</span>
                         <div class="options-grid" data-category="mouth_body">
                             <div class="option-btn">Acquoso</div><div class="option-btn">Esile</div><div class="option-btn">Medio</div><div class="option-btn">Corposo</div>
                         </div>
@@ -331,11 +325,11 @@
 
                 <details class="section-accordion" id="sec-5">
                     <summary>
-                        <div class="summary-title"><span class="material-symbols-outlined">history</span> 5. Retrogusto</div>
+                        <div class="summary-title"><span class="material-symbols-outlined">history</span> Retrogusto</div>
                         <span class="completed-badge">Completa ✓</span>
                     </summary>
                     <div class="accordion-content">
-                        <span class="desc-label" style="margin-top:0">Gusto Base</span>
+                        <span class="desc-label">Gusto Base</span>
                         <div class="options-grid" data-category="aftertaste_basic" data-type="multi">
                             <div class="option-btn">Dolce</div><div class="option-btn">Salato</div><div class="option-btn">Acido</div><div class="option-btn">Amaro</div><div class="option-btn">Umami</div>
                         </div>
@@ -418,7 +412,6 @@
         /* --- 1. GESTIONE ACCORDION (Esclusivo + Completamento) --- */
         const accordions = document.querySelectorAll('details.section-accordion');
         
-        // Funzione per chiudere gli altri
         accordions.forEach(acc => {
             acc.addEventListener('toggle', (e) => {
                 if (acc.open) {
@@ -429,19 +422,16 @@
             });
         });
 
-        // Funzione Check Completamento
         function checkCompletion() {
             accordions.forEach(acc => {
                 const id = acc.id;
-                if (!id || id === 'sec-data') return; // Salta dati birra e senza ID
+                if (!id || id === 'sec-data') return;
 
                 const grids = acc.querySelectorAll('.options-grid');
                 if (grids.length === 0) return;
 
                 let complete = true;
                 grids.forEach(grid => {
-                    // Controlla se la griglia ha almeno un selezionato
-                    // Nota: Alcune griglie potrebbero essere opzionali? Per ora assumiamo di no nelle sezioni principali.
                     if (grid.querySelectorAll('.option-btn.selected').length === 0) complete = false;
                 });
 
@@ -452,7 +442,7 @@
 
         /* --- 2. GESTIONE PULSANTI & LOGICA --- */
         
-        // CHIPS (Dati Birra)
+        // CHIPS
         function setupChipGroup(groupId) {
             const container = document.getElementById(groupId);
             container.querySelectorAll('.chip-btn').forEach(chip => {
@@ -480,7 +470,7 @@
             if(el) el.classList.add('selected');
         }
 
-        // OPTION BUTTONS (Quadrotti)
+        // OPTION BUTTONS
         document.querySelectorAll('.option-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 isDirty = true;
@@ -496,7 +486,7 @@
                         this.classList.add('selected');
                     }
                 }
-                checkCompletion(); // Aggiorna stato
+                checkCompletion();
             });
         });
 
@@ -631,9 +621,24 @@
         });
         window.addEventListener('beforeunload', (e) => { if (isDirty) { e.preventDefault(); e.returnValue = ''; } });
 
-        /* --- 4. SUBMIT --- */
+        /* --- 5. SUBMIT --- */
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // VALIDAZIONE MANUALE CON POPUP
+            if (!form.checkValidity()) {
+                alert("⚠️ Attenzione!\nPer salvare la scheda devi compilare almeno:\n- Nome Birra\n- Stile");
+                // Trova il primo campo non valido e portaci l'utente
+                const invalidField = form.querySelector(':invalid');
+                if (invalidField) {
+                    // Se è dentro un accordion chiuso, aprilo
+                    const parentDetails = invalidField.closest('details');
+                    if (parentDetails && !parentDetails.open) parentDetails.open = true;
+                    invalidField.focus();
+                }
+                return;
+            }
+
             const btn = document.getElementById('submit-btn');
 
             let finalStyle = "", styleType = "";
@@ -699,10 +704,10 @@
             }
         });
 
+        // SW
         const updateToast = document.getElementById('update-toast');
         if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').then(reg => { if (reg.waiting && updateToast) updateToast.classList.add('show'); reg.addEventListener('updatefound', () => { const n = reg.installing; n.addEventListener('statechange', () => { if (n.state === 'installed' && navigator.serviceWorker.controller && updateToast) updateToast.classList.add('show'); }); }); });
         if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
     </script>
 </body>
-</html>
 </html>
