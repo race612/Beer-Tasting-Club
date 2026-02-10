@@ -3,49 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lavori in corso - Beer Tasting Club</title>
-    
+    <title>Tools & Utility - Beer Tasting Club</title>
     <link rel="stylesheet" href="css/style.css?v=0.8.1">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
+    <style>
+        /* GRID MENU STRUMENTI */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .tool-card {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        
+        .tool-card:active { transform: scale(0.98); }
+        .tool-card:hover { border-color: var(--primary-color); }
+
+        .tool-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            background: rgba(245, 158, 11, 0.1);
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        .tool-info h3 { margin: 0; color: #fff; font-size: 1.1rem; }
+        .tool-info p { margin: 5px 0 0 0; color: var(--text-muted); font-size: 0.9rem; }
+
+        /* STILI CONVERTITORE */
+        .converter-box {
+            background: #111827;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #374151;
+            margin-bottom: 20px;
+        }
+        .conv-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+        .conv-input { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #4b5563; background: #1f2937; color: white; font-size: 1.1rem; text-align: center; }
+        .conv-label { width: 50px; text-align: center; font-weight: bold; color: var(--primary-color); }
+        .conv-select { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #4b5563; background: #1f2937; color: white; }
+    </style>
 </head>
 <body>
     <div class="container">
         
         <div class="header-bar">
-            <a href="index.html" class="header-link">
-                <span class="material-symbols-outlined">arrow_back</span> Home
-            </a>
+            <div id="dynamic-back-btn" class="header-link" style="cursor: pointer;">
+                <span class="material-symbols-outlined">arrow_back</span> <span id="back-label">Home</span>
+            </div>
             <img src="assets/logo.png" alt="Logo" class="header-logo">
         </div>
 
-        <div class="card" style="text-align: center; padding: 40px 20px;">
-            <span class="material-symbols-outlined" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 20px;">construction</span>
-            
-            <h2 style="color: var(--primary-color);">Tools - Lavori in Corso</h2>
-            
-            <p style="color: #d1d5db; margin-top: 15px;">
-                Stiamo costruendo questa funzionalità.<br>
-                Torna a trovarci presto, sarà disponibile nei prossimi aggiornamenti!
-            </p>
-            
-            <a href="index.html" class="btn btn-secondary mt-20" style="max-width: 200px; margin: 30px auto 0;">
-                <span class="material-symbols-outlined">home</span> Torna alla Home
-            </a>
+        <h2 class="text-center" id="page-title" style="margin-bottom: 5px;">Strumenti</h2>
+        <p class="text-center" id="page-subtitle" style="color: var(--text-muted); font-size: 0.9em; margin-top:0;">Utility per Homebrewer e Giudici</p>
+
+        <div id="view-menu">
+            <div class="tools-grid">
+                
+                <div class="tool-card" onclick="openTool('bjcp')">
+                    <span class="material-symbols-outlined tool-icon">analytics</span>
+                    <div class="tool-info">
+                        <h3>BJCP Vitals</h3>
+                        <p>Dati tecnici e range per ogni stile (OG, FG, IBU, SRM).</p>
+                    </div>
+                </div>
+
+                <div class="tool-card" onclick="openTool('color')">
+                    <span class="material-symbols-outlined tool-icon">palette</span>
+                    <div class="tool-info">
+                        <h3>Color Tool</h3>
+                        <p>Visualizzatore EBC/SRM e riferimenti visivi.</p>
+                    </div>
+                </div>
+
+                <div class="tool-card" onclick="openTool('converter')">
+                    <span class="material-symbols-outlined tool-icon">calculate</span>
+                    <div class="tool-info">
+                        <h3>Convertitore</h3>
+                        <p>Unità di misura comuni (Temp, Gravità, Peso, Vol).</p>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
-        <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
-            &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
-            <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-    
-            <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
-            </p>
-        </footer>
+        <div id="view-converter" style="display: none;">
+            
+            <div class="converter-box">
+                <h4 style="margin-top:0; color: #d1d5db;">🌡️ Temperatura</h4>
+                <div class="conv-row">
+                    <input type="number" id="temp-in" class="conv-input" placeholder="0">
+                    <select id="temp-unit-in" class="conv-select">
+                        <option value="c">°C Celsius</option>
+                        <option value="f">°F Fahrenheit</option>
+                    </select>
+                </div>
+                <div style="text-align:center; font-size:1.5rem; color:#6b7280;">=</div>
+                <div class="conv-row">
+                    <input type="number" id="temp-out" class="conv-input" readonly>
+                    <select id="temp-unit-out" class="conv-select">
+                        <option value="f">°F Fahrenheit</option>
+                        <option value="c">°C Celsius</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="converter-box">
+                <h4 style="margin-top:0; color: #d1d5db;">⚖️ Gravità (Densità)</h4>
+                <div class="conv-row">
+                    <input type="number" id="grav-in" class="conv-input" placeholder="1.050" step="0.001">
+                    <select id="grav-unit-in" class="conv-select">
+                        <option value="sg">SG (1.xxx)</option>
+                        <option value="plato">°P Plato</option>
+                    </select>
+                </div>
+                <div style="text-align:center; font-size:1.5rem; color:#6b7280;">=</div>
+                <div class="conv-row">
+                    <input type="number" id="grav-out" class="conv-input" readonly>
+                    <select id="grav-unit-out" class="conv-select">
+                        <option value="plato">°P Plato</option>
+                        <option value="sg">SG (1.xxx)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="converter-box">
+                <h4 style="margin-top:0; color: #d1d5db;">💧 Volume</h4>
+                <div class="conv-row">
+                    <input type="number" id="vol-in" class="conv-input" placeholder="23">
+                    <select id="vol-unit-in" class="conv-select">
+                        <option value="l">Litri (L)</option>
+                        <option value="gal">Galloni (US)</option>
+                    </select>
+                </div>
+                <div style="text-align:center; font-size:1.5rem; color:#6b7280;">=</div>
+                <div class="conv-row">
+                    <input type="number" id="vol-out" class="conv-input" readonly>
+                    <select id="vol-unit-out" class="conv-select">
+                        <option value="gal">Galloni (US)</option>
+                        <option value="l">Litri (L)</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="view-bjcp" style="display: none; text-align: center; padding: 40px;">
+            <span class="material-symbols-outlined" style="font-size: 3rem; color: #f59e0b;">analytics</span>
+            <h3>BJCP Vitals</h3>
+            <p style="color: var(--text-muted);">In arrivo nel prossimo aggiornamento!</p>
+        </div>
+
+        <div id="view-color" style="display: none; text-align: center; padding: 40px;">
+            <span class="material-symbols-outlined" style="font-size: 3rem; color: #f59e0b;">palette</span>
+            <h3>Color Tool</h3>
+            <p style="color: var(--text-muted);">In arrivo nel prossimo aggiornamento!</p>
+        </div>
+
     </div>
+
+    <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
+        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
+        <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
+        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        </p>
+    </footer>
 
     <div id="update-toast" class="update-toast">
         <span class="material-symbols-outlined">system_update</span>
@@ -53,25 +191,131 @@
     </div>
 
     <script type="module">
-        // 1. IMPORT (TASSATIVAMENTE IN CIMA)
-        import { APP_VERSION } from './js/config.js'; // Usa ./ perché siamo in root
+        import { APP_VERSION } from './js/config.js';
 
-        // 2. MOSTRA VERSIONE NEL FOOTER
-        const footerVer = document.getElementById('footer-version');
-        if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
+        // 1. Version
+        document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
 
-        // 3. GESTIONE AGGIORNAMENTI (Service Worker Robusto)
+        // 2. NAV & ROUTING LOGIC
+        window.openTool = function(toolName) {
+            // Nascondi tutto
+            document.getElementById('view-menu').style.display = 'none';
+            document.getElementById('view-converter').style.display = 'none';
+            document.getElementById('view-bjcp').style.display = 'none';
+            document.getElementById('view-color').style.display = 'none';
+
+            // Mostra Selezionato
+            document.getElementById(`view-${toolName}`).style.display = 'block';
+
+            // Aggiorna Header
+            const titleMap = {
+                'converter': 'Convertitore',
+                'bjcp': 'BJCP Vitals',
+                'color': 'Color Tool'
+            };
+            document.getElementById('page-title').textContent = titleMap[toolName];
+            document.getElementById('page-subtitle').style.display = 'none';
+
+            // Aggiorna Pulsante Indietro
+            const backBtn = document.getElementById('dynamic-back-btn');
+            document.getElementById('back-label').textContent = 'Strumenti';
+            backBtn.onclick = () => showMenu();
+        }
+
+        window.showMenu = function() {
+            document.getElementById('view-menu').style.display = 'block';
+            document.getElementById('view-converter').style.display = 'none';
+            document.getElementById('view-bjcp').style.display = 'none';
+            document.getElementById('view-color').style.display = 'none';
+
+            document.getElementById('page-title').textContent = 'Strumenti';
+            document.getElementById('page-subtitle').style.display = 'block';
+
+            // Reset Back Button
+            const backBtn = document.getElementById('dynamic-back-btn');
+            document.getElementById('back-label').textContent = 'Home';
+            backBtn.onclick = () => window.location.href = 'index.html';
+        }
+
+        // 3. LOGICA CONVERTITORE
+        function convertTemp() {
+            const val = parseFloat(document.getElementById('temp-in').value);
+            const unitIn = document.getElementById('temp-unit-in').value;
+            const resField = document.getElementById('temp-out');
+            const unitOut = document.getElementById('temp-unit-out');
+
+            // Logica smart: se cambio input in F, output diventa C automaticamente
+            if(unitIn === 'c') unitOut.value = 'f'; else unitOut.value = 'c';
+
+            if (isNaN(val)) { resField.value = ''; return; }
+
+            let res;
+            if (unitIn === 'c') res = (val * 9/5) + 32;
+            else res = (val - 32) * 5/9;
+            
+            resField.value = res.toFixed(1);
+        }
+
+        function convertGrav() {
+            const val = parseFloat(document.getElementById('grav-in').value);
+            const unitIn = document.getElementById('grav-unit-in').value;
+            const resField = document.getElementById('grav-out');
+            const unitOut = document.getElementById('grav-unit-out');
+
+            if(unitIn === 'sg') unitOut.value = 'plato'; else unitOut.value = 'sg';
+
+            if (isNaN(val)) { resField.value = ''; return; }
+
+            let res;
+            // Formula approssimata (plato = (sg - 1) * 250) è troppo semplice.
+            // Usiamo: Plato = (-1 * 616.868) + (1111.14 * sg) – (630.272 * sg^2) + (135.997 * sg^3) 
+            // O la semplice: P = (SG - 1) * 1000 / 4
+            
+            if (unitIn === 'sg') {
+                // SG -> Plato
+                res = (val - 1) * 1000 / 4; 
+            } else {
+                // Plato -> SG
+                res = 1 + (val / (258.6 - ((val/258.2)*227.1)));
+            }
+            
+            resField.value = res.toFixed(3);
+        }
+
+        function convertVol() {
+            const val = parseFloat(document.getElementById('vol-in').value);
+            const unitIn = document.getElementById('vol-unit-in').value;
+            const resField = document.getElementById('vol-out');
+            const unitOut = document.getElementById('vol-unit-out');
+
+            if(unitIn === 'l') unitOut.value = 'gal'; else unitOut.value = 'l';
+
+            if (isNaN(val)) { resField.value = ''; return; }
+
+            let res;
+            if (unitIn === 'l') res = val * 0.264172;
+            else res = val * 3.78541;
+            
+            resField.value = res.toFixed(2);
+        }
+
+        // Listeners Converter
+        ['keyup', 'change'].forEach(evt => {
+            document.getElementById('temp-in').addEventListener(evt, convertTemp);
+            document.getElementById('temp-unit-in').addEventListener(evt, convertTemp);
+            
+            document.getElementById('grav-in').addEventListener(evt, convertGrav);
+            document.getElementById('grav-unit-in').addEventListener(evt, convertGrav);
+
+            document.getElementById('vol-in').addEventListener(evt, convertVol);
+            document.getElementById('vol-unit-in').addEventListener(evt, convertVol);
+        });
+
+        // 4. SW UPDATE
         const updateToast = document.getElementById('update-toast');
-
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                
-                // A) Aggiornamento GIA' in attesa
-                if (reg.waiting) {
-                    if(updateToast) updateToast.classList.add('show');
-                }
-
-                // B) Aggiornamento trovato ORA
+                if (reg.waiting) if(updateToast) updateToast.classList.add('show');
                 reg.addEventListener('updatefound', () => {
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
@@ -80,17 +324,9 @@
                         }
                     });
                 });
-            }).catch(err => console.log('SW failed', err));
-        }
-
-        // Click -> Aggiorna
-        if(updateToast) {
-            updateToast.addEventListener('click', () => {
-                if (navigator.serviceWorker.controller) {
-                    window.location.reload();
-                }
             });
         }
+        if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
     </script>
 </body>
 </html>
