@@ -10,9 +10,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="../assets/icon-192.png">
     <link rel="apple-touch-icon" href="../assets/icon-192.png">
-    
     <style>
-        /* STILI BASE */
         .dynamic-field-group { margin-top: 10px; background: #374151; padding: 12px; border-radius: 6px; border-left: 3px solid #f59e0b; }
         .dynamic-label { font-size: 0.85em; color: #f59e0b; margin-bottom: 5px; display: block; font-weight: bold; }
         .dynamic-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
@@ -21,15 +19,11 @@
         .radio-badge input { margin-right: 5px; }
         .vote-btn { min-width: 40px !important; font-weight: bold; font-size: 1.1rem; }
         .desc-subsection-title { color: #d1d5db; font-size: 1rem; font-weight: bold; margin-top: 20px; margin-bottom: 10px; padding-left: 5px; border-left: 3px solid var(--primary-color); }
-        
-        /* CHIPS (Uguali a Mie Birre) */
         .chips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
         .chip-btn { background: #1f2937; border: 1px solid #4b5563; border-radius: 8px; padding: 10px 5px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; text-align: center; color: #d1d5db; display: flex; align-items: center; justify-content: center; user-select: none; }
         .chip-btn:hover { border-color: #9ca3af; background: #374151; }
         .chip-btn.selected { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--primary-color); color: var(--primary-color); font-weight: bold; }
         .chip-btn.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
-
-        /* SLIDER & DIFETTI (Invariati) */
         details.flaws-section { background: #2d1b1b; border: 1px solid #ef4444; border-radius: 8px; padding: 10px; margin-bottom: 20px; }
         details.flaws-section summary { color: #ef4444; font-weight: bold; cursor: pointer; list-style: none; display: flex; align-items: center; gap: 10px; }
         .slider-group { background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; margin-bottom: 15px; }
@@ -42,7 +36,6 @@
 </head>
 <body>
     <div class="container">
-        
         <div class="header-bar">
             <a href="../nuova-scheda.html" class="header-link" id="back-link">
                 <span class="material-symbols-outlined">arrow_back</span> Indietro
@@ -56,12 +49,10 @@
             <hr style="border-color: #374151; margin: 15px 0;">
 
             <form id="tasting-form">
-                
                 <div class="form-group">
                     <label>Nome Birra / Numero Campione</label>
                     <input type="text" id="beer-name" required placeholder="Es. IPA del Mario o #42">
                 </div>
-
                 <div class="form-group">
                     <label>Produttore</label>
                     <input type="text" id="beer-producer" placeholder="Es. Mario Rossi">
@@ -70,19 +61,15 @@
                         <div class="chip-btn" data-value="pro">Pro</div>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label>Stile</label>
                     <select id="style-system" style="margin-bottom: 10px; border: 1px solid var(--primary-color);">
                         <option value="free">📝 Stile Libero</option>
                         <option value="bjcp">⚖️ BJCP 2021</option>
                     </select>
-
                     <div id="container-free">
                         <input type="text" id="style-free" placeholder="Es. Italian Grape Ale" required minlength="3">
-                        <small style="color: #6b7280;">Minimo 3 caratteri.</small>
                     </div>
-
                     <div id="container-bjcp" style="display: none;">
                         <select id="style-bjcp">
                             <option value="" disabled selected>-- Seleziona uno stile --</option>
@@ -90,7 +77,6 @@
                         <div id="bjcp-dynamic-container"></div>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label>Confezionamento</label>
                     <div class="chips-grid" id="group-packaging">
@@ -107,25 +93,13 @@
                 <div class="desc-group">
                     <span class="desc-label">Colore Birra</span>
                     <div class="options-grid" data-category="aspect_color">
-                        <div class="option-btn">Giallo Paglierino</div>
-                        <div class="option-btn">Giallo Dorato</div>
-                        <div class="option-btn">Ambrato</div>
-                        <div class="option-btn">Ramato</div>
-                        <div class="option-btn">Rosso Rubino</div>
-                        <div class="option-btn">Marrone</div>
-                        <div class="option-btn">Marrone Scuro</div>
-                        <div class="option-btn">Nera</div>
+                        <div class="option-btn">Giallo Paglierino</div><div class="option-btn">Giallo Dorato</div><div class="option-btn">Ambrato</div><div class="option-btn">Ramato</div><div class="option-btn">Rosso Rubino</div><div class="option-btn">Marrone</div><div class="option-btn">Marrone Scuro</div><div class="option-btn">Nera</div>
                     </div>
                 </div>
                 <div class="desc-group">
                     <span class="desc-label">Trasparenza</span>
                     <div class="options-grid" data-category="aspect_clarity">
-                        <div class="option-btn">Brillante</div>
-                        <div class="option-btn">Limpida</div>
-                        <div class="option-btn">Poco Velata</div>
-                        <div class="option-btn">Velata</div>
-                        <div class="option-btn">Torbida</div>
-                        <div class="option-btn">Opaca</div>
+                        <div class="option-btn">Brillante</div><div class="option-btn">Limpida</div><div class="option-btn">Poco Velata</div><div class="option-btn">Velata</div><div class="option-btn">Torbida</div><div class="option-btn">Opaca</div>
                     </div>
                 </div>
 
@@ -133,10 +107,7 @@
                 <div class="desc-group">
                     <span class="desc-label">Presenza</span>
                     <div class="options-grid" data-category="head_amount">
-                        <div class="option-btn">Assente</div>
-                        <div class="option-btn">Scarsa</div>
-                        <div class="option-btn">Presente</div>
-                        <div class="option-btn">Abbondante</div>
+                        <div class="option-btn">Assente</div><div class="option-btn">Scarsa</div><div class="option-btn">Presente</div><div class="option-btn">Abbondante</div>
                     </div>
                 </div>
                 <div class="slider-group">
@@ -166,7 +137,7 @@
                     <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-aroma-pers" data-category="aroma_persistence" data-type="persistence">
                 </div>
                 <div class="desc-group">
-                    <span class="desc-label">Descrizione (Multipla)</span>
+                    <span class="desc-label">Descrizione</span>
                     <div class="options-grid" data-category="aroma_descriptors" data-type="multi">
                         <div class="option-btn">Cereali</div><div class="option-btn">Miele</div><div class="option-btn">Panificati</div><div class="option-btn">Caramello</div><div class="option-btn">Tostato</div><div class="option-btn">Cioccolato</div><div class="option-btn">Caffè</div><div class="option-btn">Affumicato</div><div class="option-btn">Frutta P. Bianca</div><div class="option-btn">Frutta P. Gialla</div><div class="option-btn">Frutta Tropicale</div><div class="option-btn">Frutti di Bosco</div><div class="option-btn">Agrumato</div><div class="option-btn">Banana</div><div class="option-btn">Frutta Disidr.</div><div class="option-btn">Vaniglia/Legno</div><div class="option-btn">Erbaceo</div><div class="option-btn">Floreale</div><div class="option-btn">Balsamico</div><div class="option-btn">Terroso</div><div class="option-btn">Speziato</div><div class="option-btn">Lattico</div><div class="option-btn">Acetico</div><div class="option-btn">Animale/Cantina</div>
                     </div>
@@ -188,7 +159,7 @@
                     <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-taste-pers" data-category="taste_persistence" data-type="persistence">
                 </div>
                 <div class="desc-group">
-                    <span class="desc-label">Descrizione (Multipla)</span>
+                    <span class="desc-label">Descrizione</span>
                     <div class="options-grid" data-category="taste_descriptors" data-type="multi">
                         <div class="option-btn">Cereali</div><div class="option-btn">Miele</div><div class="option-btn">Panificati</div><div class="option-btn">Caramello</div><div class="option-btn">Tostato</div><div class="option-btn">Cioccolato</div><div class="option-btn">Caffè</div><div class="option-btn">Affumicato</div><div class="option-btn">Frutta P. Bianca</div><div class="option-btn">Frutta P. Gialla</div><div class="option-btn">Frutta Tropicale</div><div class="option-btn">Frutti di Bosco</div><div class="option-btn">Agrumato</div><div class="option-btn">Banana</div><div class="option-btn">Frutta Disidr.</div><div class="option-btn">Vaniglia/Legno</div><div class="option-btn">Erbaceo</div><div class="option-btn">Floreale</div><div class="option-btn">Balsamico</div><div class="option-btn">Terroso</div><div class="option-btn">Speziato</div><div class="option-btn">Lattico</div><div class="option-btn">Acetico</div><div class="option-btn">Animale/Cantina</div>
                     </div>
@@ -230,7 +201,7 @@
                     <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-after-pers" data-category="aftertaste_persistence" data-type="persistence">
                 </div>
                 <div class="desc-group">
-                    <span class="desc-label">Descrizione (Multipla)</span>
+                    <span class="desc-label">Descrizione</span>
                     <div class="options-grid" data-category="aftertaste_descriptors" data-type="multi">
                         <div class="option-btn">Cereali</div><div class="option-btn">Miele</div><div class="option-btn">Panificati</div><div class="option-btn">Caramello</div><div class="option-btn">Tostato</div><div class="option-btn">Cioccolato</div><div class="option-btn">Caffè</div><div class="option-btn">Affumicato</div><div class="option-btn">Frutta P. Bianca</div><div class="option-btn">Frutta P. Gialla</div><div class="option-btn">Frutta Tropicale</div><div class="option-btn">Frutti di Bosco</div><div class="option-btn">Agrumato</div><div class="option-btn">Banana</div><div class="option-btn">Frutta Disidr.</div><div class="option-btn">Vaniglia/Legno</div><div class="option-btn">Erbaceo</div><div class="option-btn">Floreale</div><div class="option-btn">Balsamico</div><div class="option-btn">Terroso</div><div class="option-btn">Speziato</div><div class="option-btn">Lattico</div><div class="option-btn">Acetico</div><div class="option-btn">Animale/Cantina</div>
                     </div>
@@ -278,12 +249,11 @@
 
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
 
-        // 1. GESTIONE CHIPS
+        // 1. HELPERS CHIPS (AGGIUNTI PER FAR FUNZIONARE I PULSANTI)
         function setupChipGroup(groupId) {
             const container = document.getElementById(groupId);
             container.querySelectorAll('.chip-btn').forEach(chip => {
                 chip.addEventListener('click', () => {
-                    // Logic: Single Selection, deselectable
                     if (chip.classList.contains('disabled')) return;
                     if (chip.classList.contains('selected')) {
                         chip.classList.remove('selected');
@@ -307,17 +277,25 @@
             if(el) el.classList.add('selected');
         }
 
-        // 2. CHECK BEER SHARING CONTEXT
+        // 2. CHECK CONTEXT (Beer Sharing)
         let contextBeer = null;
         let linkedBeerCode = null;
         try {
             const storedBeer = localStorage.getItem('btc_context_beer');
             if(storedBeer) contextBeer = JSON.parse(storedBeer);
-        } catch(e) { console.error("Error parsing context", e); }
+        } catch(e) {}
 
+        // GLOBAL DOM VARS
+        const systemSelect = document.getElementById('style-system');
+        const containerFree = document.getElementById('container-free');
+        const containerBjcp = document.getElementById('container-bjcp');
+        const inputFree = document.getElementById('style-free');
+        const inputBjcp = document.getElementById('style-bjcp');
+        const dynamicContainer = document.getElementById('bjcp-dynamic-container');
+
+        // POPOLAMENTO O BLOCCAGGIO
         if (contextBeer) {
-            // MOALITA' BEER SHARING -> Precompila e Blocca
-            linkedBeerCode = contextBeer.sharing_id; // IMPORTANTISSIMO
+            linkedBeerCode = contextBeer.sharing_id;
 
             const setReadOnly = (id, val) => {
                 const el = document.getElementById(id);
@@ -329,48 +307,22 @@
 
             setReadOnly('beer-name', contextBeer.name);
             setReadOnly('beer-producer', contextBeer.producer);
-            
-            // Chips (Visual only, disable click)
-            if (contextBeer.producer_type) {
-                setChipValue('group-producer-type', contextBeer.producer_type);
-            }
-            if (contextBeer.packaging) {
-                setChipValue('group-packaging', contextBeer.packaging);
-            }
-            // Disabilita tutte le chips in questi gruppi
+            if (contextBeer.producer_type) setChipValue('group-producer-type', contextBeer.producer_type);
+            if (contextBeer.packaging) setChipValue('group-packaging', contextBeer.packaging);
             document.querySelectorAll('#group-producer-type .chip-btn, #group-packaging .chip-btn').forEach(b => b.classList.add('disabled'));
 
-            // Stile
-            const systemSelect = document.getElementById('style-system');
             systemSelect.value = contextBeer.style_type;
             systemSelect.disabled = true;
-            
-            const containerFree = document.getElementById('container-free');
-            const containerBjcp = document.getElementById('container-bjcp');
-            
             if (contextBeer.style_type === 'free') {
-                containerFree.style.display = 'block';
-                containerBjcp.style.display = 'none';
+                containerFree.style.display = 'block'; containerBjcp.style.display = 'none';
                 setReadOnly('style-free', contextBeer.style_name);
             } else {
-                containerBjcp.style.display = 'block';
-                containerFree.style.display = 'none';
-                const inputBjcp = document.getElementById('style-bjcp');
-                // Nota: Per semplicità, qui mettiamo solo l'opzione selezionata senza caricare tutto il catalogo
+                containerBjcp.style.display = 'block'; containerFree.style.display = 'none';
                 inputBjcp.innerHTML = `<option selected>${contextBeer.style_name}</option>`;
                 inputBjcp.disabled = true;
             }
-
         } else {
-            // MODALITA' LIBERA -> Init Standard
-            // ... (Logica BJCP standard caricamento catalogo) ...
-            const inputBjcp = document.getElementById('style-bjcp');
-            const systemSelect = document.getElementById('style-system');
-            const containerFree = document.getElementById('container-free');
-            const containerBjcp = document.getElementById('container-bjcp');
-            const inputFree = document.getElementById('style-free');
-            const dynamicContainer = document.getElementById('bjcp-dynamic-container');
-
+            // Logica Free Mode
             bjcpCatalog.forEach(category => {
                 const group = document.createElement('optgroup');
                 group.label = category.family;
@@ -393,17 +345,15 @@
             });
 
             inputBjcp.addEventListener('change', (e) => {
-                // ... logica dinamica BJCP ...
                 dynamicContainer.innerHTML = ''; 
                 const code = e.target.value.split('.')[0];
                 const rule = specialStyleRules[code];
                 if (!rule) return;
                 const wrapper = document.createElement('div');
                 wrapper.className = 'dynamic-field-group';
-                // ... (codice generazione dinamica già presente) ...
                 if (rule.type === 'text_only') {
-                    if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b">${rule.hint}</small>`;
-                    wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" required>`;
+                     if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b">${rule.hint}</small>`;
+                     wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" required>`;
                 } else if (rule.type === 'options') {
                     wrapper.innerHTML += `<span class="dynamic-label">${rule.label}</span><div class="dynamic-row">` + 
                     rule.choices.map(c => `<label class="radio-badge"><input type="radio" name="dyn-radio" value="${c}"><span>${c}</span></label>`).join('') + `</div>`;
@@ -412,15 +362,12 @@
             });
         }
 
-        // ... (IL RESTO DELLO SCRIPT LOGICA SLIDER, VOTI, ETC. RIMANE UGUALE A PRIMA) ...
-        // ... (Assicurati di includere tutto il blocco slider, chips option-btn, ecc) ...
-
+        // LOGICA UI (Slider, Crocette)
         let isDirty = false;
         const form = document.getElementById('tasting-form');
         form.addEventListener('input', () => isDirty = true);
         form.addEventListener('change', () => isDirty = true);
 
-        // SLIDER Logic
         const intensityMap = [null, 'Bassa', 'Medio/Bassa', 'Media', 'Medio/Alta', 'Alta'];
         const persistenceMap = [null, 'Breve', 'Medio/Breve', 'Media', 'Medio/Lunga', 'Lunga'];
         document.querySelectorAll('.range-slider').forEach(range => {
@@ -435,7 +382,6 @@
             });
         });
 
-        // OPTION BTN Logic
         document.querySelectorAll('.option-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 isDirty = true;
@@ -443,32 +389,36 @@
                 const isMulti = parent.getAttribute('data-type') === 'multi';
                 const isToggle = parent.getAttribute('data-toggle') === 'true';
                 if (isMulti) this.classList.toggle('selected');
-                else if (isToggle) {
-                    if (this.classList.contains('selected')) this.classList.remove('selected');
-                    else { parent.querySelectorAll('.option-btn').forEach(sib => sib.classList.remove('selected')); this.classList.add('selected'); }
-                } else {
-                    parent.querySelectorAll('.option-btn').forEach(sib => sib.classList.remove('selected'));
-                    this.classList.add('selected');
+                else {
+                    if (isToggle && this.classList.contains('selected')) this.classList.remove('selected');
+                    else {
+                        parent.querySelectorAll('.option-btn').forEach(sib => sib.classList.remove('selected'));
+                        this.classList.add('selected');
+                    }
                 }
             });
         });
+
+        document.getElementById('back-link').addEventListener('click', (e) => {
+            if (isDirty && !confirm("⚠️ Stai per uscire senza salvare.")) e.preventDefault(); else isDirty = false;
+        });
+        window.addEventListener('beforeunload', (e) => { if (isDirty) { e.preventDefault(); e.returnValue = ''; } });
 
         // SUBMIT
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
 
-            // Stile (Se contextBeer esiste, lo prendiamo da lì, altrimenti dal form)
             let finalStyle = "";
             let styleType = "";
             if (contextBeer) {
                 finalStyle = contextBeer.style_name + (contextBeer.style_details ? ` (${contextBeer.style_details})` : "");
                 styleType = contextBeer.style_type;
             } else {
-                styleType = document.getElementById('style-system').value;
-                if (styleType === 'free') finalStyle = document.getElementById('style-free').value;
+                styleType = systemSelect.value;
+                if (styleType === 'free') finalStyle = inputFree.value;
                 else {
-                    finalStyle = document.getElementById('style-bjcp').value;
+                    finalStyle = inputBjcp.value;
                     const textVal = document.getElementById('dyn-text')?.value;
                     const radioVal = document.querySelector('input[name="dyn-radio"]:checked')?.value;
                     let specs = [];
@@ -478,11 +428,10 @@
                 }
             }
 
-            // Dati descrittivi
             const descriptiveData = {};
             document.querySelectorAll('.options-grid').forEach(grid => {
                 const category = grid.getAttribute('data-category');
-                if (category === 'final_vote') return;
+                if (category === 'final_vote' || category === 'flaws') return;
                 const isMulti = grid.getAttribute('data-type') === 'multi';
                 if (isMulti) descriptiveData[category] = Array.from(grid.querySelectorAll('.option-btn.selected')).map(el => el.textContent);
                 else { const sel = grid.querySelector('.option-btn.selected'); descriptiveData[category] = sel ? sel.textContent : null; }
@@ -502,47 +451,29 @@
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) { window.location.href = '../index.html'; return; }
 
-            // PAYLOAD AGGIORNATO CON NUOVI CAMPI
             const payload = {
-                user_id: user.id,
-                // Event ID sempre 1 se Sharing o Free
-                event_id: 1, 
-                
-                // Dati Birra (Dal form o dal context)
+                user_id: user.id, event_id: 1, 
                 beer_name: contextBeer ? contextBeer.name : document.getElementById('beer-name').value,
                 producer: contextBeer ? contextBeer.producer : document.getElementById('beer-producer').value,
                 producer_type: contextBeer ? contextBeer.producer_type : getChipValue('group-producer-type'),
                 packaging: contextBeer ? contextBeer.packaging : getChipValue('group-packaging'),
-                
-                // Link al codice birra (Se siamo in sharing mode)
-                linked_beer_code: linkedBeerCode,
-
+                linked_beer_code: linkedBeerCode, 
                 sheet_type: 'desc_crocette',
                 final_score: finalScore,
-                details: {
-                    style: finalStyle,
-                    style_type: styleType,
-                    notes: document.getElementById('notes').value,
-                    description: descriptiveData
-                }
+                details: { style: finalStyle, style_type: styleType, notes: document.getElementById('notes').value, description: descriptiveData }
             };
 
             const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
             if (error) { alert(error.message); btn.disabled = false; return; }
 
             isDirty = false;
-            // Pulizia Context
             localStorage.removeItem('btc_context_beer');
             localStorage.removeItem('btc_context_mode');
 
-            if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) {
-                window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
-            } else {
-                window.location.href = '../nuova-scheda.html';
-            }
+            if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
+            else window.location.href = '../nuova-scheda.html';
         });
 
-        // SW UPDATE
         const updateToast = document.getElementById('update-toast');
         if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').then(reg => { if (reg.waiting && updateToast) updateToast.classList.add('show'); reg.addEventListener('updatefound', () => { const n = reg.installing; n.addEventListener('statechange', () => { if (n.state === 'installed' && navigator.serviceWorker.controller && updateToast) updateToast.classList.add('show'); }); }); });
         if(updateToast) updateToast.addEventListener('click', () => window.location.reload());

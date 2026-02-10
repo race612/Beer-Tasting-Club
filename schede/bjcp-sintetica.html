@@ -5,38 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BJCP Sintetica - Beer Tasting Club</title>
     <link rel="stylesheet" href="../css/style.css?v=0.8.2">
-    
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="../assets/icon-192.png">
     <link rel="apple-touch-icon" href="../assets/icon-192.png">
-
     <style>
-        /* STILI UI */
         .dynamic-field-group { margin-top: 10px; background: #374151; padding: 12px; border-radius: 6px; border-left: 3px solid #f59e0b; }
         .dynamic-label { font-size: 0.85em; color: #f59e0b; margin-bottom: 5px; display: block; font-weight: bold; }
         .dynamic-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
         .radio-badge label { background: #1f2937; padding: 5px 10px; border-radius: 4px; border: 1px solid #4b5563; cursor: pointer; font-size: 0.9em; }
         .radio-badge input:checked + span { color: var(--primary-color); font-weight: bold; }
         .radio-badge input { margin-right: 5px; }
-
-        /* CHIPS (Stile Standardizzato) */
         .chips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
         .chip-btn { background: #1f2937; border: 1px solid #4b5563; border-radius: 8px; padding: 10px 5px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; text-align: center; color: #d1d5db; display: flex; align-items: center; justify-content: center; user-select: none; }
         .chip-btn:hover { border-color: #9ca3af; background: #374151; }
         .chip-btn.selected { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--primary-color); color: var(--primary-color); font-weight: bold; }
         .chip-btn.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
-
-        /* SEZIONE PUNTEGGI */
         .score-box { background: #111827; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #374151; }
         .score-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px dashed #374151; }
-        .score-row:last-child { border-bottom: none; }
-        .score-row label { font-weight: 500; color: #d1d5db; }
         .calc-input { width: 60px; text-align: center; background: #1f2937; border: 1px solid #4b5563; color: white; padding: 5px; border-radius: 4px; font-weight: bold; font-size: 1rem; }
-        .calc-input:focus { border-color: var(--primary-color); outline: none; }
-
-        /* TABELLA DIFETTI */
         .flaws-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
         .flaw-card { background: #1f2937; border: 1px solid #4b5563; padding: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
         .flaw-checkbox-hidden { display: none; }
@@ -48,7 +36,6 @@
 </head>
 <body>
     <div class="container">
-        
         <div class="header-bar">
             <a href="../nuova-scheda.html" class="header-link" id="back-link">
                 <span class="material-symbols-outlined">arrow_back</span> Indietro
@@ -58,16 +45,14 @@
 
         <div class="card">
             <h2 style="text-align: center; margin-bottom: 5px;">BJCP Sintetica</h2>
-            <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-top:0;">Compilazione Rapida & Punteggio</p>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-top:0;">Compilazione Rapida</p>
             <hr style="border-color: #374151; margin: 15px 0;">
 
             <form id="tasting-form">
-                
                 <div class="form-group">
                     <label>Nome Birra / Numero Campione</label>
                     <input type="text" id="beer-name" required placeholder="Es. IPA del Mario o #42">
                 </div>
-
                 <div class="form-group">
                     <label>Produttore</label>
                     <input type="text" id="beer-producer" placeholder="Es. Mario Rossi">
@@ -76,19 +61,15 @@
                         <div class="chip-btn" data-value="pro">Pro</div>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label>Classificazione Stile</label>
                     <select id="style-system" style="margin-bottom: 10px; border: 1px solid var(--primary-color);">
-                        <option value="free">📝 Stile Libero (Testo)</option>
-                        <option value="bjcp">⚖️ BJCP 2021 (Lista)</option>
+                        <option value="free">📝 Stile Libero</option>
+                        <option value="bjcp">⚖️ BJCP 2021</option>
                     </select>
-
                     <div id="container-free">
                         <input type="text" id="style-free" placeholder="Es. Italian Grape Ale" required minlength="3">
-                        <small style="color: #6b7280;">Minimo 3 caratteri.</small>
                     </div>
-
                     <div id="container-bjcp" style="display: none;">
                         <select id="style-bjcp">
                             <option value="" disabled selected>-- Seleziona uno stile --</option>
@@ -96,7 +77,6 @@
                         <div id="bjcp-dynamic-container"></div>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label>Confezionamento</label>
                     <div class="chips-grid" id="group-packaging">
@@ -108,11 +88,11 @@
                 </div>
 
                 <div class="score-box">
-                    <div class="score-row"><label>👃 Aroma (max 12)</label><input type="number" id="score-aroma" class="calc-input" min="0" max="12" placeholder="0" required></div>
-                    <div class="score-row"><label>👀 Aspetto (max 3)</label><input type="number" id="score-appearance" class="calc-input" min="0" max="3" placeholder="0" required></div>
-                    <div class="score-row"><label>👅 Gusto (max 20)</label><input type="number" id="score-flavor" class="calc-input" min="0" max="20" placeholder="0" required></div>
-                    <div class="score-row"><label>👄 Corpo (max 5)</label><input type="number" id="score-mouthfeel" class="calc-input" min="0" max="5" placeholder="0" required></div>
-                    <div class="score-row"><label>🍺 Generale (max 10)</label><input type="number" id="score-overall" class="calc-input" min="0" max="10" placeholder="0" required></div>
+                    <div class="score-row"><label>👃 Aroma (max 12)</label><input type="number" id="score-aroma" class="calc-input" min="0" max="12" required></div>
+                    <div class="score-row"><label>👀 Aspetto (max 3)</label><input type="number" id="score-appearance" class="calc-input" min="0" max="3" required></div>
+                    <div class="score-row"><label>👅 Gusto (max 20)</label><input type="number" id="score-flavor" class="calc-input" min="0" max="20" required></div>
+                    <div class="score-row"><label>👄 Corpo (max 5)</label><input type="number" id="score-mouthfeel" class="calc-input" min="0" max="5" required></div>
+                    <div class="score-row"><label>🍺 Generale (max 10)</label><input type="number" id="score-overall" class="calc-input" min="0" max="10" required></div>
                     <div style="text-align: center; margin-top: 20px; border-top: 1px solid #374151; padding-top: 10px;">
                         <span style="color: var(--text-muted); font-size: 0.9em;">TOTALE</span>
                         <div id="total-display" style="font-size: 3rem; font-weight: bold; color: var(--primary-color);">0</div>
@@ -123,7 +103,7 @@
                 <h4 style="margin-bottom: 10px; color: #ef4444;">🚫 Difetti / Off-Flavors</h4>
                 <div class="flaws-grid" id="flaws-container"></div>
 
-                <div class="form-group" style="margin-top: 20px;">
+                <div class="form-group" style="margin-top:20px;">
                     <label>Note di degustazione</label>
                     <textarea id="notes" rows="4" placeholder="Scrivi qui le tue impressioni..."></textarea>
                 </div>
@@ -136,56 +116,25 @@
     </div>
 
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
-        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
-        <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
-        </p>
+        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span>
     </footer>
-
-    <div id="update-toast" class="update-toast">
-        <span class="material-symbols-outlined">system_update</span>
-        Nuova versione! Clicca qui.
-    </div>
+    <div id="update-toast" class="update-toast"><span class="material-symbols-outlined">system_update</span> Nuova versione!</div>
 
     <script type="module">
-        // 1. IMPORT
         import { supabase } from '../js/supabase-config.js';
         import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js'; 
         import { APP_VERSION } from '../js/config.js';
 
-        // 2. VERSIONE E TOAST
-        const footerVer = document.getElementById('footer-version');
-        if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
+        document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
 
-        const updateToast = document.getElementById('update-toast');
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('../sw.js').then(reg => {
-                if (reg.waiting) if(updateToast) updateToast.classList.add('show');
-                reg.addEventListener('updatefound', () => {
-                    const newWorker = reg.installing;
-                    newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            if(updateToast) updateToast.classList.add('show');
-                        }
-                    });
-                });
-            }).catch(err => console.log('SW failed', err));
-        }
-        if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
-
-        // 3. LOGICA CHIPS
+        // HELPERS CHIPS
         function setupChipGroup(groupId) {
             const container = document.getElementById(groupId);
             container.querySelectorAll('.chip-btn').forEach(chip => {
                 chip.addEventListener('click', () => {
                     if (chip.classList.contains('disabled')) return;
-                    if (chip.classList.contains('selected')) {
-                        chip.classList.remove('selected');
-                    } else {
-                        container.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected'));
-                        chip.classList.add('selected');
-                    }
+                    if (chip.classList.contains('selected')) chip.classList.remove('selected');
+                    else { container.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected')); chip.classList.add('selected'); }
                     isDirty = true;
                 });
             });
@@ -202,8 +151,7 @@
             if(el) el.classList.add('selected');
         }
 
-        // 4. CHECK CONTEXT (Beer Sharing)
-        const eventId = localStorage.getItem('hbl_selected_event') || '1';
+        // CONTEXT CHECK
         let contextBeer = null;
         let linkedBeerCode = null;
         try {
@@ -211,12 +159,7 @@
             if(storedBeer) contextBeer = JSON.parse(storedBeer);
         } catch(e) {}
 
-        let isDirty = false;
-        const form = document.getElementById('tasting-form');
-        form.addEventListener('input', () => isDirty = true);
-        form.addEventListener('change', () => isDirty = true);
-
-        // 5. DOM ELEMENTS
+        // GLOBAL DOM
         const systemSelect = document.getElementById('style-system');
         const containerFree = document.getElementById('container-free');
         const containerBjcp = document.getElementById('container-bjcp');
@@ -224,229 +167,126 @@
         const inputBjcp = document.getElementById('style-bjcp');
         const dynamicContainer = document.getElementById('bjcp-dynamic-container');
 
-        // 6. POPOLA E GESTISCI CONTESTO
         if (contextBeer) {
             linkedBeerCode = contextBeer.sharing_id;
-
-            const setReadOnly = (id, val) => {
-                const el = document.getElementById(id);
-                el.value = val || "";
-                el.setAttribute('readonly', 'true');
-                el.style.opacity = "0.7";
-                el.style.cursor = "not-allowed";
-            };
-
+            const setReadOnly = (id, val) => { const el = document.getElementById(id); el.value = val || ""; el.setAttribute('readonly', 'true'); el.style.opacity = "0.7"; el.style.cursor = "not-allowed"; };
+            
             setReadOnly('beer-name', contextBeer.name);
             setReadOnly('beer-producer', contextBeer.producer);
-            
             if (contextBeer.producer_type) setChipValue('group-producer-type', contextBeer.producer_type);
             if (contextBeer.packaging) setChipValue('group-packaging', contextBeer.packaging);
             document.querySelectorAll('#group-producer-type .chip-btn, #group-packaging .chip-btn').forEach(b => b.classList.add('disabled'));
 
-            systemSelect.value = contextBeer.style_type;
-            systemSelect.disabled = true;
-            
+            systemSelect.value = contextBeer.style_type; systemSelect.disabled = true;
             if (contextBeer.style_type === 'free') {
-                containerFree.style.display = 'block';
-                containerBjcp.style.display = 'none';
+                containerFree.style.display = 'block'; containerBjcp.style.display = 'none';
                 setReadOnly('style-free', contextBeer.style_name);
             } else {
-                containerBjcp.style.display = 'block';
-                containerFree.style.display = 'none';
+                containerBjcp.style.display = 'block'; containerFree.style.display = 'none';
                 inputBjcp.innerHTML = `<option selected>${contextBeer.style_name}</option>`;
                 inputBjcp.disabled = true;
             }
         } else {
-            // Modalità Libera: Carica BJCP e Listener
             bjcpCatalog.forEach(category => {
-                const group = document.createElement('optgroup');
-                group.label = category.family;
-                category.styles.forEach(styleName => {
-                    const option = document.createElement('option');
-                    option.value = styleName; option.textContent = styleName;
-                    group.appendChild(option);
-                });
+                const group = document.createElement('optgroup'); group.label = category.family;
+                category.styles.forEach(styleName => { const option = document.createElement('option'); option.value = styleName; option.textContent = styleName; group.appendChild(option); });
                 inputBjcp.appendChild(group);
             });
-
             systemSelect.addEventListener('change', (e) => {
-                if (e.target.value === 'free') {
-                    containerFree.style.display = 'block'; inputFree.setAttribute('required', 'true');
-                    containerBjcp.style.display = 'none'; inputBjcp.removeAttribute('required'); inputBjcp.value = ""; dynamicContainer.innerHTML = '';
-                } else {
-                    containerBjcp.style.display = 'block'; inputBjcp.setAttribute('required', 'true');
-                    containerFree.style.display = 'none'; inputFree.removeAttribute('required'); inputFree.value = "";
-                }
+                if (e.target.value === 'free') { containerFree.style.display = 'block'; inputFree.setAttribute('required', 'true'); containerBjcp.style.display = 'none'; inputBjcp.removeAttribute('required'); }
+                else { containerBjcp.style.display = 'block'; inputBjcp.setAttribute('required', 'true'); containerFree.style.display = 'none'; inputFree.removeAttribute('required'); }
             });
-
             inputBjcp.addEventListener('change', (e) => {
-                dynamicContainer.innerHTML = ''; 
-                const code = e.target.value.split('.')[0];
-                const rule = specialStyleRules[code];
-                if (!rule) return;
-                const wrapper = document.createElement('div');
-                wrapper.className = 'dynamic-field-group';
-                
-                if (rule.type === 'text_only') {
-                     if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b">${rule.hint}</small>`;
-                     wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" ${rule.required?'required':''}>`;
-                } else if (rule.type === 'options') {
-                    wrapper.innerHTML += `<span class="dynamic-label">${rule.label}</span><div class="dynamic-row">` + 
-                    rule.choices.map(c => {
-                        return `<label class="radio-badge"><input type="radio" name="dyn-radio" value="${c}"><span>${c}</span></label>`;
-                    }).join('') + `</div>`;
-                }
+                dynamicContainer.innerHTML = ''; const code = e.target.value.split('.')[0]; const rule = specialStyleRules[code]; if (!rule) return;
+                const wrapper = document.createElement('div'); wrapper.className = 'dynamic-field-group';
+                if (rule.type === 'text_only') { if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b">${rule.hint}</small>`; wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" required>`; }
+                else if (rule.type === 'options') { wrapper.innerHTML += `<span class="dynamic-label">${rule.label}</span><div class="dynamic-row">` + rule.choices.map(c => `<label class="radio-badge"><input type="radio" name="dyn-radio" value="${c}"><span>${c}</span></label>`).join('') + `</div>`; }
                 dynamicContainer.appendChild(wrapper);
-                wrapper.querySelectorAll('input').forEach(i => i.addEventListener('change', () => isDirty = true));
             });
         }
 
-        // 7. DIFETTI GENERAZIONE
+        let isDirty = false;
+        const form = document.getElementById('tasting-form');
+        form.addEventListener('input', () => isDirty = true);
+        form.addEventListener('change', () => isDirty = true);
+
+        // DIFETTI
         const commonFlaws = ["Acetaldehyde", "Alcoholic", "Astringent", "Diacetyl", "DMS", "Estery", "Grassy", "Light-Struck", "Metallic", "Musty", "Oxidized", "Phenolic", "Solvent", "Sour/Acidic", "Sulfur", "Vegetal", "Yeasty"];
         const flawsContainer = document.getElementById('flaws-container');
         commonFlaws.forEach(flaw => {
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.className = 'flaw-checkbox-hidden';
-            checkbox.id = `flaw-${flaw}`;
-            checkbox.value = flaw;
-            checkbox.addEventListener('change', () => isDirty = true);
-
-            const labelCard = document.createElement('label');
-            labelCard.className = 'flaw-card';
-            labelCard.htmlFor = `flaw-${flaw}`;
-            
-            const title = document.createElement('span');
-            title.textContent = flaw;
-            labelCard.appendChild(title);
-
-            const intensityWrapper = document.createElement('div');
-            intensityWrapper.className = 'flaw-intensity-wrapper';
-            intensityWrapper.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); });
-
-            const select = document.createElement('select');
-            select.className = 'flaw-select-modern';
-            select.id = `int-${flaw}`;
-            select.innerHTML = `<option value="Low">Low</option><option value="Medium">Medium</option><option value="High">High</option>`;
-            select.addEventListener('click', (e) => e.stopPropagation());
-            select.addEventListener('change', () => isDirty = true);
-
-            intensityWrapper.appendChild(select);
-            labelCard.appendChild(intensityWrapper);
-
-            flawsContainer.appendChild(checkbox);
-            flawsContainer.appendChild(labelCard);
+            const checkbox = document.createElement('input'); checkbox.type = 'checkbox'; checkbox.className = 'flaw-checkbox-hidden'; checkbox.id = `flaw-${flaw}`; checkbox.value = flaw; checkbox.addEventListener('change', () => isDirty = true);
+            const labelCard = document.createElement('label'); labelCard.className = 'flaw-card'; labelCard.htmlFor = `flaw-${flaw}`;
+            labelCard.innerHTML = `<span>${flaw}</span><div class="flaw-intensity-wrapper"><select class="flaw-select-modern" id="int-${flaw}" onclick="event.stopPropagation()"><option value="Low">Low</option><option value="Medium">Medium</option><option value="High">High</option></select></div>`;
+            flawsContainer.appendChild(checkbox); flawsContainer.appendChild(labelCard);
         });
 
-        // 8. CALCOLO VOTI
+        // CALCOLO
         const inputs = document.querySelectorAll('.calc-input');
         const totalDisplay = document.getElementById('total-display');
         inputs.forEach(input => {
-            input.setAttribute('pattern', '[0-9]*');
             input.addEventListener('input', () => {
-                let max = parseInt(input.getAttribute('max'));
-                let val = parseInt(input.value) || 0;
-                if(val > max) { val = max; input.value = max; }
+                let max = parseInt(input.getAttribute('max')); let val = parseInt(input.value) || 0; if(val>max) { val=max; input.value=max; }
                 let tot = 0; inputs.forEach(i => tot += parseInt(i.value) || 0);
                 totalDisplay.textContent = tot;
                 totalDisplay.style.color = tot >= 45 ? "#FFD700" : tot >= 38 ? "#10b981" : tot >= 30 ? "#f59e0b" : "#ef4444";
             });
         });
 
-        // 9. AVVISO USCITA
-        document.getElementById('back-link').addEventListener('click', (e) => {
-            if (isDirty) {
-                if (!confirm("⚠️ Stai per uscire senza salvare.\nVuoi davvero procedere? I dati andranno persi.")) e.preventDefault();
-                else isDirty = false;
-            }
-        });
+        document.getElementById('back-link').addEventListener('click', (e) => { if (isDirty && !confirm("⚠️ Stai per uscire senza salvare.")) e.preventDefault(); else isDirty = false; });
         window.addEventListener('beforeunload', (e) => { if (isDirty) { e.preventDefault(); e.returnValue = ''; } });
 
-        // 10. INVIO DATI
+        // INVIO
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
 
-            // Difetti
-            const selectedFlaws = [];
-            commonFlaws.forEach(flaw => {
-                const cb = document.getElementById(`flaw-${flaw}`);
-                if (cb.checked) {
-                    const intensity = document.getElementById(`int-${flaw}`).value;
-                    selectedFlaws.push(`${flaw} (${intensity})`);
-                }
-            });
+            let selectedFlaws = [];
+            commonFlaws.forEach(flaw => { if (document.getElementById(`flaw-${flaw}`).checked) selectedFlaws.push(`${flaw} (${document.getElementById(`int-${flaw}`).value})`); });
 
-            // Stile (Se contextBeer esiste, lo prendiamo da lì, altrimenti dal form)
-            let finalStyle = "";
-            let styleType = "";
-            if (contextBeer) {
-                finalStyle = contextBeer.style_name + (contextBeer.style_details ? ` (${contextBeer.style_details})` : "");
-                styleType = contextBeer.style_type;
-            } else {
+            let finalStyle = "", styleType = "";
+            if (contextBeer) { finalStyle = contextBeer.style_name + (contextBeer.style_details ? ` (${contextBeer.style_details})` : ""); styleType = contextBeer.style_type; }
+            else {
                 styleType = systemSelect.value;
                 if (styleType === 'free') finalStyle = inputFree.value;
                 else {
                     finalStyle = inputBjcp.value;
-                    const code = finalStyle.split('.')[0];
-                    const rule = specialStyleRules[code];
-                    if (rule) {
-                        let specs = [];
-                        const textVal = document.getElementById('dyn-text')?.value;
-                        const radioVal = document.querySelector('input[name="dyn-radio"]:checked')?.value;
-                        if (textVal) specs.push(textVal);
-                        if (radioVal) specs.push(radioVal);
-                        if (specs.length > 0) finalStyle += ` (${specs.join(', ')})`;
-                    }
+                    const textVal = document.getElementById('dyn-text')?.value;
+                    const radioVal = document.querySelector('input[name="dyn-radio"]:checked')?.value;
+                    let specs = []; if(textVal) specs.push(textVal); if(radioVal) specs.push(radioVal); if(specs.length > 0) finalStyle += ` (${specs.join(', ')})`;
                 }
             }
             if (!finalStyle || finalStyle.length < 3) { alert("Inserisci uno stile valido."); return; }
 
-            const scores = {
-                aroma: parseInt(document.getElementById('score-aroma').value) || 0,
-                appearance: parseInt(document.getElementById('score-appearance').value) || 0,
-                flavor: parseInt(document.getElementById('score-flavor').value) || 0,
-                mouthfeel: parseInt(document.getElementById('score-mouthfeel').value) || 0,
-                overall: parseInt(document.getElementById('score-overall').value) || 0
-            };
+            const scores = { aroma: parseInt(document.getElementById('score-aroma').value)||0, appearance: parseInt(document.getElementById('score-appearance').value)||0, flavor: parseInt(document.getElementById('score-flavor').value)||0, mouthfeel: parseInt(document.getElementById('score-mouthfeel').value)||0, overall: parseInt(document.getElementById('score-overall').value)||0 };
 
             btn.disabled = true; btn.textContent = "Salvataggio...";
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) { window.location.href = '../index.html'; return; }
 
             const payload = {
-                user_id: user.id, event_id: eventId, 
-                
-                // Dati Birra (Context o Form)
+                user_id: user.id, event_id: 1, 
                 beer_name: contextBeer ? contextBeer.name : document.getElementById('beer-name').value,
                 producer: contextBeer ? contextBeer.producer : document.getElementById('beer-producer').value,
                 producer_type: contextBeer ? contextBeer.producer_type : getChipValue('group-producer-type'),
                 packaging: contextBeer ? contextBeer.packaging : getChipValue('group-packaging'),
-                linked_beer_code: linkedBeerCode, // Link se esiste
-
+                linked_beer_code: linkedBeerCode, 
                 sheet_type: 'bjcp_sintetica', 
                 final_score: Object.values(scores).reduce((a,b)=>a+b,0),
-                details: { 
-                    style: finalStyle, style_type: styleType, 
-                    notes: document.getElementById('notes').value, 
-                    scores: scores, flaws: selectedFlaws 
-                }
+                details: { style: finalStyle, style_type: styleType, notes: document.getElementById('notes').value, scores: scores, flaws: selectedFlaws }
             };
 
             const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
             if (error) { alert(error.message); btn.disabled = false; return; }
             
             isDirty = false;
-            // Pulizia Context dopo salvataggio
-            localStorage.removeItem('btc_context_beer');
-            localStorage.removeItem('btc_context_mode');
-
-            if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) {
-                window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
-            } else {
-                window.location.href = '../nuova-scheda.html';
-            }
+            localStorage.removeItem('btc_context_beer'); localStorage.removeItem('btc_context_mode');
+            if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
+            else window.location.href = '../nuova-scheda.html';
         });
+
+        const updateToast = document.getElementById('update-toast');
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').then(reg => { if (reg.waiting && updateToast) updateToast.classList.add('show'); reg.addEventListener('updatefound', () => { const n = reg.installing; n.addEventListener('statechange', () => { if (n.state === 'installed' && navigator.serviceWorker.controller && updateToast) updateToast.classList.add('show'); }); }); });
+        if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
     </script>
 </body>
 </html>

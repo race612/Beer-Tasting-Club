@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuova Degustazione - Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.8.2">
+    <link rel="stylesheet" href="css/style.css?v=0.8.3">
     
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
@@ -12,19 +12,9 @@
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
     <style>
-        /* Stile Input Ricerca */
-        .sharing-search-box {
-            display: flex; gap: 10px; margin-bottom: 20px;
-        }
-        .sharing-search-box input {
-            flex: 1; text-transform: uppercase; font-family: monospace; letter-spacing: 2px;
-            font-size: 1.2rem; text-align: center;
-        }
-        #beer-preview-card {
-            background: #1f2937; border-left: 4px solid var(--primary-color);
-            padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none;
-            animation: fadeIn 0.3s ease-out;
-        }
+        .sharing-search-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        .sharing-search-box input { flex: 1; text-transform: uppercase; font-family: monospace; letter-spacing: 2px; font-size: 1.2rem; text-align: center; }
+        #beer-preview-card { background: #1f2937; border-left: 4px solid var(--primary-color); padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; animation: fadeIn 0.3s ease-out; }
     </style>
 </head>
 <body>
@@ -45,7 +35,7 @@
         </div>
 
         <div id="sharing-container" style="display: none; margin-top: 20px;">
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 10px;">Inserisci il codice univoco della birra (6 caratteri)</p>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 10px;">Inserisci il codice birra (6 caratteri)</p>
             <div class="sharing-search-box">
                 <input type="text" id="sharing-id-input" placeholder="CODICE" maxlength="6">
                 <button class="btn btn-primary" id="btn-search-beer" style="width: auto;">
@@ -64,17 +54,39 @@
             <h3 style="text-align: center; margin-bottom: 10px;" id="select-title">Che scheda vuoi usare?</h3>
 
             <div class="sheet-grid">
-                <a href="schede/crocette.html" class="sheet-card">
+                <a href="schede/crocette.html" class="sheet-card" onclick="return checkSelection()">
                     <span class="material-symbols-outlined icon-large">checklist</span>
                     <span class="sheet-title">Descrittiva<br>Semplificata</span>
                 </a>
-                <a href="schede/bjcp-sintetica.html" class="sheet-card">
+                
+                <div class="sheet-card disabled">
+                    <span class="coming-soon-badge">Coming Soon</span>
+                    <span class="material-symbols-outlined icon-large">menu_book</span>
+                    <span class="sheet-title">Descrittiva<br>Estesa</span>
+                </div>
+
+                <a href="schede/bjcp-sintetica.html" class="sheet-card" onclick="return checkSelection()">
                     <span class="material-symbols-outlined icon-large">balance</span>
                     <span class="sheet-title">BJCP<br>Sintetica</span>
                 </a>
-                
-                <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="material-symbols-outlined icon-large">menu_book</span><span class="sheet-title">Descrittiva<br>Estesa</span></div>
-                <div class="sheet-card disabled"><span class="coming-soon-badge">Coming Soon</span><span class="material-symbols-outlined icon-large">gavel</span><span class="sheet-title">BJCP<br>Completa</span></div>
+
+                <div class="sheet-card disabled">
+                    <span class="coming-soon-badge">Coming Soon</span>
+                    <span class="material-symbols-outlined icon-large">gavel</span>
+                    <span class="sheet-title">BJCP<br>Completa</span>
+                </div>
+
+                <div class="sheet-card disabled">
+                    <span class="coming-soon-badge">Coming Soon</span>
+                    <span class="material-symbols-outlined icon-large">sports_bar</span>
+                    <span class="sheet-title">Scheda<br>HBL</span>
+                </div>
+
+                <div class="sheet-card disabled">
+                    <span class="coming-soon-badge">Coming Soon</span>
+                    <span class="material-symbols-outlined icon-large">emoji_events</span>
+                    <span class="sheet-title">Concorso<br>BdA</span>
+                </div>
             </div>
         </div>
 
@@ -97,27 +109,27 @@
         import { supabase } from './js/supabase-config.js';
         import { APP_VERSION } from './js/config.js';
 
-        // Version
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
 
-        // Reset contesti all'avvio
+        // Reset contesti
         localStorage.removeItem('btc_context_beer'); 
-        localStorage.removeItem('btc_context_mode'); // 'free' o 'sharing'
+        localStorage.removeItem('btc_context_mode'); 
 
-        // UI Logic
+        let currentMode = 'free';
+
         window.setMode = function(mode, element) {
             document.querySelectorAll('.segmented-option').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
+            currentMode = mode;
 
             const sheetContainer = document.getElementById('sheet-selection-container');
             const sharingContainer = document.getElementById('sharing-container');
             const eventContainer = document.getElementById('mode-coming-soon');
             const previewCard = document.getElementById('beer-preview-card');
 
-            // Reset visibilità
             sharingContainer.style.display = 'none';
             eventContainer.style.display = 'none';
-            sheetContainer.style.display = 'block'; // Default visibile per Free
+            sheetContainer.style.display = 'block'; 
             previewCard.style.display = 'none';
 
             if (mode === 'free') {
@@ -126,7 +138,7 @@
             } 
             else if (mode === 'sharing') {
                 localStorage.setItem('btc_context_mode', 'sharing');
-                sheetContainer.style.display = 'none'; // Nascondi schede finché non cerca
+                sheetContainer.style.display = 'none'; 
                 sharingContainer.style.display = 'block';
                 document.getElementById('sharing-id-input').value = "";
             } 
@@ -136,10 +148,19 @@
             }
         }
 
-        // INIT Default
+        // INIT
         localStorage.setItem('btc_context_mode', 'free');
 
-        // LOGICA RICERCA BIRRA
+        // CHECK PRIMA DI ANDARE ALLA SCHEDA
+        window.checkSelection = function() {
+            if (currentMode === 'sharing' && !localStorage.getItem('btc_context_beer')) {
+                alert("Devi prima cercare e trovare una birra!");
+                return false;
+            }
+            return true;
+        }
+
+        // RICERCA BIRRA
         document.getElementById('btn-search-beer').addEventListener('click', async () => {
             const code = document.getElementById('sharing-id-input').value.toUpperCase().trim();
             if(code.length !== 6) { alert("Il codice deve essere di 6 caratteri."); return; }
@@ -147,50 +168,25 @@
             const btn = document.getElementById('btn-search-beer');
             btn.disabled = true;
 
-            const { data, error } = await supabase
-                .from('my_beers')
-                .select('*')
-                .eq('sharing_id', code)
-                .single();
-
+            const { data, error } = await supabase.from('my_beers').select('*').eq('sharing_id', code).single();
             btn.disabled = false;
 
-            if (error || !data) {
-                alert("Birra non trovata! Controlla il codice.");
-                return;
-            }
+            if (error || !data) { alert("Birra non trovata!"); return; }
 
-            // Birra trovata!
-            // 1. Mostra anteprima
-            const preview = document.getElementById('beer-preview-card');
+            // Mostra Anteprima e Sblocca Schede
             document.getElementById('preview-name').textContent = data.name;
             document.getElementById('preview-producer').textContent = data.producer;
             document.getElementById('preview-style').textContent = data.style_name;
-            preview.style.display = 'block';
-
-            // 2. Salva nel Context
+            document.getElementById('beer-preview-card').style.display = 'block';
+            
             localStorage.setItem('btc_context_beer', JSON.stringify(data));
-
-            // 3. Sblocca le schede
             document.getElementById('sheet-selection-container').style.display = 'block';
-            document.getElementById('select-title').textContent = "Birra Trovata! Ora scegli la scheda:";
+            document.getElementById('select-title').textContent = "Birra Trovata! Scegli la scheda:";
         });
 
-        // SW UPDATE
+        // SW
         const updateToast = document.getElementById('update-toast');
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then(reg => {
-                if (reg.waiting) if(updateToast) updateToast.classList.add('show');
-                reg.addEventListener('updatefound', () => {
-                    const newWorker = reg.installing;
-                    newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            if(updateToast) updateToast.classList.add('show');
-                        }
-                    });
-                });
-            });
-        }
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').then(reg => { if (reg.waiting && updateToast) updateToast.classList.add('show'); reg.addEventListener('updatefound', () => { const n = reg.installing; n.addEventListener('statechange', () => { if (n.state === 'installed' && navigator.serviceWorker.controller && updateToast) updateToast.classList.add('show'); }); }); });
         if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
     </script>
 </body>
