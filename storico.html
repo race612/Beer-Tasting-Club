@@ -29,29 +29,72 @@
             <p style="text-align: center; margin-top: 40px;">Caricamento...</p>
         </div>
     </div>
-    <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
-            &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
-            <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-    
-            <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
-            </p>
-        </footer>
-    <script type="module">
-        import { supabase } from './js/supabase-config.js';
 
+    <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
+        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
+        <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
+        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        </p>
+    </footer>
+
+    <div id="update-toast" class="update-toast">
+        <span class="material-symbols-outlined">system_update</span>
+        Nuova versione! Clicca qui.
+    </div>
+
+    <script type="module">
+        // 1. IMPORT (TASSATIVAMENTE IN CIMA)
+        import { supabase } from './js/supabase-config.js';
+        import { APP_VERSION } from './js/config.js'; // Usa ./ perché siamo in root
+
+        // 2. VERSION & UPDATE LOGIC (Robust)
+        const footerVer = document.getElementById('footer-version');
+        if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
+
+        const updateToast = document.getElementById('update-toast');
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then(reg => {
+                
+                // A) Aggiornamento GIA' in attesa
+                if (reg.waiting) {
+                    if(updateToast) updateToast.classList.add('show');
+                }
+
+                // B) Aggiornamento trovato ORA
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            if(updateToast) updateToast.classList.add('show');
+                        }
+                    });
+                });
+            }).catch(err => console.log('SW failed', err));
+        }
+
+        // Click -> Aggiorna
+        if(updateToast) {
+            updateToast.addEventListener('click', () => {
+                if (navigator.serviceWorker.controller) {
+                    window.location.reload();
+                }
+            });
+        }
+
+        // 3. LOGICA STORICO
         async function loadHistory() {
             const listContainer = document.getElementById('notes-list');
             
-            // 1. Controllo Utente
+            // A. Controllo Utente
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) {
                 window.location.href = 'index.html';
                 return;
             }
 
-            // 2. Scarica Dati (Join con Eventi per avere il nome evento)
-            // Ordine decrescente (dal più recente)
+            // B. Scarica Dati (Join con Eventi per avere il nome evento)
             const { data: notes, error } = await supabase
                 .from('tasting_notes')
                 .select('*, events (name)')
@@ -74,7 +117,7 @@
                 return;
             }
 
-            // 3. Genera HTML per ogni scheda
+            // C. Genera HTML
             listContainer.innerHTML = '';
             
             notes.forEach(note => {
@@ -82,14 +125,13 @@
                 const eventName = note.events ? note.events.name : 'Evento sconosciuto';
                 
                 // Gestione Punteggio e Colori
-                // Se è una scheda descrittiva (crocette) e il voto è 0, mostriamo un'icona
                 let scoreDisplay = note.final_score;
                 let borderClass = '';
                 let badgeColor = '';
 
                 if (note.sheet_type === 'desc_crocette' && (!note.final_score || note.final_score === 0)) {
                     scoreDisplay = '<span class="material-symbols-outlined" style="font-size:1.2rem">checklist</span>'; // Icona se non c'è voto
-                    borderClass = ''; // Grigio standard
+                    borderClass = ''; 
                 } else {
                     // Colori in base al voto (BJCP style)
                     if (note.final_score >= 45) { borderClass = 'border-gold'; badgeColor = '#FFD700'; }
@@ -98,11 +140,10 @@
                     else { borderClass = 'border-red'; badgeColor = '#ef4444'; }
                 }
 
-                // Creazione Elemento Card
+                // Creazione Card
                 const card = document.createElement('div');
                 card.className = `history-card ${borderClass}`;
                 
-                // HTML interno della card
                 card.innerHTML = `
                     <div class="delete-btn" data-id="${note.id}" title="Elimina scheda">
                         <span class="material-symbols-outlined">delete</span>
@@ -122,16 +163,16 @@
                     </div>
                 `;
 
-                // Aggiungi listener per Click sulla Card (Vai al dettaglio)
+                // Listener: Click su contenuto -> Apri dettaglio
                 const contentDiv = card.querySelector('.card-content');
                 contentDiv.addEventListener('click', () => {
                     window.location.href = `dettaglio-scheda.html?id=${note.id}`;
                 });
 
-                // Aggiungi listener per Eliminazione (Stop Propagation per non aprire la scheda)
+                // Listener: Click su elimina -> Cancella (senza aprire dettaglio)
                 const deleteBtn = card.querySelector('.delete-btn');
                 deleteBtn.addEventListener('click', async (e) => {
-                    e.stopPropagation(); // IMPORTANTE: Evita che il click apra la scheda
+                    e.stopPropagation(); // BLOCCA PROPAGAZIONE
                     if(confirm(`Sei sicuro di voler eliminare la scheda di "${note.beer_name}"?`)) {
                         const { error: delError } = await supabase
                             .from('tasting_notes')
@@ -140,8 +181,8 @@
                         
                         if (delError) alert("Errore eliminazione: " + delError.message);
                         else {
-                            card.remove(); // Rimuovi visivamente
-                            // Se non ci sono più schede, ricarica per mostrare il messaggio vuoto
+                            card.remove(); 
+                            // Se lista vuota, ricarica per mostrare placeholder
                             if (document.querySelectorAll('.history-card').length === 0) loadHistory();
                         }
                     }
@@ -151,45 +192,7 @@
             });
         }
 
-        // Avvia caricamento
         loadHistory();
-        import { APP_VERSION } from './js/config.js'; // Assicurati che il percorso sia corretto (es. ../js/config.js nelle sottocartelle)
-
-    // 1. MOSTRA VERSIONE NEL FOOTER
-    const footerVer = document.getElementById('footer-version');
-    if (footerVer) footerVer.textContent = `v${APP_VERSION}`;
-
-    // 2. GESTIONE AGGIORNAMENTI (Service Worker)
-    const updateToast = document.getElementById('update-toast');
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').then(reg => { // Attenzione al percorso ./sw.js o ../sw.js
-            
-            // Se c'è un aggiornamento in attesa
-            reg.addEventListener('updatefound', () => {
-                const newWorker = reg.installing;
-                
-                newWorker.addEventListener('statechange', () => {
-                    // Se il nuovo SW è installato E c'è già un SW attivo (non è la prima visita)
-                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        // Mostra notifica
-                        if(updateToast) updateToast.classList.add('show');
-                    }
-                });
-            });
-        });
-    }
-
-    // Click sul Toast -> Ricarica la pagina per attivare la nuova versione
-    if(updateToast) {
-        updateToast.addEventListener('click', () => {
-            window.location.reload();
-        });
-    }
     </script>
-    <div id="update-toast" class="update-toast">
-        <span class="material-symbols-outlined">system_update</span>
-        Nuova versione! Clicca qui.
-    </div>
 </body>
 </html>

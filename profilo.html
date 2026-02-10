@@ -74,7 +74,7 @@
             box-shadow: 0 0 8px rgba(245, 158, 11, 0.2);
         }
 
-        /* Campi Nascosti - Ora hanno stile neutro, invisibili finché non attivati */
+        /* Campi Nascosti */
         .hidden-field {
             display: none; 
             margin-top: 15px;
@@ -131,7 +131,7 @@
                             <option value="AHBT">AHBT - Associazione HomeBrewers Ticino</option>
                             <option value="ABC">ABC - Associazione Birraria Cuneese</option>
                             <option value="HBF">HBF - Homebrewers Fiorentini</option>
-                            <option value="HBF">HBN - Homebrewers Novaresi</option>
+                            <option value="HBN">HBN - Homebrewers Novaresi</option>
                             <option value="Trinacria">Trinacria Homebrewers</option>
                         </select>
                     </div>
@@ -231,16 +231,59 @@
             <span class="material-symbols-outlined">logout</span> Esci dall'App
         </button>
     </div>
+
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
-            &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
-            <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-    
-            <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
-            </p>
-        </footer>
+        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
+        <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
+        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        </p>
+    </footer>
+
+    <div id="update-toast" class="update-toast">
+        <span class="material-symbols-outlined">system_update</span>
+        Nuova versione! Clicca qui.
+    </div>
+
     <script type="module">
+        // 1. IMPORT (TASSATIVAMENTE IN CIMA)
         import { supabase } from './js/supabase-config.js';
+        import { APP_VERSION } from './js/config.js'; // Usa ./ perché siamo in root
+
+        // 2. VERSION & UPDATE LOGIC (Robust)
+        const footerVer = document.getElementById('footer-version');
+        if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
+
+        const updateToast = document.getElementById('update-toast');
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then(reg => {
+                
+                // A) Aggiornamento GIA' in attesa
+                if (reg.waiting) {
+                    if(updateToast) updateToast.classList.add('show');
+                }
+
+                // B) Aggiornamento trovato ORA
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            if(updateToast) updateToast.classList.add('show');
+                        }
+                    });
+                });
+            }).catch(err => console.log('SW failed', err));
+        }
+
+        // Click -> Aggiorna
+        if(updateToast) {
+            updateToast.addEventListener('click', () => {
+                if (navigator.serviceWorker.controller) {
+                    window.location.reload();
+                }
+            });
+        }
 
         // --- HELPER FUNCTIONS ---
         function selectSingleChip(containerId, clickedElement, forceSelection = false) {
@@ -270,8 +313,6 @@
         function checkBjcpVisibility() {
             const val = getSingleValue('bjcp-grid');
             const el = document.getElementById('bjcp-id-container');
-            // Nascosto SOLO se vuoto o Provisional. 
-            // Mostrato per Pending, Apprentice, Recognized, etc.
             if (val && val !== "" && val !== "provisional") el.style.display = 'block';
             else el.style.display = 'none';
         }
@@ -288,7 +329,7 @@
             if (val === 'yes') el.style.display = 'block'; else el.style.display = 'none';
         }
 
-        // --- 1. LOAD DATA ---
+        // --- 3. LOAD DATA ---
         async function loadProfile() {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) { window.location.href = 'index.html'; return; }
@@ -299,8 +340,6 @@
             document.getElementById('display-name').value = meta.full_name || "";
             const name = meta.full_name || user.email;
             document.getElementById('avatar-initials').textContent = name.charAt(0).toUpperCase();
-            
-            // Badge Livello
             document.getElementById('account-level-val').textContent = meta.account_level || "Taster";
 
             // Homebrewer
@@ -360,19 +399,17 @@
         }
         loadProfile();
 
-        // --- 2. SAVE & CALCULATE LEVEL ---
+        // --- 4. SAVE ---
         document.getElementById('save-profile').addEventListener('click', async () => {
             const btn = document.getElementById('save-profile');
             const originalText = btn.innerHTML;
             btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Salvataggio...`;
             btn.disabled = true;
 
-            // Raccogli Dati
             const isHb = getSingleValue('hb-bool-grid') === 'yes';
             const isOrg = getSingleValue('org-bool-grid') === 'yes';
             const isBirraio = document.querySelector('.chip-btn[data-role="role_pro"]').classList.contains('selected');
 
-            // CALCOLO LIVELLO ACCOUNT (English)
             let newLevel = "Taster";
             if (isHb || isBirraio) newLevel = "Brewer";
             if (isOrg) newLevel = "Event Master";
@@ -392,7 +429,6 @@
                 is_organizer: isOrg,
                 
                 bjcp_level: bjcpLevel,
-                // Salva ID se livello esiste e NON è provisional (quindi pending e superiori)
                 bjcp_id: (bjcpLevel && bjcpLevel !== 'provisional') ? document.getElementById('bjcp-id').value : "",
                 
                 cicerone_level: getSingleValue('cicerone-grid'),
@@ -401,14 +437,12 @@
                 ...rolesUpdates,
                 other_qualifications: document.getElementById('other-qualifications').value,
 
-                // Socials
                 social_whatsapp: document.getElementById('social-whatsapp').value,
                 social_telegram: document.getElementById('social-telegram').value,
                 social_facebook: document.getElementById('social-facebook').value,
                 social_instagram: document.getElementById('social-instagram').value,
                 social_linkedin: document.getElementById('social-linkedin').value,
 
-                // Privacy
                 privacy_share_level: document.getElementById('privacy-share').value
             };
 
@@ -427,49 +461,13 @@
             btn.disabled = false;
         });
 
-        // --- 3. LOGOUT ---
+        // --- 5. LOGOUT ---
         document.getElementById('logout-btn').addEventListener('click', async () => {
             if(confirm("Vuoi davvero uscire?")) {
                 await supabase.auth.signOut();
                 window.location.href = 'index.html';
             }
-        });import { APP_VERSION } from './js/config.js'; // Assicurati che il percorso sia corretto (es. ../js/config.js nelle sottocartelle)
-
-    // 1. MOSTRA VERSIONE NEL FOOTER
-    const footerVer = document.getElementById('footer-version');
-    if (footerVer) footerVer.textContent = `v${APP_VERSION}`;
-
-    // 2. GESTIONE AGGIORNAMENTI (Service Worker)
-    const updateToast = document.getElementById('update-toast');
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').then(reg => { // Attenzione al percorso ./sw.js o ../sw.js
-            
-            // Se c'è un aggiornamento in attesa
-            reg.addEventListener('updatefound', () => {
-                const newWorker = reg.installing;
-                
-                newWorker.addEventListener('statechange', () => {
-                    // Se il nuovo SW è installato E c'è già un SW attivo (non è la prima visita)
-                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        // Mostra notifica
-                        if(updateToast) updateToast.classList.add('show');
-                    }
-                });
-            });
         });
-    }
-
-    // Click sul Toast -> Ricarica la pagina per attivare la nuova versione
-    if(updateToast) {
-        updateToast.addEventListener('click', () => {
-            window.location.reload();
-        });
-    }
     </script>
-    <div id="update-toast" class="update-toast">
-        <span class="material-symbols-outlined">system_update</span>
-        Nuova versione! Clicca qui.
-    </div>
 </body>
 </html>

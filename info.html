@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Info - Beer Tasting Club</title>
     <link rel="stylesheet" href="css/style.css?v=0.8.1">
-    <link rel="manifest" href="/HBL-Tasting/manifest.json">
+    <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
@@ -66,13 +66,24 @@
         </footer>
     </div>
 
+    <div id="update-toast" class="update-toast">
+        <span class="material-symbols-outlined">system_update</span>
+        Nuova versione! Clicca qui.
+    </div>
+
     <script type="module">
+        // 1. IMPORT (TASSATIVAMENTE IN CIMA)
         import { APP_VERSION } from './js/config.js';
 
-        // 1. Mostra versione corrente da config.js
+        // 2. LOGICA VERSIONE PAGINA
+        // Mostra versione corrente nella sezione Changelog
         document.getElementById('app-version-display').textContent = APP_VERSION;
+        
+        // Mostra versione nel footer
+        const footerVer = document.getElementById('footer-version');
+        if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
 
-        // 2. Carica e Renderizza Changelog
+        // 3. LOGICA CHANGELOG
         async function loadChangelog() {
             try {
                 const response = await fetch('changelog.json');
@@ -133,43 +144,37 @@
 
         loadChangelog();
 
-        import { APP_VERSION } from './js/config.js'; // Assicurati che il percorso sia corretto (es. ../js/config.js nelle sottocartelle)
+        // 4. GESTIONE AGGIORNAMENTI (Service Worker) ROBUSTA
+        const updateToast = document.getElementById('update-toast');
 
-    // 1. MOSTRA VERSIONE NEL FOOTER
-    const footerVer = document.getElementById('footer-version');
-    if (footerVer) footerVer.textContent = `v${APP_VERSION}`;
-
-    // 2. GESTIONE AGGIORNAMENTI (Service Worker)
-    const updateToast = document.getElementById('update-toast');
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').then(reg => { // Attenzione al percorso ./sw.js o ../sw.js
-            
-            // Se c'è un aggiornamento in attesa
-            reg.addEventListener('updatefound', () => {
-                const newWorker = reg.installing;
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then(reg => {
                 
-                newWorker.addEventListener('statechange', () => {
-                    // Se il nuovo SW è installato E c'è già un SW attivo (non è la prima visita)
-                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        // Mostra notifica
-                        if(updateToast) updateToast.classList.add('show');
-                    }
-                });
-            });
-        });
-    }
+                // A) Controllo se c'è un aggiornamento GIA' in attesa
+                if (reg.waiting) {
+                    if(updateToast) updateToast.classList.add('show');
+                }
 
-    // Click sul Toast -> Ricarica la pagina per attivare la nuova versione
-    if(updateToast) {
-        updateToast.addEventListener('click', () => {
-            window.location.reload();
-        });
-    }
+                // B) Controllo se un aggiornamento viene trovato ORA
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            if(updateToast) updateToast.classList.add('show');
+                        }
+                    });
+                });
+            }).catch(err => console.log('SW failed', err));
+        }
+
+        // Click -> Forza aggiornamento
+        if(updateToast) {
+            updateToast.addEventListener('click', () => {
+                if (navigator.serviceWorker.controller) {
+                    window.location.reload();
+                }
+            });
+        }
     </script>
-    <div id="update-toast" class="update-toast">
-        <span class="material-symbols-outlined">system_update</span>
-        Nuova versione! Clicca qui.
-    </div>
 </body>
 </html>

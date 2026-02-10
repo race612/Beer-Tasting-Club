@@ -90,27 +90,69 @@
             </form>
         </div>
     </div>
+
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
-            &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
-            <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-    
-            <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
-            </p>
-        </footer>
+        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
+        <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
+        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        </p>
+    </footer>
+
+    <div id="update-toast" class="update-toast">
+        <span class="material-symbols-outlined">system_update</span>
+        Nuova versione! Clicca qui.
+    </div>
+
     <script type="module">
+        // 1. IMPORT (TASSATIVAMENTE IN CIMA)
         import { supabase } from '../js/supabase-config.js';
         import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js'; 
+        import { APP_VERSION } from '../js/config.js'; // Usa ../ per uscire dalla cartella schede
 
-        // 1. INIZIALIZZAZIONE (Fallback Event ID = 1)
+        // 2. VERSION & UPDATE LOGIC (Robust)
+        const footerVer = document.getElementById('footer-version');
+        if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
+
+        const updateToast = document.getElementById('update-toast');
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('../sw.js').then(reg => { // Usa ../sw.js
+                
+                // A) Controllo se c'è un aggiornamento GIA' in attesa
+                if (reg.waiting) {
+                    if(updateToast) updateToast.classList.add('show');
+                }
+
+                // B) Controllo se un aggiornamento viene trovato ORA
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            if(updateToast) updateToast.classList.add('show');
+                        }
+                    });
+                });
+            }).catch(err => console.log('SW failed', err));
+        }
+
+        // Click sul Toast -> Forza aggiornamento
+        if(updateToast) {
+            updateToast.addEventListener('click', () => {
+                if (navigator.serviceWorker.controller) {
+                    window.location.reload();
+                }
+            });
+        }
+
+        // 3. LOGICA PAGINA (Invariata)
         const eventId = localStorage.getItem('hbl_selected_event') || '1';
-
         let isDirty = false;
         const form = document.getElementById('tasting-form');
         form.addEventListener('input', () => isDirty = true);
         form.addEventListener('change', () => isDirty = true);
 
-        // DOM
+        // DOM Elements
         const systemSelect = document.getElementById('style-system');
         const containerFree = document.getElementById('container-free');
         const containerBjcp = document.getElementById('container-bjcp');
@@ -161,8 +203,6 @@
                     return `<label class="radio-badge"><input type="radio" name="dyn-radio" value="${c}" ${chk}><span>${c}</span></label>`;
                 }).join('') + `</div>`;
             }
-            // (altri casi complessi omessi ma gestiti se necessario copiando dal JS precedente)
-
             dynamicContainer.appendChild(wrapper);
             wrapper.querySelectorAll('input').forEach(i => i.addEventListener('change', () => isDirty = true));
         });
@@ -220,13 +260,12 @@
             });
         });
 
-        // AVVISO USCITA CORRETTO (Previene doppio popup)
+        // AVVISO USCITA
         document.getElementById('back-link').addEventListener('click', (e) => {
             if (isDirty) {
                 if (!confirm("⚠️ Stai per uscire senza salvare.\nVuoi davvero procedere? I dati andranno persi.")) {
                     e.preventDefault();
                 } else {
-                    // Utente ha confermato di voler uscire, disattiviamo il check
                     isDirty = false;
                 }
             }
@@ -292,7 +331,6 @@
             const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
             if (error) { alert(error.message); btn.disabled = false; return; }
             
-            // RESET DIRTY AL SALVATAGGIO
             isDirty = false;
 
             if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) {
@@ -301,43 +339,6 @@
                 window.location.href = '../nuova-scheda.html';
             }
         });
-        import { APP_VERSION } from '../js/config.js'; // Assicurati che il percorso sia corretto (es. ../js/config.js nelle sottocartelle)
-
-    // 1. MOSTRA VERSIONE NEL FOOTER
-    const footerVer = document.getElementById('footer-version');
-    if (footerVer) footerVer.textContent = `v${APP_VERSION}`;
-
-    // 2. GESTIONE AGGIORNAMENTI (Service Worker)
-    const updateToast = document.getElementById('update-toast');
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('../sw.js').then(reg => { // Attenzione al percorso ./sw.js o ../sw.js
-            
-            // Se c'è un aggiornamento in attesa
-            reg.addEventListener('updatefound', () => {
-                const newWorker = reg.installing;
-                
-                newWorker.addEventListener('statechange', () => {
-                    // Se il nuovo SW è installato E c'è già un SW attivo (non è la prima visita)
-                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        // Mostra notifica
-                        if(updateToast) updateToast.classList.add('show');
-                    }
-                });
-            });
-        });
-    }
-
-    // Click sul Toast -> Ricarica la pagina per attivare la nuova versione
-    if(updateToast) {
-        updateToast.addEventListener('click', () => {
-            window.location.reload();
-        });
-    }
     </script>
-    <div id="update-toast" class="update-toast">
-        <span class="material-symbols-outlined">system_update</span>
-        Nuova versione! Clicca qui.
-    </div>
 </body>
 </html>

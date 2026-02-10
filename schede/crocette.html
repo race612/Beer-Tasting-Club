@@ -43,11 +43,20 @@
             min-width: 80px; text-align: center;
         }
 
-        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; height: 30px; }
-        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: #4b5563; border-radius: 3px; }
+        /* Input Range Customization (Standard + Webkit) */
+        input[type=range] { 
+            -webkit-appearance: none; 
+            appearance: none; /* Aggiunto standard */
+            width: 100%; background: transparent; cursor: pointer; height: 30px; 
+        }
+        input[type=range]::-webkit-slider-runnable-track { 
+            width: 100%; height: 6px; cursor: pointer; background: #4b5563; border-radius: 3px; 
+        }
         input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; 
+            appearance: none; /* Aggiunto standard */
             height: 24px; width: 24px; border-radius: 50%; background: var(--primary-color); cursor: pointer;
-            -webkit-appearance: none; margin-top: -9px; box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid #fff;
+            margin-top: -9px; box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid #fff;
         }
         input[type=range]:focus::-webkit-slider-runnable-track { background: #6b7280; }
     </style>
@@ -437,23 +446,26 @@
     </div>
 
     <script type="module">
-        // IMPORT DEVONO ESSERE SEMPRE ALL'INIZIO!
+        // 1. IMPORT (TASSATIVAMENTE IN CIMA)
         import { supabase } from '../js/supabase-config.js';
         import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js';
-        import { APP_VERSION } from '../js/config.js'; // Assicurati di usare il percorso corretto
+        import { APP_VERSION } from '../js/config.js'; // Usa ../ per uscire dalla cartella
 
-        let isDirty = false;
-        const eventId = localStorage.getItem('hbl_selected_event') || '1';
-        
-        // --- 1. MOSTRA VERSIONE NEL FOOTER (Logica PWA) ---
+        // 2. VERSION & UPDATE LOGIC (Robust)
         const footerVer = document.getElementById('footer-version');
         if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
 
-        // --- 2. GESTIONE AGGIORNAMENTI (Service Worker) ---
         const updateToast = document.getElementById('update-toast');
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('../sw.js').then(reg => {
+                
+                // A) Controllo se c'è un aggiornamento GIA' in attesa
+                if (reg.waiting) {
+                    if(updateToast) updateToast.classList.add('show');
+                }
+
+                // B) Controllo se un aggiornamento viene trovato ORA
                 reg.addEventListener('updatefound', () => {
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
@@ -462,14 +474,22 @@
                         }
                     });
                 });
+            }).catch(err => console.log('SW failed', err));
+        }
+
+        // Click sul Toast -> Forza aggiornamento
+        if(updateToast) {
+            updateToast.addEventListener('click', () => {
+                if (navigator.serviceWorker.controller) {
+                    window.location.reload();
+                }
             });
         }
 
-        if(updateToast) {
-            updateToast.addEventListener('click', () => window.location.reload());
-        }
-
-        // --- 3. LOGICA SCHEDA (Originale) ---
+        // 3. LOGICA PAGINA (Invariata)
+        let isDirty = false;
+        const eventId = localStorage.getItem('hbl_selected_event') || '1';
+        
         const systemSelect = document.getElementById('style-system');
         const containerFree = document.getElementById('container-free');
         const containerBjcp = document.getElementById('container-bjcp');

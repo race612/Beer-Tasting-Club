@@ -14,7 +14,6 @@
     <link rel="apple-touch-icon" href="assets/icon-192.png">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script type="module" src="js/app.js"></script>
 </head>
 <body>
     <div class="container" style="max-width: 100%;">
@@ -33,7 +32,10 @@
             </button>
         </div>
 
-        <div id="loading" style="text-align: center;">Caricamento scheda...</div>
+        <div id="loading" style="text-align: center; color: var(--text-muted);">
+            <span class="material-symbols-outlined" style="animation: spin 1s infinite;">refresh</span>
+            Caricamento scheda...
+        </div>
 
         <div id="print-area" class="paper-sheet" style="display: none;">
             
@@ -83,17 +85,61 @@
             </div>
         </div>
     </div>
-    <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
-            &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
-            <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-    
-            <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
-            </p>
-        </footer>
-    <script type="module">
-        import { supabase } from './js/supabase-config.js';
 
+    <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
+        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
+        <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
+        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        </p>
+    </footer>
+
+    <div id="update-toast" class="update-toast">
+        <span class="material-symbols-outlined">system_update</span>
+        Nuova versione! Clicca qui.
+    </div>
+
+    <script type="module">
+        // 1. IMPORT (TASSATIVAMENTE IN CIMA)
+        import { supabase } from './js/supabase-config.js';
+        import { APP_VERSION } from './js/config.js'; // Usa ./ perché siamo nella root
+
+        // 2. VERSION & UPDATE LOGIC (Robust)
+        const footerVer = document.getElementById('footer-version');
+        if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
+
+        const updateToast = document.getElementById('update-toast');
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then(reg => { // Usa ./sw.js
+                
+                // A) Aggiornamento GIA' in attesa
+                if (reg.waiting) {
+                    if(updateToast) updateToast.classList.add('show');
+                }
+
+                // B) Aggiornamento trovato ORA
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            if(updateToast) updateToast.classList.add('show');
+                        }
+                    });
+                });
+            }).catch(err => console.log('SW failed', err));
+        }
+
+        // Click -> Aggiorna
+        if(updateToast) {
+            updateToast.addEventListener('click', () => {
+                if (navigator.serviceWorker.controller) {
+                    window.location.reload();
+                }
+            });
+        }
+
+        // 3. LOGICA PAGINA (Caricamento Dati)
         const params = new URLSearchParams(window.location.search);
         const noteId = params.get('id');
 
@@ -118,12 +164,12 @@
                 .eq('id', noteId)
                 .single();
 
-            if (error) { alert("Errore: " + error.message); return; }
+            if (error) { alert("Errore caricamento: " + error.message); return; }
 
             // GESTIONE EVENTO
             const evtName = note.events ? note.events.name : "";
             if (evtName.toLowerCase().includes('libero') || evtName.toLowerCase().includes('privato')) {
-                document.getElementById('row-event').classList.add('hidden-row');
+                document.getElementById('row-event').style.display = 'none';
             } else {
                 document.getElementById('pdf-event').textContent = evtName;
             }
@@ -133,6 +179,9 @@
             document.getElementById('pdf-style').textContent = note.details.style || "-";
             document.getElementById('pdf-notes').textContent = note.details.notes || "Nessuna nota inserita.";
 
+            // GESTIONE PUNTEGGI (Differenzia per tipo scheda)
+            const scoresContainer = document.getElementById('pdf-scores');
+            
             if (note.sheet_type === 'bjcp_sintetica' && note.details.scores) {
                 const s = note.details.scores;
                 const htmlScores = `
@@ -144,9 +193,20 @@
                     <div class="score-item" style="grid-column: span 2;"></div>
                     <div class="score-total" style="grid-column: span 2;">TOTALE: ${note.final_score}/50</div>
                 `;
-                document.getElementById('pdf-scores').innerHTML = htmlScores;
+                scoresContainer.innerHTML = htmlScores;
+            } 
+            else if (note.sheet_type === 'desc_crocette') {
+                // Per la descrittiva, mostriamo solo il voto finale se c'è
+                scoresContainer.innerHTML = `
+                    <div class="score-item" style="grid-column: span 2; border:none;">
+                        Scheda Descrittiva (Senza punteggi parziali)
+                    </div>
+                    <div class="score-total" style="grid-column: span 2;">
+                        VOTO: ${note.final_score > 0 ? note.final_score + '/10' : 'N.D.'}
+                    </div>
+                `;
             } else {
-                document.getElementById('pdf-scores').innerHTML = "<div>Dettagli punteggio non supportati.</div>";
+                scoresContainer.innerHTML = "<div>Dettagli punteggio non supportati.</div>";
             }
 
             // INFO GIUDICE
@@ -163,7 +223,7 @@
             if (meta.role_sommelier) ranks.push("Beer Sommelier");
             if (meta.role_courses) ranks.push("Degustatore");
 
-            document.getElementById('judge-name').textContent = fullName || user.email;
+            document.getElementById('judge-name').textContent = fullName.trim() || user.email;
             document.getElementById('judge-rank').textContent = ranks.join(" • ");
             if (meta.bjcp_id) document.getElementById('judge-id').textContent = `BJCP ID: ${meta.bjcp_id}`;
             document.getElementById('judge-email').textContent = user.email;
@@ -174,7 +234,7 @@
 
         loadSheet();
 
-        // 1. ELIMINAZIONE
+        // 4. ELIMINAZIONE
         document.getElementById('btn-delete').addEventListener('click', async () => {
             if(!confirm("⚠️ Sei sicuro di voler eliminare questa scheda definitivamente?")) return;
 
@@ -191,7 +251,7 @@
             }
         });
 
-        // 2. DOWNLOAD PDF
+        // 5. DOWNLOAD PDF
         document.getElementById('btn-download').addEventListener('click', () => {
             const element = document.getElementById('print-area');
             const btn = document.getElementById('btn-download');
@@ -208,47 +268,10 @@
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
-                btn.textContent = "📥 Scarica PDF";
+                btn.innerHTML = `<span class="material-symbols-outlined">download</span> Scarica PDF`;
                 btn.disabled = false;
             });
         });
-        import { APP_VERSION } from './js/config.js'; // Assicurati che il percorso sia corretto (es. ../js/config.js nelle sottocartelle)
-
-    // 1. MOSTRA VERSIONE NEL FOOTER
-    const footerVer = document.getElementById('footer-version');
-    if (footerVer) footerVer.textContent = `v${APP_VERSION}`;
-
-    // 2. GESTIONE AGGIORNAMENTI (Service Worker)
-    const updateToast = document.getElementById('update-toast');
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').then(reg => { // Attenzione al percorso ./sw.js o ../sw.js
-            
-            // Se c'è un aggiornamento in attesa
-            reg.addEventListener('updatefound', () => {
-                const newWorker = reg.installing;
-                
-                newWorker.addEventListener('statechange', () => {
-                    // Se il nuovo SW è installato E c'è già un SW attivo (non è la prima visita)
-                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        // Mostra notifica
-                        if(updateToast) updateToast.classList.add('show');
-                    }
-                });
-            });
-        });
-    }
-
-    // Click sul Toast -> Ricarica la pagina per attivare la nuova versione
-    if(updateToast) {
-        updateToast.addEventListener('click', () => {
-            window.location.reload();
-        });
-    }
     </script>
-    <div id="update-toast" class="update-toast">
-        <span class="material-symbols-outlined">system_update</span>
-        Nuova versione! Clicca qui.
-    </div>
 </body>
 </html>

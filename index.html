@@ -138,6 +138,11 @@
         </button>
     </div>
 
+    <div id="update-toast" class="update-toast">
+        <span class="material-symbols-outlined">system_update</span>
+        Nuova versione disponibile!
+    </div>
+
     <div id="modal-forgot" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <button class="modal-close" id="close-modal"><span class="material-symbols-outlined">close</span></button>
@@ -149,25 +154,79 @@
     </div>
 
     <script type="module">
+        // --- 1. IMPORT (DEVONO ESSERE IN CIMA) ---
         import { supabase } from './js/supabase-config.js';
+        import { APP_VERSION } from './js/config.js';
 
-        const APP_URL = 'https://race612.github.io/Beer-Tasting-Club/';
+        // URL base dell'applicazione
+        const APP_URL = 'https://race612.github.io/Beer-Tasting-Club/'; 
 
-        // PWA Logic (Invariata)
-        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err)); }); }
+        // --- 2. VERSION & UPDATE LOGIC (Robust) ---
+        const footerVer = document.getElementById('footer-version');
+        if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
+
+        const updateToast = document.getElementById('update-toast');
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then(reg => {
+                
+                // A) Controllo se c'è un aggiornamento GIA' in attesa (Waiting)
+                if (reg.waiting) {
+                    if(updateToast) updateToast.classList.add('show');
+                }
+
+                // B) Controllo se un aggiornamento viene trovato ORA
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            if(updateToast) updateToast.classList.add('show');
+                        }
+                    });
+                });
+            }).catch(err => console.log('SW failed', err));
+        }
+
+        // Click sul Toast -> Forza aggiornamento
+        if(updateToast) {
+            updateToast.addEventListener('click', () => {
+                if (navigator.serviceWorker.controller) {
+                    // Ricarica brutale per pulire cache JS
+                    window.location.reload();
+                }
+            });
+        }
+
+        // --- 3. PWA INSTALL LOGIC ---
         let deferredPrompt;
         const pwaToast = document.getElementById('pwa-toast');
         const installTrigger = document.getElementById('pwa-install-trigger');
         const closeBtn = document.getElementById('pwa-close-btn');
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault(); deferredPrompt = e;
-            const isDismissed = localStorage.getItem('btc_pwa_dismissed');
-            if (!isDismissed && !window.matchMedia('(display-mode: standalone)').matches) { pwaToast.classList.add('show'); }
-        });
-        installTrigger.addEventListener('click', async () => { if (deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; pwaToast.classList.remove('show'); } });
-        closeBtn.addEventListener('click', () => { pwaToast.classList.remove('show'); localStorage.setItem('btc_pwa_dismissed', 'true'); });
 
-        // AUTH & DASHBOARD LOGIC
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); 
+            deferredPrompt = e;
+            const isDismissed = localStorage.getItem('btc_pwa_dismissed');
+            if (!isDismissed && !window.matchMedia('(display-mode: standalone)').matches) { 
+                pwaToast.classList.add('show'); 
+            }
+        });
+
+        installTrigger.addEventListener('click', async () => { 
+            if (deferredPrompt) { 
+                deferredPrompt.prompt(); 
+                await deferredPrompt.userChoice; 
+                deferredPrompt = null; 
+                pwaToast.classList.remove('show'); 
+            } 
+        });
+        
+        closeBtn.addEventListener('click', () => { 
+            pwaToast.classList.remove('show'); 
+            localStorage.setItem('btc_pwa_dismissed', 'true'); 
+        });
+
+        // --- 4. AUTH & DASHBOARD LOGIC ---
         const authView = document.getElementById('auth-view');
         const dashboardView = document.getElementById('dashboard-view');
         const updatePasswordView = document.getElementById('update-password-view');
@@ -187,23 +246,16 @@
             if (event === 'PASSWORD_RECOVERY') {
                 authView.style.display = 'none'; dashboardView.style.display = 'none'; updatePasswordView.style.display = 'block';
             } else if (event === 'SIGNED_IN' || session) {
-                // UTENTE LOGGATO: Controllo Livello Account
+                // UTENTE LOGGATO
                 const user = session.user;
-                const level = user.user_metadata.account_level || 'Taster'; // Default
+                const level = user.user_metadata.account_level || 'Taster';
 
                 // Reset visualizzazione
                 navMyBeers.style.display = 'none';
                 navMyEvents.style.display = 'none';
 
-                // Logica Brewer (Vede "Le mie birre")
-                if (level === 'Brewer' || level === 'Event Master') {
-                    navMyBeers.style.display = 'grid'; // Usa 'grid' perché .menu-item è display:grid nel CSS
-                }
-
-                // Logica Event Master (Vede "I miei eventi")
-                if (level === 'Event Master') {
-                    navMyEvents.style.display = 'grid';
-                }
+                if (level === 'Brewer' || level === 'Event Master') navMyBeers.style.display = 'grid';
+                if (level === 'Event Master') navMyEvents.style.display = 'grid';
 
                 authView.style.display = 'none'; updatePasswordView.style.display = 'none'; dashboardView.style.display = 'block';
             } else {
@@ -211,62 +263,102 @@
             }
         });
 
-        // TABS, LOGIN FORM, MODALS (Codice invariato, compatto per leggibilità)
-        const tabLogin = document.getElementById('tab-login'); const tabRegister = document.getElementById('tab-register'); const btnSubmit = document.getElementById('btn-submit');
-        const groupName = document.getElementById('group-name'); const inputName = document.getElementById('display-name'); const authMessage = document.getElementById('auth-message');
-        const linkForgot = document.getElementById('forgot-link'); const linkResend = document.getElementById('resend-link'); let isLoginMode = true;
+        // --- 5. TABS & FORMS ---
+        const tabLogin = document.getElementById('tab-login'); 
+        const tabRegister = document.getElementById('tab-register'); 
+        const btnSubmit = document.getElementById('btn-submit');
+        const groupName = document.getElementById('group-name'); 
+        const inputName = document.getElementById('display-name'); 
+        const authMessage = document.getElementById('auth-message');
+        const linkForgot = document.getElementById('forgot-link'); 
+        const linkResend = document.getElementById('resend-link'); 
+        let isLoginMode = true;
 
-        tabLogin.addEventListener('click', () => { isLoginMode = true; tabLogin.classList.add('active'); tabRegister.classList.remove('active'); btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`; groupName.style.display = 'none'; inputName.removeAttribute('required'); authMessage.textContent = ''; linkForgot.style.display = 'inline-block'; linkResend.style.display = 'none'; });
-        tabRegister.addEventListener('click', () => { isLoginMode = false; tabRegister.classList.add('active'); tabLogin.classList.remove('active'); btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`; groupName.style.display = 'block'; inputName.setAttribute('required', 'true'); authMessage.textContent = ''; linkForgot.style.display = 'none'; linkResend.style.display = 'inline-block'; });
+        tabLogin.addEventListener('click', () => { 
+            isLoginMode = true; 
+            tabLogin.classList.add('active'); tabRegister.classList.remove('active'); 
+            btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`; 
+            groupName.style.display = 'none'; inputName.removeAttribute('required'); 
+            authMessage.textContent = ''; 
+            linkForgot.style.display = 'inline-block'; linkResend.style.display = 'none'; 
+        });
 
-        document.getElementById('auth-form').addEventListener('submit', async (e) => { e.preventDefault(); const email = document.getElementById('email').value; const password = document.getElementById('password').value; const displayName = inputName.value; btnSubmit.disabled = true; btnSubmit.textContent = "Elaborazione..."; authMessage.style.color = 'var(--text-muted)';
-            if (isLoginMode) { const { error } = await supabase.auth.signInWithPassword({ email, password }); if (error) { authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message; btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`; } } 
-            else { const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: APP_URL, data: { full_name: displayName } } }); if (error) { authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message; } else { authMessage.style.color = '#10b981'; authMessage.textContent = "Registrazione OK! Controlla la mail."; } btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`; } });
+        tabRegister.addEventListener('click', () => { 
+            isLoginMode = false; 
+            tabRegister.classList.add('active'); tabLogin.classList.remove('active'); 
+            btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`; 
+            groupName.style.display = 'block'; inputName.setAttribute('required', 'true'); 
+            authMessage.textContent = ''; 
+            linkForgot.style.display = 'none'; linkResend.style.display = 'inline-block'; 
+        });
 
-        const modal = document.getElementById('modal-forgot'); const modalTitle = document.getElementById('modal-title'); const modalDesc = document.getElementById('modal-desc'); const btnModalAction = document.getElementById('btn-modal-action'); let modalMode = 'reset';
-        document.getElementById('forgot-link').addEventListener('click', (e) => { e.preventDefault(); modalMode = 'reset'; modalTitle.textContent = "Reset Password"; modalDesc.textContent = "Inserisci la email per il ripristino."; btnModalAction.innerHTML = `<span class="material-symbols-outlined">lock_reset</span> Invia Link`; modal.style.display = 'flex'; });
-        document.getElementById('resend-link').addEventListener('click', (e) => { e.preventDefault(); modalMode = 'resend'; modalTitle.textContent = "Rinvio Conferma"; modalDesc.textContent = "Inserisci l'email usata per la registrazione."; btnModalAction.innerHTML = `<span class="material-symbols-outlined">mail</span> Rinvia Mail`; modal.style.display = 'flex'; });
-        document.getElementById('close-modal').addEventListener('click', () => modal.style.display = 'none');
-        btnModalAction.addEventListener('click', async () => { const email = document.getElementById('modal-email').value; if(!email) return alert("Inserisci email!"); btnModalAction.disabled = true; let error = null; if (modalMode === 'reset') { const res = await supabase.auth.resetPasswordForEmail(email, { redirectTo: APP_URL }); error = res.error; } else { const res = await supabase.auth.resend({ type: 'signup', email, options: { emailRedirectTo: APP_URL } }); error = res.error; } if(error) alert("Errore: " + error.message); else { alert("Operazione completata!"); modal.style.display = 'none'; } btnModalAction.disabled = false; btnModalAction.innerHTML = `<span class="material-symbols-outlined">send</span> Invia`; });
-
-        document.getElementById('btn-update-password').addEventListener('click', async () => { const newPass = document.getElementById('new-password').value; if (!newPass || newPass.length < 6) return alert("Password troppo corta."); const { error } = await supabase.auth.updateUser({ password: newPass }); if (error) alert("Errore: " + error.message); else { alert("Password aggiornata!"); window.location.hash = ''; window.location.reload(); } });
-    import { APP_VERSION } from './js/config.js'; // Assicurati che il percorso sia corretto (es. ../js/config.js nelle sottocartelle)
-
-    // 1. MOSTRA VERSIONE NEL FOOTER
-    const footerVer = document.getElementById('footer-version');
-    if (footerVer) footerVer.textContent = `v${APP_VERSION}`;
-
-    // 2. GESTIONE AGGIORNAMENTI (Service Worker)
-    const updateToast = document.getElementById('update-toast');
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').then(reg => { // Attenzione al percorso ./sw.js o ../sw.js
+        document.getElementById('auth-form').addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const email = document.getElementById('email').value; 
+            const password = document.getElementById('password').value; 
+            const displayName = inputName.value; 
+            btnSubmit.disabled = true; btnSubmit.textContent = "Elaborazione..."; authMessage.style.color = 'var(--text-muted)';
             
-            // Se c'è un aggiornamento in attesa
-            reg.addEventListener('updatefound', () => {
-                const newWorker = reg.installing;
-                
-                newWorker.addEventListener('statechange', () => {
-                    // Se il nuovo SW è installato E c'è già un SW attivo (non è la prima visita)
-                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        // Mostra notifica
-                        if(updateToast) updateToast.classList.add('show');
-                    }
-                });
-            });
+            if (isLoginMode) { 
+                const { error } = await supabase.auth.signInWithPassword({ email, password }); 
+                if (error) { 
+                    authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message; 
+                    btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`; 
+                } 
+            } else { 
+                const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: APP_URL, data: { full_name: displayName } } }); 
+                if (error) { 
+                    authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message; 
+                } else { 
+                    authMessage.style.color = '#10b981'; authMessage.textContent = "Registrazione OK! Controlla la mail."; 
+                } 
+                btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`; 
+            } 
         });
-    }
 
-    // Click sul Toast -> Ricarica la pagina per attivare la nuova versione
-    if(updateToast) {
-        updateToast.addEventListener('click', () => {
-            window.location.reload();
+        // --- 6. MODALS ---
+        const modal = document.getElementById('modal-forgot'); 
+        const modalTitle = document.getElementById('modal-title'); 
+        const modalDesc = document.getElementById('modal-desc'); 
+        const btnModalAction = document.getElementById('btn-modal-action'); 
+        let modalMode = 'reset';
+        
+        document.getElementById('forgot-link').addEventListener('click', (e) => { 
+            e.preventDefault(); modalMode = 'reset'; modalTitle.textContent = "Reset Password"; 
+            modalDesc.textContent = "Inserisci la email per il ripristino."; 
+            btnModalAction.innerHTML = `<span class="material-symbols-outlined">lock_reset</span> Invia Link`; 
+            modal.style.display = 'flex'; 
         });
-    }
+        
+        document.getElementById('resend-link').addEventListener('click', (e) => { 
+            e.preventDefault(); modalMode = 'resend'; modalTitle.textContent = "Rinvio Conferma"; 
+            modalDesc.textContent = "Inserisci l'email usata per la registrazione."; 
+            btnModalAction.innerHTML = `<span class="material-symbols-outlined">mail</span> Rinvia Mail`; 
+            modal.style.display = 'flex'; 
+        });
+        
+        document.getElementById('close-modal').addEventListener('click', () => modal.style.display = 'none');
+        
+        btnModalAction.addEventListener('click', async () => { 
+            const email = document.getElementById('modal-email').value; 
+            if(!email) return alert("Inserisci email!"); 
+            btnModalAction.disabled = true; 
+            let error = null; 
+            if (modalMode === 'reset') { 
+                const res = await supabase.auth.resetPasswordForEmail(email, { redirectTo: APP_URL }); error = res.error; 
+            } else { 
+                const res = await supabase.auth.resend({ type: 'signup', email, options: { emailRedirectTo: APP_URL } }); error = res.error; 
+            } 
+            if(error) alert("Errore: " + error.message); else { alert("Operazione completata!"); modal.style.display = 'none'; } 
+            btnModalAction.disabled = false; btnModalAction.innerHTML = `<span class="material-symbols-outlined">send</span> Invia`; 
+        });
+
+        document.getElementById('btn-update-password').addEventListener('click', async () => { 
+            const newPass = document.getElementById('new-password').value; 
+            if (!newPass || newPass.length < 6) return alert("Password troppo corta."); 
+            const { error } = await supabase.auth.updateUser({ password: newPass }); 
+            if (error) alert("Errore: " + error.message); else { alert("Password aggiornata!"); window.location.hash = ''; window.location.reload(); } 
+        });
     </script>
-    <div id="update-toast" class="update-toast">
-        <span class="material-symbols-outlined">system_update</span>
-        Nuova versione! Clicca qui.
-    </div>
 </body>
 </html>
