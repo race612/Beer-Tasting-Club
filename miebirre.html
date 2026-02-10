@@ -3,14 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lavori in corso - Beer Tasting Club</title>
-    
+    <title>Le mie Birre - Beer Tasting Club</title>
     <link rel="stylesheet" href="css/style.css?v=0.8.1">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
+    
+    <style>
+        /* STILI SPECIFICI PER I RADIO-CHECKBOX */
+        .custom-radio-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+            flex-wrap: wrap;
+        }
+
+        .radio-chip {
+            background: #1f2937;
+            border: 1px solid #4b5563;
+            color: #d1d5db;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .radio-chip:hover { border-color: #9ca3af; }
+
+        .radio-chip.selected {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* CARD BIRRA IN LISTA */
+        .beer-card {
+            background: #1f2937;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .beer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .beer-id-badge {
+            background: #374151;
+            color: #fff;
+            font-family: monospace;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            border: 1px solid #6b7280;
+        }
+
+        /* FAB (Floating Action Button) per aggiungere */
+        .fab-add {
+            position: fixed;
+            bottom: 80px; /* Sopra il footer */
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--primary-color);
+            color: black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            cursor: pointer;
+            z-index: 100;
+            border: none;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -22,27 +101,99 @@
             <img src="assets/logo.png" alt="Logo" class="header-logo">
         </div>
 
-        <div class="card" style="text-align: center; padding: 40px 20px;">
-            <span class="material-symbols-outlined" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 20px;">construction</span>
-            
-            <h2 style="color: var(--primary-color);">Mie Birre - Lavori in Corso</h2>
-            
-            <p style="color: #d1d5db; margin-top: 15px;">
-                Stiamo costruendo questa funzionalità.<br>
-                Torna a trovarci presto, sarà disponibile nei prossimi aggiornamenti!
-            </p>
-            
-            <a href="index.html" class="btn btn-secondary mt-20" style="max-width: 200px; margin: 30px auto 0;">
-                <span class="material-symbols-outlined">home</span> Torna alla Home
-            </a>
+        <h2 class="text-center" style="margin-bottom: 5px;">Le mie Birre</h2>
+        <p class="text-center" style="color: var(--text-muted); font-size: 0.9em; margin-top:0;">Archivio produzioni e cantina</p>
+
+        <div id="view-list" style="margin-top: 20px; padding-bottom: 60px;">
+            <div id="beer-list-container">
+                <p style="text-align: center; margin-top: 40px;">Caricamento birre...</p>
+            </div>
         </div>
+
+        <div id="view-add" style="display: none; margin-top: 20px;">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 style="margin:0;">Nuova Birra</h3>
+                    <button class="btn btn-sm btn-outline" onclick="toggleView('list')">Annulla</button>
+                </div>
+
+                <form id="add-beer-form">
+                    <div class="form-group">
+                        <label>Nome Birra</label>
+                        <input type="text" id="beer-name" required placeholder="Es. American IPA">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Produttore / Birrificio</label>
+                        <input type="text" id="beer-producer" required placeholder="Es. Mario Rossi">
+                        
+                        <div class="custom-radio-group" id="group-producer-type" style="margin-top: 8px;">
+                            <div class="radio-chip" data-value="homebrewer">
+                                <span class="material-symbols-outlined" style="font-size:1.1rem">home</span> Homebrewer
+                            </div>
+                            <div class="radio-chip" data-value="pro">
+                                <span class="material-symbols-outlined" style="font-size:1.1rem">factory</span> Pro
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr style="border-color: #374151; margin: 20px 0;">
+
+                    <div class="form-group">
+                        <label>Stile</label>
+                        <select id="style-system" style="margin-bottom: 10px; border: 1px solid var(--primary-color);">
+                            <option value="free">📝 Stile Libero</option>
+                            <option value="bjcp">⚖️ BJCP 2021</option>
+                        </select>
+
+                        <div id="container-free">
+                            <input type="text" id="style-free" placeholder="Es. Italian Grape Ale" required minlength="3">
+                        </div>
+
+                        <div id="container-bjcp" style="display: none;">
+                            <select id="style-bjcp">
+                                <option value="" disabled selected>-- Seleziona uno stile --</option>
+                            </select>
+                            <div id="bjcp-dynamic-container"></div>
+                        </div>
+                    </div>
+
+                    <hr style="border-color: #374151; margin: 20px 0;">
+
+                    <div class="form-group">
+                        <label>Confezionamento (Opzionale)</label>
+                        <div class="custom-radio-group" id="group-packaging">
+                            <div class="radio-chip" data-value="bottle">
+                                <span class="material-symbols-outlined" style="font-size:1.1rem">wine_bar</span> Bottiglia
+                            </div>
+                            <div class="radio-chip" data-value="can">
+                                <span class="material-symbols-outlined" style="font-size:1.1rem">local_drink</span> Lattina
+                            </div>
+                            <div class="radio-chip" data-value="tap">
+                                <span class="material-symbols-outlined" style="font-size:1.1rem">water_drop</span> Spina
+                            </div>
+                            <div class="radio-chip" data-value="growler">
+                                <span class="material-symbols-outlined" style="font-size:1.1rem">propane_tank</span> Growler
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btn-save" class="btn btn-primary" style="margin-top: 20px;">
+                        <span class="material-symbols-outlined">save</span> Salva Birra
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <button class="fab-add" id="fab-add" onclick="toggleView('add')">
+            <span class="material-symbols-outlined" style="font-size: 2rem;">add</span>
+        </button>
 
         <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
             &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
             <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-    
             <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+                Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
             </p>
         </footer>
     </div>
@@ -53,25 +204,251 @@
     </div>
 
     <script type="module">
-        // 1. IMPORT (TASSATIVAMENTE IN CIMA)
-        import { APP_VERSION } from './js/config.js'; // Usa ./ perché siamo in root
+        // 1. IMPORT
+        import { supabase } from './js/supabase-config.js';
+        import { bjcpCatalog, specialStyleRules } from './js/bjcp-2021.js';
+        import { APP_VERSION } from './js/config.js';
 
-        // 2. MOSTRA VERSIONE NEL FOOTER
+        // 2. CONFIGURAZIONE BASE
         const footerVer = document.getElementById('footer-version');
         if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
 
-        // 3. GESTIONE AGGIORNAMENTI (Service Worker Robusto)
-        const updateToast = document.getElementById('update-toast');
+        // 3. UI MANAGEMENT
+        window.toggleView = function(viewName) {
+            const listDiv = document.getElementById('view-list');
+            const addDiv = document.getElementById('view-add');
+            const fab = document.getElementById('fab-add');
 
+            if (viewName === 'add') {
+                listDiv.style.display = 'none';
+                addDiv.style.display = 'block';
+                fab.style.display = 'none';
+            } else {
+                listDiv.style.display = 'block';
+                addDiv.style.display = 'none';
+                fab.style.display = 'flex';
+                // Reset form opzionale
+            }
+        }
+
+        // 4. LOGICA RADIO-CHECKBOX (Opzionale e Deselezionabile)
+        function setupRadioGroup(groupId) {
+            const container = document.getElementById(groupId);
+            container.querySelectorAll('.radio-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    if (chip.classList.contains('selected')) {
+                        // Se già selezionato, deseleziona
+                        chip.classList.remove('selected');
+                    } else {
+                        // Deseleziona gli altri e seleziona questo
+                        container.querySelectorAll('.radio-chip').forEach(c => c.classList.remove('selected'));
+                        chip.classList.add('selected');
+                    }
+                });
+            });
+        }
+        setupRadioGroup('group-producer-type');
+        setupRadioGroup('group-packaging');
+
+        // 5. LOGICA STILI (Copiata da Nuova Scheda)
+        const systemSelect = document.getElementById('style-system');
+        const containerFree = document.getElementById('container-free');
+        const containerBjcp = document.getElementById('container-bjcp');
+        const inputFree = document.getElementById('style-free');
+        const inputBjcp = document.getElementById('style-bjcp');
+        const dynamicContainer = document.getElementById('bjcp-dynamic-container');
+
+        bjcpCatalog.forEach(category => {
+            const group = document.createElement('optgroup');
+            group.label = category.family;
+            category.styles.forEach(styleName => {
+                const option = document.createElement('option');
+                option.value = styleName; option.textContent = styleName;
+                group.appendChild(option);
+            });
+            inputBjcp.appendChild(group);
+        });
+
+        systemSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'free') {
+                containerFree.style.display = 'block'; inputFree.setAttribute('required', 'true');
+                containerBjcp.style.display = 'none'; inputBjcp.removeAttribute('required'); inputBjcp.value = ""; dynamicContainer.innerHTML = '';
+            } else {
+                containerBjcp.style.display = 'block'; inputBjcp.setAttribute('required', 'true');
+                containerFree.style.display = 'none'; inputFree.removeAttribute('required'); inputFree.value = "";
+            }
+        });
+
+        inputBjcp.addEventListener('change', (e) => {
+            dynamicContainer.innerHTML = ''; 
+            const code = e.target.value.split('.')[0];
+            const rule = specialStyleRules[code];
+            if (!rule) return;
+            const wrapper = document.createElement('div');
+            // Stile semplificato per questo form
+            if (rule.type === 'text_only') {
+                 if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b">${rule.hint}</small>`;
+                 wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" style="width:100%; padding:8px; margin-top:5px; background:#374151; border:1px solid #4b5563; color:white; border-radius:4px;">`;
+            } else if (rule.type === 'options') {
+                wrapper.innerHTML += `<span style="display:block; margin-top:5px; font-size:0.9em;">${rule.label}</span><div style="display:flex; gap:10px; margin-top:5px;">` + 
+                rule.choices.map(c => {
+                    return `<label style="background:#374151; padding:5px 10px; border-radius:4px;"><input type="radio" name="dyn-radio" value="${c}"> ${c}</label>`;
+                }).join('') + `</div>`;
+            }
+            dynamicContainer.appendChild(wrapper);
+        });
+
+        // 6. GENERATORE SHARING ID
+        function generateSharingId() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // No I, O, 0, 1 per evitare confusione
+            let result = '';
+            for (let i = 0; i < 6; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        // 7. CARICAMENTO BIRRE
+        async function loadBeers() {
+            const container = document.getElementById('beer-list-container');
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (!user) { window.location.href = 'index.html'; return; }
+
+            const { data: beers, error } = await supabase
+                .from('my_beers')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                container.innerHTML = `<p style="color:red; text-align:center">Errore: ${error.message}</p>`;
+                return;
+            }
+
+            if (!beers || beers.length === 0) {
+                container.innerHTML = `<p style="text-align: center; opacity: 0.6;">Nessuna birra inserita.<br>Clicca su + per aggiungerne una.</p>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            beers.forEach(beer => {
+                const el = document.createElement('div');
+                el.className = 'beer-card';
+                
+                // Icona confezionamento
+                let packIcon = '';
+                if(beer.packaging === 'bottle') packIcon = 'wine_bar';
+                else if(beer.packaging === 'can') packIcon = 'local_drink';
+                else if(beer.packaging === 'tap') packIcon = 'water_drop';
+                
+                el.innerHTML = `
+                    <div class="beer-header">
+                        <div>
+                            <h3 style="margin:0; color:white;">${beer.name}</h3>
+                            <div style="color:var(--text-muted); font-size:0.9em;">${beer.producer}</div>
+                        </div>
+                        <div class="beer-id-badge" title="Codice Condivisione">ID: ${beer.sharing_id}</div>
+                    </div>
+                    <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:flex-end;">
+                        <div style="font-size:0.85em; color:var(--primary-color);">
+                            ${beer.style_name}
+                            ${packIcon ? `<span class="material-symbols-outlined" style="font-size:1em; vertical-align:text-bottom; margin-left:5px;">${packIcon}</span>` : ''}
+                        </div>
+                        <button class="btn-delete-beer" data-id="${beer.id}" style="background:none; border:none; color:#ef4444; cursor:pointer;">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </div>
+                `;
+                
+                // Delete Listener
+                el.querySelector('.btn-delete-beer').addEventListener('click', async () => {
+                    if(confirm("Eliminare questa birra?")) {
+                        await supabase.from('my_beers').delete().eq('id', beer.id);
+                        loadBeers();
+                    }
+                });
+
+                container.appendChild(el);
+            });
+        }
+
+        // 8. SALVATAGGIO BIRRA
+        document.getElementById('add-beer-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save');
+            btn.disabled = true; btn.textContent = "Salvataggio...";
+
+            const { data: { user } } = await supabase.auth.getUser();
+
+            // Raccolta dati Radio
+            const getRadioVal = (id) => {
+                const el = document.getElementById(id).querySelector('.radio-chip.selected');
+                return el ? el.getAttribute('data-value') : null;
+            }
+
+            // Stile
+            let styleName = "";
+            let styleDetails = null;
+            if (systemSelect.value === 'free') styleName = inputFree.value;
+            else {
+                styleName = inputBjcp.value;
+                // Gestione dettagli BJCP
+                const textVal = document.getElementById('dyn-text')?.value;
+                const radioVal = document.querySelector('input[name="dyn-radio"]:checked')?.value;
+                let detailsArr = [];
+                if(textVal) detailsArr.push(textVal);
+                if(radioVal) detailsArr.push(radioVal);
+                if(detailsArr.length > 0) styleDetails = detailsArr.join(', ');
+            }
+
+            // Sharing ID Univoco (loop per sicurezza collisioni, anche se improbabile)
+            let sharingId = generateSharingId();
+            let unique = false;
+            let attempts = 0;
+            
+            while(!unique && attempts < 5) {
+                const { data } = await supabase.from('my_beers').select('id').eq('sharing_id', sharingId);
+                if (!data || data.length === 0) unique = true;
+                else { sharingId = generateSharingId(); attempts++; }
+            }
+
+            const payload = {
+                user_id: user.id,
+                name: document.getElementById('beer-name').value,
+                producer: document.getElementById('beer-producer').value,
+                producer_type: getRadioVal('group-producer-type'),
+                style_type: systemSelect.value,
+                style_name: styleName,
+                style_details: styleDetails,
+                packaging: getRadioVal('group-packaging'),
+                sharing_id: sharingId
+            };
+
+            const { error } = await supabase.from('my_beers').insert([payload]);
+
+            if (error) {
+                alert("Errore salvataggio: " + error.message);
+                btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">save</span> Salva Birra`;
+            } else {
+                alert("Birra salvata! 🍻\nCodice condivisione: " + sharingId);
+                document.getElementById('add-beer-form').reset();
+                // Reset manuale UI chips
+                document.querySelectorAll('.radio-chip').forEach(c => c.classList.remove('selected'));
+                toggleView('list');
+                loadBeers();
+                btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">save</span> Salva Birra`;
+            }
+        });
+
+        // Avvio
+        loadBeers();
+
+        // 9. SERVICE WORKER (Standard)
+        const updateToast = document.getElementById('update-toast');
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                
-                // A) Aggiornamento GIA' in attesa
-                if (reg.waiting) {
-                    if(updateToast) updateToast.classList.add('show');
-                }
-
-                // B) Aggiornamento trovato ORA
+                if (reg.waiting) { if(updateToast) updateToast.classList.add('show'); }
                 reg.addEventListener('updatefound', () => {
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
@@ -82,13 +459,9 @@
                 });
             }).catch(err => console.log('SW failed', err));
         }
-
-        // Click -> Aggiorna
         if(updateToast) {
             updateToast.addEventListener('click', () => {
-                if (navigator.serviceWorker.controller) {
-                    window.location.reload();
-                }
+                if (navigator.serviceWorker.controller) window.location.reload();
             });
         }
     </script>

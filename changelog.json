@@ -1,6 +1,14 @@
-[
+[   
     {
         "_comment":"modificare versione in js/config.js e cambiare CACHE_NAME in sw.js",
+        "version": "0.5.3 Alpha",
+        "date": "10 Feb 2026",
+        "changes": [
+            "Tabella DB e pagina Le mie Birre, primi test.",
+            "Miglioramento e revisione codice di tutte le pagine."
+        ]
+    },
+    {
         "version": "0.5.0 Alpha",
         "date": "10 Feb 2026",
         "changes": [
