@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BJCP Full Scoresheet - Beer Tasting Club</title>
+    <link rel="stylesheet" href="../css/style.css?v=0.9.6">
+    <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
+    <meta name="theme-color" content="#f59e0b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="../assets/icon-192.png">
+    <link rel="apple-touch-icon" href="../assets/icon-192.png">
+    
+    <style>
+        /* STILI SPECIFICI BJCP COMPLETA */
+        
+        /* Accordion */
+        details.section-accordion {
+            background: #111827; border: 1px solid #374151; border-radius: 8px; margin-bottom: 15px; overflow: hidden; transition: all 0.3s ease;
+        }
+        details.section-accordion summary {
+            padding: 15px; background: #1f2937; cursor: pointer; color: var(--primary-color);
+            list-style: none; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid transparent;
+        }
+        details.section-accordion[open] summary { border-bottom-color: #374151; background: rgba(245, 158, 11, 0.05); }
+        details.section-accordion summary::after { content: 'expand_more'; font-family: 'Material Symbols Outlined'; font-size: 1.5rem; color: #9ca3af; }
+        details.section-accordion[open] summary::after { content: 'expand_less'; }
+
+        /* Header Sezione con Punteggio */
+        .section-header-content {
+            display: flex; align-items: center; justify-content: space-between; width: 100%; padding-right: 10px;
+        }
+        .section-title { font-weight: bold; display: flex; align-items: center; gap: 10px; font-size: 1.1rem; }
+        
+        /* Input Punteggio nel Titolo */
+        .score-input-wrapper {
+            display: flex; align-items: center; gap: 5px; background: #111827;
+            padding: 2px 8px; border-radius: 6px; border: 1px solid #4b5563;
+        }
+        .score-input {
+            width: 40px; background: transparent; border: none; color: white;
+            font-weight: bold; font-size: 1.1rem; text-align: right;
+        }
+        .score-input:focus { outline: none; }
+        .score-max { color: #6b7280; font-size: 0.8rem; margin-left: 2px; }
+
+        /* Checkbox List (Ispezione) */
+        .checkbox-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        .checkbox-item { display: flex; align-items: center; gap: 10px; color: #d1d5db; font-size: 0.9rem; cursor: pointer; }
+        .checkbox-item input { accent-color: var(--primary-color); width: 18px; height: 18px; }
+
+        /* Guide Text (Suggerimenti BJCP) */
+        .bjcp-guide {
+            font-size: 0.75rem; color: #9ca3af; margin-bottom: 10px; font-style: italic; line-height: 1.4;
+            background: rgba(255,255,255,0.05); padding: 8px; border-radius: 4px; border-left: 2px solid #6b7280;
+        }
+
+        /* Feedback Sliders (Bottom) */
+        .feedback-slider-row { margin-bottom: 20px; }
+        .feedback-labels { display: flex; justify-content: space-between; color: #6b7280; font-size: 0.75rem; margin-top: 5px; }
+        
+        /* Total Score Fisso */
+        .sticky-footer {
+            position: sticky; bottom: 0; background: #111827; border-top: 1px solid #374151;
+            padding: 15px; display: flex; justify-content: space-between; align-items: center; z-index: 100;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.5); margin: 0 -20px -20px -20px; /* Hack per full width */
+        }
+        .total-display { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); }
+        .total-label { font-size: 0.8rem; color: #9ca3af; display: block; }
+
+        /* Chips & Standard */
+        .chips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
+        .chip-btn { background: #1f2937; border: 1px solid #4b5563; border-radius: 8px; padding: 10px 5px; font-size: 0.85rem; cursor: pointer; text-align: center; color: #d1d5db; }
+        .chip-btn.selected { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--primary-color); color: var(--primary-color); font-weight: bold; }
+        .chip-btn.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+        .dynamic-field-group { margin-top: 10px; background: #374151; padding: 12px; border-radius: 6px; border-left: 3px solid #f59e0b; }
+        .accordion-content { padding: 15px; }
+        
+        input[type=range] { width: 100%; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container" style="padding-bottom: 80px;"> <div class="header-bar">
+            <a href="../nuova-scheda.html" class="header-link">
+                <span class="material-symbols-outlined">arrow_back</span> Indietro
+            </a>
+            <img src="../assets/logo.png" alt="Logo" class="header-logo">
+        </div>
+
+        <h2 style="text-align: center; margin-bottom: 5px;">BJCP Full</h2>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-top:0;">Official Scoresheet</p>
+        
+        <form id="bjcp-full-form" novalidate>
+
+            <details class="section-accordion" open>
+                <summary>
+                    <span class="section-title"><span class="material-symbols-outlined">info</span> Info & Inspection</span>
+                </summary>
+                <div class="accordion-content">
+                    <div class="form-group">
+                        <label>Beer Name / Entry #</label>
+                        <input type="text" id="beer-name" required placeholder="Ex. #452 or Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Brewer</label>
+                        <input type="text" id="beer-producer" placeholder="Name">
+                        <div class="chips-grid" id="group-producer-type">
+                            <div class="chip-btn" data-value="homebrewer">Homebrewer</div>
+                            <div class="chip-btn" data-value="pro">Pro</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Style</label>
+                        <select id="style-system" style="margin-bottom: 10px; border: 1px solid var(--primary-color);">
+                            <option value="bjcp">⚖️ BJCP 2021</option>
+                            <option value="free">📝 Other / Free</option>
+                        </select>
+                        <div id="container-bjcp">
+                            <select id="style-bjcp"><option value="" disabled selected>-- Select Style --</option></select>
+                            <div id="bjcp-dynamic-container"></div>
+                        </div>
+                        <div id="container-free" style="display:none;">
+                            <input type="text" id="style-free" placeholder="Manual Style">
+                        </div>
+                    </div>
+
+                    <hr style="border-color: #374151; margin: 20px 0;">
+                    
+                    <label style="color:var(--primary-color); font-weight:bold; margin-bottom:10px; display:block;">Bottle Inspection</label>
+                    <div class="checkbox-list">
+                        <label class="checkbox-item"><input type="checkbox" id="insp-size"> Appropriate size</label>
+                        <label class="checkbox-item"><input type="checkbox" id="insp-cap"> Cap/Crown/Seal</label>
+                        <label class="checkbox-item"><input type="checkbox" id="insp-fill"> Fill Level</label>
+                        <label class="checkbox-item"><input type="checkbox" id="insp-label"> Label Removal / Ident</label>
+                        <label class="checkbox-item" style="color: #ef4444;"><input type="checkbox" id="insp-gush"> Gushing</label>
+                    </div>
+                    <textarea id="inspection-notes" rows="2" placeholder="Inspection notes..."></textarea>
+                </div>
+            </details>
+
+            <details class="section-accordion">
+                <summary>
+                    <div class="section-header-content">
+                        <span class="section-title"><span class="material-symbols-outlined">scents</span> Aroma</span>
+                        <div class="score-input-wrapper" onclick="event.preventDefault()">
+                            <input type="number" id="score-aroma" class="score-input" min="0" max="12" placeholder="0">
+                            <span class="score-max">/12</span>
+                        </div>
+                    </div>
+                </summary>
+                <div class="accordion-content">
+                    <div class="bjcp-guide">
+                        Comment on malt, hops, esters, phenols, and other aromatics.
+                    </div>
+                    <textarea id="notes-aroma" rows="6" placeholder="Describe aroma..."></textarea>
+                </div>
+            </details>
+
+            <details class="section-accordion">
+                <summary>
+                    <div class="section-header-content">
+                        <span class="section-title"><span class="material-symbols-outlined">visibility</span> Appearance</span>
+                        <div class="score-input-wrapper" onclick="event.preventDefault()">
+                            <input type="number" id="score-appearance" class="score-input" min="0" max="3" placeholder="0">
+                            <span class="score-max">/3</span>
+                        </div>
+                    </div>
+                </summary>
+                <div class="accordion-content">
+                    <div class="bjcp-guide">
+                        Comment on color, clarity, and head (retention, color, and texture).
+                    </div>
+                    <textarea id="notes-appearance" rows="4" placeholder="Describe appearance..."></textarea>
+                </div>
+            </details>
+
+            <details class="section-accordion">
+                <summary>
+                    <div class="section-header-content">
+                        <span class="section-title"><span class="material-symbols-outlined">restaurant</span> Flavor</span>
+                        <div class="score-input-wrapper" onclick="event.preventDefault()">
+                            <input type="number" id="score-flavor" class="score-input" min="0" max="20" placeholder="0">
+                            <span class="score-max">/20</span>
+                        </div>
+                    </div>
+                </summary>
+                <div class="accordion-content">
+                    <div class="bjcp-guide">
+                        Comment on malt, hops, fermentation characteristics, balance, finish/aftertaste, and other flavor characteristics.
+                    </div>
+                    <textarea id="notes-flavor" rows="8" placeholder="Describe flavor..."></textarea>
+                </div>
+            </details>
+
+            <details class="section-accordion">
+                <summary>
+                    <div class="section-header-content">
+                        <span class="section-title"><span class="material-symbols-outlined">face</span> Mouthfeel</span>
+                        <div class="score-input-wrapper" onclick="event.preventDefault()">
+                            <input type="number" id="score-mouthfeel" class="score-input" min="0" max="5" placeholder="0">
+                            <span class="score-max">/5</span>
+                        </div>
+                    </div>
+                </summary>
+                <div class="accordion-content">
+                    <div class="bjcp-guide">
+                        Comment on body, carbonation, warmth, creaminess, astringency, and other palate sensations.
+                    </div>
+                    <textarea id="notes-mouthfeel" rows="4" placeholder="Describe mouthfeel..."></textarea>
+                </div>
+            </details>
+
+            <details class="section-accordion">
+                <summary>
+                    <div class="section-header-content">
+                        <span class="section-title"><span class="material-symbols-outlined">stars</span> Overall Impression</span>
+                        <div class="score-input-wrapper" onclick="event.preventDefault()">
+                            <input type="number" id="score-overall" class="score-input" min="0" max="10" placeholder="0">
+                            <span class="score-max">/10</span>
+                        </div>
+                    </div>
+                </summary>
+                <div class="accordion-content">
+                    <div class="bjcp-guide">
+                        Comment on overall drinking pleasure associated with entry, suggestions for improvement.
+                    </div>
+                    <textarea id="notes-overall" rows="6" placeholder="Overall impressions..."></textarea>
+                </div>
+            </details>
+
+            <details class="section-accordion">
+                <summary>
+                    <span class="section-title"><span class="material-symbols-outlined">tune</span> Feedback</span>
+                </summary>
+                <div class="accordion-content">
+                    
+                    <div class="feedback-slider-row">
+                        <label style="color:#d1d5db; font-size:0.9rem;">Stylistic Accuracy</label>
+                        <input type="range" id="fb-style" min="1" max="5" value="3">
+                        <div class="feedback-labels"><span>Not to Style</span><span>Classic</span></div>
+                    </div>
+
+                    <div class="feedback-slider-row">
+                        <label style="color:#d1d5db; font-size:0.9rem;">Technical Merit</label>
+                        <input type="range" id="fb-tech" min="1" max="5" value="3">
+                        <div class="feedback-labels"><span>Significant Flaws</span><span>Flawless</span></div>
+                    </div>
+
+                    <div class="feedback-slider-row">
+                        <label style="color:#d1d5db; font-size:0.9rem;">Intangibles</label>
+                        <input type="range" id="fb-intangible" min="1" max="5" value="3">
+                        <div class="feedback-labels"><span>Lifeless</span><span>Wonderful</span></div>
+                    </div>
+
+                </div>
+            </details>
+
+            <div class="sticky-footer">
+                <div>
+                    <span class="total-label">Total Score</span>
+                    <span id="total-score-display" class="total-display">0</span> <span style="color:#6b7280; font-size:0.9rem;">/ 50</span>
+                </div>
+                <button type="submit" id="submit-btn" class="btn btn-primary" style="width: auto; padding: 10px 25px;">
+                    <span class="material-symbols-outlined" style="margin-right:5px; font-size:1.1rem;">save</span> Salva
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <div id="update-toast" class="update-toast"><span class="material-symbols-outlined">system_update</span> Nuova versione!</div>
+
+    <script type="module">
+        import { supabase } from '../js/supabase-config.js';
+        import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js';
+        import { APP_VERSION } from '../js/config.js';
+
+        /* --- LOGICA CALCOLO PUNTEGGIO --- */
+        const inputs = {
+            aroma: document.getElementById('score-aroma'),
+            appearance: document.getElementById('score-appearance'),
+            flavor: document.getElementById('score-flavor'),
+            mouthfeel: document.getElementById('score-mouthfeel'),
+            overall: document.getElementById('score-overall')
+        };
+        const totalDisplay = document.getElementById('total-score-display');
+
+        function updateTotal() {
+            let total = 0;
+            for (let key in inputs) {
+                let val = parseInt(inputs[key].value) || 0;
+                let max = parseInt(inputs[key].getAttribute('max'));
+                if(val > max) val = max; 
+                if(val < 0) val = 0;
+                total += val;
+            }
+            totalDisplay.textContent = total;
+            
+            if(total >= 45) totalDisplay.style.color = "#FFD700"; // Gold
+            else if(total >= 38) totalDisplay.style.color = "#10b981"; // Green (Excellent)
+            else if(total >= 30) totalDisplay.style.color = "#f59e0b"; // Orange (Good)
+            else totalDisplay.style.color = "#ef4444"; // Red (Problematic)
+        }
+
+        Object.values(inputs).forEach(inp => {
+            inp.addEventListener('input', updateTotal);
+            inp.addEventListener('click', (e) => e.stopPropagation());
+        });
+
+        /* --- LOGICA ACCORDION ESCLUSIVI --- */
+        const accordions = document.querySelectorAll('details.section-accordion');
+        accordions.forEach(acc => {
+            acc.addEventListener('toggle', (e) => {
+                if (acc.open) {
+                    accordions.forEach(other => {
+                        if (other !== acc && other.open) other.removeAttribute('open');
+                    });
+                }
+            });
+        });
+
+        /* --- LOGICA CHIPS --- */
+        function setupChipGroup(groupId) {
+            const container = document.getElementById(groupId);
+            container.querySelectorAll('.chip-btn').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    if (chip.classList.contains('disabled')) return;
+                    if (chip.classList.contains('selected')) container.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected'));
+                    else {
+                        container.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected'));
+                        chip.classList.add('selected');
+                    }
+                });
+            });
+        }
+        setupChipGroup('group-producer-type');
+
+        function getChipValue(groupId) {
+            const el = document.getElementById(groupId).querySelector('.chip-btn.selected');
+            return el ? el.getAttribute('data-value') : null;
+        }
+        
+        /* --- CONTEXT & BJCP --- */
+        let contextBeer = null;
+        let linkedBeerCode = null;
+        try {
+            const storedBeer = localStorage.getItem('btc_context_beer');
+            if(storedBeer) contextBeer = JSON.parse(storedBeer);
+        } catch(e) {}
+
+        const systemSelect = document.getElementById('style-system');
+        const containerBjcp = document.getElementById('container-bjcp');
+        const containerFree = document.getElementById('container-free');
+        const inputBjcp = document.getElementById('style-bjcp');
+        const inputFree = document.getElementById('style-free');
+
+        // Init BJCP Select
+        bjcpCatalog.forEach(category => {
+            const group = document.createElement('optgroup'); group.label = category.family;
+            category.styles.forEach(styleName => { const option = document.createElement('option'); option.value = styleName; option.textContent = styleName; group.appendChild(option); });
+            inputBjcp.appendChild(group);
+        });
+
+        if (contextBeer) {
+            linkedBeerCode = contextBeer.sharing_id;
+            document.getElementById('beer-name').value = contextBeer.name;
+            document.getElementById('beer-name').setAttribute('readonly', true);
+            document.getElementById('beer-producer').value = contextBeer.producer;
+            document.getElementById('beer-producer').setAttribute('readonly', true);
+            
+            if(contextBeer.producer_type) {
+                const chip = document.querySelector(`#group-producer-type .chip-btn[data-value="${contextBeer.producer_type}"]`);
+                if(chip) chip.classList.add('selected');
+            }
+            systemSelect.value = contextBeer.style_type;
+            systemSelect.disabled = true;
+            if(contextBeer.style_type === 'free') {
+                containerFree.style.display = 'block'; containerBjcp.style.display = 'none';
+                inputFree.value = contextBeer.style_name;
+                inputFree.setAttribute('readonly', true);
+            } else {
+                containerBjcp.style.display = 'block'; containerFree.style.display = 'none';
+                inputBjcp.innerHTML = `<option selected>${contextBeer.style_name}</option>`;
+                inputBjcp.disabled = true;
+            }
+        } else {
+            systemSelect.addEventListener('change', (e) => {
+                if (e.target.value === 'free') { containerFree.style.display = 'block'; containerBjcp.style.display = 'none'; } 
+                else { containerBjcp.style.display = 'block'; containerFree.style.display = 'none'; }
+            });
+        }
+
+        /* --- SAVE --- */
+        document.getElementById('bjcp-full-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            
+            let total = parseInt(totalDisplay.textContent);
+            if(total === 0) {
+                if(!confirm("Total score is 0. Do you want to save an empty sheet?")) return;
+            }
+
+            btn.disabled = true; btn.textContent = "Salvataggio...";
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            let finalStyle = systemSelect.value === 'free' ? inputFree.value : inputBjcp.value;
+
+            const payload = {
+                user_id: user.id, event_id: 1,
+                beer_name: document.getElementById('beer-name').value,
+                producer: document.getElementById('beer-producer').value,
+                producer_type: getChipValue('group-producer-type'),
+                linked_beer_code: linkedBeerCode,
+                sheet_type: 'bjcp_full',
+                final_score: total,
+                details: {
+                    style: finalStyle,
+                    style_type: systemSelect.value,
+                    inspection: {
+                        size: document.getElementById('insp-size').checked,
+                        cap: document.getElementById('insp-cap').checked,
+                        fill: document.getElementById('insp-fill').checked,
+                        label: document.getElementById('insp-label').checked,
+                        gushing: document.getElementById('insp-gush').checked,
+                        notes: document.getElementById('inspection-notes').value
+                    },
+                    scores: {
+                        aroma: inputs.aroma.value,
+                        appearance: inputs.appearance.value,
+                        flavor: inputs.flavor.value,
+                        mouthfeel: inputs.mouthfeel.value,
+                        overall: inputs.overall.value
+                    },
+                    notes: {
+                        aroma: document.getElementById('notes-aroma').value,
+                        appearance: document.getElementById('notes-appearance').value,
+                        flavor: document.getElementById('notes-flavor').value,
+                        mouthfeel: document.getElementById('notes-mouthfeel').value,
+                        overall: document.getElementById('notes-overall').value
+                    },
+                    feedback: {
+                        style: document.getElementById('fb-style').value,
+                        technical: document.getElementById('fb-tech').value,
+                        intangible: document.getElementById('fb-intangible').value
+                    }
+                }
+            };
+
+            const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
+            if (error) { alert(error.message); btn.disabled = false; return; }
+
+            localStorage.removeItem('btc_context_beer');
+            if(confirm("Scheda salvata! ✅\nVuoi scaricare il PDF?")) {
+                window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
+            } else {
+                window.location.href = '../nuova-scheda.html';
+            }
+        });
+    </script>
+</body>
+</html>
