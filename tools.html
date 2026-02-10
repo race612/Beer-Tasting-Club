@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tools & Utility - Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.8.4">
+    <link rel="stylesheet" href="css/style.css?v=0.8.5">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -24,6 +24,10 @@
         .tool-container { margin-top: 20px; animation: fadeIn 0.3s ease-out; }
         .tool-box { background: #111827; padding: 15px; border-radius: 8px; border: 1px solid #374151; margin-bottom: 20px; }
         
+        /* TITOLI SEZIONI INTERNE */
+        .tool-header { display: flex; align-items: center; gap: 10px; margin-top: 0; margin-bottom: 15px; color: #d1d5db; font-size: 1.1rem; border-bottom: 1px solid #374151; padding-bottom: 10px; }
+        .tool-header span { color: var(--primary-color); }
+
         /* STILI CONVERTITORE */
         .conv-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
         .conv-input { flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #4b5563; background: #1f2937; color: white; font-size: 1.1rem; text-align: center; }
@@ -36,7 +40,7 @@
             border: 2px solid rgba(255,255,255,0.2);
             border-radius: 0 0 15px 15px;
             border-top: none;
-            background-color: #F8F4C4; /* Default SRM 2 */
+            background-color: #F8F4C4; /* Default */
             box-shadow: 0 0 20px rgba(0,0,0,0.5) inset;
             transition: background-color 0.2s;
             position: relative;
@@ -46,10 +50,10 @@
             content: ''; position: absolute; top: -10px; left: 0; width: 100%; height: 20px;
             background: white; border-radius: 5px 5px 0 0; opacity: 0.9;
         }
-        .color-values { display: flex; justify-content: space-around; margin-bottom: 20px; }
-        .color-val-box { text-align: center; }
-        .color-val-box label { display: block; color: var(--text-muted); font-size: 0.8rem; }
-        .color-val-box span { font-size: 1.5rem; font-weight: bold; color: white; }
+        .color-values { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .color-val-box { text-align: center; background: #1f2937; padding: 10px; border-radius: 6px; border: 1px solid #374151; }
+        .color-val-box label { display: block; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 5px; }
+        .color-val-box span { font-size: 1.2rem; font-weight: bold; color: white; }
         
         /* Slider Custom */
         input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; cursor: pointer; }
@@ -85,7 +89,7 @@
                     <span class="material-symbols-outlined tool-icon">palette</span>
                     <div class="tool-info">
                         <h3>Color Tool</h3>
-                        <p>Visualizzatore e conversione EBC/SRM.</p>
+                        <p>Visualizzatore EBC/SRM/Lovibond.</p>
                     </div>
                 </div>
 
@@ -97,18 +101,26 @@
                     </div>
                 </div>
 
+                <div class="tool-card" onclick="openTool('quiz')">
+                    <span class="material-symbols-outlined tool-icon">school</span>
+                    <div class="tool-info">
+                        <h3>Beer Quiz</h3>
+                        <p>Mettiti alla prova sulla cultura birraria.</p>
+                    </div>
+                </div>
+
             </div>
         </div>
 
         <div id="view-converter" class="tool-container" style="display: none;">
             
             <div class="tool-box">
-                <h4 style="margin-top:0; color: #d1d5db;">🌡️ Temperatura</h4>
+                <h4 class="tool-header"><span class="material-symbols-outlined">thermostat</span> Temperatura</h4>
                 <div class="conv-row">
                     <input type="number" id="temp-in" class="conv-input" placeholder="0">
                     <select id="temp-unit-in" class="conv-select"><option value="c">°C</option><option value="f">°F</option></select>
                 </div>
-                <div style="text-align:center; color:#6b7280;">⬇️</div>
+                <div style="text-align:center; color:#6b7280; margin-bottom: 10px;"><span class="material-symbols-outlined">arrow_downward</span></div>
                 <div class="conv-row">
                     <input type="number" id="temp-out" class="conv-input" readonly>
                     <select id="temp-unit-out" class="conv-select"><option value="f">°F</option><option value="c">°C</option></select>
@@ -116,12 +128,12 @@
             </div>
 
             <div class="tool-box">
-                <h4 style="margin-top:0; color: #d1d5db;">⚖️ Gravità</h4>
+                <h4 class="tool-header"><span class="material-symbols-outlined">scale</span> Gravità</h4>
                 <div class="conv-row">
                     <input type="number" id="grav-in" class="conv-input" placeholder="1.050" step="0.001">
                     <select id="grav-unit-in" class="conv-select"><option value="sg">SG</option><option value="plato">°P</option></select>
                 </div>
-                <div style="text-align:center; color:#6b7280;">⬇️</div>
+                <div style="text-align:center; color:#6b7280; margin-bottom: 10px;"><span class="material-symbols-outlined">arrow_downward</span></div>
                 <div class="conv-row">
                     <input type="number" id="grav-out" class="conv-input" readonly>
                     <select id="grav-unit-out" class="conv-select"><option value="plato">°P</option><option value="sg">SG</option></select>
@@ -129,12 +141,12 @@
             </div>
 
             <div class="tool-box">
-                <h4 style="margin-top:0; color: #d1d5db;">💧 Volume</h4>
+                <h4 class="tool-header"><span class="material-symbols-outlined">water_drop</span> Volume</h4>
                 <div class="conv-row">
                     <input type="number" id="vol-in" class="conv-input" placeholder="23">
                     <select id="vol-unit-in" class="conv-select"><option value="l">Litri</option><option value="gal">Galloni</option></select>
                 </div>
-                <div style="text-align:center; color:#6b7280;">⬇️</div>
+                <div style="text-align:center; color:#6b7280; margin-bottom: 10px;"><span class="material-symbols-outlined">arrow_downward</span></div>
                 <div class="conv-row">
                     <input type="number" id="vol-out" class="conv-input" readonly>
                     <select id="vol-unit-out" class="conv-select"><option value="gal">Galloni</option><option value="l">Litri</option></select>
@@ -157,6 +169,10 @@
                         <label>EBC</label>
                         <span id="val-ebc">4</span>
                     </div>
+                    <div class="color-val-box">
+                        <label>Lovibond</label>
+                        <span id="val-lov">1.7</span>°L
+                    </div>
                 </div>
 
                 <div style="padding: 0 10px;">
@@ -169,9 +185,15 @@
         </div>
 
         <div id="view-bjcp" class="tool-container" style="display: none; text-align: center; padding: 40px;">
-            <span class="material-symbols-outlined" style="font-size: 3rem; color: #f59e0b;">analytics</span>
+            <span class="material-symbols-outlined" style="font-size: 4rem; color: #f59e0b; margin-bottom: 20px;">analytics</span>
             <h3>BJCP Vitals</h3>
-            <p style="color: var(--text-muted);">In arrivo nel prossimo aggiornamento!</p>
+            <p style="color: var(--text-muted);">Database stili e range tecnici.<br>In arrivo nel prossimo aggiornamento!</p>
+        </div>
+
+        <div id="view-quiz" class="tool-container" style="display: none; text-align: center; padding: 40px;">
+            <span class="material-symbols-outlined" style="font-size: 4rem; color: #f59e0b; margin-bottom: 20px;">school</span>
+            <h3>Beer Quiz</h3>
+            <p style="color: var(--text-muted);">Mettiti alla prova!<br>In arrivo nel prossimo aggiornamento.</p>
         </div>
 
     </div>
@@ -180,7 +202,10 @@
         &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span>
     </footer>
 
-    <div id="update-toast" class="update-toast"><span class="material-symbols-outlined">system_update</span> Nuova versione!</div>
+    <div id="update-toast" class="update-toast">
+        <span class="material-symbols-outlined">system_update</span>
+        Nuova versione! Clicca qui.
+    </div>
 
     <script type="module">
         import { APP_VERSION } from './js/config.js';
@@ -190,10 +215,10 @@
 
         // 2. NAV & ROUTING LOGIC
         window.openTool = function(toolName) {
-            ['menu', 'converter', 'color', 'bjcp'].forEach(v => document.getElementById(`view-${v}`).style.display = 'none');
+            ['menu', 'converter', 'color', 'bjcp', 'quiz'].forEach(v => document.getElementById(`view-${v}`).style.display = 'none');
             document.getElementById(`view-${toolName}`).style.display = 'block';
 
-            const titleMap = { 'converter': 'Convertitore', 'bjcp': 'BJCP Vitals', 'color': 'Color Tool' };
+            const titleMap = { 'converter': 'Convertitore', 'bjcp': 'BJCP Vitals', 'color': 'Color Tool', 'quiz': 'Beer Quiz' };
             document.getElementById('page-title').textContent = titleMap[toolName];
             document.getElementById('page-subtitle').style.display = 'none';
 
@@ -203,7 +228,7 @@
         }
 
         window.showMenu = function() {
-            ['converter', 'color', 'bjcp'].forEach(v => document.getElementById(`view-${v}`).style.display = 'none');
+            ['converter', 'color', 'bjcp', 'quiz'].forEach(v => document.getElementById(`view-${v}`).style.display = 'none');
             document.getElementById('view-menu').style.display = 'block';
             document.getElementById('page-title').textContent = 'Strumenti';
             document.getElementById('page-subtitle').style.display = 'block';
@@ -255,22 +280,24 @@
 
         // 4. LOGICA COLOR TOOL
         const colorMap = [
-            { srm: 2, ebc: 4, hex: '#F8F4C4', desc: 'Giallo Paglierino' },
-            { srm: 3, ebc: 6, hex: '#F6EB38', desc: 'Giallo' },
-            { srm: 4, ebc: 8, hex: '#F3D231', desc: 'Dorato' },
-            { srm: 6, ebc: 12, hex: '#D88229', desc: 'Ambrato' },
-            { srm: 9, ebc: 18, hex: '#C76822', desc: 'Ambrato Carico' },
-            { srm: 12, ebc: 24, hex: '#A84C19', desc: 'Ramato' },
-            { srm: 15, ebc: 30, hex: '#8F3916', desc: 'Marrone Chiaro' },
-            { srm: 20, ebc: 39, hex: '#672E16', desc: 'Marrone' },
-            { srm: 24, ebc: 47, hex: '#481F11', desc: 'Marrone Scuro' },
-            { srm: 30, ebc: 59, hex: '#2F130D', desc: 'Marrone Molto Scuro' },
-            { srm: 40, ebc: 79, hex: '#180D08', desc: 'Nero' }
+            { srm: 2, hex: '#F8F4C4', desc: 'Giallo Paglierino' },
+            { srm: 3, hex: '#F6EB38', desc: 'Giallo' },
+            { srm: 4, hex: '#F3D231', desc: 'Dorato' },
+            { srm: 6, hex: '#D88229', desc: 'Ambrato' },
+            { srm: 9, hex: '#C76822', desc: 'Ambrato Carico' },
+            { srm: 12, hex: '#A84C19', desc: 'Ramato' },
+            { srm: 15, hex: '#8F3916', desc: 'Marrone Chiaro' },
+            { srm: 20, hex: '#672E16', desc: 'Marrone' },
+            { srm: 24, hex: '#481F11', desc: 'Marrone Scuro' },
+            { srm: 30, hex: '#2F130D', desc: 'Marrone Molto Scuro' },
+            { srm: 40, hex: '#180D08', desc: 'Nero' }
         ];
 
         function updateColor() {
             const srm = parseFloat(document.getElementById('color-slider').value);
-            const ebc = Math.round(srm * 1.97);
+            const ebc = (srm * 1.97).toFixed(1);
+            // Formula Lovibond approx: (°L = (SRM + 0.76) / 1.3546)
+            const lov = ((srm + 0.76) / 1.3546).toFixed(1);
             
             // Trova il colore più vicino nell'array
             let closest = colorMap[0];
@@ -283,6 +310,7 @@
 
             document.getElementById('val-srm').textContent = srm;
             document.getElementById('val-ebc').textContent = ebc;
+            document.getElementById('val-lov').textContent = lov;
             document.getElementById('color-desc').textContent = closest.desc;
             document.getElementById('beer-glass-preview').style.backgroundColor = closest.hex;
         }
