@@ -200,13 +200,12 @@
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
 
         // 2. State & Nav Logic
-        let currentView = 'list'; // 'list' o 'form'
+        let currentView = 'list'; 
 
         window.openForm = function(beerToEdit = null) {
             currentView = 'form';
             updateNav();
             
-            // Nascondi Lista / Mostra Form
             document.getElementById('view-list').style.display = 'none';
             document.getElementById('view-add').style.display = 'block';
             document.getElementById('fab-add').style.display = 'none';
@@ -226,11 +225,9 @@
                 document.getElementById('beer-name').value = beerToEdit.name;
                 document.getElementById('beer-producer').value = beerToEdit.producer;
                 
-                // Chips
                 if (beerToEdit.producer_type) setChipValue('group-producer-type', beerToEdit.producer_type);
                 if (beerToEdit.packaging) setChipValue('group-packaging', beerToEdit.packaging);
 
-                // Stile
                 document.getElementById('style-system').value = beerToEdit.style_type;
                 document.getElementById('style-system').dispatchEvent(new Event('change'));
                 
@@ -239,8 +236,6 @@
                 } else {
                     document.getElementById('style-bjcp').value = beerToEdit.style_name;
                     document.getElementById('style-bjcp').dispatchEvent(new Event('change'));
-                    // Nota: Il recupero dei dettagli dinamici BJCP richiederebbe parsing complesso, 
-                    // per semplicità qui resettiamo i campi dinamici se si edita.
                 }
             }
         }
@@ -267,7 +262,7 @@
                 btn.onclick = () => window.location.href = 'index.html';
             }
         }
-        updateNav(); // Init
+        updateNav(); 
 
         // 3. Chip Helper
         function setupChipGroup(groupId) {
@@ -295,7 +290,7 @@
             if(el) el.classList.add('selected');
         }
 
-        // 4. BJCP Logic (Standard)
+        // 4. BJCP Logic
         const systemSelect = document.getElementById('style-system');
         const containerFree = document.getElementById('container-free');
         const containerBjcp = document.getElementById('container-bjcp');
@@ -380,7 +375,6 @@
                 const el = document.createElement('div');
                 el.className = 'beer-card';
                 
-                // Determina testi
                 const producerText = beer.producer + (beer.producer_type === 'homebrewer' ? ' (Homebrewer)' : '');
                 const packText = beer.packaging ? packMap[beer.packaging] : '';
 
@@ -412,20 +406,16 @@
                     </div>
                 `;
 
-                // Click sulla card -> Vai al dettaglio (Futuro)
                 el.addEventListener('click', (e) => {
-                    // Evita trigger se clicchi sui bottoni azione
                     if(e.target.closest('.btn-action-beer') || e.target.closest('.beer-id-badge')) return;
                     window.location.href = `dettaglio-birra.html?id=${beer.id}`;
                 });
 
-                // Edit Logic
                 el.querySelector(`#edit-${beer.id}`).addEventListener('click', (e) => {
                     e.stopPropagation();
                     openForm(beer);
                 });
 
-                // Delete Logic
                 el.querySelector(`#del-${beer.id}`).addEventListener('click', async (e) => {
                     e.stopPropagation();
                     if(confirm("Eliminare questa birra?")) {
@@ -438,7 +428,7 @@
             });
         }
 
-        // 8. SAVE
+        // 8. SAVE (LOGICA CORRETTA INSERT/UPDATE)
         document.getElementById('beer-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-save');
@@ -447,7 +437,7 @@
             const { data: { user } } = await supabase.auth.getUser();
             const editId = document.getElementById('edit-beer-id').value;
 
-            // Stile
+            // Raccolta Dati (Stile)
             let styleName = "";
             let styleDetails = null;
             if (systemSelect.value === 'free') styleName = document.getElementById('style-free').value;
@@ -461,8 +451,8 @@
                 if(detailsArr.length > 0) styleDetails = detailsArr.join(', ');
             }
 
-            const payload = {
-                user_id: user.id,
+            // PAYLOAD BASE (Comune a Insert e Update)
+            const basePayload = {
                 name: document.getElementById('beer-name').value,
                 producer: document.getElementById('beer-producer').value,
                 producer_type: getChipValue('group-producer-type'),
@@ -475,22 +465,38 @@
             let error = null;
 
             if (editId) {
-                // UPDATE
-                const res = await supabase.from('my_beers').update(payload).eq('id', editId);
+                // --- UPDATE ---
+                // NON includiamo sharing_id o user_id, solo i dati modificati
+                const res = await supabase.from('my_beers').update(basePayload).eq('id', editId);
                 error = res.error;
             } else {
-                // INSERT (Genera ID)
+                // --- INSERT ---
+                // Generiamo Sharing ID e aggiungiamo User ID
                 let sharingId = generateSharingId();
-                // Check univocità semplice (per robustezza andrebbe fatto lato server ma ok per ora)
-                payload.sharing_id = sharingId;
-                const res = await supabase.from('my_beers').insert([payload]);
+                let unique = false; 
+                let attempts = 0;
+                
+                // Tentativi per ID univoco
+                while(!unique && attempts < 5) {
+                    const { data } = await supabase.from('my_beers').select('id').eq('sharing_id', sharingId);
+                    if (!data || data.length === 0) unique = true;
+                    else { sharingId = generateSharingId(); attempts++; }
+                }
+
+                const insertPayload = {
+                    ...basePayload,
+                    user_id: user.id,
+                    sharing_id: sharingId
+                };
+
+                const res = await supabase.from('my_beers').insert([insertPayload]);
                 error = res.error;
             }
 
             if (error) {
                 alert("Errore: " + error.message);
             } else {
-                closeForm(); // Ricarica la lista automaticamente
+                closeForm(); // Chiude il form e ricarica la lista
             }
             btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">save</span> Salva Birra`;
         });
