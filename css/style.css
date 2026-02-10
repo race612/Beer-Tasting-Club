@@ -374,7 +374,8 @@ input:focus, select:focus, textarea:focus {
 
 /* Versione nel footer */
 .footer-ver {
-    font-size: 0.7em; 
-    opacity: 0.6; 
-    margin-left: 5px;
+    font-size: inherit;     /* Prende la stessa dimensione del footer */
+    font-weight: inherit;   /* Stesso peso (non grassetto) */
+    color: inherit;         /* Stesso colore */
+    opacity: 1;             /* Nessuna trasparenza */
 }

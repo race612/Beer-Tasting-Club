@@ -33,56 +33,22 @@
         details.flaws-section summary::-webkit-details-marker { display: none; }
         details.flaws-section[open] summary { margin-bottom: 15px; border-bottom: 1px solid #ef4444; padding-bottom: 5px; }
 
-        /* --- NUOVI STILI SLIDER (UX MIGLIORATA) --- */
-        .slider-group {
-            background: #1f2937;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #374151;
-            margin-bottom: 15px;
-        }
-        
-        .slider-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
+        /* --- STILI SLIDER (UX MIGLIORATA) --- */
+        .slider-group { background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; margin-bottom: 15px; }
+        .slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .slider-label { font-weight: bold; color: #d1d5db; font-size: 0.95rem; }
-        
-        /* Il valore dinamico (es. "Media") */
         .slider-value { 
-            color: var(--primary-color); 
-            font-weight: bold; 
-            font-size: 0.95rem;
-            background: rgba(245, 158, 11, 0.1);
-            padding: 2px 8px;
-            border-radius: 4px;
-            min-width: 80px;
-            text-align: center;
+            color: var(--primary-color); font-weight: bold; font-size: 0.95rem;
+            background: rgba(245, 158, 11, 0.1); padding: 2px 8px; border-radius: 4px;
+            min-width: 80px; text-align: center;
         }
 
-        /* Input Range Customization */
-        input[type=range] {
-            -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; height: 30px; /* Aumentata area touch */
-        }
-        
-        /* La barra (Track) */
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%; height: 6px; cursor: pointer;
-            background: #4b5563; border-radius: 3px;
-        }
-        
-        /* Il pallino (Thumb) */
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; height: 30px; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: #4b5563; border-radius: 3px; }
         input[type=range]::-webkit-slider-thumb {
-            height: 24px; width: 24px; border-radius: 50%;
-            background: var(--primary-color); cursor: pointer;
-            -webkit-appearance: none; margin-top: -9px; /* Centra rispetto alla track */
-            box-shadow: 0 0 5px rgba(0,0,0,0.5);
-            border: 2px solid #fff;
+            height: 24px; width: 24px; border-radius: 50%; background: var(--primary-color); cursor: pointer;
+            -webkit-appearance: none; margin-top: -9px; box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid #fff;
         }
-        
         input[type=range]:focus::-webkit-slider-runnable-track { background: #6b7280; }
     </style>
 </head>
@@ -456,27 +422,54 @@
             </form>
         </div>
     </div>
-    
+
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
         &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
         <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-    
         <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            <span class="material-symbols-outlined" style="font-size: 0.8rem; color: #ef4444;">favorite</span>
-                Crafted with love by 
-                <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
-            <span class="material-symbols-outlined" style="font-size: 0.8rem; color: #f59e0b;">sports_bar</span>
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
         </p>
     </footer>
 
+    <div id="update-toast" class="update-toast">
+        <span class="material-symbols-outlined">system_update</span>
+        Nuova versione! Clicca qui.
+    </div>
+
     <script type="module">
+        // IMPORT DEVONO ESSERE SEMPRE ALL'INIZIO!
         import { supabase } from '../js/supabase-config.js';
         import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js';
+        import { APP_VERSION } from '../js/config.js'; // Assicurati di usare il percorso corretto
 
         let isDirty = false;
         const eventId = localStorage.getItem('hbl_selected_event') || '1';
         
-        // --- LOGICA BJCP E SISTEMA STILI (Invariata) ---
+        // --- 1. MOSTRA VERSIONE NEL FOOTER (Logica PWA) ---
+        const footerVer = document.getElementById('footer-version');
+        if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
+
+        // --- 2. GESTIONE AGGIORNAMENTI (Service Worker) ---
+        const updateToast = document.getElementById('update-toast');
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('../sw.js').then(reg => {
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            if(updateToast) updateToast.classList.add('show');
+                        }
+                    });
+                });
+            });
+        }
+
+        if(updateToast) {
+            updateToast.addEventListener('click', () => window.location.reload());
+        }
+
+        // --- 3. LOGICA SCHEDA (Originale) ---
         const systemSelect = document.getElementById('style-system');
         const containerFree = document.getElementById('container-free');
         const containerBjcp = document.getElementById('container-bjcp');
@@ -530,8 +523,7 @@
             wrapper.querySelectorAll('input').forEach(i => i.addEventListener('change', () => isDirty = true));
         });
 
-        // --- NUOVA LOGICA SLIDER (Range) ---
-        // Mappe per convertire numero (1-5) in testo
+        // SLIDER
         const intensityMap = [null, 'Bassa', 'Medio/Bassa', 'Media', 'Medio/Alta', 'Alta'];
         const persistenceMap = [null, 'Breve', 'Medio/Breve', 'Media', 'Medio/Lunga', 'Lunga'];
 
@@ -542,7 +534,6 @@
                 const type = e.target.getAttribute('data-type');
                 const labelSpan = document.getElementById(targetId);
                 
-                // Aggiorna testo in tempo reale
                 if (type === 'intensity') labelSpan.textContent = intensityMap[val];
                 else labelSpan.textContent = persistenceMap[val];
                 
@@ -550,7 +541,7 @@
             });
         });
 
-        // --- LOGICA PULSANTI (Crocette) ---
+        // PULSANTI (Crocette)
         document.querySelectorAll('.option-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 isDirty = true;
@@ -573,7 +564,7 @@
             });
         });
 
-        // Avviso Uscita
+        // AVVISO USCITA
         document.getElementById('back-link').addEventListener('click', (e) => {
             if (isDirty && !confirm("⚠️ Stai per uscire senza salvare.\nVuoi davvero procedere?")) {
                 e.preventDefault();
@@ -581,12 +572,11 @@
         });
         window.addEventListener('beforeunload', (e) => { if (isDirty) { e.preventDefault(); e.returnValue = ''; } });
 
-        // --- INVIO DATI ---
+        // INVIO DATI
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
 
-            // 1. Stile
             let finalStyle = "";
             if (systemSelect.value === 'free') finalStyle = inputFree.value;
             else {
@@ -606,7 +596,7 @@
 
             const descriptiveData = {};
 
-            // 2. Raccogli Dati da Griglie (Pulsanti)
+            // Dati da Griglie
             document.querySelectorAll('.options-grid').forEach(grid => {
                 const category = grid.getAttribute('data-category');
                 if (category === 'final_vote') return;
@@ -620,16 +610,15 @@
                 }
             });
 
-            // 3. Raccogli Dati da Slider (Converti Numero -> Testo)
+            // Dati da Slider
             document.querySelectorAll('.range-slider').forEach(range => {
                 const category = range.getAttribute('data-category');
                 const type = range.getAttribute('data-type');
                 const val = range.value;
-                // Salva il testo (es. "Media") invece del numero (3)
                 descriptiveData[category] = (type === 'intensity') ? intensityMap[val] : persistenceMap[val];
             });
 
-            // 4. Voto
+            // Voto
             const voteGrid = document.querySelector('.options-grid[data-category="final_vote"]');
             const selectedVote = voteGrid.querySelector('.option-btn.selected');
             const finalScore = selectedVote ? parseInt(selectedVote.textContent) : 0;
@@ -662,43 +651,6 @@
                 window.location.href = '../nuova-scheda.html';
             }
         });
-        import { APP_VERSION } from '../js/config.js'; // Assicurati che il percorso sia corretto (es. ../js/config.js nelle sottocartelle)
-
-    // 1. MOSTRA VERSIONE NEL FOOTER
-    const footerVer = document.getElementById('footer-version');
-    if (footerVer) footerVer.textContent = `v${APP_VERSION}`;
-
-    // 2. GESTIONE AGGIORNAMENTI (Service Worker)
-    const updateToast = document.getElementById('update-toast');
-
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('../sw.js').then(reg => { // Attenzione al percorso ./sw.js o ../sw.js
-            
-            // Se c'è un aggiornamento in attesa
-            reg.addEventListener('updatefound', () => {
-                const newWorker = reg.installing;
-                
-                newWorker.addEventListener('statechange', () => {
-                    // Se il nuovo SW è installato E c'è già un SW attivo (non è la prima visita)
-                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                        // Mostra notifica
-                        if(updateToast) updateToast.classList.add('show');
-                    }
-                });
-            });
-        });
-    }
-
-    // Click sul Toast -> Ricarica la pagina per attivare la nuova versione
-    if(updateToast) {
-        updateToast.addEventListener('click', () => {
-            window.location.reload();
-        });
-    }
     </script>
-    <div id="update-toast" class="update-toast">
-        <span class="material-symbols-outlined">system_update</span>
-        Nuova versione! Clicca qui.
-    </div>
 </body>
 </html>

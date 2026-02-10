@@ -1,4 +1,5 @@
 [
+    // modificare versione in js/config.js e cambiare CACHE_NAME in sw.js
     {
         "version": "0.5.0 Alpha",
         "date": "10 Feb 2026",
