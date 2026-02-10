@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dettaglio Birra - Beer Tasting Club</title>
+    <link rel="stylesheet" href="css/style.css?v=0.8.1">
+    <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
+    <meta name="theme-color" content="#f59e0b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
+    <style>
+        .detail-header { text-align: center; margin-bottom: 20px; }
+        .detail-header h2 { color: var(--primary-color); margin: 0; font-size: 1.8rem; }
+        .detail-header p { color: #d1d5db; margin: 5px 0; font-size: 1.1rem; }
+        
+        .stat-box { background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; margin-bottom: 20px; text-align: center; }
+        .stat-code { font-size: 2rem; font-weight: bold; color: var(--primary-color); letter-spacing: 2px; font-family: monospace; }
+        
+        .linked-sheets { margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-bar">
+            <a href="miebirre.html" class="header-link">
+                <span class="material-symbols-outlined">arrow_back</span> Mie Birre
+            </a>
+            <img src="assets/logo.png" alt="Logo" class="header-logo">
+        </div>
+
+        <div id="beer-detail-container">
+            <p style="text-align:center;">Caricamento...</p>
+        </div>
+
+        <div class="linked-sheets">
+            <h3 style="border-bottom: 1px solid #4b5563; padding-bottom: 10px;">Schede di Degustazione Ricevute</h3>
+            <div id="sheets-list">
+                <p style="color: var(--text-muted); font-size: 0.9em; margin-top: 10px;">
+                    Nessuna scheda collegata a questa birra.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
+        &copy; 2026 Beer Tasting Club
+    </footer>
+
+    <script type="module">
+        import { supabase } from './js/supabase-config.js';
+
+        const params = new URLSearchParams(window.location.search);
+        const beerId = params.get('id');
+
+        if (!beerId) window.location.href = 'miebirre.html';
+
+        async function loadData() {
+            // 1. CARICA DETTAGLI BIRRA
+            const { data: beer, error } = await supabase
+                .from('my_beers')
+                .select('*')
+                .eq('id', beerId)
+                .single();
+
+            if (error) {
+                document.getElementById('beer-detail-container').innerHTML = `<p style="color:red">Errore: ${error.message}</p>`;
+                return;
+            }
+
+            // Render Dettagli
+            const packMap = { 'bottle': 'Bottiglia', 'can': 'Lattina', 'tap': 'Spina', 'growler': 'Growler' };
+            const prodType = beer.producer_type === 'homebrewer' ? ' (Homebrewer)' : '';
+            
+            document.getElementById('beer-detail-container').innerHTML = `
+                <div class="detail-header">
+                    <h2>${beer.name}</h2>
+                    <p>${beer.producer}${prodType}</p>
+                    <div style="font-size:0.9em; color:#9ca3af; margin-top:5px;">${beer.style_name}</div>
+                    ${beer.packaging ? `<div style="font-size:0.9em; color:#9ca3af;">${packMap[beer.packaging]}</div>` : ''}
+                </div>
+
+                <div class="stat-box">
+                    <div style="font-size:0.8rem; text-transform:uppercase; color:#9ca3af; margin-bottom:5px;">Codice Condivisione</div>
+                    <div class="stat-code" onclick="navigator.clipboard.writeText('${beer.sharing_id}'); alert('Copiato!');" style="cursor:copy;">
+                        ${beer.sharing_id}
+                    </div>
+                    <div style="font-size:0.7rem; color:#6b7280; margin-top:5px;">Tocca per copiare</div>
+                </div>
+            `;
+
+            // 2. CARICA SCHEDE COLLEGATE (Future Proof)
+            // Cerca schede che hanno linked_beer_code uguale allo sharing_id di questa birra
+            const { data: sheets, error: sheetsError } = await supabase
+                .from('tasting_notes')
+                .select('*')
+                .eq('linked_beer_code', beer.sharing_id)
+                .order('created_at', { ascending: false });
+
+            const listDiv = document.getElementById('sheets-list');
+            
+            if (sheets && sheets.length > 0) {
+                listDiv.innerHTML = '';
+                sheets.forEach(sheet => {
+                    const date = new Date(sheet.created_at).toLocaleDateString('it-IT');
+                    let scoreBadge = `<span style="font-weight:bold; color:white; background:#4b5563; padding:2px 6px; border-radius:4px;">${sheet.final_score}</span>`;
+                    
+                    if (sheet.final_score >= 38) scoreBadge = `<span style="font-weight:bold; color:white; background:#10b981; padding:2px 6px; border-radius:4px;">${sheet.final_score}</span>`;
+                    
+                    const item = document.createElement('div');
+                    item.style = "background:#1f2937; padding:10px; margin-bottom:10px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;";
+                    item.innerHTML = `
+                        <div>
+                            <div style="font-weight:bold; color:#d1d5db;">Degustazione del ${date}</div>
+                            <div style="font-size:0.8rem; color:#9ca3af;">Giudice: (Anonimo per ora)</div> 
+                        </div>
+                        ${scoreBadge}
+                    `;
+                    // Click -> Vai al dettaglio scheda
+                    item.addEventListener('click', () => {
+                        window.location.href = `dettaglio-scheda.html?id=${sheet.id}`;
+                    });
+                    listDiv.appendChild(item);
+                });
+            } else {
+                listDiv.innerHTML = `<p style="text-align:center; padding:20px; color:#6b7280;">Ancora nessuna scheda ricevuta per questo codice.</p>`;
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

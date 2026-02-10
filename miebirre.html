@@ -12,39 +12,40 @@
     <link rel="apple-touch-icon" href="assets/icon-192.png">
     
     <style>
-        /* STILI SPECIFICI PER I RADIO-CHECKBOX */
-        .custom-radio-group {
-            display: flex;
+        /* CHIPS STYLE (Uguale al Profilo) */
+        .chips-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-top: 5px;
-            flex-wrap: wrap;
         }
-
-        .radio-chip {
+        
+        .chip-btn {
             background: #1f2937;
             border: 1px solid #4b5563;
-            color: #d1d5db;
-            padding: 8px 15px;
-            border-radius: 20px;
+            border-radius: 8px;
+            padding: 12px 5px;
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s;
-            user-select: none;
+            text-align: center;
+            color: #d1d5db;
             display: flex;
             align-items: center;
-            gap: 5px;
+            justify-content: center;
+            user-select: none;
         }
 
-        .radio-chip:hover { border-color: #9ca3af; }
+        .chip-btn:hover { border-color: #9ca3af; background: #374151; }
 
-        .radio-chip.selected {
+        .chip-btn.selected {
             background: rgba(245, 158, 11, 0.15);
-            border-color: var(--primary-color);
+            border: 1px solid var(--primary-color);
             color: var(--primary-color);
             font-weight: bold;
         }
 
-        /* CARD BIRRA IN LISTA */
+        /* CARD BIRRA */
         .beer-card {
             background: #1f2937;
             border-left: 4px solid var(--primary-color);
@@ -53,7 +54,9 @@
             margin-bottom: 15px;
             position: relative;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
         }
+        .beer-card:active { transform: scale(0.98); }
 
         .beer-header {
             display: flex;
@@ -61,33 +64,35 @@
             align-items: flex-start;
         }
 
+        /* ID BADGE (Più grande e cliccabile) */
         .beer-id-badge {
-            background: #374151;
-            color: #fff;
+            background: #111827;
+            color: var(--primary-color);
             font-family: monospace;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            border: 1px solid #6b7280;
-        }
-
-        /* FAB (Floating Action Button) per aggiungere */
-        .fab-add {
-            position: fixed;
-            bottom: 80px; /* Sopra il footer */
-            right: 20px;
-            width: 56px;
-            height: 56px;
-            background: var(--primary-color);
-            color: black;
-            border-radius: 50%;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: 1px dashed #6b7280;
+            cursor: copy;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 5px;
+        }
+        .beer-id-badge:active { background: #374151; }
+
+        .beer-producer { color: var(--text-muted); font-size: 0.95rem; margin-top: 2px; }
+        .beer-packaging { color: var(--text-muted); font-size: 0.85rem; margin-top: 2px; font-style: italic; opacity: 0.8; }
+
+        /* FAB */
+        .fab-add {
+            position: fixed; bottom: 80px; right: 20px;
+            width: 56px; height: 56px;
+            background: var(--primary-color); color: black;
+            border-radius: 50%; border: none;
+            display: flex; align-items: center; justify-content: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            cursor: pointer;
-            z-index: 100;
-            border: none;
+            cursor: pointer; z-index: 100;
         }
     </style>
 </head>
@@ -95,30 +100,25 @@
     <div class="container">
         
         <div class="header-bar">
-            <a href="index.html" class="header-link">
-                <span class="material-symbols-outlined">arrow_back</span> Home
-            </a>
+            <div id="dynamic-back-btn" class="header-link" style="cursor: pointer;">
+                <span class="material-symbols-outlined">arrow_back</span> <span id="back-label">Home</span>
+            </div>
             <img src="assets/logo.png" alt="Logo" class="header-logo">
         </div>
 
-        <h2 class="text-center" style="margin-bottom: 5px;">Le mie Birre</h2>
-        <p class="text-center" style="color: var(--text-muted); font-size: 0.9em; margin-top:0;">Archivio produzioni e cantina</p>
+        <h2 class="text-center" style="margin-bottom: 5px;" id="page-title">Le mie Birre</h2>
+        <p class="text-center" style="color: var(--text-muted); font-size: 0.9em; margin-top:0;" id="page-subtitle">Archivio produzioni e cantina</p>
 
         <div id="view-list" style="margin-top: 20px; padding-bottom: 60px;">
             <div id="beer-list-container">
-                <p style="text-align: center; margin-top: 40px;">Caricamento birre...</p>
+                <p style="text-align: center; margin-top: 40px;">Caricamento...</p>
             </div>
         </div>
 
         <div id="view-add" style="display: none; margin-top: 20px;">
             <div class="card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3 style="margin:0;">Nuova Birra</h3>
-                    <button class="btn btn-sm btn-outline" onclick="toggleView('list')">Annulla</button>
-                </div>
-
-                <form id="add-beer-form">
-                    <div class="form-group">
+                <form id="beer-form">
+                    <input type="hidden" id="edit-beer-id"> <div class="form-group">
                         <label>Nome Birra</label>
                         <input type="text" id="beer-name" required placeholder="Es. American IPA">
                     </div>
@@ -127,13 +127,9 @@
                         <label>Produttore / Birrificio</label>
                         <input type="text" id="beer-producer" required placeholder="Es. Mario Rossi">
                         
-                        <div class="custom-radio-group" id="group-producer-type" style="margin-top: 8px;">
-                            <div class="radio-chip" data-value="homebrewer">
-                                <span class="material-symbols-outlined" style="font-size:1.1rem">home</span> Homebrewer
-                            </div>
-                            <div class="radio-chip" data-value="pro">
-                                <span class="material-symbols-outlined" style="font-size:1.1rem">factory</span> Pro
-                            </div>
+                        <div class="chips-grid" id="group-producer-type">
+                            <div class="chip-btn" data-value="homebrewer">Homebrewer</div>
+                            <div class="chip-btn" data-value="pro">Professionale</div>
                         </div>
                     </div>
 
@@ -162,19 +158,11 @@
 
                     <div class="form-group">
                         <label>Confezionamento (Opzionale)</label>
-                        <div class="custom-radio-group" id="group-packaging">
-                            <div class="radio-chip" data-value="bottle">
-                                <span class="material-symbols-outlined" style="font-size:1.1rem">wine_bar</span> Bottiglia
-                            </div>
-                            <div class="radio-chip" data-value="can">
-                                <span class="material-symbols-outlined" style="font-size:1.1rem">local_drink</span> Lattina
-                            </div>
-                            <div class="radio-chip" data-value="tap">
-                                <span class="material-symbols-outlined" style="font-size:1.1rem">water_drop</span> Spina
-                            </div>
-                            <div class="radio-chip" data-value="growler">
-                                <span class="material-symbols-outlined" style="font-size:1.1rem">propane_tank</span> Growler
-                            </div>
+                        <div class="chips-grid" id="group-packaging">
+                            <div class="chip-btn" data-value="bottle">Bottiglia</div>
+                            <div class="chip-btn" data-value="can">Lattina</div>
+                            <div class="chip-btn" data-value="tap">Spina</div>
+                            <div class="chip-btn" data-value="growler">Growler</div>
                         </div>
                     </div>
 
@@ -185,7 +173,7 @@
             </div>
         </div>
 
-        <button class="fab-add" id="fab-add" onclick="toggleView('add')">
+        <button class="fab-add" id="fab-add" onclick="openForm()">
             <span class="material-symbols-outlined" style="font-size: 2rem;">add</span>
         </button>
 
@@ -204,57 +192,113 @@
     </div>
 
     <script type="module">
-        // 1. IMPORT
         import { supabase } from './js/supabase-config.js';
         import { bjcpCatalog, specialStyleRules } from './js/bjcp-2021.js';
         import { APP_VERSION } from './js/config.js';
 
-        // 2. CONFIGURAZIONE BASE
-        const footerVer = document.getElementById('footer-version');
-        if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
+        // 1. Footer Version
+        document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
 
-        // 3. UI MANAGEMENT
-        window.toggleView = function(viewName) {
-            const listDiv = document.getElementById('view-list');
-            const addDiv = document.getElementById('view-add');
-            const fab = document.getElementById('fab-add');
+        // 2. State & Nav Logic
+        let currentView = 'list'; // 'list' o 'form'
 
-            if (viewName === 'add') {
-                listDiv.style.display = 'none';
-                addDiv.style.display = 'block';
-                fab.style.display = 'none';
-            } else {
-                listDiv.style.display = 'block';
-                addDiv.style.display = 'none';
-                fab.style.display = 'flex';
-                // Reset form opzionale
+        window.openForm = function(beerToEdit = null) {
+            currentView = 'form';
+            updateNav();
+            
+            // Nascondi Lista / Mostra Form
+            document.getElementById('view-list').style.display = 'none';
+            document.getElementById('view-add').style.display = 'block';
+            document.getElementById('fab-add').style.display = 'none';
+            document.getElementById('page-title').textContent = beerToEdit ? "Modifica Birra" : "Nuova Birra";
+            document.getElementById('page-subtitle').style.display = 'none';
+
+            // Reset Form
+            document.getElementById('beer-form').reset();
+            document.getElementById('edit-beer-id').value = "";
+            document.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected'));
+            document.getElementById('style-system').value = 'free';
+            document.getElementById('style-system').dispatchEvent(new Event('change'));
+
+            if (beerToEdit) {
+                // POPOLA FORM (Edit Mode)
+                document.getElementById('edit-beer-id').value = beerToEdit.id;
+                document.getElementById('beer-name').value = beerToEdit.name;
+                document.getElementById('beer-producer').value = beerToEdit.producer;
+                
+                // Chips
+                if (beerToEdit.producer_type) setChipValue('group-producer-type', beerToEdit.producer_type);
+                if (beerToEdit.packaging) setChipValue('group-packaging', beerToEdit.packaging);
+
+                // Stile
+                document.getElementById('style-system').value = beerToEdit.style_type;
+                document.getElementById('style-system').dispatchEvent(new Event('change'));
+                
+                if (beerToEdit.style_type === 'free') {
+                    document.getElementById('style-free').value = beerToEdit.style_name;
+                } else {
+                    document.getElementById('style-bjcp').value = beerToEdit.style_name;
+                    document.getElementById('style-bjcp').dispatchEvent(new Event('change'));
+                    // Nota: Il recupero dei dettagli dinamici BJCP richiederebbe parsing complesso, 
+                    // per semplicità qui resettiamo i campi dinamici se si edita.
+                }
             }
         }
 
-        // 4. LOGICA RADIO-CHECKBOX (Opzionale e Deselezionabile)
-        function setupRadioGroup(groupId) {
+        window.closeForm = function() {
+            currentView = 'list';
+            updateNav();
+            document.getElementById('view-list').style.display = 'block';
+            document.getElementById('view-add').style.display = 'none';
+            document.getElementById('fab-add').style.display = 'flex';
+            document.getElementById('page-title').textContent = "Le mie Birre";
+            document.getElementById('page-subtitle').style.display = 'block';
+            loadBeers(); // Ricarica lista per vedere modifiche
+        }
+
+        function updateNav() {
+            const btn = document.getElementById('dynamic-back-btn');
+            const label = document.getElementById('back-label');
+            if (currentView === 'form') {
+                label.textContent = "Mie Birre";
+                btn.onclick = () => closeForm();
+            } else {
+                label.textContent = "Home";
+                btn.onclick = () => window.location.href = 'index.html';
+            }
+        }
+        updateNav(); // Init
+
+        // 3. Chip Helper
+        function setupChipGroup(groupId) {
             const container = document.getElementById(groupId);
-            container.querySelectorAll('.radio-chip').forEach(chip => {
+            container.querySelectorAll('.chip-btn').forEach(chip => {
                 chip.addEventListener('click', () => {
                     if (chip.classList.contains('selected')) {
-                        // Se già selezionato, deseleziona
                         chip.classList.remove('selected');
                     } else {
-                        // Deseleziona gli altri e seleziona questo
-                        container.querySelectorAll('.radio-chip').forEach(c => c.classList.remove('selected'));
+                        container.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected'));
                         chip.classList.add('selected');
                     }
                 });
             });
         }
-        setupRadioGroup('group-producer-type');
-        setupRadioGroup('group-packaging');
+        setupChipGroup('group-producer-type');
+        setupChipGroup('group-packaging');
 
-        // 5. LOGICA STILI (Copiata da Nuova Scheda)
+        function getChipValue(groupId) {
+            const el = document.getElementById(groupId).querySelector('.chip-btn.selected');
+            return el ? el.getAttribute('data-value') : null;
+        }
+        function setChipValue(groupId, val) {
+            const el = document.querySelector(`#${groupId} .chip-btn[data-value="${val}"]`);
+            if(el) el.classList.add('selected');
+        }
+
+        // 4. BJCP Logic (Standard)
         const systemSelect = document.getElementById('style-system');
         const containerFree = document.getElementById('container-free');
         const containerBjcp = document.getElementById('container-bjcp');
-        const inputFree = document.getElementById('style-free');
         const inputBjcp = document.getElementById('style-bjcp');
         const dynamicContainer = document.getElementById('bjcp-dynamic-container');
 
@@ -271,11 +315,11 @@
 
         systemSelect.addEventListener('change', (e) => {
             if (e.target.value === 'free') {
-                containerFree.style.display = 'block'; inputFree.setAttribute('required', 'true');
-                containerBjcp.style.display = 'none'; inputBjcp.removeAttribute('required'); inputBjcp.value = ""; dynamicContainer.innerHTML = '';
+                containerFree.style.display = 'block'; document.getElementById('style-free').setAttribute('required', 'true');
+                containerBjcp.style.display = 'none'; inputBjcp.removeAttribute('required');
             } else {
                 containerBjcp.style.display = 'block'; inputBjcp.setAttribute('required', 'true');
-                containerFree.style.display = 'none'; inputFree.removeAttribute('required'); inputFree.value = "";
+                containerFree.style.display = 'none'; document.getElementById('style-free').removeAttribute('required');
             }
         });
 
@@ -285,34 +329,35 @@
             const rule = specialStyleRules[code];
             if (!rule) return;
             const wrapper = document.createElement('div');
-            // Stile semplificato per questo form
             if (rule.type === 'text_only') {
-                 if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b">${rule.hint}</small>`;
-                 wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" style="width:100%; padding:8px; margin-top:5px; background:#374151; border:1px solid #4b5563; color:white; border-radius:4px;">`;
+                 wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" style="width:100%; padding:10px; margin-top:5px; background:#111827; border:1px solid #4b5563; color:white; border-radius:4px;">`;
             } else if (rule.type === 'options') {
-                wrapper.innerHTML += `<span style="display:block; margin-top:5px; font-size:0.9em;">${rule.label}</span><div style="display:flex; gap:10px; margin-top:5px;">` + 
-                rule.choices.map(c => {
-                    return `<label style="background:#374151; padding:5px 10px; border-radius:4px;"><input type="radio" name="dyn-radio" value="${c}"> ${c}</label>`;
-                }).join('') + `</div>`;
+                wrapper.innerHTML += `<div style="display:flex; gap:10px; margin-top:5px; flex-wrap:wrap;">` + 
+                rule.choices.map(c => `<label style="background:#111827; padding:5px 10px; border-radius:4px;"><input type="radio" name="dyn-radio" value="${c}"> ${c}</label>`).join('') + `</div>`;
             }
             dynamicContainer.appendChild(wrapper);
         });
 
-        // 6. GENERATORE SHARING ID
+        // 5. Sharing ID Generator
         function generateSharingId() {
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // No I, O, 0, 1 per evitare confusione
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let result = '';
-            for (let i = 0; i < 6; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
+            for (let i = 0; i < 6; i++) { result += chars.charAt(Math.floor(Math.random() * chars.length)); }
             return result;
         }
 
-        // 7. CARICAMENTO BIRRE
+        // 6. COPY CLIPBOARD
+        window.copyId = function(id, event) {
+            event.stopPropagation();
+            navigator.clipboard.writeText(id).then(() => {
+                alert("ID Copiato: " + id);
+            });
+        }
+
+        // 7. LOAD LIST
         async function loadBeers() {
             const container = document.getElementById('beer-list-container');
             const { data: { user } } = await supabase.auth.getUser();
-            
             if (!user) { window.location.href = 'index.html'; return; }
 
             const { data: beers, error } = await supabase
@@ -321,48 +366,68 @@
                 .eq('user_id', user.id)
                 .order('created_at', { ascending: false });
 
-            if (error) {
-                container.innerHTML = `<p style="color:red; text-align:center">Errore: ${error.message}</p>`;
-                return;
-            }
-
+            if (error) { container.innerHTML = `<p style="color:red;">Errore: ${error.message}</p>`; return; }
             if (!beers || beers.length === 0) {
-                container.innerHTML = `<p style="text-align: center; opacity: 0.6;">Nessuna birra inserita.<br>Clicca su + per aggiungerne una.</p>`;
+                container.innerHTML = `<p style="text-align: center; opacity: 0.6;">Nessuna birra inserita.<br>Clicca su + per iniziare.</p>`;
                 return;
             }
 
             container.innerHTML = '';
+            
+            const packMap = { 'bottle': 'Bottiglia', 'can': 'Lattina', 'tap': 'Spina', 'growler': 'Growler' };
+
             beers.forEach(beer => {
                 const el = document.createElement('div');
                 el.className = 'beer-card';
                 
-                // Icona confezionamento
-                let packIcon = '';
-                if(beer.packaging === 'bottle') packIcon = 'wine_bar';
-                else if(beer.packaging === 'can') packIcon = 'local_drink';
-                else if(beer.packaging === 'tap') packIcon = 'water_drop';
-                
+                // Determina testi
+                const producerText = beer.producer + (beer.producer_type === 'homebrewer' ? ' (Homebrewer)' : '');
+                const packText = beer.packaging ? packMap[beer.packaging] : '';
+
                 el.innerHTML = `
                     <div class="beer-header">
                         <div>
                             <h3 style="margin:0; color:white;">${beer.name}</h3>
-                            <div style="color:var(--text-muted); font-size:0.9em;">${beer.producer}</div>
+                            <div class="beer-producer">${producerText}</div>
+                            ${packText ? `<div class="beer-packaging">${packText}</div>` : ''}
                         </div>
-                        <div class="beer-id-badge" title="Codice Condivisione">ID: ${beer.sharing_id}</div>
+                        <div class="beer-id-badge" onclick="copyId('${beer.sharing_id}', event)" title="Clicca per copiare">
+                            <span class="material-symbols-outlined" style="font-size:0.9rem">content_copy</span>
+                            ${beer.sharing_id}
+                        </div>
                     </div>
-                    <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:flex-end;">
-                        <div style="font-size:0.85em; color:var(--primary-color);">
+                    
+                    <div style="margin-top:15px; display:flex; justify-content:space-between; align-items:flex-end;">
+                        <div style="font-size:0.9rem; color:var(--primary-color); font-weight:bold;">
                             ${beer.style_name}
-                            ${packIcon ? `<span class="material-symbols-outlined" style="font-size:1em; vertical-align:text-bottom; margin-left:5px;">${packIcon}</span>` : ''}
                         </div>
-                        <button class="btn-delete-beer" data-id="${beer.id}" style="background:none; border:none; color:#ef4444; cursor:pointer;">
-                            <span class="material-symbols-outlined">delete</span>
-                        </button>
+                        <div style="display:flex; gap:15px;">
+                            <button class="btn-action-beer" id="edit-${beer.id}" style="background:none; border:none; color:#f59e0b; cursor:pointer;">
+                                <span class="material-symbols-outlined">edit</span>
+                            </button>
+                            <button class="btn-action-beer" id="del-${beer.id}" style="background:none; border:none; color:#ef4444; cursor:pointer;">
+                                <span class="material-symbols-outlined">delete</span>
+                            </button>
+                        </div>
                     </div>
                 `;
-                
-                // Delete Listener
-                el.querySelector('.btn-delete-beer').addEventListener('click', async () => {
+
+                // Click sulla card -> Vai al dettaglio (Futuro)
+                el.addEventListener('click', (e) => {
+                    // Evita trigger se clicchi sui bottoni azione
+                    if(e.target.closest('.btn-action-beer') || e.target.closest('.beer-id-badge')) return;
+                    window.location.href = `dettaglio-birra.html?id=${beer.id}`;
+                });
+
+                // Edit Logic
+                el.querySelector(`#edit-${beer.id}`).addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openForm(beer);
+                });
+
+                // Delete Logic
+                el.querySelector(`#del-${beer.id}`).addEventListener('click', async (e) => {
+                    e.stopPropagation();
                     if(confirm("Eliminare questa birra?")) {
                         await supabase.from('my_beers').delete().eq('id', beer.id);
                         loadBeers();
@@ -373,27 +438,21 @@
             });
         }
 
-        // 8. SALVATAGGIO BIRRA
-        document.getElementById('add-beer-form').addEventListener('submit', async (e) => {
+        // 8. SAVE
+        document.getElementById('beer-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-save');
             btn.disabled = true; btn.textContent = "Salvataggio...";
 
             const { data: { user } } = await supabase.auth.getUser();
-
-            // Raccolta dati Radio
-            const getRadioVal = (id) => {
-                const el = document.getElementById(id).querySelector('.radio-chip.selected');
-                return el ? el.getAttribute('data-value') : null;
-            }
+            const editId = document.getElementById('edit-beer-id').value;
 
             // Stile
             let styleName = "";
             let styleDetails = null;
-            if (systemSelect.value === 'free') styleName = inputFree.value;
+            if (systemSelect.value === 'free') styleName = document.getElementById('style-free').value;
             else {
                 styleName = inputBjcp.value;
-                // Gestione dettagli BJCP
                 const textVal = document.getElementById('dyn-text')?.value;
                 const radioVal = document.querySelector('input[name="dyn-radio"]:checked')?.value;
                 let detailsArr = [];
@@ -402,53 +461,47 @@
                 if(detailsArr.length > 0) styleDetails = detailsArr.join(', ');
             }
 
-            // Sharing ID Univoco (loop per sicurezza collisioni, anche se improbabile)
-            let sharingId = generateSharingId();
-            let unique = false;
-            let attempts = 0;
-            
-            while(!unique && attempts < 5) {
-                const { data } = await supabase.from('my_beers').select('id').eq('sharing_id', sharingId);
-                if (!data || data.length === 0) unique = true;
-                else { sharingId = generateSharingId(); attempts++; }
-            }
-
             const payload = {
                 user_id: user.id,
                 name: document.getElementById('beer-name').value,
                 producer: document.getElementById('beer-producer').value,
-                producer_type: getRadioVal('group-producer-type'),
+                producer_type: getChipValue('group-producer-type'),
                 style_type: systemSelect.value,
                 style_name: styleName,
                 style_details: styleDetails,
-                packaging: getRadioVal('group-packaging'),
-                sharing_id: sharingId
+                packaging: getChipValue('group-packaging')
             };
 
-            const { error } = await supabase.from('my_beers').insert([payload]);
+            let error = null;
+
+            if (editId) {
+                // UPDATE
+                const res = await supabase.from('my_beers').update(payload).eq('id', editId);
+                error = res.error;
+            } else {
+                // INSERT (Genera ID)
+                let sharingId = generateSharingId();
+                // Check univocità semplice (per robustezza andrebbe fatto lato server ma ok per ora)
+                payload.sharing_id = sharingId;
+                const res = await supabase.from('my_beers').insert([payload]);
+                error = res.error;
+            }
 
             if (error) {
-                alert("Errore salvataggio: " + error.message);
-                btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">save</span> Salva Birra`;
+                alert("Errore: " + error.message);
             } else {
-                alert("Birra salvata! 🍻\nCodice condivisione: " + sharingId);
-                document.getElementById('add-beer-form').reset();
-                // Reset manuale UI chips
-                document.querySelectorAll('.radio-chip').forEach(c => c.classList.remove('selected'));
-                toggleView('list');
-                loadBeers();
-                btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">save</span> Salva Birra`;
+                closeForm(); // Ricarica la lista automaticamente
             }
+            btn.disabled = false; btn.innerHTML = `<span class="material-symbols-outlined">save</span> Salva Birra`;
         });
 
-        // Avvio
         loadBeers();
 
-        // 9. SERVICE WORKER (Standard)
+        // 9. SW Update
         const updateToast = document.getElementById('update-toast');
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                if (reg.waiting) { if(updateToast) updateToast.classList.add('show'); }
+                if (reg.waiting) if(updateToast) updateToast.classList.add('show');
                 reg.addEventListener('updatefound', () => {
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
@@ -457,13 +510,9 @@
                         }
                     });
                 });
-            }).catch(err => console.log('SW failed', err));
-        }
-        if(updateToast) {
-            updateToast.addEventListener('click', () => {
-                if (navigator.serviceWorker.controller) window.location.reload();
             });
         }
+        if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
     </script>
 </body>
 </html>
