@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descrittiva Semplificata - Beer Tasting Club</title>
-    <link rel="stylesheet" href="../css/style.css?v=0.9.0">
+    <link rel="stylesheet" href="../css/style.css?v=0.9.1">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,9 +12,9 @@
     <link rel="apple-touch-icon" href="../assets/icon-192.png">
     
     <style>
-        /* STILI SPECIFICI COMPATTEZZA E UX */
+        /* --- STILI SPECIFICI COMPATTEZZA E UX --- */
         
-        /* 1. Accordion (Sezioni Collassabili) */
+        /* 1. Accordion */
         details.section-accordion {
             background: #111827;
             border: 1px solid #374151;
@@ -23,7 +23,7 @@
             overflow: hidden;
         }
         details.section-accordion summary {
-            padding: 15px;
+            padding: 12px 15px; /* Ridotto leggermente */
             background: #1f2937;
             cursor: pointer;
             font-weight: bold;
@@ -33,47 +33,38 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid transparent;
-            transition: border-color 0.2s;
         }
         details.section-accordion[open] summary {
             border-bottom-color: #374151;
             background: rgba(245, 158, 11, 0.05);
         }
-        details.section-accordion summary::after {
-            content: '+'; 
-            font-size: 1.2rem;
-            color: #9ca3af;
-        }
-        details.section-accordion[open] summary::after {
-            content: '-';
-        }
-        .accordion-content {
-            padding: 15px;
-        }
+        details.section-accordion summary::after { content: '+'; font-size: 1.2rem; color: #9ca3af; }
+        details.section-accordion[open] summary::after { content: '-'; }
+        .accordion-content { padding: 15px; }
 
         /* 2. Pulsanti Descrittori Ottimizzati */
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); /* Celle più responsive */
-            gap: 8px;
+            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+            gap: 6px; /* Gap ridotto */
         }
         .option-btn {
             background: #1f2937;
             border: 1px solid #4b5563;
             border-radius: 6px;
-            padding: 8px 4px; /* Padding ridotto */
-            font-size: 0.75rem; /* Font più piccolo */
+            padding: 6px 2px;
+            font-size: 0.75rem;
             cursor: pointer;
             text-align: center;
             color: #d1d5db;
             user-select: none;
-            min-height: 48px; /* Altezza minima fissa */
+            min-height: 44px; /* Altezza ridotta */
             display: flex;
             align-items: center;
             justify-content: center;
             line-height: 1.1;
-            word-break: break-word; /* A capo se serve */
-            hyphens: auto; /* Sillabazione se supportata */
+            word-break: break-word;
+            hyphens: auto;
             position: relative;
         }
         .option-btn.selected {
@@ -82,45 +73,48 @@
             color: var(--primary-color);
             font-weight: bold;
         }
-        /* Spunta visiva */
         .option-btn.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            font-size: 0.6rem;
-            color: var(--primary-color);
+            content: '✓'; position: absolute; top: 1px; right: 2px; font-size: 0.6rem; color: var(--primary-color);
         }
 
-        /* 3. Slider Voto Finale */
+        /* 3. Slider Compact (SENZA RIQUADRO) */
+        .slider-group {
+            background: transparent; /* Niente sfondo */
+            padding: 0;              /* Niente padding */
+            border: none;            /* Niente bordo */
+            margin-bottom: 20px;     /* Spazio sotto */
+            margin-top: 10px;
+        }
+        .slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .slider-label { font-size: 0.9rem; color: #d1d5db; }
+        .slider-value { color: var(--primary-color); font-weight: bold; font-size: 0.9rem; }
+        
+        input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; cursor: pointer; height: 30px; margin: 0; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: #4b5563; border-radius: 3px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; height: 20px; width: 20px; border-radius: 50%; background: var(--primary-color); cursor: pointer; margin-top: -7px; box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid #fff; }
+
+        /* 4. Slider Voto Finale (Manteniamo il box per evidenza ma pulito) */
         .final-score-box {
             text-align: center;
             background: #111827;
-            padding: 20px;
+            padding: 15px;
             border-radius: 12px;
-            border: 2px solid #374151;
+            border: 1px solid #374151;
             margin-bottom: 20px;
         }
-        .final-score-display {
-            font-size: 3rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin: 10px 0;
-            display: block;
-        }
+        .final-score-display { font-size: 3rem; font-weight: bold; color: var(--primary-color); margin: 5px 0; display: block; line-height: 1; }
 
-        /* Altri stili standard */
+        /* Altri stili */
+        .desc-label { display: block; color: #9ca3af; font-size: 0.85rem; margin-bottom: 5px; margin-top: 15px; font-weight: 500; }
         .dynamic-field-group { margin-top: 10px; background: #374151; padding: 12px; border-radius: 6px; border-left: 3px solid #f59e0b; }
         .chips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
         .chip-btn { background: #1f2937; border: 1px solid #4b5563; border-radius: 8px; padding: 10px 5px; font-size: 0.85rem; cursor: pointer; text-align: center; color: #d1d5db; }
         .chip-btn.selected { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--primary-color); color: var(--primary-color); font-weight: bold; }
         .chip-btn.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
-        .slider-group { background: #1f2937; padding: 10px; border-radius: 8px; border: 1px solid #374151; margin-bottom: 10px; }
-        .slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .slider-value { color: var(--primary-color); font-weight: bold; font-size: 0.9rem; }
-        .desc-label { display: block; color: #9ca3af; font-size: 0.85rem; margin-bottom: 5px; margin-top: 10px; }
         
-        input[type=range] { width: 100%; cursor: pointer; }
+        details.flaws-section { background: #2d1b1b; border: 1px solid #ef4444; border-radius: 8px; margin-bottom: 20px; overflow: hidden;}
+        details.flaws-section summary { color: #ef4444; background: #2d1b1b; }
+        details.flaws-section[open] summary { background: rgba(239, 68, 68, 0.1); }
     </style>
 </head>
 <body>
@@ -133,7 +127,8 @@
             <img src="../assets/logo.png" alt="Logo" class="header-logo">
         </div>
 
-        <div class="card" style="padding: 15px;"> <h2 style="text-align: center; margin-bottom: 5px;">Descrittiva</h2>
+        <div class="card" style="padding: 15px;">
+            <h2 style="text-align: center; margin-bottom: 5px;">Descrittiva</h2>
             <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-top:0;">Scheda Rapida</p>
             <hr style="border-color: #374151; margin: 15px 0;">
 
@@ -190,7 +185,7 @@
                 <details class="section-accordion">
                     <summary>1. Aspetto</summary>
                     <div class="accordion-content">
-                        <span class="desc-label">Colore</span>
+                        <span class="desc-label" style="margin-top:0">Colore</span>
                         <div class="options-grid" data-category="aspect_color">
                             <div class="option-btn">Paglierino</div><div class="option-btn">Dorato</div><div class="option-btn">Ambrato</div><div class="option-btn">Ramato</div><div class="option-btn">Rubino</div><div class="option-btn">Marrone</div><div class="option-btn">Scuro</div><div class="option-btn">Nera</div>
                         </div>
@@ -208,7 +203,7 @@
                             <div class="option-btn">Assente</div><div class="option-btn">Scarsa</div><div class="option-btn">Presente</div><div class="option-btn">Abbondante</div>
                         </div>
 
-                        <div class="slider-group" style="margin-top:10px;">
+                        <div class="slider-group">
                             <div class="slider-header"><span class="slider-label">Persistenza</span><span class="slider-value" id="val-head-ret">Media</span></div>
                             <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-head-ret" data-category="head_retention" data-type="persistence">
                         </div>
@@ -223,7 +218,7 @@
                 <details class="section-accordion">
                     <summary>2. Aroma</summary>
                     <div class="accordion-content">
-                        <div class="slider-group">
+                        <div class="slider-group" style="margin-top:0;">
                             <div class="slider-header"><span class="slider-label">Intensità</span><span class="slider-value" id="val-aroma-int">Media</span></div>
                             <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-aroma-int" data-category="aroma_intensity" data-type="intensity">
                         </div>
@@ -238,12 +233,12 @@
                 <details class="section-accordion">
                     <summary>3. Gusto</summary>
                     <div class="accordion-content">
-                        <span class="desc-label">Bilanciamento</span>
+                        <span class="desc-label" style="margin-top:0">Bilanciamento</span>
                         <div class="options-grid" data-category="taste_basic" data-type="multi">
                             <div class="option-btn">Dolce</div><div class="option-btn">Salato</div><div class="option-btn">Acido</div><div class="option-btn">Amaro</div><div class="option-btn">Umami</div>
                         </div>
 
-                        <div class="slider-group" style="margin-top:10px;">
+                        <div class="slider-group">
                             <div class="slider-header"><span class="slider-label">Intensità</span><span class="slider-value" id="val-taste-int">Media</span></div>
                             <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-taste-int" data-category="taste_intensity" data-type="intensity">
                         </div>
@@ -258,7 +253,7 @@
                 <details class="section-accordion">
                     <summary>4. Bocca</summary>
                     <div class="accordion-content">
-                        <span class="desc-label">Corpo</span>
+                        <span class="desc-label" style="margin-top:0">Corpo</span>
                         <div class="options-grid" data-category="mouth_body">
                             <div class="option-btn">Acquoso</div><div class="option-btn">Esile</div><div class="option-btn">Medio</div><div class="option-btn">Pieno</div><div class="option-btn">Masticabile</div>
                         </div>
@@ -278,7 +273,7 @@
                 <details class="section-accordion">
                     <summary>5. Retrogusto</summary>
                     <div class="accordion-content">
-                        <div class="slider-group">
+                        <div class="slider-group" style="margin-top:0">
                             <div class="slider-header"><span class="slider-label">Persistenza</span><span class="slider-value" id="val-after-pers">Media</span></div>
                             <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-after-pers" data-category="aftertaste_persistence" data-type="persistence">
                         </div>
@@ -290,8 +285,8 @@
                     </div>
                 </details>
 
-                <details class="flaws-section section-accordion" style="background:#2d1b1b; border-color:#ef4444;">
-                    <summary style="color:#ef4444; background:#2d1b1b;">⚠️ Difetti / Off-Flavors</summary>
+                <details class="flaws-section">
+                    <summary>⚠️ Difetti / Off-Flavors</summary>
                     <div class="accordion-content">
                         <div class="options-grid" data-category="flaws" data-type="multi">
                             <div class="option-btn">Diacetile</div><div class="option-btn">DMS</div><div class="option-btn">Acetaldeide</div><div class="option-btn">Luce</div><div class="option-btn">Cartone</div><div class="option-btn">Fenolico</div><div class="option-btn">Solvente</div><div class="option-btn">Formaggio</div>
@@ -334,7 +329,7 @@
 
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
 
-        /* --- 1. GESTIONE CHIPS & BUTTONS --- */
+        /* --- 1. CHIPS --- */
         function setupChipGroup(groupId) {
             const container = document.getElementById(groupId);
             container.querySelectorAll('.chip-btn').forEach(chip => {
@@ -362,7 +357,7 @@
             if(el) el.classList.add('selected');
         }
 
-        // Gestione Option Buttons (Quadrotti)
+        /* --- 2. OPTION BUTTONS --- */
         document.querySelectorAll('.option-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 isDirty = true;
@@ -372,7 +367,7 @@
                     this.classList.toggle('selected');
                 } else {
                     if (this.classList.contains('selected')) {
-                        this.classList.remove('selected'); // Deseleziona
+                        this.classList.remove('selected');
                     } else {
                         parent.querySelectorAll('.option-btn').forEach(sib => sib.classList.remove('selected'));
                         this.classList.add('selected');
@@ -381,25 +376,35 @@
             });
         });
 
-        /* --- 2. LOGICA SLIDER VOTO FINALE --- */
+        /* --- 3. SLIDERS (Descriptive & Score) --- */
+        const intensityMap = [null, 'Bassa', 'Medio/Bassa', 'Media', 'Medio/Alta', 'Alta'];
+        const persistenceMap = [null, 'Breve', 'Medio/Breve', 'Media', 'Medio/Lunga', 'Lunga'];
+        
+        document.querySelectorAll('.range-slider').forEach(range => {
+            range.addEventListener('input', (e) => {
+                const val = e.target.value;
+                const targetId = e.target.getAttribute('data-target');
+                const type = e.target.getAttribute('data-type');
+                const labelSpan = document.getElementById(targetId);
+                if (type === 'intensity') labelSpan.textContent = intensityMap[val];
+                else labelSpan.textContent = persistenceMap[val];
+                isDirty = true;
+            });
+        });
+
         const scoreSlider = document.getElementById('final-score-slider');
         const scoreDisplay = document.getElementById('final-score-display');
-        
         function updateScoreColor(val) {
             scoreDisplay.textContent = val;
-            if (val >= 9) scoreDisplay.style.color = "#FFD700"; // Oro
-            else if (val >= 7.5) scoreDisplay.style.color = "#10b981"; // Verde
-            else if (val >= 6) scoreDisplay.style.color = "#f59e0b"; // Arancio
-            else scoreDisplay.style.color = "#ef4444"; // Rosso
+            if (val >= 9) scoreDisplay.style.color = "#FFD700";
+            else if (val >= 7.5) scoreDisplay.style.color = "#10b981";
+            else if (val >= 6) scoreDisplay.style.color = "#f59e0b";
+            else scoreDisplay.style.color = "#ef4444";
         }
-        
-        scoreSlider.addEventListener('input', (e) => {
-            updateScoreColor(e.target.value);
-            isDirty = true;
-        });
-        updateScoreColor(6.0); // Init
+        scoreSlider.addEventListener('input', (e) => { updateScoreColor(e.target.value); isDirty = true; });
+        updateScoreColor(6.0);
 
-        /* --- 3. CONTEXT & BEER SHARING --- */
+        /* --- 4. CONTEXT & BEER SHARING --- */
         let contextBeer = null;
         let linkedBeerCode = null;
         try {
@@ -473,23 +478,6 @@
             });
         }
 
-        // Logic Slider Descrittivi
-        const intensityMap = [null, 'Bassa', 'Medio/Bassa', 'Media', 'Medio/Alta', 'Alta'];
-        const persistenceMap = [null, 'Breve', 'Medio/Breve', 'Media', 'Medio/Lunga', 'Lunga'];
-        document.querySelectorAll('.range-slider').forEach(range => {
-            if(range.id === 'final-score-slider') return; // Skip voto finale
-            range.addEventListener('input', (e) => {
-                const val = e.target.value;
-                const targetId = e.target.getAttribute('data-target');
-                const type = e.target.getAttribute('data-type');
-                const labelSpan = document.getElementById(targetId);
-                if (type === 'intensity') labelSpan.textContent = intensityMap[val];
-                else labelSpan.textContent = persistenceMap[val];
-                isDirty = true;
-            });
-        });
-
-        // Dirty Check
         let isDirty = false;
         const form = document.getElementById('tasting-form');
         form.addEventListener('input', () => isDirty = true);
@@ -500,11 +488,12 @@
         });
         window.addEventListener('beforeunload', (e) => { if (isDirty) { e.preventDefault(); e.returnValue = ''; } });
 
-        /* --- 4. SUBMIT --- */
+        /* --- 5. SUBMIT --- */
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
 
+            // Style Validation
             let finalStyle = "", styleType = "";
             if (contextBeer) {
                 finalStyle = contextBeer.style_name + (contextBeer.style_details ? ` (${contextBeer.style_details})` : "");
@@ -516,14 +505,12 @@
                     finalStyle = inputBjcp.value;
                     const textVal = document.getElementById('dyn-text')?.value;
                     const radioVal = document.querySelector('input[name="dyn-radio"]:checked')?.value;
-                    let specs = [];
-                    if (textVal) specs.push(textVal);
-                    if (radioVal) specs.push(radioVal);
+                    let specs = []; if (textVal) specs.push(textVal); if (radioVal) specs.push(radioVal);
                     if (specs.length > 0) finalStyle += ` (${specs.join(', ')})`;
                 }
             }
 
-            // Raccolta dati griglie
+            // Data Collection
             const descriptiveData = {};
             document.querySelectorAll('.options-grid').forEach(grid => {
                 const category = grid.getAttribute('data-category');
@@ -532,7 +519,6 @@
                 else { const sel = grid.querySelector('.option-btn.selected'); descriptiveData[category] = sel ? sel.textContent : null; }
             });
             
-            // Raccolta dati slider descrittivi
             document.querySelectorAll('.range-slider').forEach(range => {
                 if(range.id === 'final-score-slider') return;
                 const category = range.getAttribute('data-category');
@@ -540,7 +526,6 @@
                 descriptiveData[category] = (type === 'intensity') ? intensityMap[range.value] : persistenceMap[range.value];
             });
 
-            // Voto Finale
             const finalScore = parseFloat(scoreSlider.value);
 
             btn.disabled = true; btn.textContent = "Salvataggio...";
@@ -573,7 +558,7 @@
             }
         });
 
-        // SW UPDATE
+        // SW
         const updateToast = document.getElementById('update-toast');
         if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').then(reg => { if (reg.waiting && updateToast) updateToast.classList.add('show'); reg.addEventListener('updatefound', () => { const n = reg.installing; n.addEventListener('statechange', () => { if (n.state === 'installed' && navigator.serviceWorker.controller && updateToast) updateToast.classList.add('show'); }); }); });
         if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
