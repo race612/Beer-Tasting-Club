@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tools & Utility - Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.8.8">
+    <link rel="stylesheet" href="css/style.css?v=0.8.9">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -491,9 +491,15 @@
         }
 
         function getDescForSRM(srm) {
-            if (srm < 2) return "Giallo Paglierino"; if (srm < 4) return "Giallo"; if (srm < 7) return "Dorato";
-            if (srm < 11) return "Ambrato"; if (srm < 16) return "Ambrato Carico / Ramato"; if (srm < 22) return "Marrone";
-            if (srm < 30) return "Marrone Scuro"; return "Nero";
+            if (srm < 2) return "Giallo Paglierino";
+            if (srm < 4) return "Giallo Pallido";
+            if (srm < 7) return "Giallo Dorato";
+            if (srm < 12) return "Ambrato";
+            if (srm < 18) return "Ambrato Scuro / Ramato";
+            if (srm < 25) return "Marrone";
+            if (srm < 35) return "Marrone Scuro";
+            if (srm < 40) return "Marrone Molto Scuro / Quasi Nero";
+            return "Nero";
         }
 
         function updateColor() {
