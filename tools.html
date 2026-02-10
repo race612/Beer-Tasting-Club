@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tools & Utility - Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.8.9">
+    <link rel="stylesheet" href="css/style.css?v=0.9.0">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -287,6 +287,9 @@
         import { APP_VERSION } from './js/config.js';
 
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
+
+        // FIX: Inizializza il comportamento del tasto Home al caricamento
+        document.getElementById('dynamic-back-btn').onclick = () => window.location.href = 'index.html';
 
         // NAV
         window.openTool = function(toolName) {
