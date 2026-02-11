@@ -95,7 +95,7 @@
 
             <details class="section-accordion" open>
                 <summary>
-                    <span class="section-title"><span class="material-symbols-outlined">info</span> Info & Inspection</span>
+                    <span class="section-title"><span class="material-symbols-outlined">sports_bar</span> Info & Inspection</span>
                 </summary>
                 <div class="accordion-content">
                     <div class="form-group">
@@ -142,7 +142,7 @@
             <details class="section-accordion">
                 <summary>
                     <div class="section-header-content">
-                        <span class="section-title"><span class="material-symbols-outlined">scents</span> Aroma</span>
+                        <span class="section-title"><span class="material-symbols-outlined">local_florist</span> Aroma</span>
                         <div class="score-input-wrapper" onclick="event.preventDefault()">
                             <input type="number" id="score-aroma" class="score-input" min="0" max="12" placeholder="0">
                             <span class="score-max">/12</span>
@@ -226,6 +226,15 @@
                         Comment on overall drinking pleasure associated with entry, suggestions for improvement.
                     </div>
                     <textarea id="notes-overall" rows="6" placeholder="Overall impressions..."></textarea>
+                </div>
+            </details>
+
+            <details class="section-accordion">
+                <summary>
+                    <span class="section-title"><span class="material-symbols-outlined">warning</span> Flaws / Off-Flavors</span>
+                </summary>
+                <div class="accordion-content">
+                    <div class="flaws-grid" id="flaws-container"></div>
                 </div>
             </details>
 
@@ -437,6 +446,28 @@
             });
         }
 
+        /* --- FLAWS LOGIC --- */
+        const commonFlaws = ["Acetaldehyde", "Alcoholic", "Astringent", "Diacetyl", "DMS", "Estery", "Grassy", "Light-Struck", "Metallic", "Musty", "Oxidized", "Phenolic", "Solvent", "Sour/Acidic", "Sulfur", "Vegetal", "Yeasty"];
+        const flawsContainer = document.getElementById('flaws-container');
+        if (flawsContainer) {
+            commonFlaws.forEach(flaw => {
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'flaw-checkbox-hidden';
+                checkbox.id = `flaw-${flaw}`;
+                checkbox.value = flaw;
+                
+                const labelCard = document.createElement('label');
+                labelCard.className = 'flaw-card';
+                labelCard.htmlFor = `flaw-${flaw}`;
+                
+                labelCard.innerHTML = `<span>${flaw}</span><div class="flaw-intensity-wrapper"><select class="flaw-select-modern" id="int-${flaw}" onclick="event.stopPropagation()"><option value="Low">Low</option><option value="Medium">Medium</option><option value="High">High</option></select></div>`;
+
+                flawsContainer.appendChild(checkbox);
+                flawsContainer.appendChild(labelCard);
+            });
+        }
+
         /* --- SAVE --- */
         document.getElementById('bjcp-full-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -471,6 +502,16 @@
                 if (specs.length > 0) finalStyle += ` (${specs.join(', ')})`;
             }
 
+            // Collect Flaws
+            const selectedFlaws = [];
+            commonFlaws.forEach(flaw => {
+                const cb = document.getElementById(`flaw-${flaw}`);
+                if (cb && cb.checked) {
+                    const intensity = document.getElementById(`int-${flaw}`).value;
+                    selectedFlaws.push(`${flaw} (${intensity})`);
+                }
+            });
+
             const payload = {
                 user_id: user.id, event_id: 1,
                 beer_name: document.getElementById('beer-name').value,
@@ -504,6 +545,7 @@
                         mouthfeel: document.getElementById('notes-mouthfeel').value,
                         overall: document.getElementById('notes-overall').value
                     },
+                    flaws: selectedFlaws,
                     feedback: {
                         style: document.getElementById('fb-style').value,
                         technical: document.getElementById('fb-tech').value,
