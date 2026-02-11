@@ -1,6 +1,6 @@
 // sw.js
 // IMPORTANTE: Cambia questa stringa ad ogni rilascio per forzare l'aggiornamento sugli utenti
-const CACHE_NAME = 'btc-cache-v0.6.2-alpha'; 
+const CACHE_NAME = 'btc-cache-v0.6.2.1-alpha'; 
 
 const ASSETS_TO_CACHE = [
   './',
@@ -15,7 +15,6 @@ const ASSETS_TO_CACHE = [
   './schede/crocette.html',
   './dettaglio-scheda.html',
   './css/style.css',
-  './js/app.js',
   './js/config.js',
   './js/supabase-config.js',
   './js/bjcp-2021.js',

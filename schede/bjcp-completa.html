@@ -389,6 +389,52 @@
                 if (e.target.value === 'free') { containerFree.style.display = 'block'; containerBjcp.style.display = 'none'; } 
                 else { containerBjcp.style.display = 'block'; containerFree.style.display = 'none'; }
             });
+
+            // GESTIONE CAMPI DINAMICI (Mancante in precedenza)
+            inputBjcp.addEventListener('change', (e) => {
+                const dynamicContainer = document.getElementById('bjcp-dynamic-container');
+                dynamicContainer.innerHTML = ''; 
+                const code = e.target.value.split('.')[0];
+                const rule = specialStyleRules[code];
+                if (!rule) return;
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = 'dynamic-field-group';
+                
+                // Helper per creare Select
+                const createSelect = (id, label, options) => {
+                    let html = `<label style="color:#f59e0b; font-size:0.9em; display:block; margin-bottom:5px;">${label}</label>`;
+                    html += `<select id="${id}" style="width:100%; padding:8px; background:#1f2937; border:1px solid #4b5563; color:white; border-radius:4px; margin-bottom:10px;">`;
+                    options.forEach(o => html += `<option value="${o}">${o || '-- Seleziona --'}</option>`);
+                    html += `</select>`;
+                    return html;
+                };
+
+                // Helper per creare Radio
+                const createRadios = (name, label, options, def) => {
+                    let html = `<span style="color:#f59e0b; font-size:0.9em; display:block; margin-bottom:5px;">${label}</span><div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;">`;
+                    options.forEach(c => html += `<label style="background:#1f2937; padding:5px 10px; border-radius:4px; border:1px solid #4b5563; cursor:pointer;"><input type="radio" name="${name}" value="${c}" ${c===def?'checked':''}> ${c}</label>`);
+                    html += `</div>`;
+                    return html;
+                };
+
+                if (rule.type === 'text_only') {
+                     if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b; display:block; margin-bottom:5px;">${rule.hint}</small>`;
+                     wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" style="width:100%; padding:10px; background:#1f2937; border:1px solid #4b5563; color:white; border-radius:4px;">`;
+                } else if (rule.type === 'options') {
+                    wrapper.innerHTML += createRadios('dyn-radio', rule.label, rule.choices, rule.default);
+                } else if (rule.type === 'complex_ipa') {
+                    wrapper.innerHTML += createSelect('dyn-select', rule.dropdownLabel, rule.dropdownOptions);
+                    wrapper.innerHTML += createRadios('dyn-radio-strength', rule.strengthLabel, rule.strengthOptions, rule.defaultStrength);
+                } else if (rule.type === 'complex_saison') {
+                    wrapper.innerHTML += createRadios('dyn-radio-color', rule.colorLabel, rule.colorOptions);
+                    wrapper.innerHTML += createRadios('dyn-radio-strength', rule.strengthLabel, rule.strengthOptions, rule.defaultStrength);
+                } else if (rule.type === 'dropdown_plus_text') {
+                    wrapper.innerHTML += createSelect('dyn-select', rule.dropdownLabel, rule.dropdownOptions);
+                    wrapper.innerHTML += `<label style="color:#f59e0b; font-size:0.9em; display:block; margin-bottom:5px;">${rule.textLabel}</label><input type="text" id="dyn-text" placeholder="..." style="width:100%; padding:10px; background:#1f2937; border:1px solid #4b5563; color:white; border-radius:4px;">`;
+                }
+                dynamicContainer.appendChild(wrapper);
+            });
         }
 
         /* --- SAVE --- */
@@ -405,6 +451,25 @@
             const { data: { user } } = await supabase.auth.getUser();
             
             let finalStyle = systemSelect.value === 'free' ? inputFree.value : inputBjcp.value;
+            
+            // Aggiunta dettagli dinamici allo stile se presenti
+            if (systemSelect.value === 'bjcp') {
+                let specs = [];
+                // Raccogli valori da tutti i possibili input dinamici
+                const textVal = document.getElementById('dyn-text')?.value;
+                const selectVal = document.getElementById('dyn-select')?.value;
+                const radioVal = document.querySelector('input[name="dyn-radio"]:checked')?.value;
+                const strengthVal = document.querySelector('input[name="dyn-radio-strength"]:checked')?.value;
+                const colorVal = document.querySelector('input[name="dyn-radio-color"]:checked')?.value;
+
+                if (selectVal) specs.push(selectVal);
+                if (colorVal) specs.push(colorVal);
+                if (strengthVal) specs.push(strengthVal);
+                if (radioVal) specs.push(radioVal);
+                if (textVal) specs.push(textVal);
+                
+                if (specs.length > 0) finalStyle += ` (${specs.join(', ')})`;
+            }
 
             const payload = {
                 user_id: user.id, event_id: 1,
