@@ -77,6 +77,26 @@
         .dynamic-field-group { margin-top: 10px; background: #374151; padding: 12px; border-radius: 6px; border-left: 3px solid #f59e0b; }
         .accordion-content { padding: 15px; }
         
+        /* Completed Badge */
+        .completed-badge {
+            font-size: 0.75rem; color: #10b981; background: rgba(16, 185, 129, 0.1);
+            padding: 2px 6px; border-radius: 4px; border: 1px solid #10b981;
+            display: none; align-items: center; gap: 4px; margin-left: 10px;
+        }
+        details.section-accordion.completed:not([open]) .completed-badge { display: inline-flex; }
+
+        /* Feedback Scale */
+        .feedback-row { margin-bottom: 20px; }
+        .scale-container { display: flex; justify-content: space-between; gap: 5px; margin: 10px 0; }
+        .scale-box { 
+            width: 100%; height: 35px; border: 1px solid #4b5563; background: #1f2937; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; border-radius: 4px; color: white;
+        }
+        .scale-box:hover { border-color: var(--primary-color); }
+        .scale-box.selected { background: var(--primary-color); color: black; font-weight: bold; border-color: var(--primary-color); }
+        .scale-box.selected::after { content: '✕'; font-size: 1.2rem; }
+
         input[type=range] { width: 100%; cursor: pointer; }
     </style>
 </head>
@@ -142,7 +162,7 @@
             <details class="section-accordion">
                 <summary>
                     <div class="section-header-content">
-                        <span class="section-title"><span class="material-symbols-outlined">local_florist</span> Aroma</span>
+                        <span class="section-title"><span class="material-symbols-outlined">local_florist</span> Aroma <span class="completed-badge">Completa ✓</span></span>
                         <div class="score-input-wrapper" onclick="event.preventDefault()">
                             <input type="number" id="score-aroma" class="score-input" min="0" max="12" placeholder="0">
                             <span class="score-max">/12</span>
@@ -160,7 +180,7 @@
             <details class="section-accordion">
                 <summary>
                     <div class="section-header-content">
-                        <span class="section-title"><span class="material-symbols-outlined">visibility</span> Appearance</span>
+                        <span class="section-title"><span class="material-symbols-outlined">visibility</span> Appearance <span class="completed-badge">Completa ✓</span></span>
                         <div class="score-input-wrapper" onclick="event.preventDefault()">
                             <input type="number" id="score-appearance" class="score-input" min="0" max="3" placeholder="0">
                             <span class="score-max">/3</span>
@@ -178,7 +198,7 @@
             <details class="section-accordion">
                 <summary>
                     <div class="section-header-content">
-                        <span class="section-title"><span class="material-symbols-outlined">restaurant</span> Flavor</span>
+                        <span class="section-title"><span class="material-symbols-outlined">restaurant</span> Flavor <span class="completed-badge">Completa ✓</span></span>
                         <div class="score-input-wrapper" onclick="event.preventDefault()">
                             <input type="number" id="score-flavor" class="score-input" min="0" max="20" placeholder="0">
                             <span class="score-max">/20</span>
@@ -196,7 +216,7 @@
             <details class="section-accordion">
                 <summary>
                     <div class="section-header-content">
-                        <span class="section-title"><span class="material-symbols-outlined">face</span> Mouthfeel</span>
+                        <span class="section-title"><span class="material-symbols-outlined">face</span> Mouthfeel <span class="completed-badge">Completa ✓</span></span>
                         <div class="score-input-wrapper" onclick="event.preventDefault()">
                             <input type="number" id="score-mouthfeel" class="score-input" min="0" max="5" placeholder="0">
                             <span class="score-max">/5</span>
@@ -214,7 +234,7 @@
             <details class="section-accordion">
                 <summary>
                     <div class="section-header-content">
-                        <span class="section-title"><span class="material-symbols-outlined">stars</span> Overall Impression</span>
+                        <span class="section-title"><span class="material-symbols-outlined">stars</span> Overall Impression <span class="completed-badge">Completa ✓</span></span>
                         <div class="score-input-wrapper" onclick="event.preventDefault()">
                             <input type="number" id="score-overall" class="score-input" min="0" max="10" placeholder="0">
                             <span class="score-max">/10</span>
@@ -240,30 +260,40 @@
 
             <details class="section-accordion">
                 <summary>
-                    <span class="section-title"><span class="material-symbols-outlined">tune</span> Feedback</span>
+                    <span class="section-title"><span class="material-symbols-outlined">tune</span> Feedback <span class="completed-badge">Completa ✓</span></span>
                 </summary>
                 <div class="accordion-content">
                     
-                    <div class="feedback-slider-row">
+                    <div class="feedback-row" id="fb-row-style" data-value="0">
                         <label style="color:#d1d5db; font-size:0.9rem;">Stylistic Accuracy</label>
-                        <input type="range" id="fb-style" min="1" max="5" value="3">
+                        <div class="scale-container">
+                            <div class="scale-box" data-val="1"></div><div class="scale-box" data-val="2"></div><div class="scale-box" data-val="3"></div><div class="scale-box" data-val="4"></div><div class="scale-box" data-val="5"></div>
+                        </div>
                         <div class="feedback-labels"><span>Not to Style</span><span>Classic</span></div>
                     </div>
 
-                    <div class="feedback-slider-row">
+                    <div class="feedback-row" id="fb-row-tech" data-value="0">
                         <label style="color:#d1d5db; font-size:0.9rem;">Technical Merit</label>
-                        <input type="range" id="fb-tech" min="1" max="5" value="3">
+                        <div class="scale-container">
+                            <div class="scale-box" data-val="1"></div><div class="scale-box" data-val="2"></div><div class="scale-box" data-val="3"></div><div class="scale-box" data-val="4"></div><div class="scale-box" data-val="5"></div>
+                        </div>
                         <div class="feedback-labels"><span>Significant Flaws</span><span>Flawless</span></div>
                     </div>
 
-                    <div class="feedback-slider-row">
+                    <div class="feedback-row" id="fb-row-intangible" data-value="0">
                         <label style="color:#d1d5db; font-size:0.9rem;">Intangibles</label>
-                        <input type="range" id="fb-intangible" min="1" max="5" value="3">
+                        <div class="scale-container">
+                            <div class="scale-box" data-val="1"></div><div class="scale-box" data-val="2"></div><div class="scale-box" data-val="3"></div><div class="scale-box" data-val="4"></div><div class="scale-box" data-val="5"></div>
+                        </div>
                         <div class="feedback-labels"><span>Lifeless</span><span>Wonderful</span></div>
                     </div>
 
                 </div>
             </details>
+
+            <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563; margin-bottom: 20px;">
+                &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span>
+            </footer>
 
             <div class="sticky-footer">
                 <div>
@@ -284,6 +314,12 @@
         import { supabase } from '../js/supabase-config.js';
         import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js';
         import { APP_VERSION } from '../js/config.js';
+
+        // Footer & SW
+        document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
+        const updateToast = document.getElementById('update-toast');
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').then(reg => { if (reg.waiting && updateToast) updateToast.classList.add('show'); reg.addEventListener('updatefound', () => { const n = reg.installing; n.addEventListener('statechange', () => { if (n.state === 'installed' && navigator.serviceWorker.controller && updateToast) updateToast.classList.add('show'); }); }); });
+        if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
 
         /* --- LOGICA CALCOLO PUNTEGGIO --- */
         const inputs = {
@@ -316,6 +352,57 @@
             inp.addEventListener('input', updateTotal);
             inp.addEventListener('click', (e) => e.stopPropagation());
         });
+
+        /* --- FEEDBACK LOGIC --- */
+        document.querySelectorAll('.scale-box').forEach(box => {
+            box.addEventListener('click', function() {
+                const parent = this.closest('.feedback-row');
+                const val = this.getAttribute('data-val');
+                
+                parent.querySelectorAll('.scale-box').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                parent.setAttribute('data-value', val);
+                checkCompletion();
+            });
+        });
+
+        /* --- COMPLETION LOGIC --- */
+        function checkCompletion() {
+            const sections = [
+                { score: 'score-aroma', notes: 'notes-aroma' },
+                { score: 'score-appearance', notes: 'notes-appearance' },
+                { score: 'score-flavor', notes: 'notes-flavor' },
+                { score: 'score-mouthfeel', notes: 'notes-mouthfeel' },
+                { score: 'score-overall', notes: 'notes-overall' }
+            ];
+
+            sections.forEach(sec => {
+                const scoreInput = document.getElementById(sec.score);
+                const notesInput = document.getElementById(sec.notes);
+                const details = scoreInput.closest('details');
+                
+                if (details) {
+                    const hasScore = scoreInput.value !== '' && parseInt(scoreInput.value) >= 0;
+                    const hasNotes = notesInput.value.trim().length >= 10;
+                    if (hasScore && hasNotes) details.classList.add('completed');
+                    else details.classList.remove('completed');
+                }
+            });
+
+            // Feedback Section Check
+            const fbStyle = document.getElementById('fb-row-style').getAttribute('data-value');
+            const fbTech = document.getElementById('fb-row-tech').getAttribute('data-value');
+            const fbInt = document.getElementById('fb-row-intangible').getAttribute('data-value');
+            const fbDetails = document.getElementById('fb-row-style').closest('details');
+            
+            if (fbDetails) {
+                if (fbStyle != "0" && fbTech != "0" && fbInt != "0") fbDetails.classList.add('completed');
+                else fbDetails.classList.remove('completed');
+            }
+        }
+        // Attach listeners
+        document.querySelectorAll('.score-input, textarea').forEach(el => el.addEventListener('input', checkCompletion));
+        checkCompletion(); // Init
 
         /* --- LOGICA ACCORDION ESCLUSIVI --- */
         const accordions = document.querySelectorAll('details.section-accordion');
@@ -473,9 +560,21 @@
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
             
-            let total = parseInt(totalDisplay.textContent);
-            if(total === 0) {
-                if(!confirm("Total score is 0. Do you want to save an empty sheet?")) return;
+            // Check Completion
+            const mandatorySections = [
+                'score-aroma', 'score-appearance', 'score-flavor', 'score-mouthfeel', 'score-overall'
+            ];
+            let allComplete = true;
+            
+            // Check standard sections
+            mandatorySections.forEach(id => {
+                if (!document.getElementById(id).closest('details').classList.contains('completed')) allComplete = false;
+            });
+            // Check feedback
+            if (!document.getElementById('fb-row-style').closest('details').classList.contains('completed')) allComplete = false;
+
+            if (!allComplete) {
+                if(!confirm("Scheda non completata si desidera salvarla comunque?")) return;
             }
 
             btn.disabled = true; btn.textContent = "Salvataggio...";
@@ -547,9 +646,9 @@
                     },
                     flaws: selectedFlaws,
                     feedback: {
-                        style: document.getElementById('fb-style').value,
-                        technical: document.getElementById('fb-tech').value,
-                        intangible: document.getElementById('fb-intangible').value
+                        style: document.getElementById('fb-row-style').getAttribute('data-value'),
+                        technical: document.getElementById('fb-row-tech').getAttribute('data-value'),
+                        intangible: document.getElementById('fb-row-intangible').getAttribute('data-value')
                     }
                 }
             };
