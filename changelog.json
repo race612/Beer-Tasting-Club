@@ -1,12 +1,21 @@
 [   
     {
         "_comment":"modificare versione in js/config.js e cambiare CACHE_NAME in sw.js",
+        "version": "0.6. Alpha",
+        "date": "11 Feb 2026",
+        "changes": [
+            "Rifiniture scheda descrittiva sintetica.",
+            "Work in progress..."
+        ]
+    },
+    {
         "version": "0.6.2 Alpha",
         "date": "11 Feb 2026",
         "changes": [
             "Rifiniture scheda descrittiva sintetica.",
-            "Prima bozza scheda BJCP completa",
-            "Work in progress..."
+            "Prima bozza scheda BJCP completa.",
+            "Aggiunta licenza e aggiornato Readme.",
+            "Aggiornamento pagina Info"
         ]
     },
     {

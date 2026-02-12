@@ -69,7 +69,7 @@
                 </p>
             </div>
 
-            <a href="https://github.com/mirkocaiani/Beer-Tasting-Club" target="_blank" class="github-btn">
+            <a href="https://github.com/race612/Beer-Tasting-Club" target="_blank" class="github-btn">
                 <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="24" height="24" alt="GH" style="filter: invert(1);">
                 Vedi su GitHub
             </a>
@@ -172,7 +172,7 @@
                 const createReleaseHTML = (item, isLatest = false) => {
                     const color = isLatest ? 'var(--primary-color)' : '#9ca3af';
                     return `
-                        <div class="release-item" style="margin-bottom: 20px; ${!isLatest ? 'display:none;' : ''}">
+                        <div class="release-item" style="margin-bottom: 20px; animation: fadeIn 0.5s;">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
                                 <h4 style="margin:0; color:${color};">${item.version}${isLatest ? ' (Corrente)' : ''}</h4>
                                 <small style="color:#6b7280;">${item.date}</small>
@@ -180,19 +180,27 @@
                             <ul style="margin-top:5px; padding-left:20px; color:#d1d5db;">
                                 ${item.changes.map(c => `<li>${c}</li>`).join('')}
                             </ul>
-                            ${isLatest ? '<hr style="border-color:#374151; margin:15px 0;">' : ''}
+                            <hr style="border-color:#374151; margin:15px 0;">
                         </div>
                     `;
                 };
 
                 container.innerHTML += createReleaseHTML(data[0], true);
 
+                let currentIndex = 1;
+                const batchSize = 3;
+
                 if (data.length > 1) {
-                    for (let i = 1; i < data.length; i++) { container.innerHTML += createReleaseHTML(data[i], false); }
                     btnHistory.style.display = 'flex';
                     btnHistory.addEventListener('click', () => {
-                        container.querySelectorAll('.release-item').forEach(item => item.style.display = 'block');
-                        btnHistory.style.display = 'none';
+                        const nextBatch = data.slice(currentIndex, currentIndex + batchSize);
+                        nextBatch.forEach(item => {
+                            container.insertAdjacentHTML('beforeend', createReleaseHTML(item, false));
+                        });
+                        currentIndex += batchSize;
+                        if (currentIndex >= data.length) {
+                            btnHistory.style.display = 'none';
+                        }
                     });
                 }
             } catch (error) {
