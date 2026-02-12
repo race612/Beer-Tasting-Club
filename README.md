@@ -12,21 +12,6 @@
 
 ---
 
-## 🚀 Development Philosophy: Vibe Coding
-
-Questo progetto nasce con un approccio moderno di **"Vibe Coding"**.
-Non è il classico esercizio di scrittura manuale del codice, ma il risultato di una sinergia tra **Visione di Prodotto** e **Intelligenza Artificiale Generativa**.
-
-Il mio ruolo in questo progetto è stato quello di:
-* **Ideazione & Strategia:** Definire l'architettura dell'informazione basata sulla conoscenza approfondita del settore birrario e digitale.
-* **Prompt Engineering & Direzione:** Guidare l'AI nella generazione del codice, mantenendo il focus su UX/UI e funzionalità.
-* **Testing & Iterazione:** Un approccio al *continuo miglioramento* basato su test reali e rifinitura dell'esperienza utente.
-
-*This project is built using a **"Vibe Coding"** methodology. It leverages Generative AI as the execution engine, driven by strong **Product Vision** and **Domain Expertise**.*
-*My role focused on Ideation, Strategy, and Technical Direction, bridging the gap between Craft Beer culture and Digital Product Management.*
-
----
-
 ## 🇮🇹 Italiano
 
 **Beer Tasting Club** è una Progressive Web App (PWA) progettata per homebrewer, giudici BJCP e appassionati di birra artigianale. L'obiettivo è digitalizzare l'esperienza di degustazione, offrendo strumenti professionali in un'interfaccia moderna e accessibile da mobile.
@@ -72,6 +57,21 @@ This project is licensed under the **GNU Affero General Public License v3.0 (AGP
 You are free to use, study, modify, and distribute this software. However, if you modify the code and make it available to users over a network (e.g., as a web service/SaaS), you **must release the source code of your modifications** under the same license.
 
 See the [LICENSE](LICENSE) file for full details.
+
+---
+
+## 🚀 Development Philosophy: Vibe Coding
+
+Questo progetto nasce con un approccio moderno di **"Vibe Coding"**.
+Non è il classico esercizio di scrittura manuale del codice, ma il risultato di una sinergia tra **Visione di Prodotto** e **Intelligenza Artificiale Generativa**.
+
+Il mio ruolo in questo progetto è stato quello di:
+* **Ideazione & Strategia:** Definire l'architettura dell'informazione basata sulla conoscenza approfondita del settore birrario e digitale.
+* **Prompt Engineering & Direzione:** Guidare l'AI nella generazione del codice, mantenendo il focus su UX/UI e funzionalità.
+* **Testing & Iterazione:** Un approccio al *continuo miglioramento* basato su test reali e rifinitura dell'esperienza utente.
+
+*This project is built using a **"Vibe Coding"** methodology. It leverages Generative AI as the execution engine, driven by strong **Product Vision** and **Domain Expertise**.*
+*My role focused on Ideation, Strategy, and Technical Direction, bridging the gap between Craft Beer culture and Digital Product Management.*
 
 ---
 

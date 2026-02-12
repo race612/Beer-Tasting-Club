@@ -4,12 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Info - Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.8.1">
+    <link rel="stylesheet" href="css/style.css?v=0.9.1">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
+    <style>
+        .github-btn {
+            background: #24292e; color: white; width: 100%; margin-top: 10px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 12px; border-radius: 8px; font-weight: bold; text-decoration: none;
+            border: 1px solid #444c56; transition: background 0.2s;
+        }
+        .github-btn:active { background: #1b1f23; transform: scale(0.98); }
+        .license-box {
+            background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -31,9 +43,36 @@
             
             <h3>Chi siamo</h3>
             <p>
-                <strong>Beer Tasting Club</strong> è un'applicazione web progressiva (PWA) progettata per appassionati di birra, homebrewer e giudici. 
-                Nasce per semplificare la compilazione delle schede di degustazione, eliminando la carta e digitalizzando il tuo archivio sensoriale.
+                <strong>Beer Tasting Club</strong> è un'applicazione Web Progressiva (PWA) progettata per homebrewer, giudici BJCP e appassionati che vogliono digitalizzare il proprio archivio sensoriale eliminando la carta.
             </p>
+            
+            <div style="margin-top: 20px; border-left: 3px solid #a855f7; padding-left: 15px;">
+                <h4 style="color: #a855f7; margin: 0 0 5px 0;">🚀 Vibe Coding Philosophy</h4>
+                <p style="font-size: 0.9rem; color: #d1d5db; font-style: italic;">
+                    Questo progetto nasce da un approccio moderno allo sviluppo: la sinergia tra la <strong>visione di prodotto</strong> umana e la potenza esecutiva dell'<strong>AI Generativa</strong>. 
+                    Un software plasmato dalla passione per la cultura birraria e l'innovazione digitale.
+                </p>
+            </div>
+
+            <hr style="border-color: #374151; margin: 25px 0;">
+
+            <h3>Progetto Open Source</h3>
+            <p>Crediamo nella condivisione della conoscenza. Il codice sorgente di Beer Tasting Club è pubblico e disponibile per studio e miglioramento.</p>
+            
+            <div class="license-box">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
+                    <span class="material-symbols-outlined" style="color: var(--primary-color);">policy</span>
+                    <strong style="color: white;">Licenza GNU AGPLv3</strong>
+                </div>
+                <p style="font-size: 0.85rem; color: #9ca3af; margin: 0;">
+                    Il software è libero. Chiunque può usarlo e modificarlo, a patto che ogni versione derivata messa in rete rimanga open source con la stessa licenza.
+                </p>
+            </div>
+
+            <a href="https://github.com/mirkocaiani/Beer-Tasting-Club" target="_blank" class="github-btn">
+                <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="24" height="24" alt="GH" style="filter: invert(1);">
+                Vedi su GitHub
+            </a>
 
             <hr style="border-color: #374151; margin: 25px 0;">
 
@@ -57,12 +96,19 @@
 
             <hr style="border-color: #374151; margin: 25px 0;">
 
-            <h3>Credits & Tributi</h3>
-            <div style="text-align: center; margin: 20px 0; background: #1f2937; padding: 20px; border-radius: 12px; border: 1px solid #374151;">
+            <h3>Credits</h3>
+            
+            <div style="margin-bottom: 20px;">
+                <p style="margin-bottom: 5px;"><strong>Ideazione & Sviluppo</strong></p>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span class="material-symbols-outlined" style="color: #0a66c2;">person</span>
+                    <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: white; text-decoration: underline; font-size: 1.1rem;">Mirko Caiani</a>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px; background: #1f2937; padding: 20px; border-radius: 12px; border: 1px solid #374151;">
                 <p style="color: var(--text-muted); font-size: 0.8em; margin-bottom: 15px; text-transform: uppercase;">In collaborazione con</p>
-                
                 <img src="assets/Logo-HBL-Bianco.png" alt="HBL Logo" style="max-width: 180px; height: auto; display: block; margin: 0 auto 10px auto;">
-                
                 <h4 style="margin: 10px 0 5px 0; color: #ffffff;">Homebrewers Lombardi</h4>
                 <small style="color: var(--text-muted);">La community della birra fatta in casa in Lombardia</small>
             </div>
@@ -84,12 +130,8 @@
         </div>
 
         <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
-            &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
-            <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-    
-            <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
-            </p>
+            &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span>
+            <p style="margin-top: 5px; font-size: 0.8rem;"><a href="privacy.html" style="color: inherit; text-decoration: underline;">Privacy Policy</a></p>
         </footer>
     </div>
 
@@ -99,54 +141,40 @@
     </div>
 
     <script type="module">
-        // 1. IMPORT (TASSATIVAMENTE IN CIMA)
         import { APP_VERSION } from './js/config.js';
 
-        // 2. MOSTRA VERSIONE
         document.getElementById('app-version-display').textContent = APP_VERSION;
         const footerVer = document.getElementById('footer-version');
         if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
 
-        // 3. LOGICA CONTATTI (MAILTO)
+        // CONTATTI (MAILTO)
         document.getElementById('btn-contact-mail').addEventListener('click', () => {
             const subject = document.getElementById('contact-subject').value;
-            const appVer = APP_VERSION; // Includiamo la versione nel soggetto
-            // Sostituisci questa email con quella reale dove vuoi ricevere i messaggi
             const emailDestinatario = "m.caiani@gmail.com"; 
-            
-            const finalSubject = encodeURIComponent(`[BTC v${appVer}] ${subject}`);
+            const finalSubject = encodeURIComponent(`[BTC v${APP_VERSION}] ${subject}`);
             const body = encodeURIComponent("Scrivi qui il tuo messaggio...");
-            
             window.location.href = `mailto:${emailDestinatario}?subject=${finalSubject}&body=${body}`;
         });
 
-        // 4. LOGICA CHANGELOG
+        // CHANGELOG
         async function loadChangelog() {
             const container = document.getElementById('changelog-container');
             const btnHistory = document.getElementById('btn-show-history');
 
             try {
-                // Aggiungiamo un timestamp per evitare che il JSON venga cachato dal browser durante i test
                 const response = await fetch(`changelog.json?t=${new Date().getTime()}`);
-                
-                if (!response.ok) throw new Error("File non trovato (404)");
-                
+                if (!response.ok) throw new Error("File non trovato");
                 const data = await response.json();
 
-                if (!data || data.length === 0) {
-                    container.innerHTML = "<p>Nessun dato disponibile.</p>";
-                    return;
-                }
+                if (!data || data.length === 0) { container.innerHTML = "<p>Nessun dato.</p>"; return; }
 
                 container.innerHTML = ''; 
-
                 const createReleaseHTML = (item, isLatest = false) => {
                     const color = isLatest ? 'var(--primary-color)' : '#9ca3af';
-                    const badge = isLatest ? ' (Corrente)' : '';
                     return `
-                        <div class="release-item" style="margin-bottom: 20px; ${!isLatest ? 'display:none;' : ''}" class="${!isLatest ? 'history-item' : ''}">
+                        <div class="release-item" style="margin-bottom: 20px; ${!isLatest ? 'display:none;' : ''}">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
-                                <h4 style="margin:0; color:${color};">${item.version}${badge}</h4>
+                                <h4 style="margin:0; color:${color};">${item.version}${isLatest ? ' (Corrente)' : ''}</h4>
                                 <small style="color:#6b7280;">${item.date}</small>
                             </div>
                             <ul style="margin-top:5px; padding-left:20px; color:#d1d5db;">
@@ -160,58 +188,33 @@
                 container.innerHTML += createReleaseHTML(data[0], true);
 
                 if (data.length > 1) {
-                    for (let i = 1; i < data.length; i++) {
-                        container.innerHTML += createReleaseHTML(data[i], false);
-                    }
+                    for (let i = 1; i < data.length; i++) { container.innerHTML += createReleaseHTML(data[i], false); }
                     btnHistory.style.display = 'flex';
                     btnHistory.addEventListener('click', () => {
-                        const historyItems = container.querySelectorAll('.release-item');
-                        historyItems.forEach(item => item.style.display = 'block');
+                        container.querySelectorAll('.release-item').forEach(item => item.style.display = 'block');
                         btnHistory.style.display = 'none';
                     });
                 }
-
             } catch (error) {
-                console.error("Errore changelog:", error);
-                container.innerHTML = `
-                    <div style="color: #ef4444; text-align: center;">
-                        <span class="material-symbols-outlined">error</span><br>
-                        Errore caricamento note.<br>
-                        <small>${error.message}</small>
-                    </div>`;
+                container.innerHTML = `<div style="color:#ef4444;text-align:center;">Errore caricamento.<br><small>${error.message}</small></div>`;
             }
         }
-
         loadChangelog();
 
-        // 5. GESTIONE AGGIORNAMENTI (Service Worker Robusto)
+        // SW UPDATE
         const updateToast = document.getElementById('update-toast');
-
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                // A) Aggiornamento GIA' in attesa
-                if (reg.waiting) {
-                    if(updateToast) updateToast.classList.add('show');
-                }
-                // B) Aggiornamento trovato ORA
+                if (reg.waiting) if(updateToast) updateToast.classList.add('show');
                 reg.addEventListener('updatefound', () => {
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            if(updateToast) updateToast.classList.add('show');
-                        }
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) if(updateToast) updateToast.classList.add('show');
                     });
                 });
-            }).catch(err => console.log('SW failed', err));
-        }
-
-        if(updateToast) {
-            updateToast.addEventListener('click', () => {
-                if (navigator.serviceWorker.controller) {
-                    window.location.reload();
-                }
             });
         }
+        if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
     </script>
 </body>
 </html>
