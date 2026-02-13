@@ -170,7 +170,7 @@
             <details class="section-accordion">
                 <summary>
                     <div class="section-header-content">
-                        <span class="section-title"><span class="material-symbols-outlined">visibility</span> Appearance <span class="completed-badge">Completa ✓</span></span>
+                        <span class="section-title"><span class="icon icon-eye" style="font-size: 1.2em; margin-right: 8px;"></span> Appearance <span class="completed-badge">Completa ✓</span></span>
                         <div class="score-input-wrapper" onclick="event.preventDefault()">
                             <input type="number" id="score-appearance" class="score-input" min="0" max="3" placeholder="0">
                             <span class="score-max">/3</span>
@@ -188,7 +188,7 @@
             <details class="section-accordion">
                 <summary>
                     <div class="section-header-content">
-                        <span class="section-title"><span class="material-symbols-outlined">restaurant</span> Flavor <span class="completed-badge">Completa ✓</span></span>
+                        <span class="section-title"><span class="icon icon-tongue" style="font-size: 1.2em; margin-right: 8px;"></span> Flavor <span class="completed-badge">Completa ✓</span></span>
                         <div class="score-input-wrapper" onclick="event.preventDefault()">
                             <input type="number" id="score-flavor" class="score-input" min="0" max="20" placeholder="0">
                             <span class="score-max">/20</span>
@@ -206,7 +206,7 @@
             <details class="section-accordion">
                 <summary>
                     <div class="section-header-content">
-                        <span class="section-title"><span class="material-symbols-outlined">face</span> Mouthfeel <span class="completed-badge">Completa ✓</span></span>
+                        <span class="section-title"><span class="icon icon-mouth" style="font-size: 1.2em; margin-right: 8px;"></span> Mouthfeel <span class="completed-badge">Completa ✓</span></span>
                         <div class="score-input-wrapper" onclick="event.preventDefault()">
                             <input type="number" id="score-mouthfeel" class="score-input" min="0" max="5" placeholder="0">
                             <span class="score-max">/5</span>
@@ -302,7 +302,10 @@
         </form>
     </div>
 
-    <div id="update-toast" class="update-toast"><span class="material-symbols-outlined">system_update</span> Nuova versione!</div>
+    <div id="update-toast" class="update-toast">
+        <span class="material-symbols-outlined">system_update</span>
+        Nuova versione! Clicca qui.
+    </div>
 
     <script type="module">
         import { supabase } from '../js/supabase-config.js';
@@ -312,9 +315,29 @@
 
         // Footer & SW
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
+        
+        // GESTIONE AGGIORNAMENTI (Service Worker Robusto)
         const updateToast = document.getElementById('update-toast');
-        if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').then(reg => { if (reg.waiting && updateToast) updateToast.classList.add('show'); reg.addEventListener('updatefound', () => { const n = reg.installing; n.addEventListener('statechange', () => { if (n.state === 'installed' && navigator.serviceWorker.controller && updateToast) updateToast.classList.add('show'); }); }); });
-        if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('../sw.js').then(reg => {
+                // A) Aggiornamento GIA' in attesa
+                if (reg.waiting && updateToast) updateToast.classList.add('show');
+
+                // B) Aggiornamento trovato ORA
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller && updateToast) {
+                            updateToast.classList.add('show');
+                        }
+                    });
+                });
+            }).catch(err => console.log('SW failed', err));
+        }
+
+        if(updateToast) {
+            updateToast.addEventListener('click', () => window.location.reload());
+        }
 
         /* --- LOGICA CALCOLO PUNTEGGIO --- */
         const inputs = {

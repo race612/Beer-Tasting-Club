@@ -15,11 +15,15 @@
     <style>
         /* PUNTEGGI */
         .score-box { background: #111827; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #374151; }
-        .score-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px dashed #374151; }
+        .score-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed #374151; }
         .score-row:last-child { border-bottom: none; }
-        .score-row label { font-weight: 500; color: #d1d5db; }
-        .calc-input { width: 60px; text-align: center; background: #1f2937; border: 1px solid #4b5563; color: white; padding: 5px; border-radius: 4px; font-weight: bold; font-size: 1rem; }
-        .calc-input:focus { border-color: var(--primary-color); outline: none; }
+        .score-row label { font-weight: 500; color: #d1d5db; display: flex; align-items: center; gap: 10px; font-size: 1.05rem; }
+        
+        .score-wrapper { display: flex; align-items: center; background: #1f2937; border: 1px solid #4b5563; border-radius: 6px; padding: 4px 10px; }
+        .score-wrapper:focus-within { border-color: var(--primary-color); box-shadow: 0 0 0 1px var(--primary-color); }
+        .calc-input { width: 35px; text-align: right; background: transparent; border: none; color: white; font-weight: bold; font-size: 1.1rem; padding: 0; }
+        .calc-input:focus { outline: none; }
+        .score-max { color: #6b7280; font-size: 0.9rem; margin-left: 4px; user-select: none; }
     </style>
 </head>
 <body>
@@ -84,11 +88,42 @@
                 </div>
 
                 <div class="score-box">
-                    <div class="score-row"><label>👃 Aroma (max 12)</label><input type="number" id="score-aroma" class="calc-input" min="0" max="12" placeholder="0" required></div>
-                    <div class="score-row"><label>👀 Aspetto (max 3)</label><input type="number" id="score-appearance" class="calc-input" min="0" max="3" placeholder="0" required></div>
-                    <div class="score-row"><label>👅 Gusto (max 20)</label><input type="number" id="score-flavor" class="calc-input" min="0" max="20" placeholder="0" required></div>
-                    <div class="score-row"><label>👄 Corpo (max 5)</label><input type="number" id="score-mouthfeel" class="calc-input" min="0" max="5" placeholder="0" required></div>
-                    <div class="score-row"><label>🍺 Generale (max 10)</label><input type="number" id="score-overall" class="calc-input" min="0" max="10" placeholder="0" required></div>
+                    <div class="score-row">
+                        <label><span class="icon icon-nose"></span> Aroma</label>
+                        <div class="score-wrapper">
+                            <input type="number" id="score-aroma" class="calc-input" min="0" max="12" placeholder="0" required>
+                            <span class="score-max">/12</span>
+                        </div>
+                    </div>
+                    <div class="score-row">
+                        <label><span class="icon icon-eye"></span> Aspetto</label>
+                        <div class="score-wrapper">
+                            <input type="number" id="score-appearance" class="calc-input" min="0" max="3" placeholder="0" required>
+                            <span class="score-max">/3</span>
+                        </div>
+                    </div>
+                    <div class="score-row">
+                        <label><span class="icon icon-tongue"></span> Gusto</label>
+                        <div class="score-wrapper">
+                            <input type="number" id="score-flavor" class="calc-input" min="0" max="20" placeholder="0" required>
+                            <span class="score-max">/20</span>
+                        </div>
+                    </div>
+                    <div class="score-row">
+                        <label><span class="icon icon-mouth"></span> Corpo</label>
+                        <div class="score-wrapper">
+                            <input type="number" id="score-mouthfeel" class="calc-input" min="0" max="5" placeholder="0" required>
+                            <span class="score-max">/5</span>
+                        </div>
+                    </div>
+                    <div class="score-row">
+                        <label><span class="icon icon-beer"></span> Generale</label>
+                        <div class="score-wrapper">
+                            <input type="number" id="score-overall" class="calc-input" min="0" max="10" placeholder="0" required>
+                            <span class="score-max">/10</span>
+                        </div>
+                    </div>
+                    
                     <div style="text-align: center; margin-top: 20px; border-top: 1px solid #374151; padding-top: 10px;">
                         <span style="color: var(--text-muted); font-size: 0.9em;">TOTALE</span>
                         <div id="total-display" style="font-size: 3rem; font-weight: bold; color: var(--primary-color);">0</div>
@@ -391,9 +426,24 @@
             }
         });
 
-        // SW UPDATE
+        // GESTIONE AGGIORNAMENTI (Service Worker Robusto)
         const updateToast = document.getElementById('update-toast');
-        if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').then(reg => { if (reg.waiting && updateToast) updateToast.classList.add('show'); reg.addEventListener('updatefound', () => { const n = reg.installing; n.addEventListener('statechange', () => { if (n.state === 'installed' && navigator.serviceWorker.controller && updateToast) updateToast.classList.add('show'); }); }); });
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('../sw.js').then(reg => {
+                // A) Aggiornamento GIA' in attesa
+                if (reg.waiting && updateToast) updateToast.classList.add('show');
+
+                // B) Aggiornamento trovato ORA
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller && updateToast) {
+                            updateToast.classList.add('show');
+                        }
+                    });
+                });
+            }).catch(err => console.log('SW failed', err));
+        }
         if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
     </script>
 </body>

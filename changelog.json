@@ -36,7 +36,7 @@
         "date": "10 Feb 2026",
         "changes": [
             "Aggiunto Versioning dell'app e changelog.",
-            "Aggiunta pagina Privacy Policy con note personali.",
+            "Creazione pagina Privacy Policy provvisioria con noteonali.",
             "Miglioramento gestione cache e aggiornamenti PWA."
         ]
     },
