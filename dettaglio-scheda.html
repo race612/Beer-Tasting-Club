@@ -103,6 +103,7 @@
         // 1. IMPORT (TASSATIVAMENTE IN CIMA)
         import { supabase } from './js/supabase-config.js';
         import { APP_VERSION } from './js/config.js'; // Usa ./ perché siamo nella root
+        import { showModal } from './js/modal.js';
 
         // 2. VERSION & UPDATE LOGIC (Robust)
         const footerVer = document.getElementById('footer-version');
@@ -164,7 +165,7 @@
                 .eq('id', noteId)
                 .single();
 
-            if (error) { alert("Errore caricamento: " + error.message); return; }
+            if (error) { await showModal("Errore", "Errore caricamento: " + error.message, "error"); return; }
 
             // GESTIONE EVENTO
             const evtName = note.events ? note.events.name : "";
@@ -236,7 +237,8 @@
 
         // 4. ELIMINAZIONE
         document.getElementById('btn-delete').addEventListener('click', async () => {
-            if(!confirm("⚠️ Sei sicuro di voler eliminare questa scheda definitivamente?")) return;
+            const proceed = await showModal("Attenzione", "Sei sicuro di voler eliminare questa scheda definitivamente?", "confirm", "delete_forever");
+            if(!proceed) return;
 
             const { error } = await supabase
                 .from('tasting_notes')
@@ -244,9 +246,9 @@
                 .eq('id', noteId);
 
             if (error) {
-                alert("Errore eliminazione: " + error.message);
+                await showModal("Errore", "Errore eliminazione: " + error.message, "error");
             } else {
-                alert("Scheda eliminata.");
+                await showModal("Eliminata", "Scheda eliminata con successo.", "success");
                 window.location.href = 'storico.html';
             }
         });

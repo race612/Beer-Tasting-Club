@@ -47,6 +47,7 @@
         // 1. IMPORT (TASSATIVAMENTE IN CIMA)
         import { supabase } from './js/supabase-config.js';
         import { APP_VERSION } from './js/config.js'; // Usa ./ perché siamo in root
+        import { showModal } from './js/modal.js';
 
         // 2. VERSION & UPDATE LOGIC (Robust)
         const footerVer = document.getElementById('footer-version');
@@ -173,13 +174,14 @@
                 const deleteBtn = card.querySelector('.delete-btn');
                 deleteBtn.addEventListener('click', async (e) => {
                     e.stopPropagation(); // BLOCCA PROPAGAZIONE
-                    if(confirm(`Sei sicuro di voler eliminare la scheda di "${note.beer_name}"?`)) {
+                    const proceed = await showModal("Elimina Scheda", `Sei sicuro di voler eliminare la scheda di "${note.beer_name}"?`, "confirm", "delete");
+                    if(proceed) {
                         const { error: delError } = await supabase
                             .from('tasting_notes')
                             .delete()
                             .eq('id', note.id);
                         
-                        if (delError) alert("Errore eliminazione: " + delError.message);
+                        if (delError) await showModal("Errore", "Errore eliminazione: " + delError.message, "error");
                         else {
                             card.remove(); 
                             // Se lista vuota, ricarica per mostrare placeholder

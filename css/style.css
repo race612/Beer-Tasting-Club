@@ -1,6 +1,6 @@
-/* =========================================
-   BEER TASTING CLUB - MASTER STYLE v0.8.1
-   ========================================= */
+/* =================================
+    BEER TASTING CLUB - MASTER STYLE 
+   ================================= */
 
 /* 1. IMPORTAZIONE ICONE */
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
@@ -204,12 +204,13 @@ input:focus, select:focus, textarea:focus {
     margin-top: 30px; margin-bottom: 15px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;
 }
 .desc-group { margin-bottom: 20px; }
-.desc-label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: #d1d5db; }
-.options-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.desc-label, .slider-label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: #d1d5db; font-weight: 500; }
+.options-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; }
 .option-btn {
     background: #1f2937; border: 1px solid #4b5563; border-radius: 4px; padding: 8px 5px;
     font-size: 0.85rem; cursor: pointer; transition: all 0.2s; user-select: none;
-    flex: 1 0 0; min-width: 80px; text-align: center; display: flex; align-items: center; justify-content: center; position: relative;
+    text-align: center; display: flex; align-items: center; justify-content: center; position: relative;
+    min-height: 45px; line-height: 1.1; word-break: break-word; hyphens: auto;
 }
 .option-btn:hover { border-color: #9ca3af; background: #374151; }
 .option-btn.selected {
@@ -217,25 +218,29 @@ input:focus, select:focus, textarea:focus {
     font-weight: bold; box-shadow: 0 0 10px rgba(245, 158, 11, 0.3); padding-right: 20px;
 }
 .option-btn.selected::after { content: "✓"; font-weight: 800; font-size: 1.2rem; margin-left: 8px; display: inline-block; }
+/* Spunta assoluta per layout grid */
+.options-grid .option-btn.selected { padding-right: 5px; }
+.options-grid .option-btn.selected::after {
+    content: 'check'; font-family: 'Material Symbols Outlined'; position: absolute; top: -6px; right: -6px;
+    font-size: 1rem; color: #fff; background: #10b981; border-radius: 50%; padding: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.5); margin: 0;
+}
 
 .vote-btn { min-width: 40px !important; font-weight: bold; font-size: 1.1rem; }
 .vote-btn.selected::after { margin-left: 2px; font-size: 0.9rem; }
 
 /* Flaws */
 .flaws-grid {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
-    background: #111827; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #374151;
+    display: grid; grid-template-columns: 1fr; gap: 10px;
 }
-@media (min-width: 600px) { .flaws-grid { grid-template-columns: repeat(3, 1fr); } }
 .flaw-checkbox-hidden { display: none; }
 .flaw-card {
     background: #1f2937; border: 1px solid #374151; border-radius: 6px; padding: 10px;
-    cursor: pointer; transition: all 0.2s; text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 50px;
+    cursor: pointer; transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; min-height: 45px;
 }
 .flaw-checkbox-hidden:checked + .flaw-card { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); color: #ef4444; }
 .flaw-intensity-wrapper { margin-top: 8px; display: none; animation: fadeIn 0.3s; }
 .flaw-checkbox-hidden:checked + .flaw-card .flaw-intensity-wrapper { display: block; }
-.flaw-select-modern { background: #111827; color: white; border: 1px solid #ef4444; border-radius: 4px; padding: 4px; width: 100%; font-size: 0.8rem; text-align: center; }
+.flaw-select-modern { background: #111827; color: white; border: 1px solid #ef4444; border-radius: 4px; padding: 2px 5px; font-size: 0.8rem; }
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -379,3 +384,113 @@ input:focus, select:focus, textarea:focus {
     color: inherit;         /* Stesso colore */
     opacity: 1;             /* Nessuna trasparenza */
 }
+
+/* --- CUSTOM MODAL (Alert & Confirm) --- */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Sfondo scuro semitrasparente */
+    backdrop-filter: blur(4px);      /* Effetto sfocatura moderno */
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2000; opacity: 0; transition: opacity 0.2s; pointer-events: none;
+}
+.modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+.modal-box {
+    background: #1f2937; border: 1px solid #374151;
+    width: 90%; max-width: 400px; padding: 25px; border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    transform: scale(0.9); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-align: center;
+}
+.modal-overlay.open .modal-box { transform: scale(1); }
+
+.modal-icon { font-size: 3rem; margin-bottom: 15px; display: block; }
+.modal-title { color: white; font-size: 1.2rem; margin: 0 0 10px 0; }
+.modal-text { color: #d1d5db; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.5; }
+
+.modal-actions { display: flex; gap: 10px; justify-content: center; }
+.modal-btn { flex: 1; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; font-size: 1rem; }
+.modal-btn.primary { background: var(--primary-color); color: #000; }
+.modal-btn.secondary { background: transparent; border: 1px solid #4b5563; color: #d1d5db; }
+
+/* =========================================
+   17. COMMON COMPONENTS (Refactoring)
+   ========================================= */
+
+/* CHIPS GRID (Mie Birre, Profilo, Schede) */
+.chips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
+.chip-btn {
+    background: #1f2937; border: 1px solid #4b5563; border-radius: 8px; padding: 12px 5px;
+    font-size: 0.9rem; cursor: pointer; transition: all 0.2s; text-align: center; color: #d1d5db;
+    display: flex; align-items: center; justify-content: center; user-select: none; min-height: 45px;
+}
+.chip-btn:hover { border-color: #9ca3af; background: #374151; }
+.chip-btn.selected {
+    background: rgba(245, 158, 11, 0.15); border: 1px solid var(--primary-color);
+    color: var(--primary-color); font-weight: bold; box-shadow: 0 0 8px rgba(245, 158, 11, 0.2);
+}
+.chip-btn.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+
+/* ACCORDION (Schede) */
+details.section-accordion {
+    background: #111827; border: 1px solid #374151; border-radius: 8px; margin-bottom: 15px; overflow: hidden; transition: all 0.3s ease;
+}
+details.section-accordion summary {
+    padding: 12px 15px; background: #1f2937; cursor: pointer; font-weight: bold; color: var(--primary-color);
+    list-style: none; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid transparent;
+}
+details.section-accordion[open] summary { border-bottom-color: #374151; background: rgba(245, 158, 11, 0.05); }
+details.section-accordion summary::after { content: 'expand_more'; font-family: 'Material Symbols Outlined'; font-size: 1.5rem; color: #9ca3af; }
+details.section-accordion[open] summary::after { content: 'expand_less'; }
+.accordion-content { padding: 15px; }
+.summary-title { display: flex; align-items: center; gap: 10px; flex: 1; }
+
+/* COMPLETED BADGE */
+.completed-badge {
+    font-size: 0.75rem; color: #10b981; background: rgba(16, 185, 129, 0.1);
+    padding: 2px 6px; border-radius: 4px; border: 1px solid #10b981;
+    display: none; align-items: center; gap: 4px; margin-right: 10px;
+}
+details.section-accordion.completed:not([open]) .completed-badge { display: inline-flex; }
+.optional-badge { font-size: 0.75rem; color: #6b7280; font-weight: normal; margin-left: 10px; }
+
+/* RANGE SLIDERS */
+.slider-group { background: transparent; padding: 0; border: none; margin-bottom: 20px; margin-top: 15px; }
+.slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.slider-value { color: var(--primary-color); font-weight: bold; font-size: 0.9rem; }
+input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; cursor: pointer; height: 30px; margin: 0; }
+input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; background: #4b5563; border-radius: 3px; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; height: 20px; width: 20px; border-radius: 50%; background: var(--primary-color); margin-top: -7px; box-shadow: 0 0 5px rgba(0,0,0,0.5); border: 2px solid #fff; }
+
+/* DYNAMIC FIELDS (BJCP) */
+.dynamic-field-group { margin-top: 10px; background: #374151; padding: 12px; border-radius: 6px; border-left: 3px solid #f59e0b; }
+.dynamic-label { font-size: 0.85em; color: #f59e0b; margin-bottom: 5px; display: block; font-weight: bold; }
+.dynamic-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+.radio-badge label { background: #1f2937; padding: 5px 10px; border-radius: 4px; border: 1px solid #4b5563; cursor: pointer; font-size: 0.9em; }
+.radio-badge input:checked + span { color: var(--primary-color); font-weight: bold; }
+.radio-badge input { margin-right: 5px; }
+
+/* BEER CARD (Mie Birre) */
+.beer-card { background: #1f2937; border-left: 4px solid var(--primary-color); border-radius: 8px; padding: 15px; margin-bottom: 15px; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.2s; }
+.beer-card:active { transform: scale(0.98); }
+.beer-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.beer-id-badge { background: #111827; color: var(--primary-color); font-family: monospace; padding: 6px 10px; border-radius: 6px; font-size: 1rem; font-weight: bold; border: 1px dashed #6b7280; cursor: copy; display: flex; align-items: center; gap: 5px; }
+.beer-id-badge:active { background: #374151; }
+.beer-producer { color: var(--text-muted); font-size: 0.95rem; margin-top: 2px; }
+.beer-packaging { color: var(--text-muted); font-size: 0.85rem; margin-top: 2px; font-style: italic; opacity: 0.8; }
+
+/* STAT BOX (Dettaglio Birra) */
+.stat-box { background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; margin-bottom: 20px; text-align: center; }
+.stat-code { font-size: 2rem; font-weight: bold; color: var(--primary-color); letter-spacing: 2px; font-family: monospace; }
+
+/* SHARING SEARCH (Nuova Scheda) */
+.sharing-search-box { display: flex; gap: 10px; margin-bottom: 20px; }
+.sharing-search-box input { flex: 1; text-transform: uppercase; font-family: monospace; letter-spacing: 2px; font-size: 1.2rem; text-align: center; }
+#beer-preview-card { background: #1f2937; border-left: 4px solid var(--primary-color); padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; animation: fadeIn 0.3s ease-out; }
+
+/* UTILS */
+.hidden-field { display: none; margin-top: 15px; animation: fadeIn 0.3s ease-out; }
+.text-muted-small { color: var(--text-muted); font-size: 0.85em; font-weight: normal; margin-left: 5px; }
+.profile-section-title { color: var(--primary-color); border-bottom: 1px solid #374151; padding-bottom: 5px; margin-top: 35px; margin-bottom: 15px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+.account-badge { background: #374151; color: #d1d5db; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; border: 1px solid #4b5563; }
+.fab-add { position: fixed; bottom: 80px; right: 20px; width: 56px; height: 56px; background: var(--primary-color); color: black; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); cursor: pointer; z-index: 100; }

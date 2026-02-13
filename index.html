@@ -157,6 +157,7 @@
         // --- 1. IMPORT (DEVONO ESSERE IN CIMA) ---
         import { supabase } from './js/supabase-config.js';
         import { APP_VERSION } from './js/config.js';
+        import { showModal } from './js/modal.js';
 
         // URL base dell'applicazione
         const APP_URL = 'https://race612.github.io/Beer-Tasting-Club/'; 
@@ -341,7 +342,7 @@
         
         btnModalAction.addEventListener('click', async () => { 
             const email = document.getElementById('modal-email').value; 
-            if(!email) return alert("Inserisci email!"); 
+            if(!email) { await showModal("Attenzione", "Inserisci email!", "error"); return; }
             btnModalAction.disabled = true; 
             let error = null; 
             if (modalMode === 'reset') { 
@@ -349,15 +350,15 @@
             } else { 
                 const res = await supabase.auth.resend({ type: 'signup', email, options: { emailRedirectTo: APP_URL } }); error = res.error; 
             } 
-            if(error) alert("Errore: " + error.message); else { alert("Operazione completata!"); modal.style.display = 'none'; } 
+            if(error) await showModal("Errore", "Errore: " + error.message, "error"); else { await showModal("Fatto!", "Operazione completata!", "success"); modal.style.display = 'none'; } 
             btnModalAction.disabled = false; btnModalAction.innerHTML = `<span class="material-symbols-outlined">send</span> Invia`; 
         });
 
         document.getElementById('btn-update-password').addEventListener('click', async () => { 
             const newPass = document.getElementById('new-password').value; 
-            if (!newPass || newPass.length < 6) return alert("Password troppo corta."); 
+            if (!newPass || newPass.length < 6) { await showModal("Attenzione", "Password troppo corta.", "error"); return; }
             const { error } = await supabase.auth.updateUser({ password: newPass }); 
-            if (error) alert("Errore: " + error.message); else { alert("Password aggiornata!"); window.location.hash = ''; window.location.reload(); } 
+            if (error) await showModal("Errore", "Errore: " + error.message, "error"); else { await showModal("Successo", "Password aggiornata!", "success"); window.location.hash = ''; window.location.reload(); } 
         });
     </script>
 </body>

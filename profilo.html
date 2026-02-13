@@ -10,79 +10,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
-    
-    <style>
-        /* STILI SPECIFICI PROFILO */
-        .profile-section-title {
-            color: var(--primary-color);
-            border-bottom: 1px solid #374151;
-            padding-bottom: 5px;
-            margin-top: 35px;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .text-muted-small { color: var(--text-muted); font-size: 0.85em; font-weight: normal; margin-left: 5px; }
-
-        /* LIVELLO ACCOUNT BADGE */
-        .account-badge {
-            background: #374151;
-            color: #d1d5db;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 1px solid #4b5563;
-        }
-
-        /* GRIGLIE PULSANTI (Chips) */
-        .chips-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        
-        .chip-btn {
-            background: #1f2937;
-            border: 1px solid #4b5563;
-            border-radius: 8px;
-            padding: 12px 5px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            color: #d1d5db;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 50px;
-            user-select: none;
-            line-height: 1.2;
-        }
-
-        .chip-btn:hover { border-color: #9ca3af; background: #374151; }
-
-        .chip-btn.selected {
-            background: rgba(245, 158, 11, 0.15);
-            border: 1px solid var(--primary-color);
-            color: var(--primary-color);
-            font-weight: bold;
-            box-shadow: 0 0 8px rgba(245, 158, 11, 0.2);
-        }
-
-        /* Campi Nascosti */
-        .hidden-field {
-            display: none; 
-            margin-top: 15px;
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -249,6 +176,7 @@
         // 1. IMPORT (TASSATIVAMENTE IN CIMA)
         import { supabase } from './js/supabase-config.js';
         import { APP_VERSION } from './js/config.js'; // Usa ./ perché siamo in root
+        import { showModal } from './js/modal.js';
 
         // 2. VERSION & UPDATE LOGIC (Robust)
         const footerVer = document.getElementById('footer-version');
@@ -449,9 +377,9 @@
             const { error } = await supabase.auth.updateUser({ data: updates });
 
             if (error) {
-                alert("Errore: " + error.message);
+                await showModal("Errore", "Errore: " + error.message, "error");
             } else {
-                alert("Profilo aggiornato! ✅");
+                await showModal("Profilo Aggiornato", "I dati sono stati salvati correttamente.", "success");
                 const newName = updates.full_name || document.getElementById('user-email').value;
                 document.getElementById('avatar-initials').textContent = newName.charAt(0).toUpperCase();
                 document.getElementById('account-level-val').textContent = newLevel;
@@ -463,7 +391,8 @@
 
         // --- 5. LOGOUT ---
         document.getElementById('logout-btn').addEventListener('click', async () => {
-            if(confirm("Vuoi davvero uscire?")) {
+            const proceed = await showModal("Logout", "Vuoi davvero uscire?", "confirm", "logout");
+            if(proceed) {
                 await supabase.auth.signOut();
                 window.location.href = 'index.html';
             }

@@ -13,21 +13,6 @@
     <link rel="apple-touch-icon" href="../assets/icon-192.png">
 
     <style>
-        /* STILI UI */
-        .dynamic-field-group { margin-top: 10px; background: #374151; padding: 12px; border-radius: 6px; border-left: 3px solid #f59e0b; }
-        .dynamic-label { font-size: 0.85em; color: #f59e0b; margin-bottom: 5px; display: block; font-weight: bold; }
-        .dynamic-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-        .radio-badge label { background: #1f2937; padding: 5px 10px; border-radius: 4px; border: 1px solid #4b5563; cursor: pointer; font-size: 0.9em; }
-        .radio-badge input:checked + span { color: var(--primary-color); font-weight: bold; }
-        .radio-badge input { margin-right: 5px; }
-
-        /* CHIPS */
-        .chips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
-        .chip-btn { background: #1f2937; border: 1px solid #4b5563; border-radius: 8px; padding: 10px 5px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; text-align: center; color: #d1d5db; display: flex; align-items: center; justify-content: center; user-select: none; }
-        .chip-btn:hover { border-color: #9ca3af; background: #374151; }
-        .chip-btn.selected { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--primary-color); color: var(--primary-color); font-weight: bold; }
-        .chip-btn.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
-
         /* PUNTEGGI */
         .score-box { background: #111827; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #374151; }
         .score-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px dashed #374151; }
@@ -35,15 +20,6 @@
         .score-row label { font-weight: 500; color: #d1d5db; }
         .calc-input { width: 60px; text-align: center; background: #1f2937; border: 1px solid #4b5563; color: white; padding: 5px; border-radius: 4px; font-weight: bold; font-size: 1rem; }
         .calc-input:focus { border-color: var(--primary-color); outline: none; }
-
-        /* DIFETTI */
-        .flaws-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-        .flaw-card { background: #1f2937; border: 1px solid #4b5563; padding: 10px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
-        .flaw-checkbox-hidden { display: none; }
-        .flaw-checkbox-hidden:checked + .flaw-card { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
-        .flaw-intensity-wrapper { display: none; margin-left: 10px; }
-        .flaw-checkbox-hidden:checked + .flaw-card .flaw-intensity-wrapper { display: block; }
-        .flaw-select-modern { background: #111827; color: white; border: 1px solid #ef4444; border-radius: 4px; padding: 2px 5px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -136,7 +112,11 @@
     </div>
 
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
-        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span>
+        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
+        <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
+        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        </p>
     </footer>
 
     <div id="update-toast" class="update-toast">
@@ -148,6 +128,7 @@
         import { supabase } from '../js/supabase-config.js';
         import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js'; 
         import { APP_VERSION } from '../js/config.js';
+        import { showModal } from '../js/modal.js';
 
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
 
@@ -316,10 +297,14 @@
         });
 
         // AVVISO USCITA
-        document.getElementById('back-link').addEventListener('click', (e) => {
+        document.getElementById('back-link').addEventListener('click', async (e) => {
             if (isDirty) {
-                if (!confirm("⚠️ Stai per uscire senza salvare.\nVuoi davvero procedere? I dati andranno persi.")) e.preventDefault();
-                else isDirty = false;
+                e.preventDefault();
+                const proceed = await showModal("Attenzione", "Stai per uscire senza salvare. Vuoi davvero procedere? I dati andranno persi.", "confirm");
+                if (proceed) {
+                    isDirty = false;
+                    window.location.href = e.currentTarget.href;
+                }
             }
         });
         window.addEventListener('beforeunload', (e) => { if (isDirty) { e.preventDefault(); e.returnValue = ''; } });
@@ -358,7 +343,7 @@
                     if (specs.length > 0) finalStyle += ` (${specs.join(', ')})`;
                 }
             }
-            if (!finalStyle || finalStyle.length < 3) { alert("Inserisci uno stile valido."); return; }
+            if (!finalStyle || finalStyle.length < 3) { await showModal("Attenzione", "Inserisci uno stile valido.", "error"); return; }
 
             const scores = {
                 aroma: parseInt(document.getElementById('score-aroma').value) || 0,
@@ -392,13 +377,14 @@
             };
 
             const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
-            if (error) { alert(error.message); btn.disabled = false; return; }
+            if (error) { await showModal("Errore", error.message, "error"); btn.disabled = false; return; }
             
             isDirty = false;
             localStorage.removeItem('btc_context_beer');
             localStorage.removeItem('btc_context_mode');
 
-            if(confirm("Scheda salvata! ✅\nVuoi visualizzare e scaricare il PDF?")) {
+            const wantPdf = await showModal("Scheda Salvata! ✅", "Vuoi visualizzare e scaricare il PDF?", "confirm", "picture_as_pdf");
+            if(wantPdf) {
                 window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
             } else {
                 window.location.href = '../nuova-scheda.html';

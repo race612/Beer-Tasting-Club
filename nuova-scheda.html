@@ -11,11 +11,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
-    <style>
-        .sharing-search-box { display: flex; gap: 10px; margin-bottom: 20px; }
-        .sharing-search-box input { flex: 1; text-transform: uppercase; font-family: monospace; letter-spacing: 2px; font-size: 1.2rem; text-align: center; }
-        #beer-preview-card { background: #1f2937; border-left: 4px solid var(--primary-color); padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none; animation: fadeIn 0.3s ease-out; }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -54,7 +49,7 @@
             <h3 style="text-align: center; margin-bottom: 10px;" id="select-title">Che scheda vuoi usare?</h3>
 
             <div class="sheet-grid">
-                <a href="schede/crocette.html" class="sheet-card" onclick="return checkSelection()">
+                <a href="#" class="sheet-card" onclick="handleSheetClick(event, 'schede/crocette.html')">
                     <span class="material-symbols-outlined icon-large">checklist</span>
                     <span class="sheet-title">Descrittiva<br>Semplificata</span>
                 </a>
@@ -65,12 +60,12 @@
                     <span class="sheet-title">Descrittiva<br>Estesa</span>
                 </div>
 
-                <a href="schede/bjcp-sintetica.html" class="sheet-card" onclick="return checkSelection()">
+                <a href="#" class="sheet-card" onclick="handleSheetClick(event, 'schede/bjcp-sintetica.html')">
                     <span class="material-symbols-outlined icon-large">balance</span>
                     <span class="sheet-title">BJCP<br>Sintetica</span>
                 </a>
 
-                <a href="schede/bjcp-completa.html" class="sheet-card" onclick="return checkSelection()">
+                <a href="#" class="sheet-card" onclick="handleSheetClick(event, 'schede/bjcp-completa.html')">
                     <span class="material-symbols-outlined icon-large">gavel</span>
                     <span class="sheet-title">BJCP<br>Completa</span>
                 </a>
@@ -114,6 +109,7 @@
     <script type="module">
         import { supabase } from './js/supabase-config.js';
         import { APP_VERSION } from './js/config.js';
+        import { showModal } from './js/modal.js';
 
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
 
@@ -158,18 +154,19 @@
         localStorage.setItem('btc_context_mode', 'free');
 
         // CHECK PRIMA DI ANDARE ALLA SCHEDA
-        window.checkSelection = function() {
+        window.handleSheetClick = async function(e, url) {
+            e.preventDefault();
             if (currentMode === 'sharing' && !localStorage.getItem('btc_context_beer')) {
-                alert("Devi prima cercare e trovare una birra!");
-                return false;
+                await showModal("Attenzione", "Devi prima cercare e trovare una birra!", "error");
+                return;
             }
-            return true;
+            window.location.href = url;
         }
 
         // RICERCA BIRRA
         document.getElementById('btn-search-beer').addEventListener('click', async () => {
             const code = document.getElementById('sharing-id-input').value.toUpperCase().trim();
-            if(code.length !== 6) { alert("Il codice deve essere di 6 caratteri."); return; }
+            if(code.length !== 6) { await showModal("Attenzione", "Il codice deve essere di 6 caratteri.", "error"); return; }
 
             const btn = document.getElementById('btn-search-beer');
             btn.disabled = true;
@@ -177,7 +174,7 @@
             const { data, error } = await supabase.from('my_beers').select('*').eq('sharing_id', code).single();
             btn.disabled = false;
 
-            if (error || !data) { alert("Birra non trovata!"); return; }
+            if (error || !data) { await showModal("Errore", "Birra non trovata!", "error"); return; }
 
             // Mostra Anteprima e Sblocca Schede
             document.getElementById('preview-name').textContent = data.name;

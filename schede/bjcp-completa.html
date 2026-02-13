@@ -12,21 +12,6 @@
     <link rel="apple-touch-icon" href="../assets/icon-192.png">
     
     <style>
-        /* STILI SPECIFICI BJCP COMPLETA */
-        
-        /* Accordion */
-        details.section-accordion {
-            background: #111827; border: 1px solid #374151; border-radius: 8px; margin-bottom: 15px; overflow: hidden; transition: all 0.3s ease;
-        }
-        details.section-accordion summary {
-            padding: 15px; background: #1f2937; cursor: pointer; color: var(--primary-color);
-            list-style: none; display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid transparent;
-        }
-        details.section-accordion[open] summary { border-bottom-color: #374151; background: rgba(245, 158, 11, 0.05); }
-        details.section-accordion summary::after { content: 'expand_more'; font-family: 'Material Symbols Outlined'; font-size: 1.5rem; color: #9ca3af; }
-        details.section-accordion[open] summary::after { content: 'expand_less'; }
-
         /* Header Sezione con Punteggio */
         .section-header-content {
             display: flex; align-items: center; justify-content: space-between; width: 100%; padding-right: 10px;
@@ -69,22 +54,6 @@
         }
         .total-display { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); }
         .total-label { font-size: 0.8rem; color: #9ca3af; display: block; }
-
-        /* Chips & Standard */
-        .chips-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
-        .chip-btn { background: #1f2937; border: 1px solid #4b5563; border-radius: 8px; padding: 10px 5px; font-size: 0.85rem; cursor: pointer; text-align: center; color: #d1d5db; }
-        .chip-btn.selected { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--primary-color); color: var(--primary-color); font-weight: bold; }
-        .chip-btn.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
-        .dynamic-field-group { margin-top: 10px; background: #374151; padding: 12px; border-radius: 6px; border-left: 3px solid #f59e0b; }
-        .accordion-content { padding: 15px; }
-        
-        /* Completed Badge */
-        .completed-badge {
-            font-size: 0.75rem; color: #10b981; background: rgba(16, 185, 129, 0.1);
-            padding: 2px 6px; border-radius: 4px; border: 1px solid #10b981;
-            display: none; align-items: center; gap: 4px; margin-left: 10px;
-        }
-        details.section-accordion.completed:not([open]) .completed-badge { display: inline-flex; }
 
         /* Feedback Scale */
         .feedback-row { margin-bottom: 20px; }
@@ -312,8 +281,12 @@
                 </div>
             </details>
 
-            <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563; margin-bottom: 20px;">
-                &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span>
+            <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
+                &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
+                <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
+                <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                    Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+                </p>
             </footer>
 
             <div class="sticky-footer">
@@ -335,6 +308,7 @@
         import { supabase } from '../js/supabase-config.js';
         import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js';
         import { APP_VERSION } from '../js/config.js';
+        import { showModal } from '../js/modal.js';
 
         // Footer & SW
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
@@ -601,7 +575,8 @@
             if (!document.getElementById('fb-row-style').closest('details').classList.contains('completed')) allComplete = false;
 
             if (!allComplete) {
-                if(!confirm("Scheda non completata si desidera salvarla comunque?")) return;
+                const proceed = await showModal("Attenzione", "La scheda non è completa. Vuoi salvarla comunque?", "confirm");
+                if (!proceed) return;
             }
 
             btn.disabled = true; btn.textContent = "Salvataggio...";
@@ -684,10 +659,11 @@
             };
 
             const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
-            if (error) { alert(error.message); btn.disabled = false; return; }
+            if (error) { await showModal("Errore", error.message, "error"); btn.disabled = false; return; }
 
             localStorage.removeItem('btc_context_beer');
-            if(confirm("Scheda salvata! ✅\nVuoi scaricare il PDF?")) {
+            const wantPdf = await showModal("Scheda Salvata! ✅", "Vuoi visualizzare e scaricare il PDF?", "confirm", "picture_as_pdf");
+            if(wantPdf) {
                 window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
             } else {
                 window.location.href = '../nuova-scheda.html';

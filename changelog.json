@@ -1,11 +1,13 @@
 [   
     {
         "_comment":"modificare versione in js/config.js e cambiare CACHE_NAME in sw.js",
-        "version": "0.6.4 Alpha",
+        "version": "0.6.9 Alpha",
         "date": "12 Feb 2026",
         "changes": [
-            "Work in progress...",
-            "Work in progress..."
+            "Miglioramenti CSS.",
+            "Nuova grafica Popup avvisi (modal.js).",
+            "Preparazione per nuove icone",
+            "Miglioramento css e footer"
         ]
     },
     {

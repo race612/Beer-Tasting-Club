@@ -14,10 +14,6 @@
         .detail-header { text-align: center; margin-bottom: 20px; }
         .detail-header h2 { color: var(--primary-color); margin: 0; font-size: 1.8rem; }
         .detail-header p { color: #d1d5db; margin: 5px 0; font-size: 1.1rem; }
-        
-        .stat-box { background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; margin-bottom: 20px; text-align: center; }
-        .stat-code { font-size: 2rem; font-weight: bold; color: var(--primary-color); letter-spacing: 2px; font-family: monospace; }
-        
         .linked-sheets { margin-top: 30px; }
     </style>
 </head>
@@ -45,16 +41,63 @@
     </div>
 
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
-        &copy; 2026 Beer Tasting Club
+        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
+        <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
+        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        </p>
     </footer>
 
     <script type="module">
         import { supabase } from './js/supabase-config.js';
+        import { APP_VERSION } from './js/config.js';
+        import { showModal } from './js/modal.js';
 
+        // 2. VERSION & UPDATE LOGIC (Robust)
+        const footerVer = document.getElementById('footer-version');
+        if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
+
+        const updateToast = document.getElementById('update-toast');
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then(reg => { // Usa ./sw.js
+                
+                // A) Aggiornamento GIA' in attesa
+                if (reg.waiting) {
+                    if(updateToast) updateToast.classList.add('show');
+                }
+
+                // B) Aggiornamento trovato ORA
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            if(updateToast) updateToast.classList.add('show');
+                        }
+                    });
+                });
+            }).catch(err => console.log('SW failed', err));
+        }
+
+        // Click -> Aggiorna
+        if(updateToast) {
+            updateToast.addEventListener('click', () => {
+                if (navigator.serviceWorker.controller) {
+                    window.location.reload();
+                }
+            });
+        }
+
+        // 3. LOGICA PAGINA (Caricamento Dati)
         const params = new URLSearchParams(window.location.search);
         const beerId = params.get('id');
 
         if (!beerId) window.location.href = 'miebirre.html';
+
+        window.copySharingId = async (id) => {
+            await navigator.clipboard.writeText(id);
+            await showModal("Copiato!", "Codice copiato negli appunti.", "success", "content_copy");
+        };
 
         async function loadData() {
             // 1. CARICA DETTAGLI BIRRA
@@ -83,7 +126,7 @@
 
                 <div class="stat-box">
                     <div style="font-size:0.8rem; text-transform:uppercase; color:#9ca3af; margin-bottom:5px;">Codice Condivisione</div>
-                    <div class="stat-code" onclick="navigator.clipboard.writeText('${beer.sharing_id}'); alert('Copiato!');" style="cursor:copy;">
+                    <div class="stat-code" onclick="copySharingId('${beer.sharing_id}')" style="cursor:copy;">
                         ${beer.sharing_id}
                     </div>
                     <div style="font-size:0.7rem; color:#6b7280; margin-top:5px;">Tocca per copiare</div>
