@@ -1,7 +1,7 @@
 [   
     {
         "_comment":"modificare versione in js/config.js e cambiare CACHE_NAME in sw.js",
-        "version": "0.6.9 Alpha",
+        "version": "0.6.X Alpha",
         "date": "13 Feb 2026",
         "changes": [
             "Miglioramenti CSS.",
@@ -14,10 +14,9 @@
         ]
     },
     {
-        "version": "0.5.0 Alpha",
+        "version": "0.5.X Alpha",
         "date": "10 Feb 2026",
         "changes": [
-            "Aggiunto Versioning dell'app e changelog.",
             "Aggiunta pagina Privacy Policy con note personali.",
             "Miglioramento gestione cache e aggiornamenti PWA.",
             "Tabella DB e pagina Le mie Birre.",
@@ -28,19 +27,21 @@
         ]
     },
     {
-        "version": "0.4.0 Alpha",
+        "version": "0.4.X Alpha",
         "date": "8 Feb 2026",
         "changes": [
+            "Aggiunto Versioning dell'app e changelog.",
             "Implementazione sistema di Login e Registrazione.",
             "Nuova gestione Password Dimenticata e Rinvio Email."
         ]
     },
     {
-        "version": "0.3.0 Alpha",
+        "version": "0.3.X Alpha",
         "date": "01 Feb 2026",
         "changes": [
             "Integrazione Supabase per il database.",
-            "Prima versione di prova delle schede di degustazione."
+            "Prima versione di prova delle schede di degustazione.",
+            "Creazione di tutte le pagine html."
         ]
     }
 ]
