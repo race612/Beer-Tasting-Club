@@ -494,3 +494,57 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: 
 .profile-section-title { color: var(--primary-color); border-bottom: 1px solid #374151; padding-bottom: 5px; margin-top: 35px; margin-bottom: 15px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
 .account-badge { background: #374151; color: #d1d5db; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; border: 1px solid #4b5563; }
 .fab-add { position: fixed; bottom: 80px; right: 20px; width: 56px; height: 56px; background: var(--primary-color); color: black; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); cursor: pointer; z-index: 100; }
+
+/* =========================================
+   18. INFO PAGE SPECIFICS
+   ========================================= */
+.github-btn {
+    background: #24292e; color: white; width: 100%; margin-top: 10px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 12px; border-radius: 8px; font-weight: bold; text-decoration: none;
+    border: 1px solid #444c56; transition: background 0.2s;
+}
+.github-btn:active { background: #1b1f23; transform: scale(0.98); }
+.license-box {
+    background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; margin-top: 10px;
+}
+
+@font-face {
+    font-family: "beer-icon";
+    src: url("fonts/beer-icon.woff2") format("woff2"),
+        url("fonts/beer-icon.ttf") format("truetype"),
+        url("fonts/beer-icon.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+.icon {
+    /* Use !important to prevent extensions from overriding this font. */
+    font-family: "beer-icon" !important;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    display: inline-block;
+    vertical-align: middle;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* INCONS */
+.icon-nose:before { content: "\f000"; }
+.icon-beer:before { content: "\f001"; }
+.icon-beermug:before { content: "\f002"; }
+.icon-artificial-intelligence:before { content: "\f003"; }
+.icon-eye:before { content: "\f004"; }
+.icon-bugs:before { content: "\f005"; }
+.icon-bottle:before { content: "\f006"; }
+.icon-tongue:before { content: "\f007"; }
+.icon-mouth:before { content: "\f008"; }
+.icon-lips:before { content: "\f009"; }
+.icon-tap:before { content: "\f00a"; }
+.icon-growler:before { content: "\f00b"; }
+.icon-can:before { content: "\f00c"; }
