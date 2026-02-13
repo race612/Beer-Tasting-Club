@@ -1,6 +1,6 @@
 // sw.js
 // IMPORTANTE: Cambia questa stringa ad ogni rilascio per forzare l'aggiornamento sugli utenti
-const CACHE_NAME = 'btc-cache-v0.6.13-alpha'; 
+const CACHE_NAME = 'btc-cache-v0.6.14-alpha'; 
 
 const ASSETS_TO_CACHE = [
   './',
@@ -53,7 +53,7 @@ self.addEventListener('activate', (event) => {
 // FETCH
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
+    caches.match(event.request, { ignoreSearch: true }).then((response) => {
       return response || fetch(event.request);
     })
   );

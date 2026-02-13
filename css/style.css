@@ -5,6 +5,17 @@
 /* 1. IMPORTAZIONE ICONE */
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
 
+/* 1.1 CUSTOM FONT (Beer Icons) */
+@font-face {
+    font-family: "beer-icon";
+    src: url("../fonts/beer-icon.woff2") format("woff2"),
+        url("../fonts/beer-icon.ttf") format("truetype"),
+        url("../fonts/beer-icon.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
 /* 2. VARIABILI & COLORI */
 :root {
     --primary-color: #f59e0b; /* Amber 500 */
@@ -509,15 +520,6 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: 
     background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; margin-top: 10px;
 }
 
-@font-face {
-    font-family: "beer-icon";
-    src: url("../fonts/beer-icon.woff2") format("woff2"),
-        url("../fonts/beer-icon.ttf") format("truetype"),
-        url("../fonts/beer-icon.woff") format("woff");
-    font-weight: normal;
-    font-style: normal;
-    font-display: block;
-}
 .icon {
     /* Use !important to prevent extensions from overriding this font. */
     font-family: "beer-icon" !important;
