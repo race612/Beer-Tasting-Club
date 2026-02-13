@@ -70,6 +70,8 @@
                             <select id="style-system" style="margin-bottom: 10px; border: 1px solid var(--primary-color);">
                                 <option value="free">📝 Stile Libero</option>
                                 <option value="bjcp">⚖️ BJCP 2021</option>
+                                <option value="free">Stile Libero</option>
+                                <option value="bjcp">BJCP 2021</option>
                             </select>
 
                             <div id="container-free">
@@ -594,7 +596,7 @@
             localStorage.removeItem('btc_context_beer');
             localStorage.removeItem('btc_context_mode');
 
-            const wantPdf = await showModal("Scheda Salvata! ✅", "Vuoi visualizzare e scaricare il PDF?", "confirm", "picture_as_pdf");
+            const wantPdf = await showModal("Scheda Salvata!", "Vuoi visualizzare e scaricare il PDF?", "confirm", "picture_as_pdf");
             if(wantPdf) {
                 window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
             } else {

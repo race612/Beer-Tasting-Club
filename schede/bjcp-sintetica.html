@@ -62,6 +62,8 @@
                     <select id="style-system" style="margin-bottom: 10px; border: 1px solid var(--primary-color);">
                         <option value="free">📝 Stile Libero (Testo)</option>
                         <option value="bjcp">⚖️ BJCP 2021 (Lista)</option>
+                        <option value="free">Stile Libero (Testo)</option>
+                        <option value="bjcp">BJCP 2021 (Lista)</option>
                     </select>
 
                     <div id="container-free">
@@ -132,6 +134,9 @@
                 </div>
 
                 <h4 style="margin-bottom: 10px; color: #ef4444;">🚫 Difetti / Off-Flavors</h4>
+                <h4 style="margin-bottom: 10px; color: #ef4444; display: flex; align-items: center; gap: 8px;">
+                    <span class="material-symbols-outlined">warning</span> Difetti / Off-Flavors
+                </h4>
                 <div class="flaws-grid" id="flaws-container"></div>
 
                 <div class="form-group" style="margin-top: 20px;">
@@ -418,7 +423,8 @@
             localStorage.removeItem('btc_context_beer');
             localStorage.removeItem('btc_context_mode');
 
-            const wantPdf = await showModal("Scheda Salvata! ✅", "Vuoi visualizzare e scaricare il PDF?", "confirm", "picture_as_pdf");
+ 
+            const wantPdf = await showModal("Scheda Salvata!", "Vuoi visualizzare e scaricare il PDF?", "confirm", "picture_as_pdf");
             if(wantPdf) {
                 window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
             } else {

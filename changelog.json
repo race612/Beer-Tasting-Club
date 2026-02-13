@@ -6,29 +6,11 @@
         "changes": [
             "Miglioramenti CSS.",
             "Nuova grafica Popup avvisi (modal.js).",
-            "Preparazione per nuove icone",
-            "Miglioramento css e footer"
-        ]
-    },
-    {
-        "version": "0.6.2 Alpha",
-        "date": "11 Feb 2026",
-        "changes": [
+            "Aggiunte nuove icone personalizzate.",
             "Rifiniture scheda descrittiva sintetica.",
-            "Prima bozza scheda BJCP completa.",
+            "Aggiunta scheda BJCP completa.",
             "Aggiunta licenza e aggiornato Readme.",
-            "Aggiornamento pagina Info"
-        ]
-    },
-    {
-        "version": "0.5.8 Alpha",
-        "date": "10 Feb 2026",
-        "changes": [
-            "Tabella DB e pagina Le mie Birre.",
-            "Possibilità di Eliminare e modificare Le mie Birre.",
-            "Funzionalità Beer Sharing, primi test.",
-            "Implementazione primi tools: colore e convertitore.",
-            "Miglioramento e revisione codice di tutte le pagine."
+            "Aggiornamento pagina Info."
         ]
     },
     {
@@ -36,8 +18,13 @@
         "date": "10 Feb 2026",
         "changes": [
             "Aggiunto Versioning dell'app e changelog.",
-            "Creazione pagina Privacy Policy provvisioria con noteonali.",
-            "Miglioramento gestione cache e aggiornamenti PWA."
+            "Aggiunta pagina Privacy Policy con note personali.",
+            "Miglioramento gestione cache e aggiornamenti PWA.",
+            "Tabella DB e pagina Le mie Birre.",
+            "Possibilità di Eliminare e modificare Le mie Birre.",
+            "Funzionalità Beer Sharing, primi test.",
+            "Implementazione primi tools: colore e convertitore.",
+            "Miglioramento e revisione codice di tutte le pagine."
         ]
     },
     {

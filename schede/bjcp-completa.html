@@ -685,7 +685,7 @@
             if (error) { await showModal("Errore", error.message, "error"); btn.disabled = false; return; }
 
             localStorage.removeItem('btc_context_beer');
-            const wantPdf = await showModal("Scheda Salvata! ✅", "Vuoi visualizzare e scaricare il PDF?", "confirm", "picture_as_pdf");
+            const wantPdf = await showModal("Scheda Salvata!", "Vuoi visualizzare e scaricare il PDF?", "confirm", "picture_as_pdf");
             if(wantPdf) {
                 window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
             } else {
