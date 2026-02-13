@@ -511,9 +511,9 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: 
 
 @font-face {
     font-family: "beer-icon";
-    src: url("fonts/beer-icon.woff2") format("woff2"),
-        url("fonts/beer-icon.ttf") format("truetype"),
-        url("fonts/beer-icon.woff") format("woff");
+    src: url("../fonts/beer-icon.woff2") format("woff2"),
+        url("../fonts/beer-icon.ttf") format("truetype"),
+        url("../fonts/beer-icon.woff") format("woff");
     font-weight: normal;
     font-style: normal;
     font-display: block;

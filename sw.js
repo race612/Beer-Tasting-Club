@@ -1,6 +1,6 @@
 // sw.js
 // IMPORTANTE: Cambia questa stringa ad ogni rilascio per forzare l'aggiornamento sugli utenti
-const CACHE_NAME = 'btc-cache-v0.6.12-alpha'; 
+const CACHE_NAME = 'btc-cache-v0.6.13-alpha'; 
 
 const ASSETS_TO_CACHE = [
   './',
@@ -19,7 +19,10 @@ const ASSETS_TO_CACHE = [
   './js/supabase-config.js',
   './js/bjcp-2021.js',
   './assets/logo.png',
-  './assets/icon-192.png'
+  './assets/icon-192.png',
+  './fonts/beer-icon.woff2',
+  './fonts/beer-icon.ttf',
+  './fonts/beer-icon.woff'
 ];
 
 // INSTALLAZIONE
