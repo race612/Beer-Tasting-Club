@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profilo - Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.8.1">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
 </head>
+
 <body>
     <div class="container">
-        
+
         <div class="header-bar">
             <a href="index.html" class="header-link">
                 <span class="material-symbols-outlined">arrow_back</span> Home
@@ -22,14 +24,14 @@
         </div>
 
         <div class="card">
-            
+
             <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;">
                 <div class="profile-avatar" id="avatar-initials" style="margin-bottom: 10px;">?</div>
-                
+
                 <div class="account-badge">
                     Level: <span id="account-level-val" style="font-weight: bold; color: white;">Taster</span>
                 </div>
-                
+
                 <div style="width: 100%; text-align: left;">
                     <div class="form-group">
                         <label>Nome Pubblico <span class="text-muted-small">(Nome e Cognome o Nickname)</span></label>
@@ -37,9 +39,10 @@
                     </div>
                     <div class="form-group">
                         <label>Email <span class="text-muted-small">(Non modificabile)</span></label>
-                        <input type="email" id="user-email" disabled style="opacity: 0.6; cursor: not-allowed; color: #9ca3af;">
+                        <input type="email" id="user-email" disabled
+                            style="opacity: 0.6; cursor: not-allowed; color: #9ca3af;">
                     </div>
-                    
+
                     <div style="margin-top: 20px;">
                         <label style="margin-bottom: 8px; display:block;">Sei un Homebrewer?</label>
                         <div class="chips-grid" id="hb-bool-grid">
@@ -113,7 +116,8 @@
 
             <div class="form-group" style="margin-top: 15px;">
                 <label>Altri corsi di degustazione o Qualifiche</label>
-                <textarea id="other-qualifications" rows="3" placeholder="Es. Sommelier AIS, Corsi di degustazione locali, ecc..."></textarea>
+                <textarea id="other-qualifications" rows="3"
+                    placeholder="Es. Sommelier AIS, Corsi di degustazione locali, ecc..."></textarea>
             </div>
 
             <h3 class="profile-section-title">Contatti e Social</h3>
@@ -162,8 +166,10 @@
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
         &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
         <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        <p
+            style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
         </p>
     </footer>
 
@@ -186,10 +192,10 @@
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                
+
                 // A) Aggiornamento GIA' in attesa
                 if (reg.waiting) {
-                    if(updateToast) updateToast.classList.add('show');
+                    if (updateToast) updateToast.classList.add('show');
                 }
 
                 // B) Aggiornamento trovato ORA
@@ -197,7 +203,7 @@
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            if(updateToast) updateToast.classList.add('show');
+                            if (updateToast) updateToast.classList.add('show');
                         }
                     });
                 });
@@ -205,7 +211,7 @@
         }
 
         // Click -> Aggiorna
-        if(updateToast) {
+        if (updateToast) {
             updateToast.addEventListener('click', () => {
                 if (navigator.serviceWorker.controller) {
                     window.location.reload();
@@ -348,20 +354,20 @@
             });
 
             const bjcpLevel = getSingleValue('bjcp-grid');
-            
+
             const updates = {
                 full_name: document.getElementById('display-name').value,
                 account_level: newLevel,
                 is_homebrewer: isHb,
                 homebrewer_club: isHb ? document.getElementById('hb-club-select').value : null,
                 is_organizer: isOrg,
-                
+
                 bjcp_level: bjcpLevel,
                 bjcp_id: (bjcpLevel && bjcpLevel !== 'provisional') ? document.getElementById('bjcp-id').value : "",
-                
+
                 cicerone_level: getSingleValue('cicerone-grid'),
                 cicerone_link: getSingleValue('cicerone-grid') ? document.getElementById('cicerone-link').value : "",
-                
+
                 ...rolesUpdates,
                 other_qualifications: document.getElementById('other-qualifications').value,
 
@@ -392,11 +398,12 @@
         // --- 5. LOGOUT ---
         document.getElementById('logout-btn').addEventListener('click', async () => {
             const proceed = await showModal("Logout", "Vuoi davvero uscire?", "confirm", "logout");
-            if(proceed) {
+            if (proceed) {
                 await supabase.auth.signOut();
                 window.location.href = 'index.html';
             }
         });
     </script>
 </body>
+
 </html>

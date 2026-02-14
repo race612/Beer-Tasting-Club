@@ -1,77 +1,199 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BJCP Full Scoresheet - Beer Tasting Club</title>
-    <link rel="stylesheet" href="../css/style.css?v=0.9.6">
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="../assets/icon-192.png">
     <link rel="apple-touch-icon" href="../assets/icon-192.png">
-    
+
     <style>
         /* Header Sezione con Punteggio */
         .section-header-content {
-            display: flex; align-items: center; justify-content: space-between; width: 100%; padding-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding-right: 10px;
         }
-        .section-title { font-weight: bold; display: flex; align-items: center; gap: 10px; font-size: 1.1rem; }
-        
+
+        .section-title {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+
         /* Input Punteggio nel Titolo */
         .score-input-wrapper {
-            display: flex; align-items: center; justify-content: center; gap: 2px; background: #111827;
-            padding: 6px 10px; border-radius: 6px; border: 1px solid #4b5563;
-            width: 95px; /* Larghezza fissa per uniformità */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            background: #111827;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #4b5563;
+            width: 95px;
+            /* Larghezza fissa per uniformità */
         }
+
         input.score-input {
-            width: 30px; background: transparent; border: none; color: white;
-            font-weight: bold; font-size: 1.1rem; text-align: right; padding: 0;
+            width: 30px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-align: right;
+            padding: 0;
         }
-        .score-input:focus { outline: none; }
-        .score-max { color: #9ca3af; font-size: 1.1rem; margin-left: 2px; }
+
+        .score-input:focus {
+            outline: none;
+        }
+
+        .score-max {
+            color: #9ca3af;
+            font-size: 1.1rem;
+            margin-left: 2px;
+        }
 
         /* Checkbox List (Ispezione) */
-        .checkbox-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
-        .checkbox-item { display: flex; align-items: center; gap: 10px; color: #d1d5db; font-size: 0.9rem; cursor: pointer; }
-        .checkbox-item input { accent-color: var(--primary-color); width: 18px; height: 18px; }
+        .checkbox-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #d1d5db;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .checkbox-item input {
+            accent-color: var(--primary-color);
+            width: 18px;
+            height: 18px;
+        }
 
         /* Guide Text (Suggerimenti BJCP) */
         .bjcp-guide {
-            font-size: 0.75rem; color: #9ca3af; margin-bottom: 10px; font-style: italic; line-height: 1.4;
-            background: rgba(255,255,255,0.05); padding: 8px; border-radius: 4px; border-left: 2px solid #6b7280;
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-bottom: 10px;
+            font-style: italic;
+            line-height: 1.4;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 2px solid #6b7280;
         }
 
         /* Feedback Sliders (Bottom) */
-        .feedback-slider-row { margin-bottom: 20px; }
-        .feedback-labels { display: flex; justify-content: space-between; color: #6b7280; font-size: 0.75rem; margin-top: 5px; }
-        
+        .feedback-slider-row {
+            margin-bottom: 20px;
+        }
+
+        .feedback-labels {
+            display: flex;
+            justify-content: space-between;
+            color: #6b7280;
+            font-size: 0.75rem;
+            margin-top: 5px;
+        }
+
         /* Total Score Fisso */
         .sticky-footer {
-            position: sticky; bottom: 0; background: #111827; border-top: 1px solid #374151;
-            padding: 15px; display: flex; justify-content: space-between; align-items: center; z-index: 100;
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.5); margin: 0 -20px -20px -20px; /* Hack per full width */
+            position: sticky;
+            bottom: 0;
+            background: #111827;
+            border-top: 1px solid #374151;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.5);
+            margin: 0 -20px -20px -20px;
+            /* Hack per full width */
         }
-        .total-display { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); }
-        .total-label { font-size: 0.8rem; color: #9ca3af; display: block; }
+
+        .total-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .total-label {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            display: block;
+        }
 
         /* Feedback Scale */
-        .feedback-row { margin-bottom: 20px; }
-        .scale-container { display: flex; justify-content: space-between; gap: 5px; margin: 10px 0; }
-        .scale-box { 
-            width: 100%; height: 35px; border: 1px solid #4b5563; background: #1f2937; 
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s; border-radius: 4px; color: white;
+        .feedback-row {
+            margin-bottom: 20px;
         }
-        .scale-box:hover { border-color: var(--primary-color); }
-        .scale-box.selected { background: var(--primary-color); color: black; font-weight: bold; border-color: var(--primary-color); }
-        .scale-box.selected::after { content: '✕'; font-size: 1.2rem; }
 
-        input[type=range] { width: 100%; cursor: pointer; }
+        .scale-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+            margin: 10px 0;
+        }
+
+        .scale-box {
+            width: 100%;
+            height: 35px;
+            border: 1px solid #4b5563;
+            background: #1f2937;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            border-radius: 4px;
+            color: white;
+        }
+
+        .scale-box:hover {
+            border-color: var(--primary-color);
+        }
+
+        .scale-box.selected {
+            background: var(--primary-color);
+            color: black;
+            font-weight: bold;
+            border-color: var(--primary-color);
+        }
+
+        .scale-box.selected::after {
+            content: '✕';
+            font-size: 1.2rem;
+        }
+
+        input[type=range] {
+            width: 100%;
+            cursor: pointer;
+        }
     </style>
 </head>
+
 <body>
-    <div class="container" style="padding-bottom: 80px;"> <div class="header-bar">
+    <div class="container" style="padding-bottom: 80px;">
+        <div class="header-bar">
             <a href="../nuova-scheda.html" class="header-link">
                 <span class="material-symbols-outlined">arrow_back</span> Indietro
             </a>
@@ -80,12 +202,13 @@
 
         <h2 style="text-align: center; margin-bottom: 5px;">BJCP Full</h2>
         <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-top:0;">Official Scoresheet</p>
-        
+
         <form id="bjcp-full-form" novalidate>
 
             <details class="section-accordion" open id="sec-data">
                 <summary>
-                    <span class="section-title"><span class="material-symbols-outlined">sports_bar</span> Dati Birra</span>
+                    <span class="section-title"><span class="material-symbols-outlined">sports_bar</span> Dati
+                        Birra</span>
                 </summary>
                 <div class="accordion-content">
                     <div class="form-group">
@@ -135,15 +258,18 @@
 
             <details class="section-accordion">
                 <summary>
-                    <span class="section-title"><span class="material-symbols-outlined">search</span> Bottle Inspection</span>
+                    <span class="section-title"><span class="material-symbols-outlined">search</span> Bottle
+                        Inspection</span>
                 </summary>
                 <div class="accordion-content">
                     <div class="checkbox-list">
                         <label class="checkbox-item"><input type="checkbox" id="insp-size"> Appropriate size</label>
                         <label class="checkbox-item"><input type="checkbox" id="insp-cap"> Cap/Crown/Seal</label>
                         <label class="checkbox-item"><input type="checkbox" id="insp-fill"> Fill Level</label>
-                        <label class="checkbox-item"><input type="checkbox" id="insp-label"> Label Removal / Ident</label>
-                        <label class="checkbox-item" style="color: #ef4444;"><input type="checkbox" id="insp-gush"> Gushing</label>
+                        <label class="checkbox-item"><input type="checkbox" id="insp-label"> Label Removal /
+                            Ident</label>
+                        <label class="checkbox-item" style="color: #ef4444;"><input type="checkbox" id="insp-gush">
+                            Gushing</label>
                     </div>
                     <textarea id="inspection-notes" rows="2" placeholder="Inspection notes..."></textarea>
                 </div>
@@ -152,7 +278,9 @@
             <details class="section-accordion">
                 <summary>
                     <div class="section-header-content">
-                        <span class="section-title"><span class="icon icon-nose" style="font-size: 1.2em; margin-right: 8px;"></span> Aroma <span class="completed-badge">Completa ✓</span></span>
+                        <span class="section-title"><span class="icon icon-nose"
+                                style="font-size: 1.2em; margin-right: 8px;"></span> Aroma <span
+                                class="completed-badge">Completa ✓</span></span>
                         <div class="score-input-wrapper" onclick="event.preventDefault()">
                             <input type="number" id="score-aroma" class="score-input" min="0" max="12" placeholder="0">
                             <span class="score-max">/12</span>
@@ -170,9 +298,12 @@
             <details class="section-accordion">
                 <summary>
                     <div class="section-header-content">
-                        <span class="section-title"><span class="icon icon-eye" style="font-size: 1.2em; margin-right: 8px;"></span> Appearance <span class="completed-badge">Completa ✓</span></span>
+                        <span class="section-title"><span class="icon icon-eye"
+                                style="font-size: 1.2em; margin-right: 8px;"></span> Appearance <span
+                                class="completed-badge">Completa ✓</span></span>
                         <div class="score-input-wrapper" onclick="event.preventDefault()">
-                            <input type="number" id="score-appearance" class="score-input" min="0" max="3" placeholder="0">
+                            <input type="number" id="score-appearance" class="score-input" min="0" max="3"
+                                placeholder="0">
                             <span class="score-max">/3</span>
                         </div>
                     </div>
@@ -188,7 +319,9 @@
             <details class="section-accordion">
                 <summary>
                     <div class="section-header-content">
-                        <span class="section-title"><span class="icon icon-tongue" style="font-size: 1.2em; margin-right: 8px;"></span> Flavor <span class="completed-badge">Completa ✓</span></span>
+                        <span class="section-title"><span class="icon icon-tongue"
+                                style="font-size: 1.2em; margin-right: 8px;"></span> Flavor <span
+                                class="completed-badge">Completa ✓</span></span>
                         <div class="score-input-wrapper" onclick="event.preventDefault()">
                             <input type="number" id="score-flavor" class="score-input" min="0" max="20" placeholder="0">
                             <span class="score-max">/20</span>
@@ -197,7 +330,8 @@
                 </summary>
                 <div class="accordion-content">
                     <div class="bjcp-guide">
-                        Comment on malt, hops, fermentation characteristics, balance, finish/aftertaste, and other flavor characteristics.
+                        Comment on malt, hops, fermentation characteristics, balance, finish/aftertaste, and other
+                        flavor characteristics.
                     </div>
                     <textarea id="notes-flavor" rows="8" placeholder="Describe flavor..."></textarea>
                 </div>
@@ -206,9 +340,12 @@
             <details class="section-accordion">
                 <summary>
                     <div class="section-header-content">
-                        <span class="section-title"><span class="icon icon-mouth" style="font-size: 1.2em; margin-right: 8px;"></span> Mouthfeel <span class="completed-badge">Completa ✓</span></span>
+                        <span class="section-title"><span class="icon icon-mouth"
+                                style="font-size: 1.2em; margin-right: 8px;"></span> Mouthfeel <span
+                                class="completed-badge">Completa ✓</span></span>
                         <div class="score-input-wrapper" onclick="event.preventDefault()">
-                            <input type="number" id="score-mouthfeel" class="score-input" min="0" max="5" placeholder="0">
+                            <input type="number" id="score-mouthfeel" class="score-input" min="0" max="5"
+                                placeholder="0">
                             <span class="score-max">/5</span>
                         </div>
                     </div>
@@ -224,9 +361,11 @@
             <details class="section-accordion">
                 <summary>
                     <div class="section-header-content">
-                        <span class="section-title"><span class="material-symbols-outlined">stars</span> Overall Impression <span class="completed-badge">Completa ✓</span></span>
+                        <span class="section-title"><span class="material-symbols-outlined">stars</span> Overall
+                            Impression <span class="completed-badge">Completa ✓</span></span>
                         <div class="score-input-wrapper" onclick="event.preventDefault()">
-                            <input type="number" id="score-overall" class="score-input" min="0" max="10" placeholder="0">
+                            <input type="number" id="score-overall" class="score-input" min="0" max="10"
+                                placeholder="0">
                             <span class="score-max">/10</span>
                         </div>
                     </div>
@@ -241,7 +380,8 @@
 
             <details class="section-accordion">
                 <summary>
-                    <span class="section-title"><span class="material-symbols-outlined">warning</span> Flaws / Off-Flavors</span>
+                    <span class="section-title"><span class="material-symbols-outlined">warning</span> Flaws /
+                        Off-Flavors</span>
                 </summary>
                 <div class="accordion-content">
                     <div class="flaws-grid" id="flaws-container"></div>
@@ -250,14 +390,19 @@
 
             <details class="section-accordion">
                 <summary>
-                    <span class="section-title"><span class="material-symbols-outlined">tune</span> Feedback <span class="completed-badge">Completa ✓</span></span>
+                    <span class="section-title"><span class="material-symbols-outlined">tune</span> Feedback <span
+                            class="completed-badge">Completa ✓</span></span>
                 </summary>
                 <div class="accordion-content">
-                    
+
                     <div class="feedback-row" id="fb-row-style" data-value="0">
                         <label style="color:#d1d5db; font-size:0.9rem;">Stylistic Accuracy</label>
                         <div class="scale-container">
-                            <div class="scale-box" data-val="1"></div><div class="scale-box" data-val="2"></div><div class="scale-box" data-val="3"></div><div class="scale-box" data-val="4"></div><div class="scale-box" data-val="5"></div>
+                            <div class="scale-box" data-val="1"></div>
+                            <div class="scale-box" data-val="2"></div>
+                            <div class="scale-box" data-val="3"></div>
+                            <div class="scale-box" data-val="4"></div>
+                            <div class="scale-box" data-val="5"></div>
                         </div>
                         <div class="feedback-labels"><span>Not to Style</span><span>Classic</span></div>
                     </div>
@@ -265,7 +410,11 @@
                     <div class="feedback-row" id="fb-row-tech" data-value="0">
                         <label style="color:#d1d5db; font-size:0.9rem;">Technical Merit</label>
                         <div class="scale-container">
-                            <div class="scale-box" data-val="1"></div><div class="scale-box" data-val="2"></div><div class="scale-box" data-val="3"></div><div class="scale-box" data-val="4"></div><div class="scale-box" data-val="5"></div>
+                            <div class="scale-box" data-val="1"></div>
+                            <div class="scale-box" data-val="2"></div>
+                            <div class="scale-box" data-val="3"></div>
+                            <div class="scale-box" data-val="4"></div>
+                            <div class="scale-box" data-val="5"></div>
                         </div>
                         <div class="feedback-labels"><span>Significant Flaws</span><span>Flawless</span></div>
                     </div>
@@ -273,7 +422,11 @@
                     <div class="feedback-row" id="fb-row-intangible" data-value="0">
                         <label style="color:#d1d5db; font-size:0.9rem;">Intangibles</label>
                         <div class="scale-container">
-                            <div class="scale-box" data-val="1"></div><div class="scale-box" data-val="2"></div><div class="scale-box" data-val="3"></div><div class="scale-box" data-val="4"></div><div class="scale-box" data-val="5"></div>
+                            <div class="scale-box" data-val="1"></div>
+                            <div class="scale-box" data-val="2"></div>
+                            <div class="scale-box" data-val="3"></div>
+                            <div class="scale-box" data-val="4"></div>
+                            <div class="scale-box" data-val="5"></div>
                         </div>
                         <div class="feedback-labels"><span>Lifeless</span><span>Wonderful</span></div>
                     </div>
@@ -284,18 +437,22 @@
             <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
                 &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
                 <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-                <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+                <p
+                    style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                    Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                        style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
                 </p>
             </footer>
 
             <div class="sticky-footer">
                 <div>
                     <span class="total-label">Total Score</span>
-                    <span id="total-score-display" class="total-display">0</span> <span style="color:#6b7280; font-size:0.9rem;">/ 50</span>
+                    <span id="total-score-display" class="total-display">0</span> <span
+                        style="color:#6b7280; font-size:0.9rem;">/ 50</span>
                 </div>
                 <button type="submit" id="submit-btn" class="btn btn-primary" style="width: auto; padding: 10px 25px;">
-                    <span class="material-symbols-outlined" style="margin-right:5px; font-size:1.1rem;">save</span> Salva
+                    <span class="material-symbols-outlined" style="margin-right:5px; font-size:1.1rem;">save</span>
+                    Salva
                 </button>
             </div>
 
@@ -315,7 +472,7 @@
 
         // Footer & SW
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
-        
+
         // GESTIONE AGGIORNAMENTI (Service Worker Robusto)
         const updateToast = document.getElementById('update-toast');
         if ('serviceWorker' in navigator) {
@@ -335,7 +492,7 @@
             }).catch(err => console.log('SW failed', err));
         }
 
-        if(updateToast) {
+        if (updateToast) {
             updateToast.addEventListener('click', () => window.location.reload());
         }
 
@@ -354,15 +511,15 @@
             for (let key in inputs) {
                 let val = parseInt(inputs[key].value) || 0;
                 let max = parseInt(inputs[key].getAttribute('max'));
-                if(val > max) val = max; 
-                if(val < 0) val = 0;
+                if (val > max) val = max;
+                if (val < 0) val = 0;
                 total += val;
             }
             totalDisplay.textContent = total;
-            
-            if(total >= 45) totalDisplay.style.color = "#FFD700"; // Gold
-            else if(total >= 38) totalDisplay.style.color = "#10b981"; // Green (Excellent)
-            else if(total >= 30) totalDisplay.style.color = "#f59e0b"; // Orange (Good)
+
+            if (total >= 45) totalDisplay.style.color = "#FFD700"; // Gold
+            else if (total >= 38) totalDisplay.style.color = "#10b981"; // Green (Excellent)
+            else if (total >= 30) totalDisplay.style.color = "#f59e0b"; // Orange (Good)
             else totalDisplay.style.color = "#ef4444"; // Red (Problematic)
         }
 
@@ -373,10 +530,10 @@
 
         /* --- FEEDBACK LOGIC --- */
         document.querySelectorAll('.scale-box').forEach(box => {
-            box.addEventListener('click', function() {
+            box.addEventListener('click', function () {
                 const parent = this.closest('.feedback-row');
                 const val = this.getAttribute('data-val');
-                
+
                 parent.querySelectorAll('.scale-box').forEach(b => b.classList.remove('selected'));
                 this.classList.add('selected');
                 parent.setAttribute('data-value', val);
@@ -398,7 +555,7 @@
                 const scoreInput = document.getElementById(sec.score);
                 const notesInput = document.getElementById(sec.notes);
                 const details = scoreInput.closest('details');
-                
+
                 if (details) {
                     const hasScore = scoreInput.value !== '' && parseInt(scoreInput.value) >= 0;
                     const hasNotes = notesInput.value.trim().length >= 10;
@@ -412,7 +569,7 @@
             const fbTech = document.getElementById('fb-row-tech').getAttribute('data-value');
             const fbInt = document.getElementById('fb-row-intangible').getAttribute('data-value');
             const fbDetails = document.getElementById('fb-row-style').closest('details');
-            
+
             if (fbDetails) {
                 if (fbStyle != "0" && fbTech != "0" && fbInt != "0") fbDetails.classList.add('completed');
                 else fbDetails.classList.remove('completed');
@@ -455,14 +612,14 @@
             const el = document.getElementById(groupId).querySelector('.chip-btn.selected');
             return el ? el.getAttribute('data-value') : null;
         }
-        
+
         /* --- CONTEXT & BJCP --- */
         let contextBeer = null;
         let linkedBeerCode = null;
         try {
             const storedBeer = localStorage.getItem('btc_context_beer');
-            if(storedBeer) contextBeer = JSON.parse(storedBeer);
-        } catch(e) {}
+            if (storedBeer) contextBeer = JSON.parse(storedBeer);
+        } catch (e) { }
 
         const systemSelect = document.getElementById('style-system');
         const containerBjcp = document.getElementById('container-bjcp');
@@ -483,19 +640,19 @@
             document.getElementById('beer-name').setAttribute('readonly', true);
             document.getElementById('beer-producer').value = contextBeer.producer;
             document.getElementById('beer-producer').setAttribute('readonly', true);
-            
-            if(contextBeer.producer_type) {
+
+            if (contextBeer.producer_type) {
                 const chip = document.querySelector(`#group-producer-type .chip-btn[data-value="${contextBeer.producer_type}"]`);
-                if(chip) chip.classList.add('selected');
+                if (chip) chip.classList.add('selected');
             }
-            if(contextBeer.packaging) {
+            if (contextBeer.packaging) {
                 const chip = document.querySelector(`#group-packaging .chip-btn[data-value="${contextBeer.packaging}"]`);
-                if(chip) chip.classList.add('selected');
+                if (chip) chip.classList.add('selected');
             }
             document.querySelectorAll('#group-producer-type .chip-btn, #group-packaging .chip-btn').forEach(b => b.classList.add('disabled'));
             systemSelect.value = contextBeer.style_type;
             systemSelect.disabled = true;
-            if(contextBeer.style_type === 'free') {
+            if (contextBeer.style_type === 'free') {
                 containerFree.style.display = 'block'; containerBjcp.style.display = 'none';
                 inputFree.value = contextBeer.style_name;
                 inputFree.setAttribute('readonly', true);
@@ -506,21 +663,21 @@
             }
         } else {
             systemSelect.addEventListener('change', (e) => {
-                if (e.target.value === 'free') { containerFree.style.display = 'block'; containerBjcp.style.display = 'none'; } 
+                if (e.target.value === 'free') { containerFree.style.display = 'block'; containerBjcp.style.display = 'none'; }
                 else { containerBjcp.style.display = 'block'; containerFree.style.display = 'none'; }
             });
 
             // GESTIONE CAMPI DINAMICI (Mancante in precedenza)
             inputBjcp.addEventListener('change', (e) => {
                 const dynamicContainer = document.getElementById('bjcp-dynamic-container');
-                dynamicContainer.innerHTML = ''; 
+                dynamicContainer.innerHTML = '';
                 const code = e.target.value.split('.')[0];
                 const rule = specialStyleRules[code];
                 if (!rule) return;
-                
+
                 const wrapper = document.createElement('div');
                 wrapper.className = 'dynamic-field-group';
-                
+
                 // Helper per creare Select
                 const createSelect = (id, label, options) => {
                     let html = `<label style="color:#f59e0b; font-size:0.9em; display:block; margin-bottom:5px;">${label}</label>`;
@@ -533,14 +690,14 @@
                 // Helper per creare Radio
                 const createRadios = (name, label, options, def) => {
                     let html = `<span style="color:#f59e0b; font-size:0.9em; display:block; margin-bottom:5px;">${label}</span><div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;">`;
-                    options.forEach(c => html += `<label style="background:#1f2937; padding:5px 10px; border-radius:4px; border:1px solid #4b5563; cursor:pointer;"><input type="radio" name="${name}" value="${c}" ${c===def?'checked':''}> ${c}</label>`);
+                    options.forEach(c => html += `<label style="background:#1f2937; padding:5px 10px; border-radius:4px; border:1px solid #4b5563; cursor:pointer;"><input type="radio" name="${name}" value="${c}" ${c === def ? 'checked' : ''}> ${c}</label>`);
                     html += `</div>`;
                     return html;
                 };
 
                 if (rule.type === 'text_only') {
-                     if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b; display:block; margin-bottom:5px;">${rule.hint}</small>`;
-                     wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" style="width:100%; padding:10px; background:#1f2937; border:1px solid #4b5563; color:white; border-radius:4px;">`;
+                    if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b; display:block; margin-bottom:5px;">${rule.hint}</small>`;
+                    wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder || '...'}" style="width:100%; padding:10px; background:#1f2937; border:1px solid #4b5563; color:white; border-radius:4px;">`;
                 } else if (rule.type === 'options') {
                     wrapper.innerHTML += createRadios('dyn-radio', rule.label, rule.choices, rule.default);
                 } else if (rule.type === 'complex_ipa') {
@@ -567,11 +724,11 @@
                 checkbox.className = 'flaw-checkbox-hidden';
                 checkbox.id = `flaw-${flaw}`;
                 checkbox.value = flaw;
-                
+
                 const labelCard = document.createElement('label');
                 labelCard.className = 'flaw-card';
                 labelCard.htmlFor = `flaw-${flaw}`;
-                
+
                 labelCard.innerHTML = `<span>${flaw}</span><div class="flaw-intensity-wrapper"><select class="flaw-select-modern" id="int-${flaw}" onclick="event.stopPropagation()"><option value="Low">Low</option><option value="Medium">Medium</option><option value="High">High</option></select></div>`;
 
                 flawsContainer.appendChild(checkbox);
@@ -583,13 +740,13 @@
         document.getElementById('bjcp-full-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
-            
+
             // Check Completion
             const mandatorySections = [
                 'score-aroma', 'score-appearance', 'score-flavor', 'score-mouthfeel', 'score-overall'
             ];
             let allComplete = true;
-            
+
             // Check standard sections
             mandatorySections.forEach(id => {
                 if (!document.getElementById(id).closest('details').classList.contains('completed')) allComplete = false;
@@ -604,9 +761,9 @@
 
             btn.disabled = true; btn.textContent = "Salvataggio...";
             const { data: { user } } = await supabase.auth.getUser();
-            
+
             let finalStyle = systemSelect.value === 'free' ? inputFree.value : inputBjcp.value;
-            
+
             // Aggiunta dettagli dinamici allo stile se presenti
             if (systemSelect.value === 'bjcp') {
                 let specs = [];
@@ -622,7 +779,7 @@
                 if (strengthVal) specs.push(strengthVal);
                 if (radioVal) specs.push(radioVal);
                 if (textVal) specs.push(textVal);
-                
+
                 if (specs.length > 0) finalStyle += ` (${specs.join(', ')})`;
             }
 
@@ -686,7 +843,7 @@
 
             localStorage.removeItem('btc_context_beer');
             const wantPdf = await showModal("Scheda Salvata!", "Vuoi visualizzare e scaricare il PDF?", "confirm", "picture_as_pdf");
-            if(wantPdf) {
+            if (wantPdf) {
                 window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
             } else {
                 window.location.href = '../nuova-scheda.html';
@@ -694,4 +851,5 @@
         });
     </script>
 </body>
+
 </html>

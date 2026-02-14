@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BJCP Sintetica - Beer Tasting Club</title>
-    <link rel="stylesheet" href="../css/style.css?v=0.8.3">
-    
+    <link rel="stylesheet" href="../css/style.css">
+
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,21 +15,77 @@
 
     <style>
         /* PUNTEGGI */
-        .score-box { background: #111827; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #374151; }
-        .score-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed #374151; }
-        .score-row:last-child { border-bottom: none; }
-        .score-row label { font-weight: 500; color: #d1d5db; display: flex; align-items: center; gap: 10px; font-size: 1.05rem; }
-        
-        .score-wrapper { display: flex; align-items: center; background: #1f2937; border: 1px solid #4b5563; border-radius: 6px; padding: 4px 10px; }
-        .score-wrapper:focus-within { border-color: var(--primary-color); box-shadow: 0 0 0 1px var(--primary-color); }
-        .calc-input { width: 35px; text-align: right; background: transparent; border: none; color: white; font-weight: bold; font-size: 1.1rem; padding: 0; }
-        .calc-input:focus { outline: none; }
-        .score-max { color: #6b7280; font-size: 0.9rem; margin-left: 4px; user-select: none; }
+        .score-box {
+            background: #111827;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #374151;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #374151;
+        }
+
+        .score-row:last-child {
+            border-bottom: none;
+        }
+
+        .score-row label {
+            font-weight: 500;
+            color: #d1d5db;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.05rem;
+        }
+
+        .score-wrapper {
+            display: flex;
+            align-items: center;
+            background: #1f2937;
+            border: 1px solid #4b5563;
+            border-radius: 6px;
+            padding: 4px 10px;
+        }
+
+        .score-wrapper:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 1px var(--primary-color);
+        }
+
+        .calc-input {
+            width: 35px;
+            text-align: right;
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 0;
+        }
+
+        .calc-input:focus {
+            outline: none;
+        }
+
+        .score-max {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-left: 4px;
+            user-select: none;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
-        
+
         <div class="header-bar">
             <a href="../nuova-scheda.html" class="header-link" id="back-link">
                 <span class="material-symbols-outlined">arrow_back</span> Indietro
@@ -38,11 +95,12 @@
 
         <div class="card">
             <h2 style="text-align: center; margin-bottom: 5px;">BJCP Sintetica</h2>
-            <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-top:0;">Compilazione Rapida</p>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-top:0;">Compilazione Rapida
+            </p>
             <hr style="border-color: #374151; margin: 15px 0;">
 
             <form id="tasting-form">
-                
+
                 <div class="form-group">
                     <label>Nome Birra / Numero Campione</label>
                     <input type="text" id="beer-name" required placeholder="Es. IPA del Mario o #42">
@@ -93,42 +151,49 @@
                     <div class="score-row">
                         <label><span class="icon icon-nose"></span> Aroma</label>
                         <div class="score-wrapper">
-                            <input type="number" id="score-aroma" class="calc-input" min="0" max="12" placeholder="0" required>
+                            <input type="number" id="score-aroma" class="calc-input" min="0" max="12" placeholder="0"
+                                required>
                             <span class="score-max">/12</span>
                         </div>
                     </div>
                     <div class="score-row">
                         <label><span class="icon icon-eye"></span> Aspetto</label>
                         <div class="score-wrapper">
-                            <input type="number" id="score-appearance" class="calc-input" min="0" max="3" placeholder="0" required>
+                            <input type="number" id="score-appearance" class="calc-input" min="0" max="3"
+                                placeholder="0" required>
                             <span class="score-max">/3</span>
                         </div>
                     </div>
                     <div class="score-row">
                         <label><span class="icon icon-tongue"></span> Gusto</label>
                         <div class="score-wrapper">
-                            <input type="number" id="score-flavor" class="calc-input" min="0" max="20" placeholder="0" required>
+                            <input type="number" id="score-flavor" class="calc-input" min="0" max="20" placeholder="0"
+                                required>
                             <span class="score-max">/20</span>
                         </div>
                     </div>
                     <div class="score-row">
                         <label><span class="icon icon-mouth"></span> Corpo</label>
                         <div class="score-wrapper">
-                            <input type="number" id="score-mouthfeel" class="calc-input" min="0" max="5" placeholder="0" required>
+                            <input type="number" id="score-mouthfeel" class="calc-input" min="0" max="5" placeholder="0"
+                                required>
                             <span class="score-max">/5</span>
                         </div>
                     </div>
                     <div class="score-row">
                         <label><span class="icon icon-beer"></span> Generale</label>
                         <div class="score-wrapper">
-                            <input type="number" id="score-overall" class="calc-input" min="0" max="10" placeholder="0" required>
+                            <input type="number" id="score-overall" class="calc-input" min="0" max="10" placeholder="0"
+                                required>
                             <span class="score-max">/10</span>
                         </div>
                     </div>
-                    
-                    <div style="text-align: center; margin-top: 20px; border-top: 1px solid #374151; padding-top: 10px;">
+
+                    <div
+                        style="text-align: center; margin-top: 20px; border-top: 1px solid #374151; padding-top: 10px;">
                         <span style="color: var(--text-muted); font-size: 0.9em;">TOTALE</span>
-                        <div id="total-display" style="font-size: 3rem; font-weight: bold; color: var(--primary-color);">0</div>
+                        <div id="total-display"
+                            style="font-size: 3rem; font-weight: bold; color: var(--primary-color);">0</div>
                         <span style="font-size: 0.8em; color: #6b7280;">/ 50 Punti</span>
                     </div>
                 </div>
@@ -154,8 +219,10 @@
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
         &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
         <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        <p
+            style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
         </p>
     </footer>
 
@@ -166,7 +233,7 @@
 
     <script type="module">
         import { supabase } from '../js/supabase-config.js';
-        import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js'; 
+        import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js';
         import { APP_VERSION } from '../js/config.js';
         import { showModal } from '../js/modal.js';
 
@@ -193,7 +260,7 @@
         }
         function setChipValue(groupId, val) {
             const el = document.querySelector(`#${groupId} .chip-btn[data-value="${val}"]`);
-            if(el) el.classList.add('selected');
+            if (el) el.classList.add('selected');
         }
 
         // CONTEXT CHECK
@@ -202,8 +269,8 @@
         let linkedBeerCode = null;
         try {
             const storedBeer = localStorage.getItem('btc_context_beer');
-            if(storedBeer) contextBeer = JSON.parse(storedBeer);
-        } catch(e) {}
+            if (storedBeer) contextBeer = JSON.parse(storedBeer);
+        } catch (e) { }
 
         let isDirty = false;
         const form = document.getElementById('tasting-form');
@@ -232,26 +299,26 @@
 
             setReadOnly('beer-name', contextBeer.name);
             setReadOnly('beer-producer', contextBeer.producer);
-            
+
             if (contextBeer.producer_type) setChipValue('group-producer-type', contextBeer.producer_type);
             if (contextBeer.packaging) setChipValue('group-packaging', contextBeer.packaging);
             document.querySelectorAll('#group-producer-type .chip-btn, #group-packaging .chip-btn').forEach(b => b.classList.add('disabled'));
 
             systemSelect.value = contextBeer.style_type;
             systemSelect.disabled = true;
-            
+
             if (contextBeer.style_type === 'free') {
                 containerFree.style.display = 'block';
                 containerBjcp.style.display = 'none';
                 setReadOnly('style-free', contextBeer.style_name);
-                
+
                 // FIX: Rimuovi required
                 inputBjcp.removeAttribute('required');
                 inputFree.setAttribute('required', 'true');
             } else {
                 containerBjcp.style.display = 'block';
                 containerFree.style.display = 'none';
-                
+
                 // FIX: Rimuovi required
                 inputFree.removeAttribute('required');
                 inputBjcp.innerHTML = `<option selected>${contextBeer.style_name}</option>`;
@@ -282,19 +349,19 @@
             });
 
             inputBjcp.addEventListener('change', (e) => {
-                dynamicContainer.innerHTML = ''; 
+                dynamicContainer.innerHTML = '';
                 const code = e.target.value.split('.')[0];
                 const rule = specialStyleRules[code];
                 if (!rule) return;
                 const wrapper = document.createElement('div');
                 wrapper.className = 'dynamic-field-group';
-                
+
                 if (rule.type === 'text_only') {
-                     if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b">${rule.hint}</small>`;
-                     wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" required>`;
+                    if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b">${rule.hint}</small>`;
+                    wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder || '...'}" required>`;
                 } else if (rule.type === 'options') {
-                    wrapper.innerHTML += `<span class="dynamic-label">${rule.label}</span><div class="dynamic-row">` + 
-                    rule.choices.map(c => `<label class="radio-badge"><input type="radio" name="dyn-radio" value="${c}"><span>${c}</span></label>`).join('') + `</div>`;
+                    wrapper.innerHTML += `<span class="dynamic-label">${rule.label}</span><div class="dynamic-row">` +
+                        rule.choices.map(c => `<label class="radio-badge"><input type="radio" name="dyn-radio" value="${c}"><span>${c}</span></label>`).join('') + `</div>`;
                 }
                 dynamicContainer.appendChild(wrapper);
             });
@@ -314,7 +381,7 @@
             const labelCard = document.createElement('label');
             labelCard.className = 'flaw-card';
             labelCard.htmlFor = `flaw-${flaw}`;
-            
+
             labelCard.innerHTML = `<span>${flaw}</span><div class="flaw-intensity-wrapper"><select class="flaw-select-modern" id="int-${flaw}" onclick="event.stopPropagation()"><option value="Low">Low</option><option value="Medium">Medium</option><option value="High">High</option></select></div>`;
 
             flawsContainer.appendChild(checkbox);
@@ -329,7 +396,7 @@
             input.addEventListener('input', () => {
                 let max = parseInt(input.getAttribute('max'));
                 let val = parseInt(input.value) || 0;
-                if(val > max) { val = max; input.value = max; }
+                if (val > max) { val = max; input.value = max; }
                 let tot = 0; inputs.forEach(i => tot += parseInt(i.value) || 0);
                 totalDisplay.textContent = tot;
                 totalDisplay.style.color = tot >= 45 ? "#FFD700" : tot >= 38 ? "#10b981" : tot >= 30 ? "#f59e0b" : "#ef4444";
@@ -398,8 +465,8 @@
             if (!user) { window.location.href = '../index.html'; return; }
 
             const payload = {
-                user_id: user.id, event_id: eventId, 
-                
+                user_id: user.id, event_id: eventId,
+
                 // Dati Birra (Context o Form)
                 beer_name: contextBeer ? contextBeer.name : document.getElementById('beer-name').value,
                 producer: contextBeer ? contextBeer.producer : document.getElementById('beer-producer').value,
@@ -407,25 +474,25 @@
                 packaging: contextBeer ? contextBeer.packaging : getChipValue('group-packaging'),
                 linked_beer_code: linkedBeerCode, // Link se esiste
 
-                sheet_type: 'bjcp_sintetica', 
-                final_score: Object.values(scores).reduce((a,b)=>a+b,0),
-                details: { 
-                    style: finalStyle, style_type: styleType, 
-                    notes: document.getElementById('notes').value, 
-                    scores: scores, flaws: selectedFlaws 
+                sheet_type: 'bjcp_sintetica',
+                final_score: Object.values(scores).reduce((a, b) => a + b, 0),
+                details: {
+                    style: finalStyle, style_type: styleType,
+                    notes: document.getElementById('notes').value,
+                    scores: scores, flaws: selectedFlaws
                 }
             };
 
             const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
             if (error) { await showModal("Errore", error.message, "error"); btn.disabled = false; return; }
-            
+
             isDirty = false;
             localStorage.removeItem('btc_context_beer');
             localStorage.removeItem('btc_context_mode');
 
- 
+
             const wantPdf = await showModal("Scheda Salvata!", "Vuoi visualizzare e scaricare il PDF?", "confirm", "picture_as_pdf");
-            if(wantPdf) {
+            if (wantPdf) {
                 window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
             } else {
                 window.location.href = '../nuova-scheda.html';
@@ -450,7 +517,8 @@
                 });
             }).catch(err => console.log('SW failed', err));
         }
-        if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
+        if (updateToast) updateToast.addEventListener('click', () => window.location.reload());
     </script>
 </body>
+
 </html>
