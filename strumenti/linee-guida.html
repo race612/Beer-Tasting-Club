@@ -4,28 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BJCP Guidelines 2021 - BTC</title>
-    <link rel="stylesheet" href="../css/style.css?v=0.9.8">
+    <link rel="stylesheet" href="../css/style.css?v=0.9.9">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../css/icomoon.css">
     
     <style>
-        /* SEARCH BAR */
-        .search-container { position: sticky; top: 0; background: #111827; padding: 10px 0; z-index: 10; margin-bottom: 10px; }
-        .search-box { display: flex; align-items: center; background: #1f2937; border: 1px solid #374151; border-radius: 8px; padding: 0 10px; }
-        .search-box input { background: transparent; border: none; color: white; padding: 12px; width: 100%; outline: none; font-size: 1rem; }
+        /* CONTROLLI IN ALTO (Search + Select) */
+        .controls-container {
+            position: sticky; top: 0; background: #111827; padding: 10px 0; z-index: 10; margin-bottom: 10px;
+            border-bottom: 1px solid #374151;
+        }
+        
+        .search-box { 
+            display: flex; align-items: center; background: #1f2937; border: 1px solid #374151; 
+            border-radius: 8px; padding: 0 10px; margin-bottom: 10px;
+        }
+        .search-box input { 
+            background: transparent; border: none; color: white; padding: 12px; width: 100%; 
+            outline: none; font-size: 1rem; 
+        }
         .search-icon { color: #9ca3af; }
 
-        /* LISTA CATEGORIE */
-        .category-item { margin-bottom: 10px; border: 1px solid #374151; border-radius: 8px; overflow: hidden; background: #1f2937; }
-        .category-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: #283040; font-weight: bold; color: var(--primary-color); }
-        .category-content { display: none; padding: 0; }
-        .category-item.open .category-content { display: block; }
-        
+        .category-select {
+            width: 100%; background: #1f2937; color: white; border: 1px solid #374151;
+            padding: 10px; border-radius: 8px; font-size: 0.95rem; outline: none;
+        }
+
         /* LISTA STILI */
-        .style-item { padding: 12px 15px; border-bottom: 1px solid #374151; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
-        .style-item:last-child { border-bottom: none; }
+        .category-header { 
+            padding: 15px; background: #283040; color: var(--primary-color); font-weight: bold;
+            border-radius: 8px; margin-top: 15px; margin-bottom: 5px; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        .style-item { 
+            padding: 15px; border-bottom: 1px solid #374151; cursor: pointer; 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: #111827; transition: background 0.2s;
+        }
         .style-item:active { background: rgba(245, 158, 11, 0.1); }
-        .style-code { font-family: monospace; background: #374151; padding: 2px 6px; border-radius: 4px; margin-right: 10px; color: #f59e0b; font-weight: bold; font-size: 0.9em; }
-        .style-name { color: #e5e7eb; }
+        .style-code { 
+            font-family: monospace; background: #374151; padding: 2px 6px; 
+            border-radius: 4px; margin-right: 10px; color: #f59e0b; font-weight: bold; 
+        }
+        .style-name { color: #e5e7eb; font-size: 1rem; }
 
         /* OVERLAY DETTAGLIO */
         .detail-overlay {
@@ -36,21 +58,32 @@
         }
         .detail-overlay.active { transform: translateX(0); }
 
-        .detail-header { position: sticky; top: 0; background: rgba(17, 24, 39, 0.95); backdrop-filter: blur(5px); padding: 15px; border-bottom: 1px solid #374151; display: flex; align-items: center; gap: 15px; z-index: 20; }
+        .detail-header { 
+            position: sticky; top: 0; background: rgba(17, 24, 39, 0.95); backdrop-filter: blur(5px); 
+            padding: 15px; border-bottom: 1px solid #374151; display: flex; align-items: center; gap: 15px; z-index: 20; 
+        }
         .detail-content { padding: 20px; padding-bottom: 80px; }
 
         /* VITALS GRID */
-        .vitals-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; }
+        .vitals-grid { 
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; 
+            background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; 
+        }
         .vital-box { text-align: center; }
         .vital-label { font-size: 0.75rem; color: #9ca3af; display: block; margin-bottom: 2px; }
         .vital-val { font-size: 0.85rem; font-weight: bold; color: white; display: block; white-space: nowrap; }
 
         /* SEZIONI TESTO */
         .bjcp-section { margin-bottom: 25px; }
-        .bjcp-label { color: var(--primary-color); font-weight: bold; font-size: 0.9rem; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #374151; padding-bottom: 5px; }
-        .bjcp-text { color: #d1d5db; font-size: 0.95rem; line-height: 1.6; margin: 0; }
+        .bjcp-label { 
+            color: var(--primary-color); font-weight: bold; font-size: 0.9rem; text-transform: uppercase; 
+            margin-bottom: 8px; display: flex; align-items: center; gap: 8px; 
+            border-bottom: 1px solid #374151; padding-bottom: 5px; 
+        }
+        .bjcp-text { color: #d1d5db; font-size: 0.95rem; line-height: 1.6; margin: 0; text-align: justify; }
         
-        .loading-state { text-align: center; padding: 40px; color: #6b7280; }
+        /* Gestione ID per anchor link */
+        .scroll-anchor { scroll-margin-top: 140px; } 
     </style>
 </head>
 <body>
@@ -63,19 +96,23 @@
             <img src="../assets/logo.png" alt="Logo" class="header-logo">
         </div>
 
-        <h2 style="text-align: center;">Linee Guida BJCP</h2>
+        <h2 style="text-align: center; margin-bottom: 10px;">BJCP 2021</h2>
         
-        <div class="search-container">
+        <div class="controls-container">
             <div class="search-box">
                 <span class="material-symbols-outlined search-icon">search</span>
-                <input type="text" id="search-input" placeholder="Cerca stile (es. IPA, Stout, 12A)...">
+                <input type="text" id="search-input" placeholder="Cerca stile (es. Pils, 12A)...">
             </div>
+
+            <select id="category-select" class="category-select">
+                <option value="all">Tutte le Categorie</option>
+                </select>
         </div>
 
         <div id="bjcp-list-container">
-            <div class="loading-state">
+            <div style="text-align: center; padding: 40px; color: #6b7280;">
                 <span class="material-symbols-outlined" style="animation: spin 1s infinite; font-size: 2rem;">refresh</span><br>
-                Caricamento Database BJCP...
+                Lettura BeerJSON...
             </div>
         </div>
 
@@ -99,175 +136,216 @@
                 <div class="vital-box"><span class="vital-label">ABV</span><span class="vital-val" id="d-abv">-</span></div>
                 <div class="vital-box"><span class="vital-label">IBU</span><span class="vital-val" id="d-ibu">-</span></div>
                 <div class="vital-box"><span class="vital-label">SRM</span><span class="vital-val" id="d-srm">-</span></div>
-                <div class="vital-box"><span class="vital-label">CO2 Vol</span><span class="vital-val" id="d-co2">-</span></div>
             </div>
 
-            <div id="dynamic-details-container">
-                </div>
+            <div id="dynamic-details-container"></div>
         </div>
     </div>
 
     <script type="module">
         const container = document.getElementById('bjcp-list-container');
         const searchInput = document.getElementById('search-input');
+        const categorySelect = document.getElementById('category-select');
         const overlay = document.getElementById('detail-overlay');
         const detailsContainer = document.getElementById('dynamic-details-container');
         
-        let bjcpClasses = []; // Categorie principali
+        let allStyles = []; // Lista piatta originale
+        let groupedData = {}; // Dati raggruppati per categoria
 
-        // HELPER: Formatta i range (low-high)
-        function formatRange(statObj, suffix = '') {
-            if (!statObj) return '-';
-            // BeerJSON a volte usa 'low'/'high', a volte stringhe. Gestiamo entrambi.
-            let low = statObj.low !== undefined ? statObj.low : null;
-            let high = statObj.high !== undefined ? statObj.high : null;
-            
-            if (low !== null && high !== null) return `${low} - ${high}${suffix}`;
-            if (low !== null) return `> ${low}${suffix}`;
-            if (high !== null) return `< ${high}${suffix}`;
-            return '-';
-        }
-
-        // CARICAMENTO DATI
+        // --- 1. CARICAMENTO E PARSING ---
         async function loadBjcpData() {
             try {
                 const response = await fetch('../data/bjcp-2021.json');
-                if (!response.ok) throw new Error("File JSON non trovato");
+                if (!response.ok) throw new Error("File JSON non trovato in data/bjcp-2021.json");
                 
                 const rootData = await response.json();
                 
-                // Navigazione struttura BeerJSON: styleguide -> class
-                if (rootData.styleguide && rootData.styleguide.class) {
-                    bjcpClasses = rootData.styleguide.class;
+                // BeerJSON root: { beerjson: { styles: [...] } }
+                if (rootData.beerjson && rootData.beerjson.styles) {
+                    allStyles = rootData.beerjson.styles;
+                    processData(allStyles);
                 } else {
-                    throw new Error("Formato JSON non valido");
+                    throw new Error("Struttura BeerJSON non valida");
                 }
-
-                renderList();
-                
             } catch (error) {
                 console.error(error);
-                container.innerHTML = `<div style="text-align:center; padding:20px; color:#ef4444;">
-                    <span class="material-symbols-outlined">error</span><br>
-                    Errore: ${error.message}
-                </div>`;
+                container.innerHTML = `<div style="text-align:center; padding:20px; color:#ef4444;">Errore: ${error.message}</div>`;
             }
         }
 
-        // RENDER LISTA
-        function renderList(filter = "") {
-            container.innerHTML = "";
-            const term = filter.toLowerCase();
-            let hasResults = false;
-
-            // Ordina le classi per ID numerico se possibile
-            bjcpClasses.sort((a,b) => parseInt(a.id) - parseInt(b.id));
-
-            bjcpClasses.forEach(cat => {
-                // I 'children' in BeerJSON sono gli stili dentro la classe
-                const styles = cat.style || [];
+        // --- 2. RAGGRUPPAMENTO DATI ---
+        function processData(styles) {
+            groupedData = {};
+            
+            // Raggruppa per category_id
+            styles.forEach(style => {
+                const catId = style.category_id;
+                const catName = style.category;
                 
-                // Filtra stili
-                const matchingStyles = styles.filter(s => 
-                    s.name.toLowerCase().includes(term) || 
-                    s.id.toLowerCase().includes(term)
-                );
-
-                if (matchingStyles.length > 0) {
-                    hasResults = true;
-                    const catDiv = document.createElement('div');
-                    catDiv.className = 'category-item';
-                    
-                    // Se sto cercando, espandi tutto
-                    if (term.length > 0) catDiv.classList.add('open');
-
-                    const header = document.createElement('div');
-                    header.className = 'category-header';
-                    header.innerHTML = `<span>${cat.id}. ${cat.name}</span> <span class="material-symbols-outlined">expand_more</span>`;
-                    
-                    header.addEventListener('click', () => {
-                        catDiv.classList.toggle('open');
-                        const icon = header.querySelector('.material-symbols-outlined');
-                        icon.textContent = catDiv.classList.contains('open') ? 'expand_less' : 'expand_more';
-                    });
-
-                    const content = document.createElement('div');
-                    content.className = 'category-content';
-
-                    matchingStyles.forEach(style => {
-                        const styleDiv = document.createElement('div');
-                        styleDiv.className = 'style-item';
-                        styleDiv.innerHTML = `<span class="style-name"><span class="style-code">${style.id}</span> ${style.name}</span> <span class="material-symbols-outlined" style="color:#6b7280; font-size:1.2rem;">chevron_right</span>`;
-                        styleDiv.addEventListener('click', () => openDetail(style));
-                        content.appendChild(styleDiv);
-                    });
-
-                    catDiv.appendChild(header);
-                    catDiv.appendChild(content);
-                    container.appendChild(catDiv);
+                if (!groupedData[catId]) {
+                    groupedData[catId] = {
+                        id: catId,
+                        name: catName,
+                        description: style.category_description || "", // Prende la desc dalla prima birra della categoria
+                        styles: []
+                    };
                 }
+                groupedData[catId].styles.push(style);
             });
 
-            if(!hasResults && bjcpClasses.length > 0) {
-                container.innerHTML = `<div style="text-align:center; padding:20px; color:#6b7280;">Nessuno stile trovato per "${filter}"</div>`;
-            }
+            // Popola la Select Categorie
+            // Ordina le chiavi numericamente (1, 2, 10 invece di 1, 10, 2)
+            const sortedKeys = Object.keys(groupedData).sort((a,b) => parseInt(a) - parseInt(b));
+            
+            sortedKeys.forEach(key => {
+                const cat = groupedData[key];
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = `${cat.id}. ${cat.name}`;
+                categorySelect.appendChild(option);
+            });
+
+            renderList(sortedKeys);
         }
 
-        // COSTRUISCI SEZIONE TESTO
-        function createSection(icon, title, text) {
-            if(!text) return '';
+        // --- 3. RENDER A SCHERMO ---
+        function renderList(catKeysToRender, filterText = "") {
+            container.innerHTML = "";
+            
+            // Se c'è un filtro testo, cerchiamo in TUTTI gli stili, ignorando la select
+            if (filterText) {
+                const term = filterText.toLowerCase();
+                const matchingStyles = allStyles.filter(s => 
+                    s.name.toLowerCase().includes(term) || 
+                    s.style_id.toLowerCase().includes(term)
+                );
+                
+                if (matchingStyles.length === 0) {
+                    container.innerHTML = `<div style="text-align:center; color:#6b7280; margin-top:20px;">Nessuno stile trovato.</div>`;
+                    return;
+                }
+
+                // Renderizza lista piatta filtrata
+                matchingStyles.forEach(style => createStyleItem(style, container));
+                return;
+            }
+
+            // Altrimenti renderizza per Categorie (Accordion style)
+            catKeysToRender.forEach(key => {
+                const cat = groupedData[key];
+                
+                // Header Categoria
+                const catHeader = document.createElement('div');
+                catHeader.className = 'category-header scroll-anchor';
+                catHeader.id = `cat-${key}`; // ID per lo scroll
+                catHeader.textContent = `${cat.id}. ${cat.name}`;
+                container.appendChild(catHeader);
+
+                // Lista Stili
+                cat.styles.forEach(style => createStyleItem(style, container));
+            });
+        }
+
+        function createStyleItem(style, parent) {
+            const div = document.createElement('div');
+            div.className = 'style-item';
+            div.innerHTML = `
+                <div>
+                    <span class="style-code">${style.style_id}</span>
+                    <span class="style-name">${style.name}</span>
+                </div>
+                <span class="material-symbols-outlined" style="color:#6b7280;">chevron_right</span>
+            `;
+            div.addEventListener('click', () => openDetail(style));
+            parent.appendChild(div);
+        }
+
+        // --- 4. GESTIONE EVENTI INPUT ---
+        
+        // Ricerca Testuale
+        searchInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            if (val.length > 0) {
+                categorySelect.disabled = true; // Disabilita select mentre cerchi
+                renderList([], val);
+            } else {
+                categorySelect.disabled = false;
+                categorySelect.value = "all"; // Reset select
+                const sortedKeys = Object.keys(groupedData).sort((a,b) => parseInt(a) - parseInt(b));
+                renderList(sortedKeys);
+            }
+        });
+
+        // Select Categoria
+        categorySelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            searchInput.value = ""; // Pulisci ricerca testo
+            
+            if (val === 'all') {
+                const sortedKeys = Object.keys(groupedData).sort((a,b) => parseInt(a) - parseInt(b));
+                renderList(sortedKeys);
+            } else {
+                // Renderizza SOLO quella categoria
+                renderList([val]);
+            }
+        });
+
+        // --- 5. LOGICA DETTAGLIO ---
+        
+        // Helper per i range (es. 1.040 - 1.050)
+        function getRange(obj) {
+            if (!obj || !obj.minimum || !obj.maximum) return '-';
+            return `${obj.minimum.value} - ${obj.maximum.value} ${obj.minimum.unit === '%' ? '%' : ''}`;
+        }
+
+        function createTextSection(icon, title, text) {
+            if (!text) return '';
             return `
                 <div class="bjcp-section">
-                    <div class="bjcp-label"><span class="material-symbols-outlined" style="font-size:1.1rem;">${icon}</span> ${title}</div>
+                    <div class="bjcp-label">
+                        <span class="material-symbols-outlined" style="font-size:1.1rem;">${icon}</span> 
+                        ${title}
+                    </div>
                     <p class="bjcp-text">${text}</p>
                 </div>
             `;
         }
 
-        // APRI DETTAGLIO
         function openDetail(style) {
-            document.getElementById('detail-code').textContent = style.id;
+            document.getElementById('detail-code').textContent = style.style_id;
             document.getElementById('detail-name').textContent = style.name;
-            
-            // Stats (Gestione sicura degli oggetti nested)
-            const stats = style.stats || {};
-            document.getElementById('d-og').textContent = formatRange(stats.og);
-            document.getElementById('d-fg').textContent = formatRange(stats.fg);
-            document.getElementById('d-ibu').textContent = formatRange(stats.ibu);
-            document.getElementById('d-srm').textContent = formatRange(stats.srm);
-            document.getElementById('d-abv').textContent = formatRange(stats.abv, '%');
-            // CO2 non sempre c'è
-            // document.getElementById('d-co2').textContent = '-'; 
 
-            // Costruzione dinamica del contenuto testuale
-            let htmlContent = '';
-            
-            htmlContent += createSection('info', 'Impressioni Generali', style.overall_impression);
-            htmlContent += createSection('scents', 'Aroma', style.aroma);
-            htmlContent += createSection('visibility', 'Aspetto', style.appearance);
-            htmlContent += createSection('restaurant', 'Gusto', style.flavor);
-            htmlContent += createSection('face', 'Bocca', style.mouthfeel);
-            htmlContent += createSection('history_edu', 'Storia', style.history);
-            htmlContent += createSection('grain', 'Ingredienti', style.ingredients);
-            htmlContent += createSection('compare_arrows', 'Confronti', style.style_comparison);
-            htmlContent += createSection('verified', 'Esempi Commerciali', style.commercial_examples ? style.commercial_examples.map(e => e.name).join(', ') : null);
+            // Stats
+            document.getElementById('d-og').textContent = getRange(style.original_gravity);
+            document.getElementById('d-fg').textContent = getRange(style.final_gravity);
+            document.getElementById('d-ibu').textContent = getRange(style.international_bitterness_units);
+            document.getElementById('d-abv').textContent = getRange(style.alcohol_by_volume);
+            document.getElementById('d-srm').textContent = getRange(style.color);
 
-            detailsContainer.innerHTML = htmlContent;
+            // Contenuto Testuale (Mappatura campi BeerJSON)
+            let html = '';
+            html += createTextSection('info', 'Impressioni Generali', style.overall_impression);
+            html += createTextSection('scents', 'Aroma', style.aroma);
+            html += createTextSection('visibility', 'Aspetto', style.appearance);
+            html += createTextSection('restaurant', 'Gusto', style.flavor);
+            html += createTextSection('face', 'Bocca', style.mouthfeel);
+            html += createTextSection('history_edu', 'Storia', style.history);
+            html += createTextSection('grain', 'Ingredienti', style.ingredients);
+            html += createTextSection('compare_arrows', 'Confronti', style.style_comparison);
+            html += createTextSection('verified', 'Esempi', style.examples);
+            html += createTextSection('label', 'Tag', style.tags);
 
+            detailsContainer.innerHTML = html;
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
-        // CHIUDI DETTAGLIO
         document.getElementById('close-detail-btn').addEventListener('click', () => {
             overlay.classList.remove('active');
             document.body.style.overflow = '';
         });
 
-        searchInput.addEventListener('input', (e) => {
-            renderList(e.target.value);
-        });
-
+        // INIT
         loadBjcpData();
 
     </script>
