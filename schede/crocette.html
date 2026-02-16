@@ -1,37 +1,62 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descrittiva Semplificata - Beer Tasting Club</title>
-    <link rel="stylesheet" href="../css/style.css?v=0.9.5">
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="../assets/icon-192.png">
     <link rel="apple-touch-icon" href="../assets/icon-192.png">
-    
+
     <style>
         /* STILI SPECIFICI CROCETTE */
-        
+
         /* Spaziatura specifica per questa scheda */
-        .desc-label { margin-top: 15px; }
+        .desc-label {
+            margin-top: 15px;
+        }
+
         /* Rimuovi margine top se è il primo elemento */
-        .accordion-content > .desc-label:first-child, 
-        .accordion-content > .slider-group:first-child .slider-label { margin-top: 0; }
+        .accordion-content>.desc-label:first-child,
+        .accordion-content>.slider-group:first-child .slider-label {
+            margin-top: 0;
+        }
 
         /* 4. Voto Finale */
-        .final-score-box { text-align: center; position: relative; }
-        .final-score-display { font-size: 3.5rem; font-weight: bold; color: #6b7280; margin: 10px 0; display: block; line-height: 1; min-height: 60px; }
-        
+        .final-score-box {
+            text-align: center;
+            position: relative;
+        }
+
+        .final-score-display {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #6b7280;
+            margin: 10px 0;
+            display: block;
+            line-height: 1;
+            min-height: 60px;
+        }
+
         .reset-score-link {
-            display: inline-block; margin-top: 10px; color: #ef4444; text-decoration: underline; font-size: 0.85rem; cursor: pointer; display: none;
+            display: inline-block;
+            margin-top: 10px;
+            color: #ef4444;
+            text-decoration: underline;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: none;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        
+
         <div class="header-bar">
             <a href="../nuova-scheda.html" class="header-link" id="back-link">
                 <span class="material-symbols-outlined">arrow_back</span> Indietro
@@ -45,10 +70,11 @@
             <hr style="border-color: #374151; margin: 15px 0;">
 
             <form id="tasting-form" novalidate>
-                
+
                 <details class="section-accordion" open id="sec-data">
                     <summary>
-                        <div class="summary-title"><span class="material-symbols-outlined">sports_bar</span> Dati Birra</div>
+                        <div class="summary-title"><span class="material-symbols-outlined">sports_bar</span> Dati Birra
+                        </div>
                     </summary>
                     <div class="accordion-content">
                         <div class="form-group">
@@ -67,7 +93,8 @@
 
                         <div class="form-group">
                             <label>Stile *</label>
-                            <select id="style-system" style="margin-bottom: 10px; border: 1px solid var(--primary-color);">
+                            <select id="style-system"
+                                style="margin-bottom: 10px; border: 1px solid var(--primary-color);">
                                 <option value="free">📝 Stile Libero</option>
                                 <option value="bjcp">⚖️ BJCP 2021</option>
                                 <option value="free">Stile Libero</option>
@@ -100,154 +127,293 @@
 
                 <details class="section-accordion" id="sec-1">
                     <summary>
-                        <div class="summary-title"><span class="icon icon-eye" style="font-size: 1.2em; margin-right: 8px;"></span> Esame Visivo</div>
+                        <div class="summary-title"><span class="icon icon-eye"
+                                style="font-size: 1.2em; margin-right: 8px;"></span> Esame Visivo</div>
                         <span class="completed-badge">Completa ✓</span>
                     </summary>
                     <div class="accordion-content">
                         <span class="desc-label">Colore Birra</span>
                         <div class="options-grid" data-category="aspect_color">
-                            <div class="option-btn">Giallo Paglierino</div><div class="option-btn">Giallo Dorato</div><div class="option-btn">Ambrato</div><div class="option-btn">Ramato</div><div class="option-btn">Rosso Rubino</div><div class="option-btn">Marrone</div><div class="option-btn">Marrone Scuro</div><div class="option-btn">Nera</div>
+                            <div class="option-btn">Giallo Paglierino</div>
+                            <div class="option-btn">Giallo Dorato</div>
+                            <div class="option-btn">Ambrato</div>
+                            <div class="option-btn">Ramato</div>
+                            <div class="option-btn">Rosso Rubino</div>
+                            <div class="option-btn">Marrone</div>
+                            <div class="option-btn">Marrone Scuro</div>
+                            <div class="option-btn">Nera</div>
                         </div>
-                        
+
                         <span class="desc-label">Trasparenza</span>
                         <div class="options-grid" data-category="aspect_clarity">
-                            <div class="option-btn">Brillante</div><div class="option-btn">Limpida</div><div class="option-btn">Poco Velata</div><div class="option-btn">Velata</div><div class="option-btn">Torbida</div><div class="option-btn">Opaca</div>
+                            <div class="option-btn">Brillante</div>
+                            <div class="option-btn">Limpida</div>
+                            <div class="option-btn">Poco Velata</div>
+                            <div class="option-btn">Velata</div>
+                            <div class="option-btn">Torbida</div>
+                            <div class="option-btn">Opaca</div>
                         </div>
 
                         <hr style="border-color: #374151; margin: 15px 0;">
                         <span class="desc-label" style="color:var(--primary-color)">Schiuma</span>
-                        
+
                         <span class="desc-label">Presenza</span>
                         <div class="options-grid" data-category="head_amount">
-                            <div class="option-btn">Assente</div><div class="option-btn">Scarsa</div><div class="option-btn">Presente</div><div class="option-btn">Abbondante</div>
+                            <div class="option-btn">Assente</div>
+                            <div class="option-btn">Scarsa</div>
+                            <div class="option-btn">Presente</div>
+                            <div class="option-btn">Abbondante</div>
                         </div>
 
                         <div class="slider-group">
-                            <div class="slider-header"><span class="slider-label">Persistenza</span><span class="slider-value" id="val-head-ret">Media</span></div>
-                            <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-head-ret" data-category="head_retention" data-type="persistence">
+                            <div class="slider-header"><span class="slider-label">Persistenza</span><span
+                                    class="slider-value" id="val-head-ret">Media</span></div>
+                            <input type="range" min="1" max="5" value="3" class="range-slider"
+                                data-target="val-head-ret" data-category="head_retention" data-type="persistence">
                         </div>
 
                         <span class="desc-label">Colore Schiuma</span>
                         <div class="options-grid" data-category="head_color">
-                            <div class="option-btn">Bianca</div><div class="option-btn">Bianco Sporco</div><div class="option-btn">Avorio</div><div class="option-btn">Crema</div><div class="option-btn">Beige</div><div class="option-btn">Cappuccino</div><div class="option-btn">Marrone</div><div class="option-btn">Rosato</div>
+                            <div class="option-btn">Bianca</div>
+                            <div class="option-btn">Bianco Sporco</div>
+                            <div class="option-btn">Avorio</div>
+                            <div class="option-btn">Crema</div>
+                            <div class="option-btn">Beige</div>
+                            <div class="option-btn">Cappuccino</div>
+                            <div class="option-btn">Marrone</div>
+                            <div class="option-btn">Rosato</div>
                         </div>
-                        
+
                         <span class="desc-label">Grana Bolle</span>
                         <div class="options-grid" data-category="head_texture">
-                            <div class="option-btn">Finissima</div><div class="option-btn">Fine</div><div class="option-btn">Media</div><div class="option-btn">Grossolana</div><div class="option-btn">Molto Grossolana</div>
+                            <div class="option-btn">Finissima</div>
+                            <div class="option-btn">Fine</div>
+                            <div class="option-btn">Media</div>
+                            <div class="option-btn">Grossolana</div>
+                            <div class="option-btn">Molto Grossolana</div>
                         </div>
                     </div>
                 </details>
 
                 <details class="section-accordion" id="sec-2">
                     <summary>
-                        <div class="summary-title"><span class="icon icon-nose" style="font-size: 1.2em; margin-right: 8px;"></span> Esame Olfattivo</div>
+                        <div class="summary-title"><span class="icon icon-nose"
+                                style="font-size: 1.2em; margin-right: 8px;"></span> Esame Olfattivo</div>
                         <span class="completed-badge">Completa ✓</span>
                     </summary>
                     <div class="accordion-content">
                         <div class="slider-group">
-                            <div class="slider-header"><span class="slider-label">Intensità</span><span class="slider-value" id="val-aroma-int">Media</span></div>
-                            <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-aroma-int" data-category="aroma_intensity" data-type="intensity">
+                            <div class="slider-header"><span class="slider-label">Intensità</span><span
+                                    class="slider-value" id="val-aroma-int">Media</span></div>
+                            <input type="range" min="1" max="5" value="3" class="range-slider"
+                                data-target="val-aroma-int" data-category="aroma_intensity" data-type="intensity">
                         </div>
-                        
+
                         <div class="slider-group">
-                            <div class="slider-header"><span class="slider-label">Persistenza</span><span class="slider-value" id="val-aroma-pers">Media</span></div>
-                            <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-aroma-pers" data-category="aroma_persistence" data-type="persistence">
+                            <div class="slider-header"><span class="slider-label">Persistenza</span><span
+                                    class="slider-value" id="val-aroma-pers">Media</span></div>
+                            <input type="range" min="1" max="5" value="3" class="range-slider"
+                                data-target="val-aroma-pers" data-category="aroma_persistence" data-type="persistence">
                         </div>
-                        
+
                         <span class="desc-label">Descrizione (Multipla)</span>
                         <div class="options-grid" data-category="aroma_descriptors" data-type="multi">
-                            <div class="option-btn">Cereali</div><div class="option-btn">Miele</div><div class="option-btn">Panificati</div><div class="option-btn">Caramello</div><div class="option-btn">Tostato</div><div class="option-btn">Cioccolato</div><div class="option-btn">Caffè</div><div class="option-btn">Affumicato</div><div class="option-btn">Frutta P. Bianca</div><div class="option-btn">Frutta P. Gialla</div><div class="option-btn">Frutta Tropicale</div><div class="option-btn">Frutti di Bosco</div><div class="option-btn">Agrumato</div><div class="option-btn">Banana</div><div class="option-btn">Frutta Disidr.</div><div class="option-btn">Vaniglia/Legno</div><div class="option-btn">Erbaceo</div><div class="option-btn">Floreale</div><div class="option-btn">Balsamico</div><div class="option-btn">Terroso</div><div class="option-btn">Speziato</div><div class="option-btn">Lattico</div><div class="option-btn">Acetico</div><div class="option-btn">Animale / Cantina</div>
+                            <div class="option-btn">Cereali</div>
+                            <div class="option-btn">Miele</div>
+                            <div class="option-btn">Panificati</div>
+                            <div class="option-btn">Caramello</div>
+                            <div class="option-btn">Tostato</div>
+                            <div class="option-btn">Cioccolato</div>
+                            <div class="option-btn">Caffè</div>
+                            <div class="option-btn">Affumicato</div>
+                            <div class="option-btn">Frutta P. Bianca</div>
+                            <div class="option-btn">Frutta P. Gialla</div>
+                            <div class="option-btn">Frutta Tropicale</div>
+                            <div class="option-btn">Frutti di Bosco</div>
+                            <div class="option-btn">Agrumato</div>
+                            <div class="option-btn">Banana</div>
+                            <div class="option-btn">Frutta Disidr.</div>
+                            <div class="option-btn">Vaniglia/Legno</div>
+                            <div class="option-btn">Erbaceo</div>
+                            <div class="option-btn">Floreale</div>
+                            <div class="option-btn">Balsamico</div>
+                            <div class="option-btn">Terroso</div>
+                            <div class="option-btn">Speziato</div>
+                            <div class="option-btn">Lattico</div>
+                            <div class="option-btn">Acetico</div>
+                            <div class="option-btn">Animale / Cantina</div>
                         </div>
                     </div>
                 </details>
 
                 <details class="section-accordion" id="sec-3">
                     <summary>
-                        <div class="summary-title"><span class="icon icon-tongue" style="font-size: 1.2em; margin-right: 8px;"></span> Esame Gustativo</div>
+                        <div class="summary-title"><span class="icon icon-tongue"
+                                style="font-size: 1.2em; margin-right: 8px;"></span> Esame Gustativo</div>
                         <span class="completed-badge">Completa ✓</span>
                     </summary>
                     <div class="accordion-content">
                         <span class="desc-label">Gusto Base</span>
                         <div class="options-grid" data-category="taste_basic" data-type="multi">
-                            <div class="option-btn">Dolce</div><div class="option-btn">Salato</div><div class="option-btn">Acido</div><div class="option-btn">Amaro</div><div class="option-btn">Umami</div>
+                            <div class="option-btn">Dolce</div>
+                            <div class="option-btn">Salato</div>
+                            <div class="option-btn">Acido</div>
+                            <div class="option-btn">Amaro</div>
+                            <div class="option-btn">Umami</div>
                         </div>
 
                         <div class="slider-group">
-                            <div class="slider-header"><span class="slider-label">Intensità</span><span class="slider-value" id="val-taste-int">Media</span></div>
-                            <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-taste-int" data-category="taste_intensity" data-type="intensity">
+                            <div class="slider-header"><span class="slider-label">Intensità</span><span
+                                    class="slider-value" id="val-taste-int">Media</span></div>
+                            <input type="range" min="1" max="5" value="3" class="range-slider"
+                                data-target="val-taste-int" data-category="taste_intensity" data-type="intensity">
                         </div>
-                        
+
                         <div class="slider-group">
-                            <div class="slider-header"><span class="slider-label">Persistenza</span><span class="slider-value" id="val-taste-pers">Media</span></div>
-                            <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-taste-pers" data-category="taste_persistence" data-type="persistence">
+                            <div class="slider-header"><span class="slider-label">Persistenza</span><span
+                                    class="slider-value" id="val-taste-pers">Media</span></div>
+                            <input type="range" min="1" max="5" value="3" class="range-slider"
+                                data-target="val-taste-pers" data-category="taste_persistence" data-type="persistence">
                         </div>
 
                         <span class="desc-label">Descrizione (Multipla)</span>
                         <div class="options-grid" data-category="taste_descriptors" data-type="multi">
-                            <div class="option-btn">Cereali</div><div class="option-btn">Miele</div><div class="option-btn">Panificati</div><div class="option-btn">Caramello</div><div class="option-btn">Tostato</div><div class="option-btn">Cioccolato</div><div class="option-btn">Caffè</div><div class="option-btn">Affumicato</div><div class="option-btn">Frutta P. Bianca</div><div class="option-btn">Frutta P. Gialla</div><div class="option-btn">Frutta Tropicale</div><div class="option-btn">Frutti di Bosco</div><div class="option-btn">Agrumato</div><div class="option-btn">Banana</div><div class="option-btn">Frutta Disidr.</div><div class="option-btn">Vaniglia/Legno</div><div class="option-btn">Erbaceo</div><div class="option-btn">Floreale</div><div class="option-btn">Balsamico</div><div class="option-btn">Terroso</div><div class="option-btn">Speziato</div><div class="option-btn">Lattico</div><div class="option-btn">Acetico</div><div class="option-btn">Animale / Cantina</div>
+                            <div class="option-btn">Cereali</div>
+                            <div class="option-btn">Miele</div>
+                            <div class="option-btn">Panificati</div>
+                            <div class="option-btn">Caramello</div>
+                            <div class="option-btn">Tostato</div>
+                            <div class="option-btn">Cioccolato</div>
+                            <div class="option-btn">Caffè</div>
+                            <div class="option-btn">Affumicato</div>
+                            <div class="option-btn">Frutta P. Bianca</div>
+                            <div class="option-btn">Frutta P. Gialla</div>
+                            <div class="option-btn">Frutta Tropicale</div>
+                            <div class="option-btn">Frutti di Bosco</div>
+                            <div class="option-btn">Agrumato</div>
+                            <div class="option-btn">Banana</div>
+                            <div class="option-btn">Frutta Disidr.</div>
+                            <div class="option-btn">Vaniglia/Legno</div>
+                            <div class="option-btn">Erbaceo</div>
+                            <div class="option-btn">Floreale</div>
+                            <div class="option-btn">Balsamico</div>
+                            <div class="option-btn">Terroso</div>
+                            <div class="option-btn">Speziato</div>
+                            <div class="option-btn">Lattico</div>
+                            <div class="option-btn">Acetico</div>
+                            <div class="option-btn">Animale / Cantina</div>
                         </div>
                     </div>
                 </details>
 
                 <details class="section-accordion" id="sec-4">
                     <summary>
-                        <div class="summary-title"><span class="icon icon-mouth" style="font-size: 1.2em; margin-right: 8px;"></span> Sensazioni Boccali</div>
+                        <div class="summary-title"><span class="icon icon-mouth"
+                                style="font-size: 1.2em; margin-right: 8px;"></span> Sensazioni Boccali</div>
                         <span class="completed-badge">Completa ✓</span>
                     </summary>
                     <div class="accordion-content">
                         <span class="desc-label">Corpo</span>
                         <div class="options-grid" data-category="mouth_body">
-                            <div class="option-btn">Acquoso</div><div class="option-btn">Esile</div><div class="option-btn">Medio</div><div class="option-btn">Corposo</div>
+                            <div class="option-btn">Acquoso</div>
+                            <div class="option-btn">Esile</div>
+                            <div class="option-btn">Medio</div>
+                            <div class="option-btn">Corposo</div>
                         </div>
-                        
+
                         <span class="desc-label">Carbonazione</span>
                         <div class="options-grid" data-category="mouth_carb">
-                            <div class="option-btn">Bassa</div><div class="option-btn">Media</div><div class="option-btn">Alta</div><div class="option-btn">Fastidiosa</div>
+                            <div class="option-btn">Bassa</div>
+                            <div class="option-btn">Media</div>
+                            <div class="option-btn">Alta</div>
+                            <div class="option-btn">Fastidiosa</div>
                         </div>
 
                         <span class="desc-label">Altre Sensazioni</span>
                         <div class="options-grid" data-category="mouth_other" data-type="multi">
-                            <div class="option-btn">Metallico</div><div class="option-btn">Astringente</div><div class="option-btn">Calore Alcolico</div>
+                            <div class="option-btn">Metallico</div>
+                            <div class="option-btn">Astringente</div>
+                            <div class="option-btn">Calore Alcolico</div>
                         </div>
                     </div>
                 </details>
 
                 <details class="section-accordion" id="sec-5">
                     <summary>
-                        <div class="summary-title"><span class="material-symbols-outlined">history</span> Retrogusto</div>
+                        <div class="summary-title"><span class="material-symbols-outlined">history</span> Retrogusto
+                        </div>
                         <span class="completed-badge">Completa ✓</span>
                     </summary>
                     <div class="accordion-content">
                         <span class="desc-label">Gusto Base</span>
                         <div class="options-grid" data-category="aftertaste_basic" data-type="multi">
-                            <div class="option-btn">Dolce</div><div class="option-btn">Salato</div><div class="option-btn">Acido</div><div class="option-btn">Amaro</div><div class="option-btn">Umami</div>
+                            <div class="option-btn">Dolce</div>
+                            <div class="option-btn">Salato</div>
+                            <div class="option-btn">Acido</div>
+                            <div class="option-btn">Amaro</div>
+                            <div class="option-btn">Umami</div>
                         </div>
 
                         <div class="slider-group">
-                            <div class="slider-header"><span class="slider-label">Intensità</span><span class="slider-value" id="val-after-int">Media</span></div>
-                            <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-after-int" data-category="aftertaste_intensity" data-type="intensity">
+                            <div class="slider-header"><span class="slider-label">Intensità</span><span
+                                    class="slider-value" id="val-after-int">Media</span></div>
+                            <input type="range" min="1" max="5" value="3" class="range-slider"
+                                data-target="val-after-int" data-category="aftertaste_intensity" data-type="intensity">
                         </div>
                         <div class="slider-group">
-                            <div class="slider-header"><span class="slider-label">Persistenza</span><span class="slider-value" id="val-after-pers">Media</span></div>
-                            <input type="range" min="1" max="5" value="3" class="range-slider" data-target="val-after-pers" data-category="aftertaste_persistence" data-type="persistence">
+                            <div class="slider-header"><span class="slider-label">Persistenza</span><span
+                                    class="slider-value" id="val-after-pers">Media</span></div>
+                            <input type="range" min="1" max="5" value="3" class="range-slider"
+                                data-target="val-after-pers" data-category="aftertaste_persistence"
+                                data-type="persistence">
                         </div>
-                        
+
                         <span class="desc-label">Descrizione (Multipla)</span>
                         <div class="options-grid" data-category="aftertaste_descriptors" data-type="multi">
-                            <div class="option-btn">Cereali</div><div class="option-btn">Miele</div><div class="option-btn">Panificati</div><div class="option-btn">Caramello</div><div class="option-btn">Tostato</div><div class="option-btn">Cioccolato</div><div class="option-btn">Caffè</div><div class="option-btn">Affumicato</div><div class="option-btn">Frutta P. Bianca</div><div class="option-btn">Frutta P. Gialla</div><div class="option-btn">Frutta Tropicale</div><div class="option-btn">Frutti di Bosco</div><div class="option-btn">Agrumato</div><div class="option-btn">Banana</div><div class="option-btn">Frutta Disidr.</div><div class="option-btn">Vaniglia/Legno</div><div class="option-btn">Erbaceo</div><div class="option-btn">Floreale</div><div class="option-btn">Balsamico</div><div class="option-btn">Terroso</div><div class="option-btn">Speziato</div><div class="option-btn">Lattico</div><div class="option-btn">Acetico</div><div class="option-btn">Animale / Cantina</div>
+                            <div class="option-btn">Cereali</div>
+                            <div class="option-btn">Miele</div>
+                            <div class="option-btn">Panificati</div>
+                            <div class="option-btn">Caramello</div>
+                            <div class="option-btn">Tostato</div>
+                            <div class="option-btn">Cioccolato</div>
+                            <div class="option-btn">Caffè</div>
+                            <div class="option-btn">Affumicato</div>
+                            <div class="option-btn">Frutta P. Bianca</div>
+                            <div class="option-btn">Frutta P. Gialla</div>
+                            <div class="option-btn">Frutta Tropicale</div>
+                            <div class="option-btn">Frutti di Bosco</div>
+                            <div class="option-btn">Agrumato</div>
+                            <div class="option-btn">Banana</div>
+                            <div class="option-btn">Frutta Disidr.</div>
+                            <div class="option-btn">Vaniglia/Legno</div>
+                            <div class="option-btn">Erbaceo</div>
+                            <div class="option-btn">Floreale</div>
+                            <div class="option-btn">Balsamico</div>
+                            <div class="option-btn">Terroso</div>
+                            <div class="option-btn">Speziato</div>
+                            <div class="option-btn">Lattico</div>
+                            <div class="option-btn">Acetico</div>
+                            <div class="option-btn">Animale / Cantina</div>
                         </div>
                     </div>
                 </details>
 
                 <details class="section-accordion" style="border-color:#ef4444;">
                     <summary style="color:#ef4444;">
-                        <div class="summary-title"><span class="material-symbols-outlined">warning</span> Difetti / Off-Flavors</div>
+                        <div class="summary-title"><span class="material-symbols-outlined">warning</span> Difetti /
+                            Off-Flavors</div>
                         <span class="optional-badge" style="color:#ef4444">(Opzionale)</span>
                     </summary>
                     <div class="accordion-content">
                         <div class="options-grid" data-category="flaws" data-type="multi">
-                            <div class="option-btn">Diacetile</div><div class="option-btn">DMS</div><div class="option-btn">Acetaldeide</div><div class="option-btn">Luce (3-MBT)</div><div class="option-btn">Ossidazione</div><div class="option-btn">Fenolico</div><div class="option-btn">Solvente</div><div class="option-btn">Acido Isovalerico</div>
+                            <div class="option-btn">Diacetile</div>
+                            <div class="option-btn">DMS</div>
+                            <div class="option-btn">Acetaldeide</div>
+                            <div class="option-btn">Luce (3-MBT)</div>
+                            <div class="option-btn">Ossidazione</div>
+                            <div class="option-btn">Fenolico</div>
+                            <div class="option-btn">Solvente</div>
+                            <div class="option-btn">Acido Isovalerico</div>
                         </div>
                     </div>
                 </details>
@@ -256,7 +422,8 @@
 
                 <details class="section-accordion">
                     <summary>
-                        <div class="summary-title"><span class="material-symbols-outlined">stars</span> Voto Finale</div>
+                        <div class="summary-title"><span class="material-symbols-outlined">stars</span> Voto Finale
+                        </div>
                         <span class="optional-badge">(Opzionale)</span>
                     </summary>
                     <div class="accordion-content">
@@ -272,7 +439,8 @@
 
                 <details class="section-accordion">
                     <summary>
-                        <div class="summary-title"><span class="material-symbols-outlined">edit_note</span> Note e Commenti</div>
+                        <div class="summary-title"><span class="material-symbols-outlined">edit_note</span> Note e
+                            Commenti</div>
                         <span class="optional-badge">(Opzionale)</span>
                     </summary>
                     <div class="accordion-content">
@@ -280,19 +448,23 @@
                     </div>
                 </details>
 
-                <button type="submit" id="submit-btn" class="btn btn-primary" style="position: sticky; bottom: 20px; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+                <button type="submit" id="submit-btn" class="btn btn-primary"
+                    style="position: sticky; bottom: 20px; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
                     <span class="material-symbols-outlined">save</span> Salva Scheda
                 </button>
             </form>
         </div>
     </div>
 
-    <div id="update-toast" class="update-toast"><span class="material-symbols-outlined">system_update</span> Nuova versione!</div>
+    <div id="update-toast" class="update-toast"><span class="material-symbols-outlined">system_update</span> Nuova
+        versione!</div>
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
         &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
         <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        <p
+            style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
         </p>
     </footer>
 
@@ -306,7 +478,7 @@
 
         /* --- 1. GESTIONE ACCORDION (Esclusivo + Completamento) --- */
         const accordions = document.querySelectorAll('details.section-accordion');
-        
+
         accordions.forEach(acc => {
             acc.addEventListener('toggle', (e) => {
                 if (acc.open) {
@@ -336,7 +508,7 @@
         }
 
         /* --- 2. GESTIONE PULSANTI & LOGICA --- */
-        
+
         // CHIPS
         function setupChipGroup(groupId) {
             const container = document.getElementById(groupId);
@@ -362,12 +534,12 @@
         }
         function setChipValue(groupId, val) {
             const el = document.querySelector(`#${groupId} .chip-btn[data-value="${val}"]`);
-            if(el) el.classList.add('selected');
+            if (el) el.classList.add('selected');
         }
 
         // OPTION BUTTONS
         document.querySelectorAll('.option-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 isDirty = true;
                 const parent = this.parentElement;
                 const isMulti = parent.getAttribute('data-type') === 'multi';
@@ -389,7 +561,7 @@
         const intensityMap = [null, 'Bassa', 'Medio/Bassa', 'Media', 'Medio/Alta', 'Alta'];
         const persistenceMap = [null, 'Breve', 'Medio/Breve', 'Media', 'Medio/Lunga', 'Lunga'];
         document.querySelectorAll('.range-slider').forEach(range => {
-            if(range.id === 'final-score-slider') return; 
+            if (range.id === 'final-score-slider') return;
             range.addEventListener('input', (e) => {
                 const val = e.target.value;
                 const targetId = e.target.getAttribute('data-target');
@@ -415,7 +587,7 @@
             else scoreDisplay.style.color = "#ef4444";
             resetScoreBtn.style.display = 'inline-block';
         }
-        
+
         scoreSlider.addEventListener('input', (e) => {
             currentScore = parseFloat(e.target.value);
             updateScoreColor(currentScore);
@@ -437,8 +609,8 @@
         let linkedBeerCode = null;
         try {
             const storedBeer = localStorage.getItem('btc_context_beer');
-            if(storedBeer) contextBeer = JSON.parse(storedBeer);
-        } catch(e) {}
+            if (storedBeer) contextBeer = JSON.parse(storedBeer);
+        } catch (e) { }
 
         const systemSelect = document.getElementById('style-system');
         const containerFree = document.getElementById('container-free');
@@ -450,7 +622,7 @@
         if (contextBeer) {
             linkedBeerCode = contextBeer.sharing_id;
             const setReadOnly = (id, val) => { const el = document.getElementById(id); el.value = val || ""; el.setAttribute('readonly', 'true'); el.style.opacity = "0.7"; el.style.cursor = "not-allowed"; };
-            
+
             setReadOnly('beer-name', contextBeer.name);
             setReadOnly('beer-producer', contextBeer.producer);
             if (contextBeer.producer_type) setChipValue('group-producer-type', contextBeer.producer_type);
@@ -459,7 +631,7 @@
 
             systemSelect.value = contextBeer.style_type;
             systemSelect.disabled = true;
-            
+
             if (contextBeer.style_type === 'free') {
                 containerFree.style.display = 'block'; containerBjcp.style.display = 'none';
                 setReadOnly('style-free', contextBeer.style_name);
@@ -489,18 +661,18 @@
                 }
             });
             inputBjcp.addEventListener('change', (e) => {
-                dynamicContainer.innerHTML = ''; 
+                dynamicContainer.innerHTML = '';
                 const code = e.target.value.split('.')[0];
                 const rule = specialStyleRules[code];
                 if (!rule) return;
                 const wrapper = document.createElement('div');
                 wrapper.className = 'dynamic-field-group';
                 if (rule.type === 'text_only') {
-                     if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b">${rule.hint}</small>`;
-                     wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder||'...'}" required>`;
+                    if (rule.hint) wrapper.innerHTML += `<small style="color:#f59e0b">${rule.hint}</small>`;
+                    wrapper.innerHTML += `<input type="text" id="dyn-text" placeholder="${rule.placeholder || '...'}" required>`;
                 } else if (rule.type === 'options') {
-                    wrapper.innerHTML += `<span class="dynamic-label">${rule.label}</span><div class="dynamic-row">` + 
-                    rule.choices.map(c => `<label class="radio-badge"><input type="radio" name="dyn-radio" value="${c}"><span>${c}</span></label>`).join('') + `</div>`;
+                    wrapper.innerHTML += `<span class="dynamic-label">${rule.label}</span><div class="dynamic-row">` +
+                        rule.choices.map(c => `<label class="radio-badge"><input type="radio" name="dyn-radio" value="${c}"><span>${c}</span></label>`).join('') + `</div>`;
                 }
                 dynamicContainer.appendChild(wrapper);
             });
@@ -510,7 +682,7 @@
         const form = document.getElementById('tasting-form');
         form.addEventListener('input', () => isDirty = true);
         form.addEventListener('change', () => isDirty = true);
-        
+
         document.getElementById('back-link').addEventListener('click', async (e) => {
             if (isDirty) {
                 e.preventDefault();
@@ -523,7 +695,7 @@
         /* --- 5. SUBMIT --- */
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             // VALIDAZIONE MANUALE CON POPUP
             if (!form.checkValidity()) {
                 await showModal("Attenzione", "Per salvare la scheda devi compilare almeno:\n- Nome Birra\n- Stile", "error");
@@ -563,9 +735,9 @@
                 if (isMulti) descriptiveData[category] = Array.from(grid.querySelectorAll('.option-btn.selected')).map(el => el.textContent);
                 else { const sel = grid.querySelector('.option-btn.selected'); descriptiveData[category] = sel ? sel.textContent : null; }
             });
-            
+
             document.querySelectorAll('.range-slider').forEach(range => {
-                if(range.id === 'final-score-slider') return;
+                if (range.id === 'final-score-slider') return;
                 const category = range.getAttribute('data-category');
                 const type = range.getAttribute('data-type');
                 descriptiveData[category] = (type === 'intensity') ? intensityMap[range.value] : persistenceMap[range.value];
@@ -578,12 +750,12 @@
             if (!user) { window.location.href = '../index.html'; return; }
 
             const payload = {
-                user_id: user.id, event_id: 1, 
+                user_id: user.id, event_id: 1,
                 beer_name: contextBeer ? contextBeer.name : document.getElementById('beer-name').value,
                 producer: contextBeer ? contextBeer.producer : document.getElementById('beer-producer').value,
                 producer_type: contextBeer ? contextBeer.producer_type : getChipValue('group-producer-type'),
                 packaging: contextBeer ? contextBeer.packaging : getChipValue('group-packaging'),
-                linked_beer_code: linkedBeerCode, 
+                linked_beer_code: linkedBeerCode,
                 sheet_type: 'desc_crocette',
                 final_score: finalScoreToSend,
                 details: { style: finalStyle, style_type: styleType, notes: document.getElementById('notes').value, description: descriptiveData }
@@ -597,7 +769,7 @@
             localStorage.removeItem('btc_context_mode');
 
             const wantPdf = await showModal("Scheda Salvata!", "Vuoi visualizzare e scaricare il PDF?", "confirm", "picture_as_pdf");
-            if(wantPdf) {
+            if (wantPdf) {
                 window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;
             } else {
                 window.location.href = '../nuova-scheda.html';
@@ -622,7 +794,8 @@
                 });
             }).catch(err => console.log('SW failed', err));
         }
-        if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
+        if (updateToast) updateToast.addEventListener('click', () => window.location.reload());
     </script>
 </body>
+
 </html>

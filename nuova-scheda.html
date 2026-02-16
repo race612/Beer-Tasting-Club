@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuova Degustazione - Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.9.0">
-    
+    <link rel="stylesheet" href="css/style.css">
+
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
 </head>
+
 <body>
     <div class="container">
         <div class="header-bar">
@@ -30,18 +32,20 @@
         </div>
 
         <div id="sharing-container" style="display: none; margin-top: 20px;">
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 10px;">Inserisci il codice birra (6 caratteri)</p>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 10px;">Inserisci il codice birra (6
+                caratteri)</p>
             <div class="sharing-search-box">
                 <input type="text" id="sharing-id-input" placeholder="CODICE" maxlength="6">
                 <button class="btn btn-primary" id="btn-search-beer" style="width: auto;">
                     <span class="material-symbols-outlined">search</span>
                 </button>
             </div>
-            
+
             <div id="beer-preview-card">
                 <h3 id="preview-name" style="margin: 0; color: white;">...</h3>
                 <div id="preview-producer" style="color: var(--text-muted); font-size: 0.9em;">...</div>
-                <div id="preview-style" style="color: var(--primary-color); margin-top: 5px; font-weight: bold;">...</div>
+                <div id="preview-style" style="color: var(--primary-color); margin-top: 5px; font-weight: bold;">...
+                </div>
             </div>
         </div>
 
@@ -53,7 +57,7 @@
                     <span class="material-symbols-outlined icon-large">checklist</span>
                     <span class="sheet-title">Descrittiva<br>Semplificata</span>
                 </a>
-                
+
                 <div class="sheet-card disabled">
                     <span class="coming-soon-badge">Coming Soon</span>
                     <span class="material-symbols-outlined icon-large">menu_book</span>
@@ -85,7 +89,8 @@
         </div>
 
         <div id="mode-coming-soon" style="display: none; text-align: center; padding: 40px 20px;">
-            <span class="material-symbols-outlined" style="font-size: 4rem; margin-bottom: 20px; color: #f59e0b;">construction</span>
+            <span class="material-symbols-outlined"
+                style="font-size: 4rem; margin-bottom: 20px; color: #f59e0b;">construction</span>
             <h3>Eventi</h3>
             <p style="color: var(--text-muted);">La modalità Evento/Concorso arriverà presto.</p>
         </div>
@@ -96,8 +101,10 @@
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
         &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
         <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        <p
+            style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
         </p>
     </footer>
 
@@ -114,12 +121,12 @@
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
 
         // Reset contesti
-        localStorage.removeItem('btc_context_beer'); 
-        localStorage.removeItem('btc_context_mode'); 
+        localStorage.removeItem('btc_context_beer');
+        localStorage.removeItem('btc_context_mode');
 
         let currentMode = 'free';
 
-        window.setMode = function(mode, element) {
+        window.setMode = function (mode, element) {
             document.querySelectorAll('.segmented-option').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
             currentMode = mode;
@@ -131,19 +138,19 @@
 
             sharingContainer.style.display = 'none';
             eventContainer.style.display = 'none';
-            sheetContainer.style.display = 'block'; 
+            sheetContainer.style.display = 'block';
             previewCard.style.display = 'none';
 
             if (mode === 'free') {
                 localStorage.setItem('btc_context_mode', 'free');
                 localStorage.removeItem('btc_context_beer');
-            } 
+            }
             else if (mode === 'sharing') {
                 localStorage.setItem('btc_context_mode', 'sharing');
-                sheetContainer.style.display = 'none'; 
+                sheetContainer.style.display = 'none';
                 sharingContainer.style.display = 'block';
                 document.getElementById('sharing-id-input').value = "";
-            } 
+            }
             else {
                 sheetContainer.style.display = 'none';
                 eventContainer.style.display = 'block';
@@ -154,7 +161,7 @@
         localStorage.setItem('btc_context_mode', 'free');
 
         // CHECK PRIMA DI ANDARE ALLA SCHEDA
-        window.handleSheetClick = async function(e, url) {
+        window.handleSheetClick = async function (e, url) {
             e.preventDefault();
             if (currentMode === 'sharing' && !localStorage.getItem('btc_context_beer')) {
                 await showModal("Attenzione", "Devi prima cercare e trovare una birra!", "error");
@@ -166,7 +173,7 @@
         // RICERCA BIRRA
         document.getElementById('btn-search-beer').addEventListener('click', async () => {
             const code = document.getElementById('sharing-id-input').value.toUpperCase().trim();
-            if(code.length !== 6) { await showModal("Attenzione", "Il codice deve essere di 6 caratteri.", "error"); return; }
+            if (code.length !== 6) { await showModal("Attenzione", "Il codice deve essere di 6 caratteri.", "error"); return; }
 
             const btn = document.getElementById('btn-search-beer');
             btn.disabled = true;
@@ -181,7 +188,7 @@
             document.getElementById('preview-producer').textContent = data.producer;
             document.getElementById('preview-style').textContent = data.style_name;
             document.getElementById('beer-preview-card').style.display = 'block';
-            
+
             localStorage.setItem('btc_context_beer', JSON.stringify(data));
             document.getElementById('sheet-selection-container').style.display = 'block';
             document.getElementById('select-title').textContent = "Birra Trovata! Scegli la scheda:";
@@ -190,7 +197,8 @@
         // SW
         const updateToast = document.getElementById('update-toast');
         if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').then(reg => { if (reg.waiting && updateToast) updateToast.classList.add('show'); reg.addEventListener('updatefound', () => { const n = reg.installing; n.addEventListener('statechange', () => { if (n.state === 'installed' && navigator.serviceWorker.controller && updateToast) updateToast.classList.add('show'); }); }); });
-        if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
+        if (updateToast) updateToast.addEventListener('click', () => window.location.reload());
     </script>
 </body>
+
 </html>

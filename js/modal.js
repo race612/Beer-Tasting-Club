@@ -2,7 +2,7 @@
 function createModalHTML(title, message, type, icon) {
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay';
-    
+
     // Icona default in base al tipo
     let iconName = icon || (type === 'confirm' ? 'help' : 'info');
     let iconColor = type === 'error' ? '#ef4444' : (type === 'success' ? '#10b981' : '#f59e0b');
@@ -19,10 +19,9 @@ function createModalHTML(title, message, type, icon) {
         </div>
     `;
     document.body.appendChild(overlay);
-    
     // Forziamo un reflow per l'animazione
     requestAnimationFrame(() => overlay.classList.add('open'));
-    
+
     return overlay;
 }
 

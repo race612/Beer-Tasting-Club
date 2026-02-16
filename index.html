@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.8.3">
-    
+    <link rel="stylesheet" href="css/style.css">
+
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
-    
+
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
 </head>
+
 <body>
     <div class="container">
-        
+
         <header class="home-header">
             <img src="assets/logo.png" alt="Logo" class="logo-large">
             <p class="home-slogan">IL TUO COMPAGNO DIGITALE DI DEGUSTAZIONE</p>
@@ -48,9 +50,11 @@
                 </form>
             </div>
 
-            <div style="text-align: center; margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
+            <div
+                style="text-align: center; margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
                 <a href="#" id="forgot-link" class="auth-link-styled">Password dimenticata?</a>
-                <a href="#" id="resend-link" class="auth-link-styled" style="display: none;">Rinvia email di verifica</a>
+                <a href="#" id="resend-link" class="auth-link-styled" style="display: none;">Rinvia email di
+                    verifica</a>
             </div>
         </div>
 
@@ -72,13 +76,13 @@
 
         <div id="dashboard-view" style="display: none;">
             <nav class="menu-grid">
-                
+
                 <a href="nuova-scheda.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">post_add</span>
                     <span class="menu-title">Nuova Degustazione</span>
                     <span class="menu-desc">Compila una scheda per una nuova birra</span>
                 </a>
-                
+
                 <a href="storico.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">history</span>
                     <span class="menu-title">Le mie degustazioni</span>
@@ -120,9 +124,11 @@
         <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
             &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
             <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-    
-            <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+
+            <p
+                style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                    style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
             </p>
         </footer>
     </div>
@@ -133,7 +139,8 @@
             <span style="font-weight: bold; font-size: 0.9rem;">Installa App</span>
         </div>
         <div style="width: 1px; height: 18px; background: #4b5563; margin: 0 8px;"></div>
-        <button id="pwa-close-btn" style="background: none; border: none; padding: 0; cursor: pointer; color: #9ca3af; display: flex;">
+        <button id="pwa-close-btn"
+            style="background: none; border: none; padding: 0; cursor: pointer; color: #9ca3af; display: flex;">
             <span class="material-symbols-outlined" style="font-size: 1.1rem;">close</span>
         </button>
     </div>
@@ -149,7 +156,8 @@
             <h3 id="modal-title" style="color: var(--primary-color);">Reset Password</h3>
             <p id="modal-desc" style="font-size: 0.9rem; color: #d1d5db; margin-bottom: 20px;">...</p>
             <div class="form-group"><input type="email" id="modal-email" placeholder="nome@esempio.com"></div>
-            <button id="btn-modal-action" class="btn btn-primary"><span class="material-symbols-outlined">send</span> Invia</button>
+            <button id="btn-modal-action" class="btn btn-primary"><span class="material-symbols-outlined">send</span>
+                Invia</button>
         </div>
     </div>
 
@@ -160,7 +168,7 @@
         import { showModal } from './js/modal.js';
 
         // URL base dell'applicazione
-        const APP_URL = 'https://race612.github.io/Beer-Tasting-Club/'; 
+        const APP_URL = 'https://race612.github.io/Beer-Tasting-Club/';
 
         // --- 2. VERSION & UPDATE LOGIC (Robust) ---
         const footerVer = document.getElementById('footer-version');
@@ -170,10 +178,10 @@
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                
+
                 // A) Controllo se c'è un aggiornamento GIA' in attesa (Waiting)
                 if (reg.waiting) {
-                    if(updateToast) updateToast.classList.add('show');
+                    if (updateToast) updateToast.classList.add('show');
                 }
 
                 // B) Controllo se un aggiornamento viene trovato ORA
@@ -181,7 +189,7 @@
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            if(updateToast) updateToast.classList.add('show');
+                            if (updateToast) updateToast.classList.add('show');
                         }
                     });
                 });
@@ -189,7 +197,7 @@
         }
 
         // Click sul Toast -> Forza aggiornamento
-        if(updateToast) {
+        if (updateToast) {
             updateToast.addEventListener('click', () => {
                 if (navigator.serviceWorker.controller) {
                     // Ricarica brutale per pulire cache JS
@@ -205,26 +213,26 @@
         const closeBtn = document.getElementById('pwa-close-btn');
 
         window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault(); 
+            e.preventDefault();
             deferredPrompt = e;
             const isDismissed = localStorage.getItem('btc_pwa_dismissed');
-            if (!isDismissed && !window.matchMedia('(display-mode: standalone)').matches) { 
-                pwaToast.classList.add('show'); 
+            if (!isDismissed && !window.matchMedia('(display-mode: standalone)').matches) {
+                pwaToast.classList.add('show');
             }
         });
 
-        installTrigger.addEventListener('click', async () => { 
-            if (deferredPrompt) { 
-                deferredPrompt.prompt(); 
-                await deferredPrompt.userChoice; 
-                deferredPrompt = null; 
-                pwaToast.classList.remove('show'); 
-            } 
+        installTrigger.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                pwaToast.classList.remove('show');
+            }
         });
-        
-        closeBtn.addEventListener('click', () => { 
-            pwaToast.classList.remove('show'); 
-            localStorage.setItem('btc_pwa_dismissed', 'true'); 
+
+        closeBtn.addEventListener('click', () => {
+            pwaToast.classList.remove('show');
+            localStorage.setItem('btc_pwa_dismissed', 'true');
         });
 
         // --- 4. AUTH & DASHBOARD LOGIC ---
@@ -243,7 +251,7 @@
 
         supabase.auth.onAuthStateChange(async (event, session) => {
             if (updatePasswordView.style.display === 'block') return;
-            
+
             if (event === 'PASSWORD_RECOVERY') {
                 authView.style.display = 'none'; dashboardView.style.display = 'none'; updatePasswordView.style.display = 'block';
             } else if (event === 'SIGNED_IN' || session) {
@@ -265,101 +273,102 @@
         });
 
         // --- 5. TABS & FORMS ---
-        const tabLogin = document.getElementById('tab-login'); 
-        const tabRegister = document.getElementById('tab-register'); 
+        const tabLogin = document.getElementById('tab-login');
+        const tabRegister = document.getElementById('tab-register');
         const btnSubmit = document.getElementById('btn-submit');
-        const groupName = document.getElementById('group-name'); 
-        const inputName = document.getElementById('display-name'); 
+        const groupName = document.getElementById('group-name');
+        const inputName = document.getElementById('display-name');
         const authMessage = document.getElementById('auth-message');
-        const linkForgot = document.getElementById('forgot-link'); 
-        const linkResend = document.getElementById('resend-link'); 
+        const linkForgot = document.getElementById('forgot-link');
+        const linkResend = document.getElementById('resend-link');
         let isLoginMode = true;
 
-        tabLogin.addEventListener('click', () => { 
-            isLoginMode = true; 
-            tabLogin.classList.add('active'); tabRegister.classList.remove('active'); 
-            btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`; 
-            groupName.style.display = 'none'; inputName.removeAttribute('required'); 
-            authMessage.textContent = ''; 
-            linkForgot.style.display = 'inline-block'; linkResend.style.display = 'none'; 
+        tabLogin.addEventListener('click', () => {
+            isLoginMode = true;
+            tabLogin.classList.add('active'); tabRegister.classList.remove('active');
+            btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`;
+            groupName.style.display = 'none'; inputName.removeAttribute('required');
+            authMessage.textContent = '';
+            linkForgot.style.display = 'inline-block'; linkResend.style.display = 'none';
         });
 
-        tabRegister.addEventListener('click', () => { 
-            isLoginMode = false; 
-            tabRegister.classList.add('active'); tabLogin.classList.remove('active'); 
-            btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`; 
-            groupName.style.display = 'block'; inputName.setAttribute('required', 'true'); 
-            authMessage.textContent = ''; 
-            linkForgot.style.display = 'none'; linkResend.style.display = 'inline-block'; 
+        tabRegister.addEventListener('click', () => {
+            isLoginMode = false;
+            tabRegister.classList.add('active'); tabLogin.classList.remove('active');
+            btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`;
+            groupName.style.display = 'block'; inputName.setAttribute('required', 'true');
+            authMessage.textContent = '';
+            linkForgot.style.display = 'none'; linkResend.style.display = 'inline-block';
         });
 
-        document.getElementById('auth-form').addEventListener('submit', async (e) => { 
-            e.preventDefault(); 
-            const email = document.getElementById('email').value; 
-            const password = document.getElementById('password').value; 
-            const displayName = inputName.value; 
+        document.getElementById('auth-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const displayName = inputName.value;
             btnSubmit.disabled = true; btnSubmit.textContent = "Elaborazione..."; authMessage.style.color = 'var(--text-muted)';
-            
-            if (isLoginMode) { 
-                const { error } = await supabase.auth.signInWithPassword({ email, password }); 
-                if (error) { 
-                    authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message; 
-                    btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`; 
-                } 
-            } else { 
-                const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: APP_URL, data: { full_name: displayName } } }); 
-                if (error) { 
-                    authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message; 
-                } else { 
-                    authMessage.style.color = '#10b981'; authMessage.textContent = "Registrazione OK! Controlla la mail."; 
-                } 
-                btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`; 
-            } 
+
+            if (isLoginMode) {
+                const { error } = await supabase.auth.signInWithPassword({ email, password });
+                if (error) {
+                    authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message;
+                    btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`;
+                }
+            } else {
+                const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: APP_URL, data: { full_name: displayName } } });
+                if (error) {
+                    authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message;
+                } else {
+                    authMessage.style.color = '#10b981'; authMessage.textContent = "Registrazione OK! Controlla la mail.";
+                }
+                btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`;
+            }
         });
 
         // --- 6. MODALS ---
-        const modal = document.getElementById('modal-forgot'); 
-        const modalTitle = document.getElementById('modal-title'); 
-        const modalDesc = document.getElementById('modal-desc'); 
-        const btnModalAction = document.getElementById('btn-modal-action'); 
+        const modal = document.getElementById('modal-forgot');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDesc = document.getElementById('modal-desc');
+        const btnModalAction = document.getElementById('btn-modal-action');
         let modalMode = 'reset';
-        
-        document.getElementById('forgot-link').addEventListener('click', (e) => { 
-            e.preventDefault(); modalMode = 'reset'; modalTitle.textContent = "Reset Password"; 
-            modalDesc.textContent = "Inserisci la email per il ripristino."; 
-            btnModalAction.innerHTML = `<span class="material-symbols-outlined">lock_reset</span> Invia Link`; 
-            modal.style.display = 'flex'; 
-        });
-        
-        document.getElementById('resend-link').addEventListener('click', (e) => { 
-            e.preventDefault(); modalMode = 'resend'; modalTitle.textContent = "Rinvio Conferma"; 
-            modalDesc.textContent = "Inserisci l'email usata per la registrazione."; 
-            btnModalAction.innerHTML = `<span class="material-symbols-outlined">mail</span> Rinvia Mail`; 
-            modal.style.display = 'flex'; 
-        });
-        
-        document.getElementById('close-modal').addEventListener('click', () => modal.style.display = 'none');
-        
-        btnModalAction.addEventListener('click', async () => { 
-            const email = document.getElementById('modal-email').value; 
-            if(!email) { await showModal("Attenzione", "Inserisci email!", "error"); return; }
-            btnModalAction.disabled = true; 
-            let error = null; 
-            if (modalMode === 'reset') { 
-                const res = await supabase.auth.resetPasswordForEmail(email, { redirectTo: APP_URL }); error = res.error; 
-            } else { 
-                const res = await supabase.auth.resend({ type: 'signup', email, options: { emailRedirectTo: APP_URL } }); error = res.error; 
-            } 
-            if(error) await showModal("Errore", "Errore: " + error.message, "error"); else { await showModal("Fatto!", "Operazione completata!", "success"); modal.style.display = 'none'; } 
-            btnModalAction.disabled = false; btnModalAction.innerHTML = `<span class="material-symbols-outlined">send</span> Invia`; 
+
+        document.getElementById('forgot-link').addEventListener('click', (e) => {
+            e.preventDefault(); modalMode = 'reset'; modalTitle.textContent = "Reset Password";
+            modalDesc.textContent = "Inserisci la email per il ripristino.";
+            btnModalAction.innerHTML = `<span class="material-symbols-outlined">lock_reset</span> Invia Link`;
+            modal.style.display = 'flex';
         });
 
-        document.getElementById('btn-update-password').addEventListener('click', async () => { 
-            const newPass = document.getElementById('new-password').value; 
+        document.getElementById('resend-link').addEventListener('click', (e) => {
+            e.preventDefault(); modalMode = 'resend'; modalTitle.textContent = "Rinvio Conferma";
+            modalDesc.textContent = "Inserisci l'email usata per la registrazione.";
+            btnModalAction.innerHTML = `<span class="material-symbols-outlined">mail</span> Rinvia Mail`;
+            modal.style.display = 'flex';
+        });
+
+        document.getElementById('close-modal').addEventListener('click', () => modal.style.display = 'none');
+
+        btnModalAction.addEventListener('click', async () => {
+            const email = document.getElementById('modal-email').value;
+            if (!email) { await showModal("Attenzione", "Inserisci email!", "error"); return; }
+            btnModalAction.disabled = true;
+            let error = null;
+            if (modalMode === 'reset') {
+                const res = await supabase.auth.resetPasswordForEmail(email, { redirectTo: APP_URL }); error = res.error;
+            } else {
+                const res = await supabase.auth.resend({ type: 'signup', email, options: { emailRedirectTo: APP_URL } }); error = res.error;
+            }
+            if (error) await showModal("Errore", "Errore: " + error.message, "error"); else { await showModal("Fatto!", "Operazione completata!", "success"); modal.style.display = 'none'; }
+            btnModalAction.disabled = false; btnModalAction.innerHTML = `<span class="material-symbols-outlined">send</span> Invia`;
+        });
+
+        document.getElementById('btn-update-password').addEventListener('click', async () => {
+            const newPass = document.getElementById('new-password').value;
             if (!newPass || newPass.length < 6) { await showModal("Attenzione", "Password troppo corta.", "error"); return; }
-            const { error } = await supabase.auth.updateUser({ password: newPass }); 
-            if (error) await showModal("Errore", "Errore: " + error.message, "error"); else { await showModal("Successo", "Password aggiornata!", "success"); window.location.hash = ''; window.location.reload(); } 
+            const { error } = await supabase.auth.updateUser({ password: newPass });
+            if (error) await showModal("Errore", "Errore: " + error.message, "error"); else { await showModal("Successo", "Password aggiornata!", "success"); window.location.hash = ''; window.location.reload(); }
         });
     </script>
 </body>
+
 </html>

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dettaglio Scheda - Beer Tasting Club</title>
-    
-    <link rel="stylesheet" href="css/style.css?v=0.8.1">
-    
+
+    <link rel="stylesheet" href="css/style.css">
+
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,18 +16,20 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
+
 <body>
     <div class="container" style="max-width: 100%;">
-        
-        <div class="controls" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px;">
+
+        <div class="controls"
+            style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px;">
             <a href="storico.html" class="btn btn-secondary" style="width: auto;">
                 <span class="material-symbols-outlined">arrow_back</span> Indietro
             </a>
-    
+
             <button id="btn-delete" class="btn btn-outline" style="width: auto; border-color: #ef4444; color: #ef4444;">
                 <span class="material-symbols-outlined">delete</span> Elimina
             </button>
-    
+
             <button id="btn-download" class="btn btn-primary" style="width: auto;">
                 <span class="material-symbols-outlined">download</span> Scarica PDF
             </button>
@@ -38,7 +41,7 @@
         </div>
 
         <div id="print-area" class="paper-sheet" style="display: none;">
-            
+
             <div class="pdf-header">
                 <div>
                     <h2 style="margin: 0; color: #000;">Scheda di Degustazione</h2>
@@ -66,11 +69,14 @@
                 </div>
             </div>
 
-            <h3 style="margin: 0 0 10px 0; color: #000; border-bottom: 1px solid #000; font-family: sans-serif;">Valutazione</h3>
+            <h3 style="margin: 0 0 10px 0; color: #000; border-bottom: 1px solid #000; font-family: sans-serif;">
+                Valutazione</h3>
             <div class="score-grid" id="pdf-scores"></div>
 
-            <h3 style="margin: 20px 0 10px 0; color: #000; border-bottom: 1px solid #000; font-family: sans-serif;">Note di Degustazione</h3>
-            <div id="pdf-notes" style="white-space: pre-wrap; min-height: 100px; border: 1px solid #eee; padding: 10px;"></div>
+            <h3 style="margin: 20px 0 10px 0; color: #000; border-bottom: 1px solid #000; font-family: sans-serif;">Note
+                di Degustazione</h3>
+            <div id="pdf-notes"
+                style="white-space: pre-wrap; min-height: 100px; border: 1px solid #eee; padding: 10px;"></div>
 
             <div class="judge-box">
                 <div style="font-weight: bold; margin-bottom: 5px;">Giudice:</div>
@@ -79,7 +85,7 @@
                 <div id="judge-id" style="font-size: 0.9em; color: #555;"></div>
                 <div id="judge-email" style="font-size: 0.8em; color: #777; margin-top: 5px;"></div>
             </div>
-            
+
             <div style="text-align: center; margin-top: 20px; font-size: 0.8rem; color: #999;">
                 Scheda generata digitalmente tramite Beer Tasting Club App
             </div>
@@ -89,8 +95,10 @@
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
         &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
         <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        <p
+            style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
         </p>
     </footer>
 
@@ -113,10 +121,10 @@
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => { // Usa ./sw.js
-                
+
                 // A) Aggiornamento GIA' in attesa
                 if (reg.waiting) {
-                    if(updateToast) updateToast.classList.add('show');
+                    if (updateToast) updateToast.classList.add('show');
                 }
 
                 // B) Aggiornamento trovato ORA
@@ -124,7 +132,7 @@
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            if(updateToast) updateToast.classList.add('show');
+                            if (updateToast) updateToast.classList.add('show');
                         }
                     });
                 });
@@ -132,7 +140,7 @@
         }
 
         // Click -> Aggiorna
-        if(updateToast) {
+        if (updateToast) {
             updateToast.addEventListener('click', () => {
                 if (navigator.serviceWorker.controller) {
                     window.location.reload();
@@ -182,7 +190,7 @@
 
             // GESTIONE PUNTEGGI (Differenzia per tipo scheda)
             const scoresContainer = document.getElementById('pdf-scores');
-            
+
             if (note.sheet_type === 'bjcp_sintetica' && note.details.scores) {
                 const s = note.details.scores;
                 const htmlScores = `
@@ -195,7 +203,7 @@
                     <div class="score-total" style="grid-column: span 2;">TOTALE: ${note.final_score}/50</div>
                 `;
                 scoresContainer.innerHTML = htmlScores;
-            } 
+            }
             else if (note.sheet_type === 'desc_crocette') {
                 // Per la descrittiva, mostriamo solo il voto finale se c'è
                 scoresContainer.innerHTML = `
@@ -213,7 +221,7 @@
             // INFO GIUDICE
             const meta = user.user_metadata;
             const fullName = `${meta.first_name || ""} ${meta.last_name || ""}`;
-            
+
             let ranks = [];
             if (meta.bjcp_level) ranks.push(`BJCP ${meta.bjcp_level.replace('_', ' ')}`);
             if (meta.cicerone_level) ranks.push(ciceroneMap[meta.cicerone_level] || meta.cicerone_level);
@@ -238,7 +246,7 @@
         // 4. ELIMINAZIONE
         document.getElementById('btn-delete').addEventListener('click', async () => {
             const proceed = await showModal("Attenzione", "Sei sicuro di voler eliminare questa scheda definitivamente?", "confirm", "delete_forever");
-            if(!proceed) return;
+            if (!proceed) return;
 
             const { error } = await supabase
                 .from('tasting_notes')
@@ -257,16 +265,16 @@
         document.getElementById('btn-download').addEventListener('click', () => {
             const element = document.getElementById('print-area');
             const btn = document.getElementById('btn-download');
-            
+
             btn.textContent = "Generazione...";
             btn.disabled = true;
 
             const opt = {
-                margin:       10,
-                filename:     `Scheda_${document.getElementById('pdf-beer').textContent}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                margin: 10,
+                filename: `Scheda_${document.getElementById('pdf-beer').textContent}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
@@ -276,4 +284,5 @@
         });
     </script>
 </body>
+
 </html>

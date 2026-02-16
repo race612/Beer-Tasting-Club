@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,12 +12,29 @@
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
     <style>
-        .detail-header { text-align: center; margin-bottom: 20px; }
-        .detail-header h2 { color: var(--primary-color); margin: 0; font-size: 1.8rem; }
-        .detail-header p { color: #d1d5db; margin: 5px 0; font-size: 1.1rem; }
-        .linked-sheets { margin-top: 30px; }
+        .detail-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .detail-header h2 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .detail-header p {
+            color: #d1d5db;
+            margin: 5px 0;
+            font-size: 1.1rem;
+        }
+
+        .linked-sheets {
+            margin-top: 30px;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header-bar">
@@ -43,8 +61,10 @@
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
         &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
         <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        <p
+            style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
         </p>
     </footer>
 
@@ -61,10 +81,10 @@
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => { // Usa ./sw.js
-                
+
                 // A) Aggiornamento GIA' in attesa
                 if (reg.waiting) {
-                    if(updateToast) updateToast.classList.add('show');
+                    if (updateToast) updateToast.classList.add('show');
                 }
 
                 // B) Aggiornamento trovato ORA
@@ -72,7 +92,7 @@
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            if(updateToast) updateToast.classList.add('show');
+                            if (updateToast) updateToast.classList.add('show');
                         }
                     });
                 });
@@ -80,7 +100,7 @@
         }
 
         // Click -> Aggiorna
-        if(updateToast) {
+        if (updateToast) {
             updateToast.addEventListener('click', () => {
                 if (navigator.serviceWorker.controller) {
                     window.location.reload();
@@ -115,7 +135,7 @@
             // Render Dettagli
             const packMap = { 'bottle': 'Bottiglia', 'can': 'Lattina', 'tap': 'Spina', 'growler': 'Growler' };
             const prodType = beer.producer_type === 'homebrewer' ? ' (Homebrewer)' : '';
-            
+
             document.getElementById('beer-detail-container').innerHTML = `
                 <div class="detail-header">
                     <h2>${beer.name}</h2>
@@ -142,15 +162,15 @@
                 .order('created_at', { ascending: false });
 
             const listDiv = document.getElementById('sheets-list');
-            
+
             if (sheets && sheets.length > 0) {
                 listDiv.innerHTML = '';
                 sheets.forEach(sheet => {
                     const date = new Date(sheet.created_at).toLocaleDateString('it-IT');
                     let scoreBadge = `<span style="font-weight:bold; color:white; background:#4b5563; padding:2px 6px; border-radius:4px;">${sheet.final_score}</span>`;
-                    
+
                     if (sheet.final_score >= 38) scoreBadge = `<span style="font-weight:bold; color:white; background:#10b981; padding:2px 6px; border-radius:4px;">${sheet.final_score}</span>`;
-                    
+
                     const item = document.createElement('div');
                     item.style = "background:#1f2937; padding:10px; margin-bottom:10px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;";
                     item.innerHTML = `
@@ -174,4 +194,5 @@
         loadData();
     </script>
 </body>
+
 </html>

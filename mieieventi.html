@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lavori in corso - Beer Tasting Club</title>
-    
-    <link rel="stylesheet" href="css/style.css?v=0.8.1">
+
+    <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
 </head>
+
 <body>
     <div class="container">
-        
+
         <div class="header-bar">
             <a href="index.html" class="header-link">
                 <span class="material-symbols-outlined">arrow_back</span> Home
@@ -23,15 +25,16 @@
         </div>
 
         <div class="card" style="text-align: center; padding: 40px 20px;">
-            <span class="material-symbols-outlined" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 20px;">construction</span>
-            
+            <span class="material-symbols-outlined"
+                style="font-size: 4rem; color: var(--primary-color); margin-bottom: 20px;">construction</span>
+
             <h2 style="color: var(--primary-color);">Miei Eventi - Lavori in Corso</h2>
-            
+
             <p style="color: #d1d5db; margin-top: 15px;">
                 Stiamo costruendo questa funzionalità.<br>
                 Torna a trovarci presto, sarà disponibile nei prossimi aggiornamenti!
             </p>
-            
+
             <a href="index.html" class="btn btn-secondary mt-20" style="max-width: 200px; margin: 30px auto 0;">
                 <span class="material-symbols-outlined">home</span> Torna alla Home
             </a>
@@ -40,9 +43,11 @@
         <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
             &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
             <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-    
-            <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+
+            <p
+                style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                    style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
             </p>
         </footer>
     </div>
@@ -65,10 +70,10 @@
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                
+
                 // A) Aggiornamento GIA' in attesa
                 if (reg.waiting) {
-                    if(updateToast) updateToast.classList.add('show');
+                    if (updateToast) updateToast.classList.add('show');
                 }
 
                 // B) Aggiornamento trovato ORA
@@ -76,7 +81,7 @@
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            if(updateToast) updateToast.classList.add('show');
+                            if (updateToast) updateToast.classList.add('show');
                         }
                     });
                 });
@@ -84,7 +89,7 @@
         }
 
         // Click -> Aggiorna
-        if(updateToast) {
+        if (updateToast) {
             updateToast.addEventListener('click', () => {
                 if (navigator.serviceWorker.controller) {
                     window.location.reload();
@@ -93,4 +98,5 @@
         }
     </script>
 </body>
+
 </html>

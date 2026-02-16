@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tools & Utility - Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.9.0">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,48 +13,208 @@
     <link rel="apple-touch-icon" href="assets/icon-192.png">
     <style>
         /* GRID MENU STRUMENTI */
-        .tools-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px; }
-        .tool-card { background: #1f2937; border: 1px solid #374151; border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: transform 0.2s, border-color 0.2s; }
-        .tool-card:active { transform: scale(0.98); }
-        .tool-card:hover { border-color: var(--primary-color); }
-        .tool-icon { font-size: 2.5rem; color: var(--primary-color); background: rgba(245, 158, 11, 0.1); padding: 10px; border-radius: 50%; }
-        .tool-info h3 { margin: 0; color: #fff; font-size: 1.1rem; }
-        .tool-info p { margin: 5px 0 0 0; color: var(--text-muted); font-size: 0.9rem; }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .tool-card {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .tool-card:active {
+            transform: scale(0.98);
+        }
+
+        .tool-card:hover {
+            border-color: var(--primary-color);
+        }
+
+        .tool-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            background: rgba(245, 158, 11, 0.1);
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        .tool-info h3 {
+            margin: 0;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+
+        .tool-info p {
+            margin: 5px 0 0 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
 
         /* BOX GENERICO TOOL */
-        .tool-container { margin-top: 20px; animation: fadeIn 0.3s ease-out; }
-        .tool-box { background: #111827; padding: 15px; border-radius: 8px; border: 1px solid #374151; margin-bottom: 20px; }
-        .tool-header { display: flex; align-items: center; gap: 10px; margin-top: 0; margin-bottom: 15px; color: #d1d5db; font-size: 1.1rem; border-bottom: 1px solid #374151; padding-bottom: 10px; }
-        .tool-header span { color: var(--primary-color); }
+        .tool-container {
+            margin-top: 20px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .tool-box {
+            background: #111827;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #374151;
+            margin-bottom: 20px;
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #d1d5db;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 10px;
+        }
+
+        .tool-header span {
+            color: var(--primary-color);
+        }
 
         /* STILI CONVERTITORE "SIMULTANEO" */
-        .conv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .conv-item { display: flex; flex-direction: column; gap: 5px; }
-        .conv-item label { color: var(--text-muted); font-size: 0.8rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .conv-item input { padding: 12px; border-radius: 6px; border: 1px solid #4b5563; background: #1f2937; color: white; font-size: 1rem; width: 100%; box-sizing: border-box; }
-        .conv-item input:focus { border-color: var(--primary-color); outline: none; background: #374151; }
+        .conv-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .conv-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .conv-item label {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conv-item input {
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #4b5563;
+            background: #1f2937;
+            color: white;
+            font-size: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .conv-item input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            background: #374151;
+        }
 
         /* STILI COLOR TOOL */
         #beer-glass-preview {
-            width: 120px; height: 160px; margin: 20px auto;
-            border: 2px solid rgba(255,255,255,0.2); border-radius: 0 0 15px 15px; border-top: none;
-            background-color: #f0eebc; box-shadow: 0 0 20px rgba(0,0,0,0.5) inset;
-            transition: background-color 0.1s; position: relative;
+            width: 120px;
+            height: 160px;
+            margin: 20px auto;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0 0 15px 15px;
+            border-top: none;
+            background-color: #f0eebc;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) inset;
+            transition: background-color 0.1s;
+            position: relative;
         }
-        #beer-glass-preview::before { content: ''; position: absolute; top: -10px; left: 0; width: 100%; height: 20px; background: white; border-radius: 5px 5px 0 0; opacity: 0.9; }
-        .color-values { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .color-val-box { text-align: center; background: #1f2937; padding: 10px; border-radius: 6px; border: 1px solid #374151; }
-        .color-val-box label { display: block; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 5px; }
-        .color-val-box span { font-size: 1.2rem; font-weight: bold; color: white; }
-        
-        input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; cursor: pointer; }
-        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 10px; background: linear-gradient(to right, #f0eebc, #d5a435, #a7582e, #501113, #000000); border-radius: 5px; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; height: 24px; width: 24px; border-radius: 50%; background: white; margin-top: -7px; box-shadow: 0 2px 5px black; border: 2px solid var(--primary-color); }
+
+        #beer-glass-preview::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: white;
+            border-radius: 5px 5px 0 0;
+            opacity: 0.9;
+        }
+
+        .color-values {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .color-val-box {
+            text-align: center;
+            background: #1f2937;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #374151;
+        }
+
+        .color-val-box label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+
+        .color-val-box span {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to right, #f0eebc, #d5a435, #a7582e, #501113, #000000);
+            border-radius: 5px;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: white;
+            margin-top: -7px;
+            box-shadow: 0 2px 5px black;
+            border: 2px solid var(--primary-color);
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
-        
+
         <div class="header-bar">
             <div id="dynamic-back-btn" class="header-link" style="cursor: pointer;">
                 <span class="material-symbols-outlined">arrow_back</span> <span id="back-label">Home</span>
@@ -62,17 +223,12 @@
         </div>
 
         <h2 class="text-center" id="page-title" style="margin-bottom: 5px;">Strumenti</h2>
-        <p class="text-center" id="page-subtitle" style="color: var(--text-muted); font-size: 0.9em; margin-top:0;">Utility per Homebrewer e Giudici</p>
+        <p class="text-center" id="page-subtitle" style="color: var(--text-muted); font-size: 0.9em; margin-top:0;">
+            Utility per Homebrewer e Giudici</p>
 
         <div id="view-menu">
             <div class="tools-grid">
-                <a href="strumenti/linee-guida.html" class="tool-card" style="text-decoration: none;">
-                    <span class="material-symbols-outlined tool-icon">analytics</span>
-                    <div class="tool-info">
-                        <h3>BJCP Guidelines</h3>
-                        <p>Database ufficiale stili 2021.</p>
-                    </div>
-                </a>
+                
                 <div class="tool-card" onclick="openTool('converter')">
                     <span class="material-symbols-outlined tool-icon">calculate</span>
                     <div class="tool-info">
@@ -118,7 +274,7 @@
         </div>
 
         <div id="view-converter" class="tool-container" style="display: none;">
-            
+
             <div class="tool-box">
                 <h4 class="tool-header"><span class="material-symbols-outlined">scale</span> Gravità</h4>
                 <div class="conv-grid">
@@ -245,7 +401,7 @@
             <div class="tool-box" style="text-align: center;">
                 <div id="beer-glass-preview"></div>
                 <h3 id="color-desc" style="color: var(--primary-color); margin: 10px 0;">Giallo Paglierino</h3>
-                
+
                 <div class="color-values">
                     <div class="color-val-box"><label>SRM</label><span id="val-srm">1</span></div>
                     <div class="color-val-box"><label>EBC</label><span id="val-ebc">2</span></div>
@@ -254,7 +410,8 @@
 
                 <div style="padding: 0 10px;">
                     <input type="range" id="color-slider" min="1" max="50" value="1" step="0.1">
-                    <div style="display:flex; justify-content:space-between; margin-top:5px; color:#6b7280; font-size:0.8rem;">
+                    <div
+                        style="display:flex; justify-content:space-between; margin-top:5px; color:#6b7280; font-size:0.8rem;">
                         <span>Chiara</span><span>Scura</span>
                     </div>
                 </div>
@@ -262,20 +419,25 @@
         </div>
 
         <div id="view-bjcp" class="tool-container" style="display: none; text-align: center; padding: 40px;">
-            <span class="material-symbols-outlined" style="font-size: 4rem; color: #f59e0b; margin-bottom: 20px;">analytics</span>
+            <span class="material-symbols-outlined"
+                style="font-size: 4rem; color: #f59e0b; margin-bottom: 20px;">analytics</span>
             <h3>BJCP Vitals</h3>
-            <p style="color: var(--text-muted);">Database stili e range tecnici.<br>In arrivo nel prossimo aggiornamento!</p>
+            <p style="color: var(--text-muted);">Database stili e range tecnici.<br>In arrivo nel prossimo
+                aggiornamento!</p>
         </div>
 
         <div id="view-spillatura" class="tool-container" style="display: none; text-align: center; padding: 40px;">
-            <span class="material-symbols-outlined" style="font-size: 4rem; color: #f59e0b; margin-bottom: 20px;">tap_and_play</span>
+            <span class="material-symbols-outlined"
+                style="font-size: 4rem; color: #f59e0b; margin-bottom: 20px;">tap_and_play</span>
             <span class="icon icon-tap" style="font-size: 4rem; color: #f59e0b; margin-bottom: 20px;"></span>
             <h3>Valori Spillatura</h3>
-            <p style="color: var(--text-muted);">Consigli su pressione e temperatura.<br>In arrivo nel prossimo aggiornamento!</p>
+            <p style="color: var(--text-muted);">Consigli su pressione e temperatura.<br>In arrivo nel prossimo
+                aggiornamento!</p>
         </div>
 
         <div id="view-quiz" class="tool-container" style="display: none; text-align: center; padding: 40px;">
-            <span class="material-symbols-outlined" style="font-size: 4rem; color: #f59e0b; margin-bottom: 20px;">school</span>
+            <span class="material-symbols-outlined"
+                style="font-size: 4rem; color: #f59e0b; margin-bottom: 20px;">school</span>
             <h3>Beer Quiz</h3>
             <p style="color: var(--text-muted);">Mettiti alla prova!<br>In arrivo nel prossimo aggiornamento.</p>
         </div>
@@ -285,8 +447,10 @@
     <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
         &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
         <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        <p
+            style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
         </p>
     </footer>
 
@@ -304,12 +468,12 @@
         document.getElementById('dynamic-back-btn').onclick = () => window.location.href = 'index.html';
 
         // NAV
-        window.openTool = function(toolName) {
+        window.openTool = function (toolName) {
             ['menu', 'converter', 'color', 'bjcp', 'spillatura', 'quiz'].forEach(v => document.getElementById(`view-${v}`).style.display = 'none');
             document.getElementById(`view-${toolName}`).style.display = 'block';
-            const titleMap = { 
-                'converter': 'Convertitore', 'bjcp': 'BJCP Vitals', 'color': 'Color Tool', 
-                'spillatura': 'Valori Spillatura', 'quiz': 'Beer Quiz' 
+            const titleMap = {
+                'converter': 'Convertitore', 'bjcp': 'BJCP Vitals', 'color': 'Color Tool',
+                'spillatura': 'Valori Spillatura', 'quiz': 'Beer Quiz'
             };
             document.getElementById('page-title').textContent = titleMap[toolName];
             document.getElementById('page-subtitle').style.display = 'none';
@@ -318,7 +482,7 @@
             backBtn.onclick = () => showMenu();
         }
 
-        window.showMenu = function() {
+        window.showMenu = function () {
             ['converter', 'color', 'bjcp', 'spillatura', 'quiz'].forEach(v => document.getElementById(`view-${v}`).style.display = 'none');
             document.getElementById('view-menu').style.display = 'block';
             document.getElementById('page-title').textContent = 'Strumenti';
@@ -329,23 +493,23 @@
         }
 
         /* --- LOGICA CONVERTITORE MULTIPLO --- */
-        let isCalculating = false; 
+        let isCalculating = false;
 
         // 1. GRAVITA'
         const g_sg = document.getElementById('grav-sg');
         const g_plato = document.getElementById('grav-plato');
 
         g_sg.addEventListener('input', () => {
-            if(isCalculating) return; isCalculating = true;
+            if (isCalculating) return; isCalculating = true;
             const sg = parseFloat(g_sg.value);
-            if(!isNaN(sg)) g_plato.value = ((sg - 1) * 1000 / 4).toFixed(2);
+            if (!isNaN(sg)) g_plato.value = ((sg - 1) * 1000 / 4).toFixed(2);
             else g_plato.value = '';
             isCalculating = false;
         });
         g_plato.addEventListener('input', () => {
-            if(isCalculating) return; isCalculating = true;
+            if (isCalculating) return; isCalculating = true;
             const p = parseFloat(g_plato.value);
-            if(!isNaN(p)) g_sg.value = (1 + (p / (258.6 - ((p/258.2)*227.1)))).toFixed(3);
+            if (!isNaN(p)) g_sg.value = (1 + (p / (258.6 - ((p / 258.2) * 227.1)))).toFixed(3);
             else g_sg.value = '';
             isCalculating = false;
         });
@@ -361,27 +525,27 @@
         };
 
         function updateServVol(source) {
-            if(isCalculating) return; isCalculating = true;
+            if (isCalculating) return; isCalculating = true;
             const val = parseFloat(s_inputs[source].value);
-            if(isNaN(val)) { Object.values(s_inputs).forEach(el => el.value = ''); isCalculating = false; return; }
+            if (isNaN(val)) { Object.values(s_inputs).forEach(el => el.value = ''); isCalculating = false; return; }
 
             // Base Liters
             let liters = 0;
-            if(source === 'l') liters = val;
-            else if(source === 'cl') liters = val / 100;
-            else if(source === 'pint_uk') liters = val * 0.568261;
-            else if(source === 'half_uk') liters = val * 0.284131;
-            else if(source === 'pint_us') liters = val * 0.473176;
-            else if(source === 'floz') liters = val * 0.0295735;
+            if (source === 'l') liters = val;
+            else if (source === 'cl') liters = val / 100;
+            else if (source === 'pint_uk') liters = val * 0.568261;
+            else if (source === 'half_uk') liters = val * 0.284131;
+            else if (source === 'pint_us') liters = val * 0.473176;
+            else if (source === 'floz') liters = val * 0.0295735;
 
             // Distribute
-            if(source !== 'l') s_inputs.l.value = liters.toFixed(3);
-            if(source !== 'cl') s_inputs.cl.value = (liters * 100).toFixed(1);
-            if(source !== 'pint_uk') s_inputs.pint_uk.value = (liters / 0.568261).toFixed(2);
-            if(source !== 'half_uk') s_inputs.half_uk.value = (liters / 0.284131).toFixed(2);
-            if(source !== 'pint_us') s_inputs.pint_us.value = (liters / 0.473176).toFixed(2);
-            if(source !== 'floz') s_inputs.floz.value = (liters / 0.0295735).toFixed(1);
-            
+            if (source !== 'l') s_inputs.l.value = liters.toFixed(3);
+            if (source !== 'cl') s_inputs.cl.value = (liters * 100).toFixed(1);
+            if (source !== 'pint_uk') s_inputs.pint_uk.value = (liters / 0.568261).toFixed(2);
+            if (source !== 'half_uk') s_inputs.half_uk.value = (liters / 0.284131).toFixed(2);
+            if (source !== 'pint_us') s_inputs.pint_us.value = (liters / 0.473176).toFixed(2);
+            if (source !== 'floz') s_inputs.floz.value = (liters / 0.0295735).toFixed(1);
+
             isCalculating = false;
         }
         Object.keys(s_inputs).forEach(k => s_inputs[k].addEventListener('input', () => updateServVol(k)));
@@ -396,22 +560,22 @@
         };
 
         function updateProdVol(source) {
-            if(isCalculating) return; isCalculating = true;
+            if (isCalculating) return; isCalculating = true;
             const val = parseFloat(p_inputs[source].value);
-            if(isNaN(val)) { Object.values(p_inputs).forEach(el => el.value = ''); isCalculating = false; return; }
+            if (isNaN(val)) { Object.values(p_inputs).forEach(el => el.value = ''); isCalculating = false; return; }
 
             let liters = 0;
-            if(source === 'l') liters = val;
-            else if(source === 'hl') liters = val * 100;
-            else if(source === 'gal_us') liters = val * 3.78541;
-            else if(source === 'gal_uk') liters = val * 4.54609;
-            else if(source === 'bbl') liters = val * 117.347;
+            if (source === 'l') liters = val;
+            else if (source === 'hl') liters = val * 100;
+            else if (source === 'gal_us') liters = val * 3.78541;
+            else if (source === 'gal_uk') liters = val * 4.54609;
+            else if (source === 'bbl') liters = val * 117.347;
 
-            if(source !== 'l') p_inputs.l.value = liters.toFixed(1);
-            if(source !== 'hl') p_inputs.hl.value = (liters / 100).toFixed(3);
-            if(source !== 'gal_us') p_inputs.gal_us.value = (liters / 3.78541).toFixed(2);
-            if(source !== 'gal_uk') p_inputs.gal_uk.value = (liters / 4.54609).toFixed(2);
-            if(source !== 'bbl') p_inputs.bbl.value = (liters / 117.347).toFixed(2);
+            if (source !== 'l') p_inputs.l.value = liters.toFixed(1);
+            if (source !== 'hl') p_inputs.hl.value = (liters / 100).toFixed(3);
+            if (source !== 'gal_us') p_inputs.gal_us.value = (liters / 3.78541).toFixed(2);
+            if (source !== 'gal_uk') p_inputs.gal_uk.value = (liters / 4.54609).toFixed(2);
+            if (source !== 'bbl') p_inputs.bbl.value = (liters / 117.347).toFixed(2);
 
             isCalculating = false;
         }
@@ -425,18 +589,18 @@
         };
 
         function updatePressure(source) {
-            if(isCalculating) return; isCalculating = true;
+            if (isCalculating) return; isCalculating = true;
             const val = parseFloat(pr_inputs[source].value);
-            if(isNaN(val)) { Object.values(pr_inputs).forEach(el => el.value = ''); isCalculating = false; return; }
+            if (isNaN(val)) { Object.values(pr_inputs).forEach(el => el.value = ''); isCalculating = false; return; }
 
             let bar = 0;
-            if(source === 'bar') bar = val;
-            else if(source === 'psi') bar = val / 14.5038;
-            else if(source === 'atm') bar = val / 0.986923;
+            if (source === 'bar') bar = val;
+            else if (source === 'psi') bar = val / 14.5038;
+            else if (source === 'atm') bar = val / 0.986923;
 
-            if(source !== 'bar') pr_inputs.bar.value = bar.toFixed(2);
-            if(source !== 'psi') pr_inputs.psi.value = (bar * 14.5038).toFixed(1);
-            if(source !== 'atm') pr_inputs.atm.value = (bar * 0.986923).toFixed(2);
+            if (source !== 'bar') pr_inputs.bar.value = bar.toFixed(2);
+            if (source !== 'psi') pr_inputs.psi.value = (bar * 14.5038).toFixed(1);
+            if (source !== 'atm') pr_inputs.atm.value = (bar * 0.986923).toFixed(2);
 
             isCalculating = false;
         }
@@ -446,15 +610,15 @@
         const t_c = document.getElementById('temp-c');
         const t_f = document.getElementById('temp-f');
         t_c.addEventListener('input', () => {
-            if(isCalculating) return; isCalculating = true;
+            if (isCalculating) return; isCalculating = true;
             const c = parseFloat(t_c.value);
-            if(!isNaN(c)) t_f.value = ((c * 9/5) + 32).toFixed(1); else t_f.value = '';
+            if (!isNaN(c)) t_f.value = ((c * 9 / 5) + 32).toFixed(1); else t_f.value = '';
             isCalculating = false;
         });
         t_f.addEventListener('input', () => {
-            if(isCalculating) return; isCalculating = true;
+            if (isCalculating) return; isCalculating = true;
             const f = parseFloat(t_f.value);
-            if(!isNaN(f)) t_c.value = ((f - 32) * 5/9).toFixed(1); else t_c.value = '';
+            if (!isNaN(f)) t_c.value = ((f - 32) * 5 / 9).toFixed(1); else t_c.value = '';
             isCalculating = false;
         });
 
@@ -464,18 +628,18 @@
         const c_lov = document.getElementById('col-lov');
 
         function updateColText(source) {
-            if(isCalculating) return; isCalculating = true;
+            if (isCalculating) return; isCalculating = true;
             const val = parseFloat(document.getElementById(`col-${source}`).value);
-            if(isNaN(val)) { [c_srm, c_ebc, c_lov].forEach(el => el.value = ''); isCalculating = false; return; }
+            if (isNaN(val)) { [c_srm, c_ebc, c_lov].forEach(el => el.value = ''); isCalculating = false; return; }
 
             let srm = 0;
-            if(source === 'srm') srm = val;
-            else if(source === 'ebc') srm = val / 1.97;
-            else if(source === 'lov') srm = (1.3546 * val) - 0.76;
+            if (source === 'srm') srm = val;
+            else if (source === 'ebc') srm = val / 1.97;
+            else if (source === 'lov') srm = (1.3546 * val) - 0.76;
 
-            if(source !== 'srm') c_srm.value = srm.toFixed(1);
-            if(source !== 'ebc') c_ebc.value = (srm * 1.97).toFixed(1);
-            if(source !== 'lov') c_lov.value = ((srm + 0.76) / 1.3546).toFixed(1);
+            if (source !== 'srm') c_srm.value = srm.toFixed(1);
+            if (source !== 'ebc') c_ebc.value = (srm * 1.97).toFixed(1);
+            if (source !== 'lov') c_lov.value = ((srm + 0.76) / 1.3546).toFixed(1);
 
             isCalculating = false;
         }
@@ -493,10 +657,10 @@
 
         function getColorForSRM(srm) {
             if (srm <= 1) return `rgb(${refPoints[0].hex.join(',')})`;
-            if (srm >= 50) return `rgb(${refPoints[refPoints.length-1].hex.join(',')})`;
-            let prev = refPoints[0]; let next = refPoints[refPoints.length-1];
+            if (srm >= 50) return `rgb(${refPoints[refPoints.length - 1].hex.join(',')})`;
+            let prev = refPoints[0]; let next = refPoints[refPoints.length - 1];
             for (let i = 0; i < refPoints.length - 1; i++) {
-                if (srm >= refPoints[i].srm && srm <= refPoints[i+1].srm) { prev = refPoints[i]; next = refPoints[i+1]; break; }
+                if (srm >= refPoints[i].srm && srm <= refPoints[i + 1].srm) { prev = refPoints[i]; next = refPoints[i + 1]; break; }
             }
             const range = next.srm - prev.srm; const dist = srm - prev.srm; const ratio = dist / range;
             const r = Math.round(prev.hex[0] + (next.hex[0] - prev.hex[0]) * ratio);
@@ -532,7 +696,8 @@
         // SW UPDATE
         const updateToast = document.getElementById('update-toast');
         if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').then(reg => { if (reg.waiting && updateToast) updateToast.classList.add('show'); reg.addEventListener('updatefound', () => { const n = reg.installing; n.addEventListener('statechange', () => { if (n.state === 'installed' && navigator.serviceWorker.controller && updateToast) updateToast.classList.add('show'); }); }); });
-        if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
+        if (updateToast) updateToast.addEventListener('click', () => window.location.reload());
     </script>
 </body>
+
 </html>

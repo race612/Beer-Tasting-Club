@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - Beer Tasting Club</title>
-    <link rel="stylesheet" href="css/style.css?v=0.8.1">
-    
+    <link rel="stylesheet" href="css/style.css">
+
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
 </head>
+
 <body>
     <div class="container">
-        
+
         <div class="header-bar">
             <a href="index.html" class="header-link">
                 <span class="material-symbols-outlined">arrow_back</span> Home
@@ -30,14 +32,16 @@
 
         <div class="card text-content">
             <p><strong>Ultimo aggiornamento: In Costruzione</strong></p>
-            
+
             <p>
-                Questa pagina descrive le modalità di gestione del sito in riferimento al trattamento dei dati personali degli utenti che lo consultano.
+                Questa pagina descrive le modalità di gestione del sito in riferimento al trattamento dei dati personali
+                degli utenti che lo consultano.
             </p>
 
             <h3>1. Tipologia di dati trattati</h3>
             <p>
-                Durante l'uso dell'applicazione, vengono raccolti solamente i dati essenziali per il funzionamento del servizio (es. indirizzo email per il login, dati delle schede di degustazione).
+                Durante l'uso dell'applicazione, vengono raccolti solamente i dati essenziali per il funzionamento del
+                servizio (es. indirizzo email per il login, dati delle schede di degustazione).
             </p>
 
             <h3>2. Finalità del trattamento</h3>
@@ -52,16 +56,20 @@
 
             <h3>3. Cookie e Local Storage</h3>
             <p>
-                Questa applicazione utilizza il "Local Storage" del browser per garantire il funzionamento offline e mantenere la sessione attiva. Non vengono utilizzati cookie di profilazione o di terze parti per scopi pubblicitari.
+                Questa applicazione utilizza il "Local Storage" del browser per garantire il funzionamento offline e
+                mantenere la sessione attiva. Non vengono utilizzati cookie di profilazione o di terze parti per scopi
+                pubblicitari.
             </p>
         </div>
 
         <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
             &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
             <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-    
-            <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+
+            <p
+                style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                    style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
             </p>
         </footer>
     </div>
@@ -84,10 +92,10 @@
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                
+
                 // A) Aggiornamento GIA' in attesa
                 if (reg.waiting) {
-                    if(updateToast) updateToast.classList.add('show');
+                    if (updateToast) updateToast.classList.add('show');
                 }
 
                 // B) Aggiornamento trovato ORA
@@ -95,7 +103,7 @@
                     const newWorker = reg.installing;
                     newWorker.addEventListener('statechange', () => {
                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            if(updateToast) updateToast.classList.add('show');
+                            if (updateToast) updateToast.classList.add('show');
                         }
                     });
                 });
@@ -103,7 +111,7 @@
         }
 
         // Click -> Aggiorna
-        if(updateToast) {
+        if (updateToast) {
             updateToast.addEventListener('click', () => {
                 if (navigator.serviceWorker.controller) {
                     window.location.reload();
@@ -112,6 +120,7 @@
         }
     </script>
 </body>
+
 </html>
 
 <!-- =========================================
