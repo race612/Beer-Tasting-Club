@@ -8,9 +8,10 @@
 /* 1.1 CUSTOM FONT (Beer Icons) */
 @font-face {
     font-family: "beer-icon";
-    src: url("../assets/fonts/beer-icon.woff2") format("woff2"),
-        url("../assets/fonts/beer-icon.ttf") format("truetype"),
-        url("../assets/fonts/beer-icon.woff") format("woff");
+    src:  url('../assets/fonts/beer-icon.eot?ncvw5n');
+    src: url('../assets/fonts/beer-icon.eot?ncvw5n#iefix') format('embedded-opentype'),
+        url("../assets/fonts/beer-icon.ttf?ncvw5n") format("truetype"),
+        url("../assets/fonts/beer-icon.woff?ncvw5n") format("woff");
     font-weight: normal;
     font-style: normal;
     font-display: block;
@@ -520,33 +521,101 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: 
     background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; margin-top: 10px;
 }
 
-.icon {
-    /* Use !important to prevent extensions from overriding this font. */
-    font-family: "beer-icon" !important;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    display: inline-block;
-    vertical-align: middle;
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
 
-    /* Better Font Rendering =========== */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* INCONS */
-.icon-nose:before { content: "\f000"; }
-.icon-beer:before { content: "\f001"; }
-.icon-beermug:before { content: "\f002"; }
-.icon-artificial-intelligence:before { content: "\f003"; }
-.icon-eye:before { content: "\f004"; }
-.icon-bugs:before { content: "\f005"; }
-.icon-bottle:before { content: "\f006"; }
-.icon-tongue:before { content: "\f007"; }
-.icon-mouth:before { content: "\f008"; }
-.icon-lips:before { content: "\f009"; }
-.icon-tap:before { content: "\f00a"; }
-.icon-growler:before { content: "\f00b"; }
-.icon-can:before { content: "\f00c"; }
+.icon-can:before {
+  content: "\e900";
+}
+.icon-growler:before {
+  content: "\e901";
+}
+.icon-tap:before {
+  content: "\e902";
+}
+.icon-lips:before {
+  content: "\e903";
+}
+.icon-mouth:before {
+  content: "\e904";
+}
+.icon-tongue:before {
+  content: "\e905";
+}
+.icon-bottle:before {
+  content: "\e906";
+}
+.icon-bugs:before {
+  content: "\e907";
+}
+.icon-eye:before {
+  content: "\e908";
+}
+.icon-artificial-intelligence:before {
+  content: "\e909";
+}
+.icon-beer-mug:before {
+  content: "\e90a";
+}
+.icon-beer:before {
+  content: "\e90b";
+}
+.icon-nose:before {
+  content: "\e90c";
+}
+.icon-equalizer:before {
+  content: "\e992";
+}
+.icon-equalizer2:before {
+  content: "\e993";
+}
+.icon-cog:before {
+  content: "\e994";
+}
+.icon-bug:before {
+  content: "\e999";
+}
+.icon-google:before {
+  content: "\ea88";
+}
+.icon-google-drive:before {
+  content: "\ea8f";
+}
+.icon-facebook:before {
+  content: "\ea90";
+}
+.icon-facebook2:before {
+  content: "\ea91";
+}
+.icon-instagram:before {
+  content: "\ea92";
+}
+.icon-whatsapp:before {
+  content: "\ea93";
+}
+.icon-telegram:before {
+  content: "\ea95";
+}
+.icon-github:before {
+  content: "\eab0";
+}
+.icon-linkedin:before {
+  content: "\eac9";
+}
+.icon-linkedin2:before {
+  content: "\eaca";
+}
+.icon-paypal:before {
+  content: "\ead8";
+}
