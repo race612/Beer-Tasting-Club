@@ -75,6 +75,9 @@ Il mio ruolo in questo progetto è stato quello di:
 
 ---
 
+### 🙏 Data Sources & Credits
+* **BJCP Data:** The BJCP 2021 Style Guidelines are integrated using the [BeerJSON](https://github.com/beerjson/bjcp-json) standard format by [Krutilin](https://github.com/beerjson/bjcp-json/commits?author=krutilin).
+
 ### 🛠 Tech Stack
 * **Frontend:** HTML5, CSS3 (Custom), Vanilla JavaScript (ES6+).
 * **Backend / Database:** Supabase.
