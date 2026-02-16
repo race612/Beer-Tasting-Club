@@ -1,2 +1,2 @@
 // js/config.js
-export const APP_VERSION = '0.6.15';
+export const APP_VERSION = '0.6.20';

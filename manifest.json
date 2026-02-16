@@ -1,7 +1,7 @@
 {
   "name": "Beer Tasting Club",
   "short_name": "Beer Tasting",
-  "id": "/Beer-Tasting-Club/?v=0.8.1",
+  "id": "/Beer-Tasting-Club/",
   "start_url": "/Beer-Tasting-Club/index.html",
   "display": "standalone",
   "background_color": "#111827",
