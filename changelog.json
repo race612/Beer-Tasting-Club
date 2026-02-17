@@ -2,7 +2,7 @@
     {
         "_comment":"modificare versione in js/config.js e cambiare CACHE_NAME in sw.js",
         "version": "0.6.X Alpha",
-        "date": "13 Feb 2026",
+        "date": "17 Feb 2026",
         "changes": [
             "Miglioramenti CSS.",
             "Nuova grafica Popup avvisi (modal.js).",
@@ -10,6 +10,7 @@
             "Rifiniture scheda descrittiva sintetica.",
             "Aggiunta scheda BJCP completa.",
             "Aggiunta licenza e aggiornato Readme.",
+            "Aggiunte GUidelinse BJCP da file Json.",
             "Aggiornamento pagina Info."
         ]
     },
