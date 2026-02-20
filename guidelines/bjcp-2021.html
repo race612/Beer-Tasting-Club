@@ -79,7 +79,10 @@
                 <a href="../linee-guida.html" class="header-link"><span class="material-symbols-outlined">arrow_back</span> Linee Guida</a>
                 <img src="../assets/logo.png" alt="Logo" class="header-logo">
             </div>
-            <h2 style="text-align: center; margin-bottom: 10px;">BJCP 2021</h2>
+            <div style="text-align: center; margin: 15px 0;">
+                <img src="../assets/BJCP-logo.png" alt="Logo BJCP" style="width: 65px; height: auto; margin-bottom: 10px;">
+                <h2 id="main-title" style="margin: 0;">BJCP 2021</h2>
+            </div>
             <div class="controls-container">
                 <div class="search-box">
                     <span class="material-symbols-outlined search-icon">search</span>
@@ -124,6 +127,7 @@
         const detailsContainer = document.getElementById('dynamic-details-container');
         const vitalsGrid = document.querySelector('.vitals-grid');
         const detailHeaderContent = document.querySelector('.detail-header > div');
+        const mainTitle = document.getElementById('main-title');
 
         let allStyles = [], groupedData = {};
 
@@ -222,6 +226,7 @@
 
         function openDetail(style) {
             showPlaceholder(false); // Nasconde il placeholder e mostra i dettagli
+            mainTitle.textContent = style.category;
 
             document.getElementById('detail-code').textContent = style.style_id;
             document.getElementById('detail-name').textContent = style.name;
@@ -253,6 +258,7 @@
 
         document.getElementById('close-detail-btn').addEventListener('click', () => {
             overlay.classList.remove('active');
+            mainTitle.textContent = "BJCP 2021";
             if (!isDesktop()) {
                 document.body.style.overflow = '';
             }

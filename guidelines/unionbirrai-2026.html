@@ -79,7 +79,10 @@
                 <a href="../linee-guida.html" class="header-link"><span class="material-symbols-outlined">arrow_back</span> Linee Guida</a>
                 <img src="../assets/logo.png" alt="Logo" class="header-logo">
             </div>
-            <h2 style="text-align: center; margin-bottom: 10px;">Unionbirrai 2026</h2>
+            <div style="text-align: center; margin: 15px 0;">
+                <img src="../assets/BdA-logo.png" alt="Logo Unionbirrai" style="width: 65px; height: auto; margin-bottom: 10px;">
+                <h2 style="margin: 0;">Unionbirrai 2026</h2>
+            </div>
             <div class="controls-container">
                 <div class="search-box">
                     <span class="material-symbols-outlined search-icon">search</span>
@@ -220,10 +223,10 @@
 
             // Description
             const desc = cat.description || {};
-            let html = createTextSection('icon-eye', 'Aspetto', desc.appearance);
+            let html = createTextSection('label', 'Stili di Riferimento', cat.styles_reference);
+            html += createTextSection('icon-eye', 'Aspetto', desc.appearance);
             html += createTextSection('icon-nose', 'Aroma', desc.aroma);
             html += createTextSection('icon-tongue', 'Gusto', desc.flavor);
-            html += createTextSection('label', 'Stili di Riferimento', cat.styles_reference);
             
             detailsContainer.innerHTML = html;
             overlay.classList.add('active');

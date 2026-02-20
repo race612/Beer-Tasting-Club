@@ -3,7 +3,7 @@
   "version": "XXI Edizione",
   "categories": [
     {
-      "id": "UB-01",
+      "id": "Cat. 1",
       "name": "Birre chiare, bassa fermentazione, basso grado alcolico, di ispirazione tedesca e ceca (German e Bohemian Pilsner)",
       "vitals": {
         "fermentation": "Bassa",
@@ -21,7 +21,7 @@
       }
     },
     {
-      "id": "UB-02",
+      "id": "Cat. 2",
       "name": "Italian Pilsner",
       "vitals": {
         "fermentation": "Bassa",
@@ -39,7 +39,7 @@
       }
     },
     {
-      "id": "UB-03",
+      "id": "Cat. 3",
       "name": "Birre chiare, bassa fermentazione, basso grado alcolico, di ispirazione europea (European Lager, Helles, Dortmunder Export) e di ispirazione americana (American Lager)",
       "vitals": {
         "fermentation": "Bassa",
@@ -57,7 +57,7 @@
       }
     },
     {
-      "id": "UB-04",
+      "id": "Cat. 4",
       "name": "Birre chiare, bassa fermentazione, basso grado alcolico, caratterizzate da un evidente profilo luppolato (Hoppy Lager)",
       "vitals": {
         "fermentation": "Bassa",
@@ -75,7 +75,7 @@
       }
     },
     {
-      "id": "UB-05",
+      "id": "Cat. 5",
       "name": "Birre chiare, alta fermentazione, basso grado alcolico di ispirazione angloamericana (Golden Ale, Cream Ale)",
       "vitals": {
         "fermentation": "Alta",
@@ -93,7 +93,7 @@
       }
     },
     {
-      "id": "UB-06",
+      "id": "Cat. 6",
       "name": "Birre chiare, alta fermentazione, basso grado alcolico, di ispirazione belga (Saison, Biere de Garde, Belge Blonde)",
       "vitals": {
         "fermentation": "Alta",
@@ -111,7 +111,7 @@
       }
     },
     {
-      "id": "UB-07",
+      "id": "Cat. 7",
       "name": "Birre chiare, alta fermentazione, basso grado alcolico, caratterizzate da un evidente profilo luppolato di ispirazione angloamericana (English e American Pale Ale)",
       "vitals": {
         "fermentation": "Alta",
@@ -129,7 +129,7 @@
       }
     },
     {
-      "id": "UB-08",
+      "id": "Cat. 8",
       "name": "Birre ambrate, bassa fermentazione, basso grado alcolico, di ispirazione tedesca (Vienna, Marzen, Keller, Rauch, International Amber Lager)",
       "vitals": {
         "fermentation": "Bassa",
@@ -147,7 +147,7 @@
       }
     },
     {
-      "id": "UB-09",
+      "id": "Cat. 9",
       "name": "Birre ambrate, alta fermentazione, basso grado alcolico, di ispirazione angloamericana (California Common, American Amber Ale, Irish Red Ale)",
       "vitals": {
         "fermentation": "Alta (o Ibrida)",
@@ -165,7 +165,7 @@
       }
     },
     {
-      "id": "UB-10",
+      "id": "Cat. 10",
       "name": "Birre ambrate, alta fermentazione, basso grado alcolico, caratterizzate da un evidente profilo luppolato di ispirazione americana (American IPA)",
       "vitals": {
         "fermentation": "Alta",
@@ -183,7 +183,7 @@
       }
     },
     {
-      "id": "UB-11",
+      "id": "Cat. 11",
       "name": "Birre ambrate, alta fermentazione, basso grado alcolico, caratterizzate da un evidente profilo luppolato di ispirazione anglosassone (English IPA)",
       "vitals": {
         "fermentation": "Alta",
@@ -201,7 +201,7 @@
       }
     },
     {
-      "id": "UB-12",
+      "id": "Cat. 12",
       "name": "Birre ambrate e scure, alta fermentazione, basso grado alcolico, di ispirazione angloamericana (Mild, British Bitter, Extra Special Bitter, Brown Ale, English e American Amber Ale)",
       "vitals": {
         "fermentation": "Alta",
@@ -219,7 +219,7 @@
       }
     },
     {
-      "id": "UB-13",
+      "id": "Cat. 13",
       "name": "Birre ambrate e scure, alta fermentazione, basso grado alcolico, di ispirazione belga (Belge Ambrée, Belge Brune)",
       "vitals": {
         "fermentation": "Alta",
@@ -237,7 +237,7 @@
       }
     },
     {
-      "id": "UB-14",
+      "id": "Cat. 14",
       "name": "Birre scure, alta fermentazione, basso grado alcolico, di ispirazione belga (Dubbel, Belgian Dark Strong Ale)",
       "vitals": {
         "fermentation": "Alta",
@@ -255,7 +255,7 @@
       }
     },
     {
-      "id": "UB-15",
+      "id": "Cat. 15",
       "name": "Birre scure, bassa fermentazione, basso grado alcolico, di ispirazione tedesca (Schwarz, Dunkel)",
       "vitals": {
         "fermentation": "Bassa",
@@ -273,7 +273,7 @@
       }
     },
     {
-      "id": "UB-16",
+      "id": "Cat. 16",
       "name": "Birre scure, alta fermentazione, basso grado alcolico, di ispirazione angloamericana (Porter, Stout)",
       "vitals": {
         "fermentation": "Alta",
@@ -291,7 +291,7 @@
       }
     },
     {
-      "id": "UB-17",
+      "id": "Cat. 17",
       "name": "Birre scure, alta fermentazione, basso grado alcolico, caratterizzate da un evidente profilo luppolato (Black IPA)",
       "vitals": {
         "fermentation": "Alta",
@@ -309,7 +309,7 @@
       }
     },
     {
-      "id": "UB-18",
+      "id": "Cat. 18",
       "name": "Birre con frumento, alta fermentazione, basso grado alcolico, di ispirazione tedesca (Weizen, Dunkelweizen, Weizenbock)",
       "vitals": {
         "fermentation": "Alta",
@@ -327,7 +327,7 @@
       }
     },
     {
-      "id": "UB-19",
+      "id": "Cat. 19",
       "name": "Birre con frumento, alta fermentazione, basso grado alcolico, di ispirazione belga (Blanche, Witbier)",
       "vitals": {
         "fermentation": "Alta",
@@ -345,7 +345,7 @@
       }
     },
     {
-      "id": "UB-20",
+      "id": "Cat. 20",
       "name": "Birre chiare e ambrate, alta o bassa fermentazione, basso grado alcolico, con uso di segale e altri cereali (Rye Beer, Wheat Beer, Specialty Grain Beer)",
       "vitals": {
         "fermentation": "Alta o Bassa",
@@ -363,7 +363,7 @@
       }
     },
     {
-      "id": "UB-21",
+      "id": "Cat. 21",
       "name": "Birre chiare, ambrate e scure, bassa fermentazione, alto grado alcolico di ispirazione tedesca (Bock, Doppelbock, Eisbock, Heller Bock, Maibock)",
       "vitals": {
         "fermentation": "Bassa",
@@ -381,7 +381,7 @@
       }
     },
     {
-      "id": "UB-22",
+      "id": "Cat. 22",
       "name": "Birre chiare, alta fermentazione, alto grado alcolico di ispirazione belga (Belgian Blonde Strong Ale, Belgian Tripel)",
       "vitals": {
         "fermentation": "Alta",
@@ -399,7 +399,7 @@
       }
     },
     {
-      "id": "UB-23",
+      "id": "Cat. 23",
       "name": "Birre ambrate e scure, alta fermentazione, alto grado alcolico di ispirazione belga (Belgian Dark Strong Ale, Belgian Quad)",
       "vitals": {
         "fermentation": "Alta",
@@ -417,7 +417,7 @@
       }
     },
     {
-      "id": "UB-24",
+      "id": "Cat. 24",
       "name": "Birre chiare, ambrate e scure, alta fermentazione, alto grado alcolico di ispirazione angloamericana (Strong Ale, Old Ale, Stock Ale)",
       "vitals": {
         "fermentation": "Alta",
@@ -435,7 +435,7 @@
       }
     },
     {
-      "id": "UB-25",
+      "id": "Cat. 25",
       "name": "Birre chiare, ambrate e scure, alta fermentazione, alto grado alcolico, caratterizzate da un evidente profilo luppolato (Double IPA, Imperial IPA)",
       "vitals": {
         "fermentation": "Alta",
@@ -453,7 +453,7 @@
       }
     },
     {
-      "id": "UB-26",
+      "id": "Cat. 26",
       "name": "Birre ambrate e scure, alta fermentazione, alto grado alcolico (Barley Wine, Wheat Wine, Imperial Stout)",
       "vitals": {
         "fermentation": "Alta",
@@ -471,15 +471,15 @@
       }
     },
     {
-      "id": "UB-27",
+      "id": "Cat. 27",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l'aggiunta di spezie e/o erbe (Spiced Beer, Herb Beer)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Variabile in base alla base utilizzata.",
@@ -488,15 +488,15 @@
       }
     },
     {
-      "id": "UB-28",
+      "id": "Cat. 28",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l'aggiunta di caffè e/o cacao (Coffee Beer, Chocolate Beer)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Generalmente da ambrate a scure.",
@@ -505,15 +505,15 @@
       }
     },
     {
-      "id": "UB-29",
+      "id": "Cat. 29",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l'aggiunta di frutta (Fruit Beer)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Può assumere i colori della frutta utilizzata.",
@@ -522,15 +522,15 @@
       }
     },
     {
-      "id": "UB-30",
+      "id": "Cat. 30",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l'aggiunta di miele (Honey Beer)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Da dorato a bruno.",
@@ -539,15 +539,15 @@
       }
     },
     {
-      "id": "UB-31",
+      "id": "Cat. 31",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l’aggiunta di verdure (Vegetable Beer)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Variabile a seconda della base e della verdura utilizzata (es. zucca, radicchio, carota).",
@@ -556,15 +556,15 @@
       }
     },
     {
-      "id": "UB-32",
+      "id": "Cat. 32",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l’uso di castagne (Chestnut Beer)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Variabile. Spesso da ambrato a scuro.",
@@ -573,15 +573,15 @@
       }
     },
     {
-      "id": "UB-33",
+      "id": "Cat. 33",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l’aggiunta di cereali speciali (Specialty Grain Beer)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Variabile a seconda del cereale (es. farro, riso, grano saraceno).",
@@ -590,15 +590,15 @@
       }
     },
     {
-      "id": "UB-34",
+      "id": "Cat. 34",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, caratterizzate dall’uso di affumicatura (Rauch, Smoked Beer)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Da chiara a scura.",
@@ -607,15 +607,15 @@
       }
     },
     {
-      "id": "UB-35",
+      "id": "Cat. 35",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, affinate in legno (Wood e Barrel Aged Beer)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Variabile. Spesso mostra una leggera ossidazione nobile.",
@@ -624,32 +624,32 @@
       }
     },
     {
-      "id": "UB-36",
+      "id": "Cat. 36",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l’aggiunta di altri ingredienti di origine vegetale (es. fiori, radici, foglie)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
-        "appearance": "Nessun riferimento specifico.",
+        "appearance": "--",
         "aroma": "L'ingrediente speciale (es. genziana, ibisco, canapa) deve essere identificabile e armonico.",
         "flavor": "Profilo gustativo unico. L'equilibrio tra l'ingrediente vegetale e la birra è essenziale per la piacevolezza."
       }
     },
     {
-      "id": "UB-37",
+      "id": "Cat. 37",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l’aggiunta di ingredienti di origine animale (es. lattosio, ostriche, miele in concorso con altri ingredienti)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Variabile.",
@@ -658,15 +658,15 @@
       }
     },
     {
-      "id": "UB-38",
+      "id": "Cat. 38",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, di ispirazione storica (Historical Beer)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Fedele allo stile storico di riferimento (es. Gose, Grätzer, Lichtenhainer).",
@@ -675,7 +675,7 @@
       }
     },
     {
-      "id": "UB-39",
+      "id": "Cat. 39",
       "name": "Birre chiare, ambrate e scure, alta fermentazione, basso grado alcolico, con evidente carattere acido (Sour Ale)",
       "vitals": {
         "fermentation": "Alta / Mista",
@@ -692,7 +692,7 @@
       }
     },
     {
-      "id": "UB-40",
+      "id": "Cat. 40",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, alto grado alcolico, con evidente carattere acido (Strong Sour Ale)",
       "vitals": {
         "fermentation": "Alta / Mista",
@@ -709,7 +709,7 @@
       }
     },
     {
-      "id": "UB-41",
+      "id": "Cat. 41",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, basso grado alcolico, prodotte con cereali non maltati, di ispirazione locale (es. Italian Wheat Beer)",
       "vitals": {
         "fermentation": "Alta o Bassa",
@@ -726,15 +726,15 @@
       }
     },
     {
-      "id": "UB-42",
+      "id": "Cat. 42",
       "name": "White Italian Grape Ale (IGA) - Birre chiare e ambrate, alta o bassa fermentazione, da basso ad alto grado alcolico, con uso di uva bianca (frutto, mosto, vinacce)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Dal dorato al ramato. Schiuma bianca, trasparenti o leggermente velate.",
@@ -743,15 +743,15 @@
       }
     },
     {
-      "id": "UB-43",
+      "id": "Cat. 43",
       "name": "Red Italian Grape Ale (IGA) - Birre chiare, ambrate e scure, alta o bassa fermentazione, da basso ad alto grado alcolico, con uso di uva rossa (frutto, mosto, vinacce)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Da ambrato a rubino/violaceo. La schiuma può avere riflessi rosati.",
@@ -760,15 +760,15 @@
       }
     },
     {
-      "id": "UB-44",
+      "id": "Cat. 44",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, da basso ad alto grado alcolico, con uso di uva o derivati, caratterizzate da evidente acidità (Sour IGA)",
       "vitals": {
         "fermentation": "Alta, Mista o Spontanea",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Variabile in base all'uva usata.",
@@ -777,15 +777,15 @@
       }
     },
     {
-      "id": "UB-45",
+      "id": "Cat. 45",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, analcoliche e a basso contenuto di alcol (Alcohol Free e Low Alcohol Beer)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
+        "og_plato": "--",
         "abv": [0.0, 1.2],
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
         "appearance": "Variabile in base allo stile base di riferimento.",
@@ -794,18 +794,18 @@
       }
     },
     {
-      "id": "UB-46",
+      "id": "Cat. 46",
       "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, da basso ad alto grado alcolico di ispirazione libera e non rientranti in nessuna delle precedenti categoria (Extraordinary Ale / Extraordinary Lager)",
       "vitals": {
         "fermentation": "Alta o Bassa",
-        "og_plato": "nessun riferimento",
-        "abv": "nessun riferimento",
-        "srm": "nessun riferimento",
-        "ebc": "nessun riferimento",
-        "ibu": "nessun riferimento"
+        "og_plato": "--",
+        "abv": "--",
+        "srm": "--",
+        "ebc": "--",
+        "ibu": "--"
       },
       "description": {
-        "appearance": "Nessun riferimento specifico.",
+        "appearance": "--",
         "aroma": "In questa categoria rientrano tutte quelle birre che non trovano collocazione, quindi non iscrivibili in altre categorie, per modalità di produzione o utilizzo di ingredienti speciali che le caratterizzano in modo unico.",
         "flavor": "L'equilibrio e la piacevolezza complessiva rimangono i criteri cardine del giudizio. La sensazione palatale deve ritrovare un corpo che sarà inevitabilmente più leggero rispetto a una birra standard, ma non deve risultare \"acquoso\" (watery) o vuoto."
       }
