@@ -18,28 +18,33 @@
     <main>
         <h1>Linee Guida per Stili di Birra</h1>
         <nav class="menu-grid">
-            <a href="guidelines/bjcp-2021.html" class="menu-item">
+            <a href="guidelines/bjcp-2021-en.html" class="menu-item">
                 <span class="material-symbols-outlined icon-large">rule_folder</span>
-                <span class="menu-title">BJCP 2021 (EN)</span>
+                <span class="menu-title">BJCP Style Guidelines 2021 - ENGLISH</span>
                 <span class="menu-desc">Beer Judge Certification Program 2021 Guidelines</span>
             </a>
 
             <a href="guidelines/unionbirrai-2026.html" class="menu-item">
                 <span class="material-symbols-outlined icon-large">rule_folder</span>
-                <span class="menu-title">Unionbirrai 2026</span>
+                <span class="menu-title">Unionbirrai 2026 - ITALIANO</span>
                 <span class="menu-desc">Linee guida Unionbirrai 2026</span>
             </a>
         </nav>
     </main>
-    <footer>
-        <div style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
-            &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
-            <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-            <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
-            </p>
-        </div>
+    <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563;">
+        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
+        <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
+
+        <p
+            style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        </p>
     </footer>
-    <script src="js/modal.js"></script>
+    <script type="module">
+        import { APP_VERSION } from './js/config.js';
+        const footerVer = document.getElementById('footer-version');
+        if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
+    </script>
 </body>
 </html>

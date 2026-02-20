@@ -8,10 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="../css/icomoon.css">
     <style>
-        /* (Ricopia lo stile dalla versione precedente se non ce l'hai, 
-            è lungo e non voglio intasare la chat, 
-            l'importante è che ci sia la classe .detail-overlay) */
-        
+         
         /* SEARCH BAR */
         .search-container { position: sticky; top: 0; background: #111827; padding: 10px 0; z-index: 10; margin-bottom: 10px; border-bottom: 1px solid #374151; }
         .search-box { display: flex; align-items: center; background: #1f2937; border: 1px solid #374151; border-radius: 8px; padding: 0 10px; margin-bottom: 10px; }
@@ -80,7 +77,7 @@
                 <img src="../assets/logo.png" alt="Logo" class="header-logo">
             </div>
             <div style="text-align: center; margin: 15px 0;">
-                <img src="../assets/BJCP-logo.png" alt="Logo BJCP" style="width: 65px; height: auto; margin-bottom: 10px;">
+                <img src="../assets/BJCP-logo.png" alt="Logo BJCP" style="width: 100px; height: auto; margin-bottom: 10px;">
                 <h2 id="main-title" style="margin: 0;">BJCP 2021</h2>
             </div>
             <div class="controls-container">
@@ -119,7 +116,20 @@
         </div>
     </div>
 
+    <footer style="text-align: center; padding: 20px 10px; font-size: 1rem; color: #4b5563; border-top: 1px solid #374151;">
+        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
+        <a href="../privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
+        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        </p>
+    </footer>
+
     <script type="module">
+        import { APP_VERSION } from '../js/config.js';
+        const footerVer = document.getElementById('footer-version');
+        if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
+
         const container = document.getElementById('bjcp-list-container');
         const searchInput = document.getElementById('search-input');
         const categorySelect = document.getElementById('category-select');
