@@ -26,7 +26,7 @@
         .style-name { color: #e5e7eb; font-size: 1rem; }
         /* OVERLAY DETTAGLIO (COMPATTO) */
         .detail-overlay { position: fixed; top: 0; height: 100%; background: #111827; z-index: 1000; overflow-y: auto; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; width: 100%; left: 0; }
-        @media (min-width: 600px) { .detail-overlay { width: 600px; left: 50%; margin-left: -300px; border-left: 1px solid #374151; border-right: 1px solid #374151; } }
+
         .detail-overlay.active { transform: translateX(0); }
         .detail-header { position: sticky; top: 0; background: rgba(17, 24, 39, 0.95); backdrop-filter: blur(5px); padding: 15px; border-bottom: 1px solid #374151; display: flex; align-items: center; gap: 15px; z-index: 20; }
         .detail-content { padding: 20px; padding-bottom: 80px; }
@@ -42,42 +42,77 @@
         .bjcp-label [class^="icon-"], .bjcp-label .material-symbols-outlined { font-size: 1.2rem; }
         .bjcp-text { color: #d1d5db; font-size: 0.95rem; line-height: 1.6; margin: 0; text-align: justify; }
         .scroll-anchor { scroll-margin-top: 140px; } 
+
+        /* DESKTOP LAYOUT - 2 COLONNE */
+        @media (min-width: 900px) {
+            .bjcp-layout {
+                display: flex;
+                height: calc(100vh - 70px); /* Altezza meno l'header bar */
+            }
+            .container {
+                width: 40%;
+                flex-shrink: 0;
+                overflow-y: auto;
+                border-right: 1px solid #374151;
+            }
+            .detail-overlay {
+                position: static;
+                transform: none !important; /* Sovrascrive la trasformazione inline */
+                width: 60%;
+                height: 100%;
+                display: block;
+                border-left: none;
+            }
+            .detail-header .btn-icon {
+                display: none; /* Nasconde il tasto 'back' su desktop */
+            }
+            .detail-overlay:not(.active) {
+                display: none; /* Nasconde la colonna dei dettagli se non attiva */
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-bar">
-            <a href="../tools.html" class="header-link"><span class="material-symbols-outlined">arrow_back</span> Tools</a>
-            <img src="../assets/logo.png" alt="Logo" class="header-logo">
-        </div>
-        <h2 style="text-align: center; margin-bottom: 10px;">BJCP 2021</h2>
-        <div class="controls-container">
-            <div class="search-box">
-                <span class="material-symbols-outlined search-icon">search</span>
-                <input type="text" id="search-input" placeholder="Cerca stile (es. Pils, 12A)...">
+    <div class="bjcp-layout">
+        <div class="container">
+            <div class="header-bar">
+                <a href="../linee-guida.html" class="header-link"><span class="material-symbols-outlined">arrow_back</span> Linee Guida</a>
+                <img src="../assets/logo.png" alt="Logo" class="header-logo">
             </div>
-            <select id="category-select" class="category-select"><option value="all">Tutte le Categorie</option></select>
+            <h2 style="text-align: center; margin-bottom: 10px;">BJCP 2021</h2>
+            <div class="controls-container">
+                <div class="search-box">
+                    <span class="material-symbols-outlined search-icon">search</span>
+                    <input type="text" id="search-input" placeholder="Cerca stile (es. Pils, 12A)...">
+                </div>
+                <select id="category-select" class="category-select"><option value="all">Tutte le Categorie</option></select>
+            </div>
+            <div id="bjcp-list-container"><div style="text-align: center; padding: 40px; color: #6b7280;"><span class="material-symbols-outlined" style="animation: spin 1s infinite; font-size: 2rem;">refresh</span><br>Lettura BeerJSON...</div></div>
         </div>
-        <div id="bjcp-list-container"><div style="text-align: center; padding: 40px; color: #6b7280;"><span class="material-symbols-outlined" style="animation: spin 1s infinite; font-size: 2rem;">refresh</span><br>Lettura BeerJSON...</div></div>
-    </div>
 
-    <div id="detail-overlay" class="detail-overlay">
-        <div class="detail-header">
-            <button id="close-detail-btn" class="btn btn-icon" style="background:transparent; border:none; color:white;"><span class="material-symbols-outlined" style="font-size: 2rem;">arrow_back</span></button>
-            <div style="flex: 1; overflow: hidden;">
-                <span id="detail-code" style="color: var(--primary-color); font-weight:bold; font-size: 0.9rem;">CODE</span>
-                <h3 id="detail-name" style="margin:0; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Style Name</h3>
+        <div id="detail-overlay" class="detail-overlay">
+            <div class="detail-header">
+                <button id="close-detail-btn" class="btn btn-icon" style="background:transparent; border:none; color:white;"><span class="material-symbols-outlined" style="font-size: 2rem;">arrow_back</span></button>
+                <div style="flex: 1; overflow: hidden;">
+                    <span id="detail-code" style="color: var(--primary-color); font-weight:bold; font-size: 0.9rem;">CODE</span>
+                    <h3 id="detail-name" style="margin:0; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Style Name</h3>
+                </div>
             </div>
-        </div>
-        <div class="detail-content">
-            <div class="vitals-grid">
-                <div class="vital-box"><span class="vital-label">OG</span><span class="vital-val" id="d-og">-</span></div>
-                <div class="vital-box"><span class="vital-label">FG</span><span class="vital-val" id="d-fg">-</span></div>
-                <div class="vital-box"><span class="vital-label">ABV</span><span class="vital-val" id="d-abv">-</span></div>
-                <div class="vital-box"><span class="vital-label">IBU</span><span class="vital-val" id="d-ibu">-</span></div>
-                <div class="vital-box"><span class="vital-label">SRM</span><span class="vital-val" id="d-srm">-</span></div>
+            <div class="detail-content">
+                <div class="vitals-grid">
+                    <div class="vital-box"><span class="vital-label">OG</span><span class="vital-val" id="d-og">-</span></div>
+                    <div class="vital-box"><span class="vital-label">FG</span><span class="vital-val" id="d-fg">-</span></div>
+                    <div class="vital-box"><span class="vital-label">ABV</span><span class="vital-val" id="d-abv">-</span></div>
+                    <div class="vital-box"><span class="vital-label">IBU</span><span class="vital-val" id="d-ibu">-</span></div>
+                    <div class="vital-box"><span class="vital-label">SRM</span><span class="vital-val" id="d-srm">-</span></div>
+                </div>
+                <div id="dynamic-details-container">
+                    <div class="placeholder-content" style="text-align: center; padding: 60px 20px; color: #6b7280;">
+                        <span class="material-symbols-outlined" style="font-size: 3rem; margin-bottom: 10px;">rule_folder</span>
+                        <p>Seleziona uno stile dalla lista per vederne i dettagli.</p>
+                    </div>
+                </div>
             </div>
-            <div id="dynamic-details-container"></div>
         </div>
     </div>
 
@@ -87,7 +122,20 @@
         const categorySelect = document.getElementById('category-select');
         const overlay = document.getElementById('detail-overlay');
         const detailsContainer = document.getElementById('dynamic-details-container');
+        const vitalsGrid = document.querySelector('.vitals-grid');
+        const detailHeaderContent = document.querySelector('.detail-header > div');
+
         let allStyles = [], groupedData = {};
+
+        // Funzione per controllare se siamo in modalità desktop
+        const isDesktop = () => window.innerWidth >= 900;
+
+        function showPlaceholder(show) {
+            const placeholder = detailsContainer.querySelector('.placeholder-content');
+            if (placeholder) placeholder.style.display = show ? 'block' : 'none';
+            vitalsGrid.style.display = show ? 'none' : 'grid';
+            detailHeaderContent.style.visibility = show ? 'hidden' : 'visible';
+        }
 
         // ... (loadBjcpData, processData, renderList sono uguali a prima) ...
         async function loadBjcpData() {
@@ -160,8 +208,6 @@
         // MAPPATURA ICONE (QUI USO LE TUE CUSTOM DOVE POSSIBILE)
         function createTextSection(iconClass, title, text) {
             if (!text) return '';
-            // Se l'icona inizia con "icon-", è una delle tue classi custom.
-            // Altrimenti, assumiamo sia una stringa per Material Symbols (es. 'history').
             const iconHTML = iconClass.startsWith('icon-') 
                 ? `<span class="${iconClass}" style="font-size:1.2rem;"></span>` 
                 : `<span class="material-symbols-outlined" style="font-size:1.2rem;">${iconClass}</span>`;
@@ -175,6 +221,8 @@
         }
 
         function openDetail(style) {
+            showPlaceholder(false); // Nasconde il placeholder e mostra i dettagli
+
             document.getElementById('detail-code').textContent = style.style_id;
             document.getElementById('detail-name').textContent = style.name;
             document.getElementById('d-og').textContent = getRange(style.original_gravity);
@@ -184,29 +232,39 @@
             document.getElementById('d-srm').textContent = getRange(style.color);
 
             let html = '';
-            // MAPPATURA TESTI -> TUE ICONE
             html += createTextSection('icon-info', 'Impressioni Generali', style.overall_impression);
             html += createTextSection('icon-nose', 'Aroma', style.aroma);
             html += createTextSection('icon-eye', 'Aspetto', style.appearance);
             html += createTextSection('icon-tongue', 'Gusto', style.flavor);
             html += createTextSection('icon-mouth', 'Bocca', style.mouthfeel);
-            
-            // Icone generiche per il resto (Google)
-            html += createTextSection('history_edu', 'Storia', style.history); // Google
-            html += createTextSection('grain', 'Ingredienti', style.ingredients); // Google
-            html += createTextSection('compare_arrows', 'Confronti', style.style_comparison); // Google
-            html += createTextSection('verified', 'Esempi', style.examples); // Google
-            html += createTextSection('label', 'Tag', style.tags); // Google
+            html += createTextSection('history_edu', 'Storia', style.history);
+            html += createTextSection('grain', 'Ingredienti', style.ingredients);
+            html += createTextSection('compare_arrows', 'Confronti', style.style_comparison);
+            html += createTextSection('verified', 'Esempi', style.examples);
+            html += createTextSection('label', 'Tag', style.tags);
 
-            detailsContainer.innerHTML = html;
+            detailsContainer.innerHTML = html; // Inserisce i dettagli
             overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+
+            if (!isDesktop()) {
+                document.body.style.overflow = 'hidden';
+            }
         }
 
         document.getElementById('close-detail-btn').addEventListener('click', () => {
             overlay.classList.remove('active');
-            document.body.style.overflow = '';
+            if (!isDesktop()) {
+                document.body.style.overflow = '';
+            }
         });
+        
+        // Setup iniziale
+        if (isDesktop()) {
+            showPlaceholder(true);
+            overlay.classList.add('active'); // Mantiene la colonna visibile su desktop
+        } else {
+            showPlaceholder(false); // Su mobile non mostrare il placeholder nel pannello chiuso
+        }
 
         loadBjcpData();
     </script>

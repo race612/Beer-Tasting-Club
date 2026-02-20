@@ -86,6 +86,17 @@
                         </div>
                     </div>
 
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <div class="form-group" style="width: 50%;">
+                            <label>IBU (Opzionale)</label>
+                            <input type="number" id="beer-ibu" placeholder="Es. 40">
+                        </div>
+                        <div class="form-group" style="width: 50%;">
+                            <label>Alcol (% Vol - Opzionale)</label>
+                            <input type="number" step="0.1" id="beer-abv" placeholder="Es. 5.5">
+                        </div>
+                    </div>
+
                     <button type="submit" id="btn-save" class="btn btn-primary" style="margin-top: 20px;">
                         <span class="material-symbols-outlined">save</span> Salva Birra
                     </button>
@@ -234,6 +245,9 @@
                     document.getElementById('style-bjcp').value = beerToEdit.style_name;
                     document.getElementById('style-bjcp').dispatchEvent(new Event('change'));
                 }
+
+                document.getElementById('beer-ibu').value = beerToEdit.ibu;
+                document.getElementById('beer-abv').value = beerToEdit.abv;
             }
         }
 
@@ -312,6 +326,10 @@
                             <h3 style="margin:0; color:white;">${beer.name}</h3>
                             <div class="beer-producer">${producerText}</div>
                             ${packText ? `<div class="beer-packaging">${packText}</div>` : ''}
+                            <div style="display: flex; gap: 10px; margin-top: 5px; color: #9ca3af; font-size: 0.9rem;">
+                                ${beer.abv ? `<span>${beer.abv}% Vol</span>` : ''}
+                                ${beer.ibu ? `<span>${beer.ibu} IBU</span>` : ''}
+                            </div>
                         </div>
                         <div class="beer-id-badge" onclick="copyId('${beer.sharing_id}', event)" title="Clicca per copiare">
                             <span class="material-symbols-outlined" style="font-size:0.9rem">content_copy</span>
@@ -387,7 +405,9 @@
                 style_type: systemSelect.value,
                 style_name: styleName,
                 style_details: styleDetails,
-                packaging: getChipValue('group-packaging')
+                packaging: getChipValue('group-packaging'),
+                ibu: document.getElementById('beer-ibu').value || null,
+                abv: document.getElementById('beer-abv').value || null
             };
 
             let error = null;

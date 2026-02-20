@@ -1,0 +1,814 @@
+{
+  "guideline": "Unionbirrai - Birra dell'Anno 2026",
+  "version": "XXI Edizione",
+  "categories": [
+    {
+      "id": "UB-01",
+      "name": "Birre chiare, bassa fermentazione, basso grado alcolico, di ispirazione tedesca e ceca (German e Bohemian Pilsner)",
+      "vitals": {
+        "fermentation": "Bassa",
+        "og_plato": [10.5, 14.0],
+        "abv": [4.0, 5.2],
+        "srm": [3, 14],
+        "ebc": [6, 28],
+        "ibu": [15, 45]
+      },
+      "styles_reference": "German & Bohemian Pilsner",
+      "description": {
+        "appearance": "Colore che va dal giallo leggero al dorato chiaro, molto limpide. Schiuma bianca generalmente di buona persistenza.",
+        "aroma": "Distintivo aroma di cereali e malto. Profumi tipicamente speziati e floreali derivanti dall'uso di luppoli europei, possono essere presenti leggeri sentori sulfurei derivanti dai lieviti e dalle acque usate. No esteri fruttati, è tollerata una leggera nota di DMS per le German Pils e di diacetile per le Bohemian Pils.",
+        "flavor": "In queste birre la pulizia è indispensabile, possono essere morbide e maltate, oppure secche e con un finale più lungo. Il tratto distintivo del luppolo deve essere armonico e bilanciato, il retrogusto equilibrato e verso l'amaro. Di corpo medio, con una gassatura da media ad alta."
+      }
+    },
+    {
+      "id": "UB-02",
+      "name": "Italian Pilsner",
+      "vitals": {
+        "fermentation": "Bassa",
+        "og_plato": [10.5, 13.5],
+        "abv": [4.0, 5.5],
+        "srm": [3, 14],
+        "ebc": [6, 28],
+        "ibu": [20, 55]
+      },
+      "styles_reference": "German Pilsner",
+      "description": {
+        "appearance": "Colore che va dal giallo leggero al dorato chiaro. Una lieve velatura è accettata.",
+        "aroma": "Profilo aromatico caratterizzato dai luppoli tedeschi (speziato, floreale, erbaceo), accentuati dalla tecnica del dry hopping. Il carattere del malto (cereale, crosta di pane) è di supporto.",
+        "flavor": "Birra secca e luppolata, l'amaro deve essere da moderato ad alto ma mai tagliente o astringente, il finale deve essere pulito e invitare a un altro sorso. La carbonazione è da moderata a media."
+      }
+    },
+    {
+      "id": "UB-03",
+      "name": "Birre chiare, bassa fermentazione, basso grado alcolico, di ispirazione europea (European Lager, Helles, Dortmunder Export) e di ispirazione americana (American Lager)",
+      "vitals": {
+        "fermentation": "Bassa",
+        "og_plato": [10.5, 13.5],
+        "abv": [4.0, 5.8],
+        "srm": [2, 12],
+        "ebc": [4, 24],
+        "ibu": [8, 30]
+      },
+      "styles_reference": "European Lager, Helles, Dortmunder Export, American Lager",
+      "description": {
+        "appearance": "Colore che va dal paglierino al dorato. Molto limpide.",
+        "aroma": "Note di malto dolce, miele e cereale. Il profilo del luppolo va da basso a moderato, con profumi floreali ed erbacei.",
+        "flavor": "Il bilanciamento deve essere verso il malto, l'amaro non deve essere mai invadente ma servire a pulire il palato. Il finale deve essere morbido e rinfrescante. Di corpo da leggero a medio, gassatura media."
+      }
+    },
+    {
+      "id": "UB-04",
+      "name": "Birre chiare, bassa fermentazione, basso grado alcolico, caratterizzate da un evidente profilo luppolato (Hoppy Lager)",
+      "vitals": {
+        "fermentation": "Bassa",
+        "og_plato": [10.0, 14.5],
+        "abv": [4.0, 6.0],
+        "srm": [2, 14],
+        "ebc": [4, 28],
+        "ibu": [20, 50]
+      },
+      "styles_reference": "Lager con luppoli moderni",
+      "description": {
+        "appearance": "Colore da paglierino a dorato. Una leggera velatura dovuta alla luppolatura a freddo è ammessa.",
+        "aroma": "L'aroma deve essere dominato dai luppoli (anche non europei) con note agrumate, tropicali, resinose o fruttate, ma deve mantenere il carattere pulito della bassa fermentazione.",
+        "flavor": "L'impatto del luppolo è netto ma senza risultare eccessivamente amaro. Il supporto del malto è leggero per non appesantire la bevuta. Di corpo da leggero a medio, finale secco."
+      }
+    },
+    {
+      "id": "UB-05",
+      "name": "Birre chiare, alta fermentazione, basso grado alcolico di ispirazione angloamericana (Golden Ale, Cream Ale)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [10.0, 13.0],
+        "abv": [3.8, 5.5],
+        "srm": [2, 10],
+        "ebc": [4, 20],
+        "ibu": [10, 35]
+      },
+      "styles_reference": "Golden Ale, Cream Ale",
+      "description": {
+        "appearance": "Dal paglierino al dorato carico, generalmente limpide.",
+        "aroma": "Malto leggero con note di cereale o pane bianco. Gli esteri fruttati sono bassi o assenti. Il luppolo è moderato con note floreali o citriche.",
+        "flavor": "Birre rinfrescanti e di facile bevuta. Il corpo è leggero, l'amaro è moderato ma bilanciato. La carbonazione è medio-alta."
+      }
+    },
+    {
+      "id": "UB-06",
+      "name": "Birre chiare, alta fermentazione, basso grado alcolico, di ispirazione belga (Saison, Biere de Garde, Belge Blonde)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [10.5, 16.0],
+        "abv": [4.5, 7.5],
+        "srm": [3, 14],
+        "ebc": [6, 28],
+        "ibu": [15, 45]
+      },
+      "styles_reference": "Saison, Biere de Garde, Belge Blonde",
+      "description": {
+        "appearance": "Dal dorato scarico al dorato intenso. Spesso opalescenti. Schiuma abbondante e persistente.",
+        "aroma": "Profilo complesso dominato dai lieviti: esteri fruttati (agrumi, pera) e fenoli (pepe, spezie). Il luppolo può essere presente con note terrose o floreali.",
+        "flavor": "Spesso caratterizzate da un finale molto secco e una leggera acidità rinfrescante (soprattutto nelle Saison). Il grado alcolico può essere avvertibile ma ben integrato."
+      }
+    },
+    {
+      "id": "UB-07",
+      "name": "Birre chiare, alta fermentazione, basso grado alcolico, caratterizzate da un evidente profilo luppolato di ispirazione angloamericana (English e American Pale Ale)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [10.0, 15.0],
+        "abv": [4.0, 6.2],
+        "srm": [4, 14],
+        "ebc": [8, 28],
+        "ibu": [20, 55]
+      },
+      "styles_reference": "English & American Pale Ale",
+      "description": {
+        "appearance": "Dal dorato all'ambrato chiaro. Limpide, ma una leggera velatura è accettata nelle versioni americane.",
+        "aroma": "Luppolo evidente che può variare dal floreale/erbaceo (English) all'agrumato/tropicale (American). Supporto maltato che ricorda il biscotto o il caramello leggero.",
+        "flavor": "Amaro netto ma bilanciato dal malto. Corpo medio-leggero, finale pulito con ritorno di note luppolate."
+      }
+    },
+    {
+      "id": "UB-08",
+      "name": "Birre ambrate, bassa fermentazione, basso grado alcolico, di ispirazione tedesca (Vienna, Marzen, Keller, Rauch, International Amber Lager)",
+      "vitals": {
+        "fermentation": "Bassa",
+        "og_plato": [11.0, 15.0],
+        "abv": [4.5, 6.2],
+        "srm": [8, 22],
+        "ebc": [16, 44],
+        "ibu": [18, 30]
+      },
+      "styles_reference": "Vienna, Marzen, Keller, Rauch, International Amber Lager",
+      "description": {
+        "appearance": "Colore ambrato, da scarico a bruno. Spesso velate se servite come Keller.",
+        "aroma": "Dominato dal malto con note di crosta di pane, tostato e nocciola. Nelle Rauch è evidente ma bilanciato il sentore di fumo.",
+        "flavor": "Ricchezza maltata iniziale seguita da un amaro moderato che pulisce il finale. Corpo medio, molto scorrevoli."
+      }
+    },
+    {
+      "id": "UB-09",
+      "name": "Birre ambrate, alta fermentazione, basso grado alcolico, di ispirazione angloamericana (California Common, American Amber Ale, Irish Red Ale)",
+      "vitals": {
+        "fermentation": "Alta (o Ibrida)",
+        "og_plato": [10.5, 15.0],
+        "abv": [4.0, 6.2],
+        "srm": [9, 25],
+        "ebc": [18, 50],
+        "ibu": [20, 45]
+      },
+      "styles_reference": "California Common, American Amber Ale, Irish Red Ale",
+      "description": {
+        "appearance": "Da ambrato a ramato intenso. Buona limpidezza.",
+        "aroma": "Bilanciamento tra caramello/malto e luppolo. Nelle versioni americane spicca il luppolo agrumato.",
+        "flavor": "Corpo medio, gusto di malto evidente ma bilanciato da un amaro presente che persiste nel finale."
+      }
+    },
+    {
+      "id": "UB-10",
+      "name": "Birre ambrate, alta fermentazione, basso grado alcolico, caratterizzate da un evidente profilo luppolato di ispirazione americana (American IPA)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [13.0, 17.5],
+        "abv": [5.5, 7.5],
+        "srm": [6, 14],
+        "ebc": [12, 28],
+        "ibu": [40, 70]
+      },
+      "styles_reference": "American IPA",
+      "description": {
+        "appearance": "Dal dorato carico all'ambrato. Limpidezza variabile (velatura ammessa).",
+        "aroma": "Esplosione di luppolo: agrumi, resina, pino, frutti tropicali. Malto di supporto minimo.",
+        "flavor": "L'amaro è forte e deciso, ma non deve essere eccessivamente ruvido. Finale secco che mette in risalto il luppolo."
+      }
+    },
+    {
+      "id": "UB-11",
+      "name": "Birre ambrate, alta fermentazione, basso grado alcolico, caratterizzate da un evidente profilo luppolato di ispirazione anglosassone (English IPA)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [12.5, 16.0],
+        "abv": [5.0, 7.5],
+        "srm": [6, 18],
+        "ebc": [12, 36],
+        "ibu": [40, 60]
+      },
+      "styles_reference": "English IPA",
+      "description": {
+        "appearance": "Dal dorato all'ambrato carico. Generalmente limpida.",
+        "aroma": "Luppoli inglesi in evidenza con note terrose, floreali o erbacee. Il malto è presente con sentori di biscotto, caramello o crosta di pane.",
+        "flavor": "L'amaro è deciso ma bilanciato da una base maltata solida. Il finale è secco con un ritorno aromatico di luppolo e malto."
+      }
+    },
+    {
+      "id": "UB-12",
+      "name": "Birre ambrate e scure, alta fermentazione, basso grado alcolico, di ispirazione angloamericana (Mild, British Bitter, Extra Special Bitter, Brown Ale, English e American Amber Ale)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [8.0, 15.0],
+        "abv": [3.0, 6.2],
+        "srm": [10, 35],
+        "ebc": [20, 70],
+        "ibu": [15, 50]
+      },
+      "styles_reference": "Mild, British Bitter, ESB, Brown Ale, Amber Ale",
+      "description": {
+        "appearance": "Dal ramato al marrone scuro. Limpidezza da buona a ottima.",
+        "aroma": "Note di caramello, toffee, nocciola o cioccolato leggero. Il luppolo è da basso a moderato con note floreali o speziate.",
+        "flavor": "Prevalenza dei toni maltati, corpo da leggero a medio. Amaro moderato per bilanciare la dolcezza del malto."
+      }
+    },
+    {
+      "id": "UB-13",
+      "name": "Birre ambrate e scure, alta fermentazione, basso grado alcolico, di ispirazione belga (Belge Ambrée, Belge Brune)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [11.0, 16.5],
+        "abv": [4.5, 7.5],
+        "srm": [10, 35],
+        "ebc": [20, 70],
+        "ibu": [15, 30]
+      },
+      "styles_reference": "Belge Ambrée, Belge Brune",
+      "description": {
+        "appearance": "Ambrato carico a bruno. Schiuma beige, persistente.",
+        "aroma": "Esteri fruttati (frutta matura, uvetta) e fenoli (leggera speziatura). Malto con note di caramello e zucchero candito.",
+        "flavor": "Morbida e mediamente dolce, con un finale che non deve risultare stucchevole. Amaro basso."
+      }
+    },
+    {
+      "id": "UB-14",
+      "name": "Birre scure, alta fermentazione, basso grado alcolico, di ispirazione belga (Dubbel, Belgian Dark Strong Ale)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [15.5, 22.0],
+        "abv": [6.0, 10.0],
+        "srm": [15, 45],
+        "ebc": [30, 90],
+        "ibu": [15, 35]
+      },
+      "styles_reference": "Dubbel, Belgian Dark Strong Ale",
+      "description": {
+        "appearance": "Da ambrato scuro a bruno ramato. Spesso velate.",
+        "aroma": "Complesso, con ricche note di malto, esteri (prugna, fico, uvetta) e spezie derivanti dal lievito.",
+        "flavor": "Piena e maltata con una moderata alcolicità che scalda il palato. Finale secco o moderatamente dolce."
+      }
+    },
+    {
+      "id": "UB-15",
+      "name": "Birre scure, bassa fermentazione, basso grado alcolico, di ispirazione tedesca (Schwarz, Dunkel)",
+      "vitals": {
+        "fermentation": "Bassa",
+        "og_plato": [11.0, 14.0],
+        "abv": [4.0, 6.0],
+        "srm": [15, 50],
+        "ebc": [30, 100],
+        "ibu": [15, 35]
+      },
+      "styles_reference": "Schwarz, Dunkel",
+      "description": {
+        "appearance": "Marrone scuro fino a nero quasi impenetrabile. Limpidezza buona. Schiuma persistente da bianca a crema.",
+        "aroma": "Malto tostato con note di cioccolato e caffè, senza sentori di bruciato aggressivo. Luppolo molto basso.",
+        "flavor": "Maltato e morbido, con un finale pulito. L'amaro deriva sia dal luppolo che dai malti tostati."
+      }
+    },
+    {
+      "id": "UB-16",
+      "name": "Birre scure, alta fermentazione, basso grado alcolico, di ispirazione angloamericana (Porter, Stout)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [9.0, 15.0],
+        "abv": [3.5, 6.5],
+        "srm": [25, 80],
+        "ebc": [50, 160],
+        "ibu": [20, 55]
+      },
+      "styles_reference": "Porter, Stout",
+      "description": {
+        "appearance": "Dal marrone molto scuro al nero opaco. Schiuma da beige a marrone chiaro.",
+        "aroma": "Tostato evidente: caffè, cacao amaro, liquirizia. Può esserci una leggera nota di luppolo.",
+        "flavor": "Secco o moderatamente dolce (Milk Stout), dominato dai malti scuri. L'amaro è bilanciato dalla morbidezza del corpo."
+      }
+    },
+    {
+      "id": "UB-17",
+      "name": "Birre scure, alta fermentazione, basso grado alcolico, caratterizzate da un evidente profilo luppolato (Black IPA)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [14.0, 18.0],
+        "abv": [5.5, 8.5],
+        "srm": [30, 80],
+        "ebc": [60, 160],
+        "ibu": [40, 80]
+      },
+      "styles_reference": "Black IPA",
+      "description": {
+        "appearance": "Nera, limpida o leggermente velata. Schiuma persistente.",
+        "aroma": "Forte carattere luppolato (agrumi, resina) combinato con leggere note tostate di caffè o cioccolato.",
+        "flavor": "L'amaro del luppolo è dominante, supportato da un corpo medio. Le note tostate non devono essere eccessivamente astringenti."
+      }
+    },
+    {
+      "id": "UB-18",
+      "name": "Birre con frumento, alta fermentazione, basso grado alcolico, di ispirazione tedesca (Weizen, Dunkelweizen, Weizenbock)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [11.0, 18.5],
+        "abv": [4.3, 8.5],
+        "srm": [3, 25],
+        "ebc": [6, 50],
+        "ibu": [8, 20]
+      },
+      "styles_reference": "Weizen, Dunkelweizen, Weizenbock",
+      "description": {
+        "appearance": "Da giallo paglierino a bruno. Tipicamente torbide. Schiuma molto abbondante e persistente.",
+        "aroma": "Caratterizzato da fenoli (chiodo di garofano) ed esteri (banana). Malto di frumento evidente.",
+        "flavor": "Fresco e vivace, con una carbonazione elevata. Amaro molto basso, finale leggermente acidulo."
+      }
+    },
+    {
+      "id": "UB-19",
+      "name": "Birre con frumento, alta fermentazione, basso grado alcolico, di ispirazione belga (Blanche, Witbier)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [11.0, 13.0],
+        "abv": [4.5, 5.5],
+        "srm": [2, 5],
+        "ebc": [4, 10],
+        "ibu": [8, 20]
+      },
+      "styles_reference": "Blanche, Witbier",
+      "description": {
+        "appearance": "Paglierino molto chiaro, molto torbida. Schiuma bianca densa.",
+        "aroma": "Speziato (coriandolo) e agrumato (buccia d'arancia). Note di frumento non maltato.",
+        "flavor": "Leggera e rinfrescante, con un finale secco e una punta di acidità citrica."
+      }
+    },
+    {
+      "id": "UB-20",
+      "name": "Birre chiare e ambrate, alta o bassa fermentazione, basso grado alcolico, con uso di segale e altri cereali (Rye Beer, Wheat Beer, Specialty Grain Beer)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": [10.0, 16.0],
+        "abv": [4.0, 7.0],
+        "srm": [3, 20],
+        "ebc": [6, 40],
+        "ibu": [10, 40]
+      },
+      "styles_reference": "Rye Beer, Wheat Beer",
+      "description": {
+        "appearance": "Variabile in base ai cereali usati.",
+        "aroma": "Il cereale caratterizzante (es. segale con note speziate/piccanti) deve essere chiaramente percepibile.",
+        "flavor": "Profilo unico dato dal cereale speciale, con un corpo che può variare dal setoso al ruvido."
+      }
+    },
+    {
+      "id": "UB-21",
+      "name": "Birre chiare, ambrate e scure, bassa fermentazione, alto grado alcolico di ispirazione tedesca (Bock, Doppelbock, Eisbock, Heller Bock, Maibock)",
+      "vitals": {
+        "fermentation": "Bassa",
+        "og_plato": [16.0, 24.0],
+        "abv": [6.3, 12.0],
+        "srm": [4, 40],
+        "ebc": [8, 80],
+        "ibu": [15, 40]
+      },
+      "styles_reference": "Bock, Doppelbock, Eisbock, Heller Bock, Maibock",
+      "description": {
+        "appearance": "Da dorato carico a bruno scuro. Schiuma persistente e compatta.",
+        "aroma": "Dominato dal malto con note di crosta di pane, tostato, caramello o frutta secca. Alcolicità pulita e scaldante nelle versioni più forti.",
+        "flavor": "Corpo pieno e strutturato. Il dolce del malto deve essere bilanciato da un amaro moderato. Finale morbido e appagante."
+      }
+    },
+    {
+      "id": "UB-22",
+      "name": "Birre chiare, alta fermentazione, alto grado alcolico di ispirazione belga (Belgian Blonde Strong Ale, Belgian Tripel)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [16.0, 21.0],
+        "abv": [7.0, 10.0],
+        "srm": [3, 10],
+        "ebc": [6, 20],
+        "ibu": [20, 45]
+      },
+      "styles_reference": "Belgian Blonde Strong Ale, Belgian Tripel",
+      "description": {
+        "appearance": "Giallo dorato, spesso con riflessi aranciati. Schiuma bianca, densa e persistente.",
+        "aroma": "Complesso con note di agrumi, frutta a pasta gialla e spezie (pepe, chiodo di garofano) derivanti dal lievito. Alcol ben integrato.",
+        "flavor": "Inizialmente dolce ma con un finale decisamente secco. L'amaro è presente e aiuta la bevibilità nonostante l'alto grado alcolico."
+      }
+    },
+    {
+      "id": "UB-23",
+      "name": "Birre ambrate e scure, alta fermentazione, alto grado alcolico di ispirazione belga (Belgian Dark Strong Ale, Belgian Quad)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [18.0, 26.0],
+        "abv": [8.0, 12.5],
+        "srm": [15, 45],
+        "ebc": [30, 90],
+        "ibu": [20, 45]
+      },
+      "styles_reference": "Belgian Dark Strong Ale, Belgian Quad",
+      "description": {
+        "appearance": "Da ambrato carico a bruno scuro. Spesso con riflessi rubino.",
+        "aroma": "Ricco e intenso: uvetta, fichi secchi, prugne e caramello scuro. Note speziate e alcoliche evidenti.",
+        "flavor": "Corpo molto strutturato, dolcezza complessa bilanciata da una leggera nota amara e dal calore dell'alcol."
+      }
+    },
+    {
+      "id": "UB-24",
+      "name": "Birre chiare, ambrate e scure, alta fermentazione, alto grado alcolico di ispirazione angloamericana (Strong Ale, Old Ale, Stock Ale)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [16.0, 24.0],
+        "abv": [7.0, 11.0],
+        "srm": [6, 35],
+        "ebc": [12, 70],
+        "ibu": [30, 60]
+      },
+      "styles_reference": "Strong Ale, Old Ale, Stock Ale",
+      "description": {
+        "appearance": "Da dorato carico a bruno. Spesso limpide.",
+        "aroma": "Malto intenso (caramello, melassa), frutta sotto spirito e leggera ossidazione nobile nelle versioni invecchiate.",
+        "flavor": "Gusto pieno, dolcezza maltata evidente e finale lungo e complesso. L'amaro serve a bilanciare la struttura."
+      }
+    },
+    {
+      "id": "UB-25",
+      "name": "Birre chiare, ambrate e scure, alta fermentazione, alto grado alcolico, caratterizzate da un evidente profilo luppolato (Double IPA, Imperial IPA)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [17.0, 22.0],
+        "abv": [7.5, 10.5],
+        "srm": [5, 15],
+        "ebc": [10, 30],
+        "ibu": [60, 100]
+      },
+      "styles_reference": "Double IPA, Imperial IPA",
+      "description": {
+        "appearance": "Da dorato ad ambrato. Velatura accettata.",
+        "aroma": "Intensissimo di luppolo (frutta tropicale, agrumi, resina). Malto presente solo come supporto strutturale.",
+        "flavor": "Amaro imponente ma armonioso. L'alcol sostiene la luppolatura senza risultare bruciante. Finale secco."
+      }
+    },
+    {
+      "id": "UB-26",
+      "name": "Birre ambrate e scure, alta fermentazione, alto grado alcolico (Barley Wine, Wheat Wine, Imperial Stout)",
+      "vitals": {
+        "fermentation": "Alta",
+        "og_plato": [20.0, 35.0],
+        "abv": [8.5, 16.0],
+        "srm": [10, 100],
+        "ebc": [20, 200],
+        "ibu": [35, 100]
+      },
+      "styles_reference": "Barley Wine, Wheat Wine, Imperial Stout",
+      "description": {
+        "appearance": "Da ambrato carico a nero impenetrabile. Schiuma variabile.",
+        "aroma": "Estrema complessità: frutta secca, cioccolato, caffè, liquirizia, note vinose e calore alcolico.",
+        "flavor": "Viscosa e densa. Esplosione di sapori tostati o maltati. Finale persistente e caldo."
+      }
+    },
+    {
+      "id": "UB-27",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l'aggiunta di spezie e/o erbe (Spiced Beer, Herb Beer)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Variabile in base alla base utilizzata.",
+        "aroma": "Le spezie o le erbe aggiunte devono essere distintamente percepibili e in armonia con la birra base.",
+        "flavor": "Equilibrio tra la componente speziata/erbacea e il carattere brassicolo. Non deve risultare stucchevole o medicinale."
+      }
+    },
+    {
+      "id": "UB-28",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l'aggiunta di caffè e/o cacao (Coffee Beer, Chocolate Beer)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Generalmente da ambrate a scure.",
+        "aroma": "Netto sentore di caffè o cioccolato, integrato con le note tostate dei malti.",
+        "flavor": "Richiamo fedele all'ingrediente aggiunto. Amaro da torrefazione bilanciato."
+      }
+    },
+    {
+      "id": "UB-29",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l'aggiunta di frutta (Fruit Beer)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Può assumere i colori della frutta utilizzata.",
+        "aroma": "Profilo fruttato fresco o sciroppato, chiaramente identificabile.",
+        "flavor": "L'apporto della frutta (acidità, dolcezza) deve arricchire la birra senza coprirla completamente."
+      }
+    },
+    {
+      "id": "UB-30",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l'aggiunta di miele (Honey Beer)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Da dorato a bruno.",
+        "aroma": "Note floreali e caratteristiche del tipo di miele usato. Evitare eccessi di dolcezza olfattiva.",
+        "flavor": "Il miele deve conferire carattere ma la birra deve rimanere tale. Spesso il finale è più secco del previsto causa fermentescibilità del miele."
+      }
+    },
+    {
+      "id": "UB-31",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l’aggiunta di verdure (Vegetable Beer)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Variabile a seconda della base e della verdura utilizzata (es. zucca, radicchio, carota).",
+        "aroma": "L'aroma della verdura deve essere percettibile, armonioso e non sovrastante rispetto alla base brassicola.",
+        "flavor": "L’ingrediente vegetale deve apportare una caratterizzazione netta ma equilibrata. Evitare note vegetali sgradevoli o eccessivamente terrose."
+      }
+    },
+    {
+      "id": "UB-32",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l’uso di castagne (Chestnut Beer)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Variabile. Spesso da ambrato a scuro.",
+        "aroma": "La castagna deve essere percepibile nelle sue diverse forme (secca, farina, caldarrosta, affumicata), integrandosi con il profilo maltato.",
+        "flavor": "Gusto caratteristico di castagna che conferisce una certa morbidezza e complessità. L'eventuale affumicatura (se usata) deve essere ben bilanciata."
+      }
+    },
+    {
+      "id": "UB-33",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l’aggiunta di cereali speciali (Specialty Grain Beer)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Variabile a seconda del cereale (es. farro, riso, grano saraceno).",
+        "aroma": "Il cereale aggiunto deve arricchire il profilo olfattivo con note proprie (es. nocciola, rustico, terroso).",
+        "flavor": "Il cereale deve influenzare sia il gusto che la sensazione boccale (corpo, setosità o ruvidità)."
+      }
+    },
+    {
+      "id": "UB-34",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, caratterizzate dall’uso di affumicatura (Rauch, Smoked Beer)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Da chiara a scura.",
+        "aroma": "Sentore affumicato netto (legna, speck, scamorza) derivante dai malti trattati con fumo.",
+        "flavor": "L'affumicato deve essere presente ma non sovrastante (non deve ricordare il posacenere o la plastica bruciata). Bilanciamento con la base maltata."
+      }
+    },
+    {
+      "id": "UB-35",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, affinate in legno (Wood e Barrel Aged Beer)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Variabile. Spesso mostra una leggera ossidazione nobile.",
+        "aroma": "Note di legno (vaniglia, tannino, cocco) ed eventualmente del distillato o vino precedentemente contenuto nella botte.",
+        "flavor": "Complessità elevata dovuta al passaggio in legno. I tannini devono essere morbidi, l'alcolicità spesso importante ma integrata."
+      }
+    },
+    {
+      "id": "UB-36",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l’aggiunta di altri ingredienti di origine vegetale (es. fiori, radici, foglie)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Nessun riferimento specifico.",
+        "aroma": "L'ingrediente speciale (es. genziana, ibisco, canapa) deve essere identificabile e armonico.",
+        "flavor": "Profilo gustativo unico. L'equilibrio tra l'ingrediente vegetale e la birra è essenziale per la piacevolezza."
+      }
+    },
+    {
+      "id": "UB-37",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, con l’aggiunta di ingredienti di origine animale (es. lattosio, ostriche, miele in concorso con altri ingredienti)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Variabile.",
+        "aroma": "L'ingrediente deve apportare una sfumatura specifica (es. sapidità per le ostriche, cremosità olfattiva per il lattosio).",
+        "flavor": "L'ingrediente animale deve integrare la ricetta senza risultare slegato dal contesto brassicolo."
+      }
+    },
+    {
+      "id": "UB-38",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, prodotte con cereali maltati e non, di ispirazione storica (Historical Beer)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Fedele allo stile storico di riferimento (es. Gose, Grätzer, Lichtenhainer).",
+        "aroma": "Riproduzione accurata del profilo aromatico d'epoca.",
+        "flavor": "Coerente con le tecniche e gli ingredienti della tradizione storica dichiarata."
+      }
+    },
+    {
+      "id": "UB-39",
+      "name": "Birre chiare, ambrate e scure, alta fermentazione, basso grado alcolico, con evidente carattere acido (Sour Ale)",
+      "vitals": {
+        "fermentation": "Alta / Mista",
+        "og_plato": [8.0, 14.0],
+        "abv": [3.0, 6.0],
+        "srm": [2, 15],
+        "ebc": [4, 30],
+        "ibu": [0, 15]
+      },
+      "description": {
+        "appearance": "Spesso velate o torbide. Colore variabile.",
+        "aroma": "Note acide, lattiche o citriche. Può esserci una componente 'funky' (spontanea o Brett) se dichiarata.",
+        "flavor": "Acidità netta e rinfrescante. L'amaro del luppolo è quasi nullo per non entrare in contrasto con l'acido."
+      }
+    },
+    {
+      "id": "UB-40",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, alto grado alcolico, con evidente carattere acido (Strong Sour Ale)",
+      "vitals": {
+        "fermentation": "Alta / Mista",
+        "og_plato": [15.0, 22.0],
+        "abv": [6.5, 11.0],
+        "srm": [5, 40],
+        "ebc": [10, 80],
+        "ibu": [0, 20]
+      },
+      "description": {
+        "appearance": "Da dorato a bruno.",
+        "aroma": "Complessità data da acidità, calore alcolico e possibili note di botte o frutta.",
+        "flavor": "Struttura importante dove l'acidità bilancia il corpo e la dolcezza residua dei malti."
+      }
+    },
+    {
+      "id": "UB-41",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, basso grado alcolico, prodotte con cereali non maltati, di ispirazione locale (es. Italian Wheat Beer)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": [10.0, 14.0],
+        "abv": [4.0, 6.0],
+        "srm": [2, 15],
+        "ebc": [4, 30],
+        "ibu": [10, 30]
+      },
+      "description": {
+        "appearance": "Da paglierino a dorato, spesso velate a causa dei cereali non maltati.",
+        "aroma": "Note fresche di cereale, crosta di pane. Eventuali leggere speziature se previste dalla ricetta locale.",
+        "flavor": "Grande freschezza e bevibilità. Il cereale non maltato dona una sensazione palatale snella ma non vuota."
+      }
+    },
+    {
+      "id": "UB-42",
+      "name": "White Italian Grape Ale (IGA) - Birre chiare e ambrate, alta o bassa fermentazione, da basso ad alto grado alcolico, con uso di uva bianca (frutto, mosto, vinacce)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Dal dorato al ramato. Schiuma bianca, trasparenti o leggermente velate.",
+        "aroma": "Il carattere vinoso deve essere piacevole e non ossidato. Le note di uva bianca devono essere apprezzabili ma non invasive.",
+        "flavor": "L'apporto dell'uva può variare dal tropicale alla pasta bianca (albicocca, pesca). Corpo presente, finale secco."
+      }
+    },
+    {
+      "id": "UB-43",
+      "name": "Red Italian Grape Ale (IGA) - Birre chiare, ambrate e scure, alta o bassa fermentazione, da basso ad alto grado alcolico, con uso di uva rossa (frutto, mosto, vinacce)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Da ambrato a rubino/violaceo. La schiuma può avere riflessi rosati.",
+        "aroma": "Vinosità caratterizzata da frutti rossi (ciliegia, amarena, prugna). Complessità elevata.",
+        "flavor": "Corpo più presente rispetto alle White IGA, possibile leggera trama tannica derivante dalle vinacce. Grande equilibrio."
+      }
+    },
+    {
+      "id": "UB-44",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, da basso ad alto grado alcolico, con uso di uva o derivati, caratterizzate da evidente acidità (Sour IGA)",
+      "vitals": {
+        "fermentation": "Alta, Mista o Spontanea",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Variabile in base all'uva usata.",
+        "aroma": "Incontro tra il profilo vinoso e quello lattico/acetico/funky. Grande ampiezza olfattiva.",
+        "flavor": "Acidità rinfrescante che esalta la parte fruttata e vinosa. Spesso molto secche."
+      }
+    },
+    {
+      "id": "UB-45",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, analcoliche e a basso contenuto di alcol (Alcohol Free e Low Alcohol Beer)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": [0.0, 1.2],
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Variabile in base allo stile base di riferimento.",
+        "aroma": "Profilo di malto e luppolo, non deve risultare eccessivamente dolce (worty).",
+        "flavor": "L'amaro del luppolo deve essere presente se lo stile lo richiede, ma bilanciato per non risultare astringente data la mancanza o limitata presenza della componente alcolica. La sensazione palatale deve ritrovare un corpo che sarà inevitabilmente più leggero rispetto a una birra standard, ma non deve risultare \"acquoso\" (watery) o vuoto."
+      }
+    },
+    {
+      "id": "UB-46",
+      "name": "Birre chiare, ambrate e scure, alta o bassa fermentazione, da basso ad alto grado alcolico di ispirazione libera e non rientranti in nessuna delle precedenti categoria (Extraordinary Ale / Extraordinary Lager)",
+      "vitals": {
+        "fermentation": "Alta o Bassa",
+        "og_plato": "nessun riferimento",
+        "abv": "nessun riferimento",
+        "srm": "nessun riferimento",
+        "ebc": "nessun riferimento",
+        "ibu": "nessun riferimento"
+      },
+      "description": {
+        "appearance": "Nessun riferimento specifico.",
+        "aroma": "In questa categoria rientrano tutte quelle birre che non trovano collocazione, quindi non iscrivibili in altre categorie, per modalità di produzione o utilizzo di ingredienti speciali che le caratterizzano in modo unico.",
+        "flavor": "L'equilibrio e la piacevolezza complessiva rimangono i criteri cardine del giudizio. La sensazione palatale deve ritrovare un corpo che sarà inevitabilmente più leggero rispetto a una birra standard, ma non deve risultare \"acquoso\" (watery) o vuoto."
+      }
+    }
+  ]
+}

@@ -187,6 +187,13 @@
             document.getElementById('preview-name').textContent = data.name;
             document.getElementById('preview-producer').textContent = data.producer;
             document.getElementById('preview-style').textContent = data.style_name;
+            
+            const beerInfo = document.createElement('div');
+            beerInfo.style.cssText = 'display: flex; gap: 10px; margin-top: 5px; color: #9ca3af; font-size: 0.9rem;';
+            if(data.abv) beerInfo.innerHTML += `<span>${data.abv}% Vol</span>`;
+            if(data.ibu) beerInfo.innerHTML += `<span>${data.ibu} IBU</span>`;
+            document.getElementById('preview-style').after(beerInfo);
+
             document.getElementById('beer-preview-card').style.display = 'block';
 
             localStorage.setItem('btc_context_beer', JSON.stringify(data));
