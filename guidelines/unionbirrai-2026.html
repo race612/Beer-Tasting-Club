@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unionbirrai 2026 - BTC</title>
+    <link rel="stylesheet" href="../css/style.css?v=0.9.9">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../css/icomoon.css">
+    <style>
+        /* (Ricopia lo stile dalla versione precedente se non ce l'hai, 
+            è lungo e non voglio intasare la chat, 
+            l'importante è che ci sia la classe .detail-overlay) */
+        
+        /* SEARCH BAR */
+        .search-container { position: sticky; top: 0; background: #111827; padding: 10px 0; z-index: 10; margin-bottom: 10px; border-bottom: 1px solid #374151; }
+        .search-box { display: flex; align-items: center; background: #1f2937; border: 1px solid #374151; border-radius: 8px; padding: 0 10px; margin-bottom: 10px; }
+        .search-box input { background: transparent; border: none; color: white; padding: 12px; width: 100%; outline: none; font-size: 1rem; }
+        .search-icon { color: #9ca3af; }
+        .category-select { width: 100%; background: #1f2937; color: white; border: 1px solid #374151; padding: 10px; border-radius: 8px; font-size: 0.95rem; outline: none; cursor: pointer; }
+        /* LISTA STILI */
+        .category-header { padding: 15px; background: #283040; color: var(--primary-color); font-weight: bold; border-radius: 8px; margin-top: 15px; margin-bottom: 5px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .style-item { padding: 15px; border-bottom: 1px solid #374151; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #111827; transition: background 0.2s; }
+        .style-item:active { background: rgba(245, 158, 11, 0.1); }
+        .style-code { font-family: monospace; background: #374151; padding: 2px 6px; border-radius: 4px; margin-right: 10px; color: #f59e0b; font-weight: bold; }
+        .style-name { color: #e5e7eb; font-size: 1rem; }
+        /* OVERLAY DETTAGLIO (COMPATTO) */
+        .detail-overlay { position: fixed; top: 0; height: 100%; background: #111827; z-index: 1000; overflow-y: auto; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; width: 100%; left: 0; }
+
+        .detail-overlay.active { transform: translateX(0); }
+        .detail-header { position: sticky; top: 0; background: rgba(17, 24, 39, 0.95); backdrop-filter: blur(5px); padding: 15px; border-bottom: 1px solid #374151; display: flex; align-items: center; gap: 15px; z-index: 20; }
+        .detail-content { padding: 20px; padding-bottom: 80px; }
+        /* VITALS GRID */
+        .vitals-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px; margin-bottom: 25px; background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; }
+        .vital-box { text-align: center; }
+        .vital-label { font-size: 0.75rem; color: #9ca3af; display: block; margin-bottom: 2px; }
+        .vital-val { font-size: 0.85rem; font-weight: bold; color: white; display: block; white-space: nowrap; }
+        /* SEZIONI TESTO */
+        .bjcp-section { margin-bottom: 25px; }
+        .bjcp-label { color: var(--primary-color); font-weight: bold; font-size: 0.9rem; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #374151; padding-bottom: 5px; }
+        /* Classe per icone dentro le label */
+        .bjcp-label [class^="icon-"], .bjcp-label .material-symbols-outlined { font-size: 1.2rem; }
+        .bjcp-text { color: #d1d5db; font-size: 0.95rem; line-height: 1.6; margin: 0; text-align: justify; }
+        .scroll-anchor { scroll-margin-top: 140px; } 
+
+        /* DESKTOP LAYOUT - 2 COLONNE */
+        @media (min-width: 900px) {
+            .bjcp-layout {
+                display: flex;
+                height: calc(100vh - 70px); /* Altezza meno l'header bar */
+            }
+            .container {
+                width: 45%;
+                flex-shrink: 0;
+                overflow-y: auto;
+                border-right: 1px solid #374151;
+            }
+            .detail-overlay {
+                position: static;
+                transform: none !important; /* Sovrascrive la trasformazione inline */
+                width: 55%;
+                height: 100%;
+                display: block;
+                border-left: none;
+            }
+            .detail-header .btn-icon {
+                display: none; /* Nasconde il tasto 'back' su desktop */
+            }
+            .detail-overlay:not(.active) {
+                display: none; /* Nasconde la colonna dei dettagli se non attiva */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bjcp-layout">
+        <div class="container">
+            <div class="header-bar">
+                <a href="../linee-guida.html" class="header-link"><span class="material-symbols-outlined">arrow_back</span> Linee Guida</a>
+                <img src="../assets/logo.png" alt="Logo" class="header-logo">
+            </div>
+            <h2 style="text-align: center; margin-bottom: 10px;">Unionbirrai 2026</h2>
+            <div class="controls-container">
+                <div class="search-box">
+                    <span class="material-symbols-outlined search-icon">search</span>
+                    <input type="text" id="search-input" placeholder="Cerca categoria (es. Pils, IGA)...">
+                </div>
+                 <select id="category-select" class="category-select" style="display: none;"><option value="all">Tutte le Categorie</option></select>
+            </div>
+            <div id="ub-list-container"><div style="text-align: center; padding: 40px; color: #6b7280;"><span class="material-symbols-outlined" style="animation: spin 1s infinite; font-size: 2rem;">refresh</span><br>Lettura dati...</div></div>
+        </div>
+
+        <div id="detail-overlay" class="detail-overlay">
+            <div class="detail-header">
+                <button id="close-detail-btn" class="btn btn-icon" style="background:transparent; border:none; color:white;"><span class="material-symbols-outlined" style="font-size: 2rem;">arrow_back</span></button>
+                <div style="flex: 1; overflow: hidden;">
+                    <span id="detail-code" style="color: var(--primary-color); font-weight:bold; font-size: 0.9rem;">CODE</span>
+                    <h3 id="detail-name" style="margin:0; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Nome Categoria</h3>
+                </div>
+            </div>
+            <div class="detail-content">
+                <div class="vitals-grid">
+                    <div class="vital-box"><span class="vital-label">OG (°P)</span><span class="vital-val" id="d-og">-</span></div>
+                    <div class="vital-box"><span class="vital-label">ABV</span><span class="vital-val" id="d-abv">-</span></div>
+                    <div class="vital-box"><span class="vital-label">IBU</span><span class="vital-val" id="d-ibu">-</span></div>
+                    <div class="vital-box"><span class="vital-label">SRM</span><span class="vital-val" id="d-srm">-</span></div>
+                    <div class="vital-box"><span class="vital-label">EBC</span><span class="vital-val" id="d-ebc">-</span></div>
+                    <div class="vital-box"><span class="vital-label">Ferm.</span><span class="vital-val" id="d-ferm">-</span></div>
+                </div>
+                <div id="dynamic-details-container">
+                    <div class="placeholder-content" style="text-align: center; padding: 60px 20px; color: #6b7280;">
+                        <span class="material-symbols-outlined" style="font-size: 3rem; margin-bottom: 10px;">rule_folder</span>
+                        <p>Seleziona una categoria dalla lista per vederne i dettagli.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        const container = document.getElementById('ub-list-container');
+        const searchInput = document.getElementById('search-input');
+        const overlay = document.getElementById('detail-overlay');
+        const detailsContainer = document.getElementById('dynamic-details-container');
+        const vitalsGrid = document.querySelector('.vitals-grid');
+        const detailHeaderContent = document.querySelector('.detail-header > div');
+
+        let allCategories = [];
+
+        const isDesktop = () => window.innerWidth >= 900;
+
+        function showPlaceholder(show) {
+            const placeholder = detailsContainer.querySelector('.placeholder-content');
+            if (placeholder) placeholder.style.display = show ? 'block' : 'none';
+            vitalsGrid.style.display = show ? 'none' : 'grid';
+            detailHeaderContent.style.visibility = show ? 'hidden' : 'visible';
+        }
+
+        async function loadUbData() {
+            try {
+                const response = await fetch('../data/unionbirrai-2026.json');
+                if (!response.ok) throw new Error("File JSON non trovato in data/unionbirrai-2026.json");
+                const data = await response.json();
+                if (data.categories) {
+                    allCategories = data.categories;
+                    renderList(allCategories);
+                } else {
+                    throw new Error("Struttura JSON non valida");
+                }
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = `<div style="text-align:center; padding:20px; color:#ef4444;">Errore: ${error.message}</div>`;
+            }
+        }
+
+        function renderList(categories, filterText = "") {
+            container.innerHTML = "";
+            let filteredCategories = categories;
+            if (filterText) {
+                const term = filterText.toLowerCase();
+                filteredCategories = categories.filter(cat => 
+                    cat.name.toLowerCase().includes(term) || 
+                    cat.id.toLowerCase().includes(term) ||
+                    (cat.styles_reference && cat.styles_reference.toLowerCase().includes(term))
+                );
+            }
+
+            if (filteredCategories.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:#6b7280; margin-top:20px;">Nessuna categoria trovata.</div>`;
+                return;
+            }
+
+            filteredCategories.forEach(cat => createCategoryItem(cat, container));
+        }
+
+        function createCategoryItem(cat, parent) {
+            const div = document.createElement('div');
+            div.className = 'style-item';
+            div.innerHTML = `<div><span class="style-code">${cat.id}</span><span class="style-name">${cat.name}</span></div><span class="material-symbols-outlined" style="color:#6b7280;">chevron_right</span>`;
+            div.addEventListener('click', () => openDetail(cat));
+            parent.appendChild(div);
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            renderList(allCategories, e.target.value);
+        });
+
+        function getRange(arr) {
+            if (!arr || arr.length === 0) return '-';
+            if (typeof arr === 'string') return arr;
+            return `${arr[0]} - ${arr[1]}`;
+        }
+
+        function createTextSection(iconClass, title, text) {
+            if (!text) return '';
+            const iconHTML = iconClass.startsWith('icon-')
+                ? `<span class="${iconClass}" style="font-size:1.2rem;"></span>`
+                : `<span class="material-symbols-outlined" style="font-size:1.2rem;">${iconClass}</span>`;
+            return `
+                <div class="bjcp-section">
+                    <div class="bjcp-label">${iconHTML} ${title}</div>
+                    <p class="bjcp-text">${text}</p>
+                </div>`;
+        }
+
+        function openDetail(cat) {
+            showPlaceholder(false);
+
+            document.getElementById('detail-code').textContent = cat.id;
+            document.getElementById('detail-name').textContent = cat.name;
+
+            // Vitals
+            const vitals = cat.vitals || {};
+            document.getElementById('d-og').textContent = getRange(vitals.og_plato);
+            document.getElementById('d-abv').textContent = getRange(vitals.abv);
+            document.getElementById('d-ibu').textContent = getRange(vitals.ibu);
+            document.getElementById('d-srm').textContent = getRange(vitals.srm);
+            document.getElementById('d-ebc').textContent = getRange(vitals.ebc);
+            document.getElementById('d-ferm').textContent = vitals.fermentation || '-';
+
+            // Description
+            const desc = cat.description || {};
+            let html = createTextSection('icon-eye', 'Aspetto', desc.appearance);
+            html += createTextSection('icon-nose', 'Aroma', desc.aroma);
+            html += createTextSection('icon-tongue', 'Gusto', desc.flavor);
+            html += createTextSection('label', 'Stili di Riferimento', cat.styles_reference);
+            
+            detailsContainer.innerHTML = html;
+            overlay.classList.add('active');
+
+            if (!isDesktop()) {
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        document.getElementById('close-detail-btn').addEventListener('click', () => {
+            overlay.classList.remove('active');
+            if (!isDesktop()) {
+                document.body.style.overflow = '';
+            }
+        });
+
+        if (isDesktop()) {
+            showPlaceholder(true);
+            overlay.classList.add('active');
+        } else {
+            showPlaceholder(false);
+        }
+
+        loadUbData();
+    </script>
+</body>
+</html>
