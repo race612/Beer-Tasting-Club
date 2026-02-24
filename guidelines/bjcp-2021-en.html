@@ -94,8 +94,9 @@
             <div class="detail-header">
                 <button id="close-detail-btn" class="btn btn-icon" style="background:transparent; border:none; color:white;"><span class="material-symbols-outlined" style="font-size: 2rem;">arrow_back</span></button>
                 <div style="flex: 1; overflow: hidden;">
-                    <span id="detail-code" style="color: var(--primary-color); font-weight:bold; font-size: 0.9rem;">CODE</span>
+                    <h4 id="detail-category" style="margin: 0; color: #9ca3af; font-size: 0.8rem; font-weight: normal; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Category</h4>
                     <h3 id="detail-name" style="margin:0; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Style Name</h3>
+                    <span id="detail-code" style="display: none;">CODE</span>
                 </div>
             </div>
             <div class="detail-content">
@@ -237,9 +238,12 @@
         function openDetail(style) {
             showPlaceholder(false); // Nasconde il placeholder e mostra i dettagli
             mainTitle.textContent = style.category;
+            detailHeaderContent.style.visibility = 'visible';
 
+            document.getElementById('detail-category').textContent = style.category;
             document.getElementById('detail-code').textContent = style.style_id;
-            document.getElementById('detail-name').textContent = style.name;
+            document.getElementById('detail-name').textContent = `${style.style_id} - ${style.name}`;
+            
             document.getElementById('d-og').textContent = getRange(style.original_gravity);
             document.getElementById('d-fg').textContent = getRange(style.final_gravity);
             document.getElementById('d-ibu').textContent = getRange(style.international_bitterness_units);

@@ -484,7 +484,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: 
 .radio-badge input { margin-right: 5px; }
 
 /* BEER CARD (Mie Birre) */
-.beer-card { background: #1f2937; border-left: 4px solid var(--primary-color); border-radius: 8px; padding: 15px; margin-bottom: 15px; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.2s; }
+.beer-card { background: #1f2937; border-radius: 8px; padding: 15px; margin-bottom: 15px; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.2s; }
 .beer-card:active { transform: scale(0.98); }
 .beer-header { display: flex; justify-content: space-between; align-items: flex-start; }
 .beer-id-badge { background: #111827; color: var(--primary-color); font-family: monospace; padding: 6px 10px; border-radius: 6px; font-size: 1rem; font-weight: bold; border: 1px dashed #6b7280; cursor: copy; display: flex; align-items: center; gap: 5px; }

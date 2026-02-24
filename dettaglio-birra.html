@@ -12,25 +12,36 @@
     <link rel="icon" type="image/png" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
     <style>
-        .detail-header {
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .detail-item {
+            background-color: #1f2937;
+            padding: 12px;
+            border-radius: 8px;
             text-align: center;
-            margin-bottom: 20px;
         }
-
-        .detail-header h2 {
+        .detail-item .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .detail-item .value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        .detail-item .value a {
             color: var(--primary-color);
-            margin: 0;
-            font-size: 1.8rem;
+            text-decoration: none;
         }
-
-        .detail-header p {
-            color: #d1d5db;
-            margin: 5px 0;
-            font-size: 1.1rem;
-        }
-
-        .linked-sheets {
-            margin-top: 30px;
+         .beer-icon {
+            font-family: 'beer-icon';
+            font-style: normal;
         }
     </style>
 </head>
@@ -73,44 +84,9 @@
         import { APP_VERSION } from './js/config.js';
         import { showModal } from './js/modal.js';
 
-        // 2. VERSION & UPDATE LOGIC (Robust)
         const footerVer = document.getElementById('footer-version');
         if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
 
-        const updateToast = document.getElementById('update-toast');
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then(reg => { // Usa ./sw.js
-
-                const trackInstalling = (worker) => {
-                    worker.addEventListener('statechange', () => {
-                        if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                            if (updateToast) updateToast.classList.add('show');
-                        }
-                    });
-                };
-
-                if (reg.waiting) {
-                    if (updateToast) updateToast.classList.add('show');
-                }
-                else if (reg.installing) { trackInstalling(reg.installing); }
-
-                reg.addEventListener('updatefound', () => {
-                    trackInstalling(reg.installing);
-                });
-            }).catch(err => console.log('SW failed', err));
-        }
-
-        // Click -> Aggiorna
-        if (updateToast) {
-            updateToast.addEventListener('click', () => {
-                if (navigator.serviceWorker.controller) {
-                    window.location.reload();
-                }
-            });
-        }
-
-        // 3. LOGICA PAGINA (Caricamento Dati)
         const params = new URLSearchParams(window.location.search);
         const beerId = params.get('id');
 
@@ -122,7 +98,6 @@
         };
 
         async function loadData() {
-            // 1. CARICA DETTAGLI BIRRA
             const { data: beer, error } = await supabase
                 .from('my_beers')
                 .select('*')
@@ -134,33 +109,40 @@
                 return;
             }
 
-            // Render Dettagli
             const packMap = { 'bottle': 'Bottiglia', 'can': 'Lattina', 'tap': 'Spina', 'growler': 'Growler' };
-            const prodType = beer.producer_type === 'homebrewer' ? ' (Homebrewer)' : '';
+            const packIcon = { 'bottle': '', 'can': '', 'tap': '', 'growler': '' };
+            const prodType = beer.producer_type === 'homebrewer' ? '<span class="beer-icon" title="Homebrewer"></span>' : '<span class="beer-icon" title="Professionale"></span>';
 
             document.getElementById('beer-detail-container').innerHTML = `
                 <div class="detail-header">
                     <h2>${beer.name}</h2>
-                    <p>${beer.producer}${prodType}</p>
-                    <div style="font-size:0.9em; color:#9ca3af; margin-top:5px;">${beer.style_name}</div>
-                    ${beer.packaging ? `<div style="font-size:0.9em; color:#9ca3af;">${packMap[beer.packaging]}</div>` : ''}
-                    <div style="display: flex; gap: 10px; margin-top: 5px; color: #9ca3af; font-size: 0.9rem; justify-content: center;">
-                        ${beer.abv ? `<span>${beer.abv}% Vol</span>` : ''}
-                        ${beer.ibu ? `<span>${beer.ibu} IBU</span>` : ''}
-                    </div>
+                    <p>${prodType} ${beer.producer}</p>
+                    <div style="font-size:1.1em; color:var(--primary-color); font-weight:bold;">${beer.style_name}</div>
                 </div>
 
-                <div class="stat-box">
+                <div class="detail-grid">
+                    ${beer.abv ? `<div class="detail-item"><div class="label">ABV</div><div class="value">${beer.abv}%</div></div>` : ''}
+                    ${beer.ibu ? `<div class="detail-item"><div class="label">IBU</div><div class="value">${beer.ibu}</div></div>` : ''}
+                    ${beer.color_ebc ? `<div class="detail-item"><div class="label">Colore</div><div class="value">${beer.color_ebc} EBC</div></div>` : ''}
+                    ${beer.packaging ? `<div class="detail-item"><div class="label">Pack</div><div class="value"><span class="beer-icon">${packIcon[beer.packaging]}</span> ${packMap[beer.packaging]}</div></div>` : ''}
+                    ${beer.packaging_date ? `<div class="detail-item"><div class="label">Data Pack</div><div class="value">${new Date(beer.packaging_date).toLocaleDateString()}</div></div>` : ''}
+                    ${beer.og ? `<div class="detail-item"><div class="label">OG</div><div class="value">${beer.og.toFixed(3)}</div></div>` : ''}
+                    ${beer.fg ? `<div class="detail-item"><div class="label">FG</div><div class="value">${beer.fg.toFixed(3)}</div></div>` : ''}
+                </div>
+                 ${beer.yeast ? `<div style="text-align:center; margin-top:15px;"><span style="color:var(--text-muted);">Lievito:</span> <span style="font-weight:bold;">${beer.yeast}</span></div>` : ''}
+                 ${beer.recipe_link ? `<div style="text-align:center; margin-top:10px;"><a href="${beer.recipe_link}" target="_blank" class="btn btn-secondary"><span class="material-symbols-outlined">link</span> Vedi Ricetta</a></div>` : ''}
+
+
+                <div class="stat-box" style="margin-top:30px;">
                     <div style="font-size:0.8rem; text-transform:uppercase; color:#9ca3af; margin-bottom:5px;">Codice Condivisione</div>
                     <div class="stat-code" onclick="copySharingId('${beer.sharing_id}')" style="cursor:copy;">
-                        ${beer.sharing_id}
+                        ${beer.sharing_id} <span class="material-symbols-outlined" style="font-size:1.1rem; vertical-align:middle;">content_copy</span>
                     </div>
                     <div style="font-size:0.7rem; color:#6b7280; margin-top:5px;">Tocca per copiare</div>
                 </div>
             `;
 
-            // 2. CARICA SCHEDE COLLEGATE (Future Proof)
-            // Cerca schede che hanno linked_beer_code uguale allo sharing_id di questa birra
+            // ... (rest of the script for loading sheets is unchanged)
             const { data: sheets, error: sheetsError } = await supabase
                 .from('tasting_notes')
                 .select('*')
@@ -186,7 +168,6 @@
                         </div>
                         ${scoreBadge}
                     `;
-                    // Click -> Vai al dettaglio scheda
                     item.addEventListener('click', () => {
                         window.location.href = `dettaglio-scheda.html?id=${sheet.id}`;
                     });

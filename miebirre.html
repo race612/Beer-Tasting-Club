@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le mie Birre - Beer Tasting Club</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/form-enhancements.css">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -48,8 +49,8 @@
                         <input type="text" id="beer-producer" required placeholder="Es. Mario Rossi">
 
                         <div class="chips-grid" id="group-producer-type">
-                            <div class="chip-btn" data-value="homebrewer">Homebrewer</div>
-                            <div class="chip-btn" data-value="pro">Professionale</div>
+                            <div class="chip-btn" data-value="homebrewer"><span class="beer-icon"></span>Homebrewer</div>
+                            <div class="chip-btn" data-value="pro"><span class="beer-icon"></span>Professionale</div>
                         </div>
                     </div>
 
@@ -74,26 +75,72 @@
                         </div>
                     </div>
 
-                    <hr style="border-color: #374151; margin: 20px 0;">
+                    <button type="button" class="collapsible">
+                        Dettagli Aggiuntivi
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
 
-                    <div class="form-group">
-                        <label>Confezionamento (Opzionale)</label>
-                        <div class="chips-grid" id="group-packaging">
-                            <div class="chip-btn" data-value="bottle">Bottiglia</div>
-                            <div class="chip-btn" data-value="can">Lattina</div>
-                            <div class="chip-btn" data-value="tap">Spina</div>
-                            <div class="chip-btn" data-value="growler">Growler</div>
+                    <div class="content">
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <div class="form-group" style="width: 50%;">
+                                <label>Alcol (% Vol)</label>
+                                <input type="number" step="0.1" id="beer-abv" placeholder="Es. 5.5">
+                            </div>
+                            <div class="form-group" style="width: 50%;">
+                                <label>IBU</label>
+                                <input type="number" id="beer-ibu" placeholder="Es. 40">
+                            </div>
                         </div>
-                    </div>
 
-                    <div style="display: flex; gap: 10px; margin-top: 20px;">
-                        <div class="form-group" style="width: 50%;">
-                            <label>IBU (Opzionale)</label>
-                            <input type="number" id="beer-ibu" placeholder="Es. 40">
+                        <div style="display: flex; gap: 10px;">
+                            <div class="form-group" style="width: 50%;">
+                                <label>Colore</label>
+                                <div class="color-switch">
+                                    <span>EBC</span>
+                                    <label class="switch">
+                                        <input type="checkbox" id="color-unit-switch">
+                                        <span class="slider"></span>
+                                    </label>
+                                    <span>SRM</span>
+                                </div>
+                                <input type="number" id="beer-color" placeholder="Es. 12">
+                                <input type="hidden" id="beer-color-ebc">
+                            </div>
+                            <div class="form-group" style="width: 50%;">
+                                <label>Data Confezionamento</label>
+                                <input type="date" id="packaging-date">
+                            </div>
                         </div>
-                        <div class="form-group" style="width: 50%;">
-                            <label>Alcol (% Vol - Opzionale)</label>
-                            <input type="number" step="0.1" id="beer-abv" placeholder="Es. 5.5">
+                        
+                        <div class="form-group">
+                            <label>Confezionamento</label>
+                            <div class="chips-grid" id="group-packaging">
+                                <div class="chip-btn" data-value="bottle"><span class="beer-icon"></span>Bottiglia</div>
+                                <div class="chip-btn" data-value="can"><span class="beer-icon"></span>Lattina</div>
+                                <div class="chip-btn" data-value="tap"><span class="beer-icon"></span>Spina</div>
+                                <div class="chip-btn" data-value="growler"><span class="beer-icon"></span>Growler</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <div class="form-group" style="width: 50%;">
+                                <label>OG (Original Gravity)</label>
+                                <input type="number" step="0.001" id="beer-og" placeholder="Es. 1.050">
+                            </div>
+                            <div class="form-group" style="width: 50%;">
+                                <label>FG (Final Gravity)</label>
+                                <input type="number" step="0.001" id="beer-fg" placeholder="Es. 1.010">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Lievito</label>
+                            <input type="text" id="beer-yeast" placeholder="Es. US-05, WLP001, ...">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Link Ricetta</label>
+                            <input type="url" id="recipe-link" placeholder="https://">
                         </div>
                     </div>
 
@@ -133,7 +180,19 @@
         // 1. Footer Version
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
 
-        // 2. Chip Helper
+        // 2. Collapsible
+        const coll = document.querySelector(".collapsible");
+        coll.addEventListener("click", function () {
+            this.classList.toggle("active");
+            const content = this.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+
+        // 3. Chip Helper
         function setupChipGroup(groupId) {
             const container = document.getElementById(groupId);
             container.querySelectorAll('.chip-btn').forEach(chip => {
@@ -159,7 +218,36 @@
             if (el) el.classList.add('selected');
         }
 
-        // 3. BJCP Logic
+        // 4. Color Conversion
+        const colorSwitch = document.getElementById('color-unit-switch');
+        const colorInput = document.getElementById('beer-color');
+        const colorEbcInput = document.getElementById('beer-color-ebc');
+
+        colorSwitch.addEventListener('change', () => {
+            const currentValue = parseFloat(colorInput.value);
+            if (isNaN(currentValue)) return;
+
+            if (colorSwitch.checked) { // From EBC to SRM
+                colorInput.value = (currentValue * 0.508).toFixed(1);
+            } else { // From SRM to EBC
+                colorInput.value = Math.round(currentValue * 1.97);
+            }
+        });
+
+        colorInput.addEventListener('input', () => {
+            const value = parseFloat(colorInput.value);
+            if (isNaN(value)) {
+                colorEbcInput.value = '';
+                return;
+            }
+            if (colorSwitch.checked) { // Input is SRM, convert to EBC for saving
+                colorEbcInput.value = Math.round(value * 1.97);
+            } else { // Input is EBC
+                colorEbcInput.value = Math.round(value);
+            }
+        });
+
+        // 5. BJCP Logic
         const systemSelect = document.getElementById('style-system');
         const containerFree = document.getElementById('container-free');
         const containerBjcp = document.getElementById('container-bjcp');
@@ -207,7 +295,7 @@
             dynamicContainer.appendChild(wrapper);
         });
 
-        // 4. Form Logic
+        // 6. Form Logic
         let currentView = 'list';
 
         window.openForm = function (beerToEdit = null) {
@@ -226,19 +314,19 @@
             document.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected'));
             document.getElementById('style-system').value = 'free';
             document.getElementById('style-system').dispatchEvent(new Event('change'));
+            coll.classList.remove("active");
+            coll.nextElementSibling.style.maxHeight = null;
+
 
             if (beerToEdit) {
                 // POPULATE
                 document.getElementById('edit-beer-id').value = beerToEdit.id;
                 document.getElementById('beer-name').value = beerToEdit.name;
                 document.getElementById('beer-producer').value = beerToEdit.producer;
-
                 if (beerToEdit.producer_type) setChipValue('group-producer-type', beerToEdit.producer_type);
-                if (beerToEdit.packaging) setChipValue('group-packaging', beerToEdit.packaging);
-
+                
                 document.getElementById('style-system').value = beerToEdit.style_type;
                 document.getElementById('style-system').dispatchEvent(new Event('change'));
-
                 if (beerToEdit.style_type === 'free') {
                     document.getElementById('style-free').value = beerToEdit.style_name;
                 } else {
@@ -246,8 +334,21 @@
                     document.getElementById('style-bjcp').dispatchEvent(new Event('change'));
                 }
 
-                document.getElementById('beer-ibu').value = beerToEdit.ibu;
+                // Optional Fields
                 document.getElementById('beer-abv').value = beerToEdit.abv;
+                document.getElementById('beer-ibu').value = beerToEdit.ibu;
+                if(beerToEdit.color_ebc) {
+                    colorSwitch.checked = false; // Set to EBC
+                    colorInput.value = beerToEdit.color_ebc;
+                    colorEbcInput.value = beerToEdit.color_ebc;
+                }
+                document.getElementById('packaging-date').value = beerToEdit.packaging_date;
+                if (beerToEdit.packaging) setChipValue('group-packaging', beerToEdit.packaging);
+                document.getElementById('beer-og').value = beerToEdit.og;
+                document.getElementById('beer-fg').value = beerToEdit.fg;
+                document.getElementById('beer-yeast').value = beerToEdit.yeast;
+                document.getElementById('recipe-link').value = beerToEdit.recipe_link;
+
             }
         }
 
@@ -276,7 +377,7 @@
         }
         updateNav();
 
-        // 5. Sharing ID & Copy
+        // 7. Sharing ID & Copy
         function generateSharingId() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let result = '';
@@ -291,7 +392,7 @@
             });
         }
 
-        // 6. LOAD BEERS
+        // 8. LOAD BEERS
         async function loadBeers() {
             const container = document.getElementById('beer-list-container');
             const { data: { user } } = await supabase.auth.getUser();
@@ -312,35 +413,39 @@
             container.innerHTML = '';
 
             const packMap = { 'bottle': 'Bottiglia', 'can': 'Lattina', 'tap': 'Spina', 'growler': 'Growler' };
+            const packIcon = { 'bottle': '', 'can': '', 'tap': '', 'growler': '' };
+
 
             beers.forEach(beer => {
                 const el = document.createElement('div');
                 el.className = 'beer-card';
 
-                const producerText = beer.producer + (beer.producer_type === 'homebrewer' ? ' (Homebrewer)' : '');
-                const packText = beer.packaging ? packMap[beer.packaging] : '';
+                const producerText = beer.producer + (beer.producer_type === 'homebrewer' ? ' (HB)' : '');
+                const packText = beer.packaging ? `<span class="beer-icon" style="color: var(--text-muted);">${packIcon[beer.packaging]}</span> ${packMap[beer.packaging]}` : '';
 
                 el.innerHTML = `
                     <div class="beer-header">
                         <div>
                             <h3 style="margin:0; color:white;">${beer.name}</h3>
                             <div class="beer-producer">${producerText}</div>
-                            ${packText ? `<div class="beer-packaging">${packText}</div>` : ''}
-                            <div style="display: flex; gap: 10px; margin-top: 5px; color: #9ca3af; font-size: 0.9rem;">
-                                ${beer.abv ? `<span>${beer.abv}% Vol</span>` : ''}
-                                ${beer.ibu ? `<span>${beer.ibu} IBU</span>` : ''}
-                            </div>
                         </div>
                         <div class="beer-id-badge" onclick="copyId('${beer.sharing_id}', event)" title="Clicca per copiare">
                             <span class="material-symbols-outlined" style="font-size:0.9rem">content_copy</span>
                             ${beer.sharing_id}
                         </div>
                     </div>
+                     <div style="font-size:0.9rem; color:var(--primary-color); font-weight:bold; margin-top:10px;">
+                        ${beer.style_name}
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; color: #9ca3af; font-size: 0.85rem;">
+                        ${beer.abv ? `<span><b>${beer.abv}%</b> Vol</span>` : ''}
+                        ${beer.ibu ? `<span><b>${beer.ibu}</b> IBU</span>` : ''}
+                        ${beer.color_ebc ? `<span><b>${beer.color_ebc}</b> EBC</span>` : ''}
+                        ${packText ? `<span>${packText}</span>` : ''}
+                         ${beer.packaging_date ? `<span><span class="material-symbols-outlined" style="font-size:1em; vertical-align:sub;">calendar_today</span> ${new Date(beer.packaging_date).toLocaleDateString()}</span>` : ''}
+                    </div>
                     
-                    <div style="margin-top:15px; display:flex; justify-content:space-between; align-items:flex-end;">
-                        <div style="font-size:0.9rem; color:var(--primary-color); font-weight:bold;">
-                            ${beer.style_name}
-                        </div>
+                    <div style="margin-top:15px; display:flex; justify-content:flex-end; align-items:flex-end;">
                         <div style="display:flex; gap:15px;">
                             <button class="btn-action-beer" id="edit-${beer.id}" style="background:none; border:none; color:#f59e0b; cursor:pointer;">
                                 <span class="material-symbols-outlined">edit</span>
@@ -375,7 +480,7 @@
             });
         }
 
-        // 7. SAVE BEER
+        // 9. SAVE BEER
         document.getElementById('beer-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-save');
@@ -397,24 +502,42 @@
                 if (radioVal) detailsArr.push(radioVal);
                 if (detailsArr.length > 0) styleDetails = detailsArr.join(', ');
             }
+             // Ensure EBC value is correct before saving
+            const colorVal = parseFloat(colorInput.value);
+            let ebcToSave = null;
+            if (!isNaN(colorVal)) {
+                if (colorSwitch.checked) { // Input is SRM
+                    ebcToSave = Math.round(colorVal * 1.97);
+                } else { // Input is EBC
+                    ebcToSave = Math.round(colorVal);
+                }
+            }
 
-            const basePayload = {
+
+            const payload = {
                 name: document.getElementById('beer-name').value,
                 producer: document.getElementById('beer-producer').value,
                 producer_type: getChipValue('group-producer-type'),
                 style_type: systemSelect.value,
                 style_name: styleName,
                 style_details: styleDetails,
-                packaging: getChipValue('group-packaging'),
+                // Optional Fields
+                abv: document.getElementById('beer-abv').value || null,
                 ibu: document.getElementById('beer-ibu').value || null,
-                abv: document.getElementById('beer-abv').value || null
+                color_ebc: ebcToSave,
+                packaging: getChipValue('group-packaging'),
+                packaging_date: document.getElementById('packaging-date').value || null,
+                og: document.getElementById('beer-og').value || null,
+                fg: document.getElementById('beer-fg').value || null,
+                yeast: document.getElementById('beer-yeast').value || null,
+                recipe_link: document.getElementById('recipe-link').value || null,
             };
 
             let error = null;
 
             if (editId) {
-                // UPDATE (Solo dati, no ID)
-                const res = await supabase.from('my_beers').update(basePayload).eq('id', editId);
+                // UPDATE
+                const res = await supabase.from('my_beers').update(payload).eq('id', editId);
                 error = res.error;
             } else {
                 // INSERT
@@ -426,7 +549,7 @@
                     else { sharingId = generateSharingId(); attempts++; }
                 }
 
-                const insertPayload = { ...basePayload, user_id: user.id, sharing_id: sharingId };
+                const insertPayload = { ...payload, user_id: user.id, sharing_id: sharingId };
                 const res = await supabase.from('my_beers').insert([insertPayload]);
                 error = res.error;
             }
@@ -442,7 +565,7 @@
 
         loadBeers();
 
-        // 8. SW Update
+        // 10. SW Update
         const updateToast = document.getElementById('update-toast');
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
