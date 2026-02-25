@@ -96,6 +96,14 @@
 
             <hr style="border-color: #374151; margin: 25px 0;">
 
+            <h3>Supporta il Progetto</h3>
+            <p>Questo è un progetto gratuito, indipendente e open source, sviluppato per pura passione. Se apprezzi il mio lavoro e vuoi supportare lo sviluppo futuro di questa applicazione, puoi offrirmi una birra virtuale! Si tratta di una libera donazione spontanea senza alcun corrispettivo o vincolo.
+                Ogni contributo, anche piccolo, è un grande incoraggiamento. Grazie di cuore!</p>
+            <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
+            <script type='text/javascript'>kofiwidget2.init('Offrimi una Birra', '#000000', 'U7U81UV8JZ');kofiwidget2.draw();</script>
+            
+            <hr style="border-color: #374151; margin: 25px 0;">
+
             <h3>Credits</h3>
 
             <div style="margin-bottom: 20px;">
@@ -156,6 +164,13 @@
             <h3>Versione & Changelog</h3>
             <p>Versione installata: <strong id="app-version-display" style="color: var(--primary-color);">...</strong>
             </p>
+
+            <div class="update-check-container" style="margin: 15px 0;">
+                <button id="btn-check-update" class="btn btn-outline" style="width: 100%;">
+                    <span class="material-symbols-outlined">cloud_sync</span> Controlla Aggiornamenti
+                </button>
+                <div id="update-status-message" style="margin-top: 10px; text-align: center; color: var(--text-muted); font-size: 0.9rem;"></div>
+            </div>
 
             <p>Changelog delle versioni principali: </p>
             <div id="changelog-container"
@@ -257,27 +272,78 @@
         }
         loadChangelog();
 
-        // SW UPDATE
+        // SW UPDATE MANAGEMENT
         const updateToast = document.getElementById('update-toast');
+        const updateStatusMsg = document.getElementById('update-status-message');
+        const btnCheckUpdate = document.getElementById('btn-check-update');
+        let swRegistration;
+
+        const showUpdateUI = () => {
+            updateStatusMsg.innerHTML = '🎉 Nuova versione disponibile! <a href="#" onclick="window.location.reload()">Aggiorna ora</a>';
+            updateToast.classList.add('show');
+        };
+
+        const trackInstalling = (worker) => {
+            worker.addEventListener('statechange', () => {
+                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                    showUpdateUI();
+                }
+            });
+        };
+        
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                const trackInstalling = (worker) => {
-                    worker.addEventListener('statechange', () => {
-                        if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                            if (updateToast) updateToast.classList.add('show');
-                        }
-                    });
-                };
+                swRegistration = reg;
 
-                if (reg.waiting) { if (updateToast) updateToast.classList.add('show'); }
-                else if (reg.installing) { trackInstalling(reg.installing); }
+                if (reg.waiting) {
+                    showUpdateUI();
+                } else if (reg.installing) {
+                    trackInstalling(reg.installing);
+                }
 
                 reg.addEventListener('updatefound', () => {
+                    // Una nuova versione del SW è stata trovata, la installiamo
                     trackInstalling(reg.installing);
                 });
+
+                // Gestione del pulsante di controllo manuale
+                btnCheckUpdate.addEventListener('click', async () => {
+                    btnCheckUpdate.disabled = true;
+                    updateStatusMsg.textContent = 'Ricerca aggiornamenti in corso...';
+                    
+                    try {
+                        const updatedReg = await swRegistration.update();
+                        if (updatedReg.installing || updatedReg.waiting) {
+                            // L'evento 'updatefound' gestirà la notifica
+                            // Non c'è bisogno di fare altro qui
+                        } else {
+                            updateStatusMsg.textContent = '✅ Sei già alla versione più recente.';
+                            setTimeout(() => { updateStatusMsg.textContent = ''; }, 3000);
+                        }
+                    } catch (error) {
+                        updateStatusMsg.textContent = '⚠️ Errore durante il controllo. Riprova.';
+                        console.error('Errore durante swRegistration.update():', error);
+                         setTimeout(() => { updateStatusMsg.textContent = ''; }, 3000);
+                    } finally {
+                        btnCheckUpdate.disabled = false;
+                    }
+                });
+
+            }).catch(error => {
+                console.error('Registrazione Service Worker fallita:', error);
+                updateStatusMsg.textContent = 'Service Worker non supportato o fallito.';
+            });
+        } else {
+            btnCheckUpdate.style.display = 'none';
+            updateStatusMsg.textContent = 'Service Worker non supportato da questo browser.';
+        }
+        
+        if (updateToast) {
+            updateToast.addEventListener('click', () => {
+                window.location.reload();
             });
         }
-        if (updateToast) updateToast.addEventListener('click', () => window.location.reload());
+
     </script>
 </body>
 
