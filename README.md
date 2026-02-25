@@ -91,4 +91,5 @@ Il mio ruolo in questo progetto è stato quello di:
 Questo è un progetto gratuito, indipendente e open source, sviluppato per pura passione. 
 Se apprezzi il mio lavoro e vuoi supportare lo sviluppo futuro di questa applicazione, puoi offrirmi una birra virtuale! 
 Si tratta di una libera donazione spontanea senza alcun corrispettivo o vincolo.
+
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U7U81UV8JZ)
