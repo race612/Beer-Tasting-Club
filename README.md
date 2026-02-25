@@ -87,3 +87,8 @@ Il mio ruolo in questo progetto è stato quello di:
 **Mirko Caiani**
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect_with_Me-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/mirko-caiani/)
+
+Questo è un progetto gratuito, indipendente e open source, sviluppato per pura passione. 
+Se apprezzi il mio lavoro e vuoi supportare lo sviluppo futuro di questa applicazione, puoi offrirmi una birra virtuale! 
+Si tratta di una libera donazione spontanea senza alcun corrispettivo o vincolo.
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U7U81UV8JZ)
