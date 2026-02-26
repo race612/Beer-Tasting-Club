@@ -51,8 +51,8 @@
                         <input type="text" id="beer-producer" required placeholder="Es. Mario Rossi">
 
                         <div class="chips-grid" id="group-producer-type">
-                            <div class="chip-btn" data-value="homebrewer"><span class="beer-icon"></span>Homebrewer</div>
-                            <div class="chip-btn" data-value="pro"><span class="beer-icon"></span>Professionale</div>
+                            <div class="chip-btn" data-value="homebrewer"><span class="material-symbols-outlined">cottage</span>Homebrewer</div>
+                            <div class="chip-btn" data-value="pro"><span class="material-symbols-outlined">storefront</span>Professionale</div>
                         </div>
                     </div>
 
@@ -117,10 +117,10 @@
                         <div class="form-group">
                             <label>Confezionamento</label>
                             <div class="chips-grid" id="group-packaging">
-                                <div class="chip-btn" data-value="bottle"><span class="icon-bottle"></span>Bottiglia</div>
-                                <div class="chip-btn" data-value="can"><span class="icon-can"></span>Lattina</div>
-                                <div class="chip-btn" data-value="tap"><span class="icon-tap"></span>Spina</div>
-                                <div class="chip-btn" data-value="growler"><span class="icon-growler"></span>Growler</div>
+                                <div class="chip-btn" data-value="bottle"><span class="icon-bottle" style="font-size: 1.2em;"></span>></span>Bottiglia</div>
+                                <div class="chip-btn" data-value="can"><span class="icon-can" style="font-size: 1.2em;"></span>></span>Lattina</div>
+                                <div class="chip-btn" data-value="tap"><span class="icon-tap" style="font-size: 1.2em;"></span>></span>Spina</div>
+                                <div class="chip-btn" data-value="growler"><span class="icon-growler" style="font-size: 1.2em;"></span>Growler</div>
                             </div>
                         </div>
 
@@ -436,18 +436,15 @@
                             ${beer.sharing_id}
                         </div>
                     </div>
-                     <div style="font-size:0.9rem; color:var(--primary-color); font-weight:bold; margin-top:10px;">
+                    <div style="font-size:0.9rem; color:var(--primary-color); font-weight:bold; margin-top:10px;">
                         ${beer.style_name}
                     </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; color: #9ca3af; font-size: 0.85rem;">
-                        ${beer.abv ? `<span><b>${beer.abv}%</b> Vol</span>` : ''}
-                        ${beer.ibu ? `<span><b>${beer.ibu}</b> IBU</span>` : ''}
-                        ${beer.color_ebc ? `<span><b>${beer.color_ebc}</b> EBC</span>` : ''}
-                        ${packText ? `<span>${packText}</span>` : ''}
-                         ${beer.packaging_date ? `<span><span class="material-symbols-outlined" style="font-size:1em; vertical-align:sub;">calendar_today</span> ${new Date(beer.packaging_date).toLocaleDateString()}</span>` : ''}
-                    </div>
-                    
-                    <div style="margin-top:15px; display:flex; justify-content:flex-end; align-items:flex-end;">
+
+                    <div style="margin-top:15px; display:flex; justify-content: space-between; align-items:flex-end;">
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; color: #9ca3af; font-size: 0.85rem;">
+                            ${beer.abv ? `<span><b>${beer.abv}%</b> Vol</span>` : ''}
+                            ${beer.ibu ? `<span><b>${beer.ibu}</b> IBU</span>` : ''}
+                        </div>
                         <div style="display:flex; gap:15px;">
                             <button class="btn-action-beer" id="edit-${beer.id}" style="background:none; border:none; color:#f59e0b; cursor:pointer;">
                                 <span class="material-symbols-outlined">edit</span>
