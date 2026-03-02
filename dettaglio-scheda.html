@@ -179,7 +179,7 @@
 
             const { data: note, error } = await supabase
                 .from('tasting_notes')
-                .select('*, events(name)')
+                .select('*, events(name), profiles(full_name, bjcp_level, cicerone_level, role_pro, role_publican, role_ubt, role_doemens, role_sommelier, role_courses, bjcp_id, email)')
                 .eq('id', noteId)
                 .single();
 
@@ -229,23 +229,25 @@
             }
 
             // INFO GIUDICE
-            const meta = user.user_metadata;
-            const fullName = `${meta.first_name || ""} ${meta.last_name || ""}`;
+            const judgeProfile = note.profiles;
+            const fullName = judgeProfile ? judgeProfile.full_name : 'Anonimo';
 
             let ranks = [];
-            if (meta.bjcp_level) ranks.push(`BJCP ${meta.bjcp_level.replace('_', ' ')}`);
-            if (meta.cicerone_level) ranks.push(ciceroneMap[meta.cicerone_level] || meta.cicerone_level);
-            if (meta.role_pro) ranks.push("Birraio Professionista");
-            if (meta.role_publican) ranks.push("Publican");
-            if (meta.role_ubt) ranks.push("Giudice UBT");
-            if (meta.role_doemens) ranks.push("Biersommelier Doemens");
-            if (meta.role_sommelier) ranks.push("Beer Sommelier");
-            if (meta.role_courses) ranks.push("Degustatore");
+            if(judgeProfile) {
+                if (judgeProfile.bjcp_level) ranks.push(`BJCP ${judgeProfile.bjcp_level.replace('_', ' ')}`);
+                if (judgeProfile.cicerone_level) ranks.push(ciceroneMap[judgeProfile.cicerone_level] || judgeProfile.cicerone_level);
+                if (judgeProfile.role_pro) ranks.push("Birraio Professionista");
+                if (judgeProfile.role_publican) ranks.push("Publican");
+                if (judgeProfile.role_ubt) ranks.push("Giudice UBT");
+                if (judgeProfile.role_doemens) ranks.push("Biersommelier Doemens");
+                if (judgeProfile.role_sommelier) ranks.push("Beer Sommelier");
+                if (judgeProfile.role_courses) ranks.push("Degustatore");
+            }
 
-            document.getElementById('judge-name').textContent = fullName.trim() || user.email;
+            document.getElementById('judge-name').textContent = fullName.trim();
             document.getElementById('judge-rank').textContent = ranks.join(" • ");
-            if (meta.bjcp_id) document.getElementById('judge-id').textContent = `BJCP ID: ${meta.bjcp_id}`;
-            document.getElementById('judge-email').textContent = user.email;
+            if (judgeProfile && judgeProfile.bjcp_id) document.getElementById('judge-id').textContent = `BJCP ID: ${judgeProfile.bjcp_id}`;
+            document.getElementById('judge-email').textContent = judgeProfile ? judgeProfile.email : '';
 
             document.getElementById('loading').style.display = 'none';
             document.getElementById('print-area').style.display = 'block';

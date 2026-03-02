@@ -750,3 +750,23 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: 
     transform: translateX(26px);
 }
 
+/* =========================================
+   21. INPUT ENHANCEMENTS
+   ========================================= */
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon .material-symbols-outlined {
+    position: absolute;
+    left: 10px;
+    color: white;
+    pointer-events: none;
+}
+
+.input-with-icon input[type="date"] {
+    padding-left: 35px;
+    color-scheme: dark;
+}
