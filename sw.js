@@ -1,6 +1,6 @@
 // sw.js
 // IMPORTANTE: Cambia questa stringa ad ogni rilascio per forzare l'aggiornamento sugli utenti
-const CACHE_NAME = 'btc-cache-v0.7.15';
+const CACHE_NAME = 'btc-cache-v0.7.16';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -10,7 +10,15 @@ const ASSETS_TO_CACHE = [
   './profilo.html',
   './info.html',
   './privacy.html',
+  './dettaglio-birra.html',
+  './linee-guida.html',
+  './miebirre.html',
+  './mieieventi.html',
+  './tools.html',
+  './guidelines/bjcp-2021-en.html',
+  './guidelines/unionbirrai-2026.html',
   './changelog.json',
+  './schede/bjcp-completa.html',
   './schede/bjcp-sintetica.html',
   './schede/crocette.html',
   './dettaglio-scheda.html',
@@ -20,9 +28,9 @@ const ASSETS_TO_CACHE = [
   './js/bjcp-2021.js',
   './assets/logo.png',
   './assets/icon-192.png',
-  './fonts/beer-icon.woff2',
-  './fonts/beer-icon.ttf',
-  './fonts/beer-icon.woff'
+  './assets/fonts/beer-icon.woff2',
+  './assets/fonts/beer-icon.ttf',
+  './assets/fonts/beer-icon.woff'
 ];
 
 // INSTALLAZIONE

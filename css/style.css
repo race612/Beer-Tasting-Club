@@ -162,7 +162,7 @@ input:focus, select:focus, textarea:focus {
 /* 9. STORICO */
 .history-card {
     background-color: var(--card-bg); border-radius: var(--radius); padding: 15px; margin-bottom: 15px;
-    border-left: 5px solid var(--primary-color); box-shadow: 0 2px 4px rgba(0,0,0,0.2); position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2); position: relative;
 }
 .history-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; padding-right: 45px; }
 .beer-name { font-size: 1.2rem; font-weight: bold; color: white; margin: 0; }
