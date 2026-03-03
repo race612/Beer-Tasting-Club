@@ -27,6 +27,16 @@
         <h2 class="text-center">Storico Degustazioni</h2>
         <p class="text-center" style="color: var(--text-muted); margin-bottom: 20px;">Le tue schede salvate</p>
 
+        <div class="sort-controls" style="text-align: center; margin-bottom: 20px; display: none;">
+            <label for="sort-select" style="margin-right: 10px; color: var(--text-muted);">Ordina per:</label>
+            <select id="sort-select" style="padding: 5px; border-radius: 5px; background: var(--input-bg); color: var(--text-color); border: 1px solid var(--border-color);">
+                <option value="created_at,desc">Data (più recenti)</option>
+                <option value="created_at,asc">Data (più vecchie)</option>
+                <option value="final_score,desc">Voto (migliori)</option>
+                <option value="final_score,asc">Voto (peggiori)</option>
+            </select>
+        </div>
+
         <div id="notes-list">
             <p style="text-align: center; margin-top: 40px;">Caricamento...</p>
         </div>
@@ -91,8 +101,11 @@
         }
 
         // 3. LOGICA STORICO
+        const sortSelect = document.getElementById('sort-select');
+
         async function loadHistory() {
             const listContainer = document.getElementById('notes-list');
+            listContainer.innerHTML = `<p style="text-align: center; margin-top: 40px;">Caricamento...</p>`;
 
             // A. Controllo Utente
             const { data: { user } } = await supabase.auth.getUser();
@@ -101,19 +114,26 @@
                 return;
             }
 
-            // B. Scarica Dati (Join con Eventi per avere il nome evento)
+            // B. Scarica Dati con Ordinamento
+            const sortValue = sortSelect.value.split(',');
+            const sortBy = sortValue[0];
+            const sortAsc = sortValue[1] === 'asc';
+
             const { data: notes, error } = await supabase
                 .from('tasting_notes')
                 .select('*, events (name)')
                 .eq('user_id', user.id)
-                .order('created_at', { ascending: false });
+                .order(sortBy, { ascending: sortAsc });
 
             if (error) {
                 listContainer.innerHTML = `<p style="color:red; text-align:center">Errore: ${error.message}</p>`;
                 return;
             }
 
+            const sortControls = document.querySelector('.sort-controls');
+
             if (!notes || notes.length === 0) {
+                if (sortControls) sortControls.style.display = 'none';
                 listContainer.innerHTML = `
                     <div style="text-align: center; padding: 40px; opacity: 0.7;">
                         <span class="material-symbols-outlined" style="font-size: 3rem; margin-bottom:10px">post_add</span>
@@ -122,6 +142,8 @@
                     </div>
                 `;
                 return;
+            } else {
+                if (sortControls) sortControls.style.display = 'block';
             }
 
             // C. Genera HTML
@@ -133,23 +155,21 @@
 
                 // Gestione Punteggio e Colori
                 let scoreDisplay = note.final_score;
-                let borderClass = '';
                 let badgeColor = '';
 
                 if (note.sheet_type === 'desc_crocette' && (!note.final_score || note.final_score === 0)) {
                     scoreDisplay = '<span class="material-symbols-outlined" style="font-size:1.2rem">checklist</span>'; // Icona se non c'è voto
-                    borderClass = '';
                 } else {
                     // Colori in base al voto (BJCP style)
-                    if (note.final_score >= 45) { borderClass = 'border-gold'; badgeColor = '#FFD700'; }
-                    else if (note.final_score >= 38) { borderClass = 'border-green'; badgeColor = '#10b981'; }
-                    else if (note.final_score >= 30) { borderClass = ''; badgeColor = '#f59e0b'; } // Amber standard
-                    else { borderClass = 'border-red'; badgeColor = '#ef4444'; }
+                    if (note.final_score >= 45) { badgeColor = '#FFD700'; }
+                    else if (note.final_score >= 38) { badgeColor = '#10b981'; }
+                    else if (note.final_score >= 30) { badgeColor = '#f59e0b'; } // Amber standard
+                    else { badgeColor = '#ef4444'; }
                 }
 
                 // Creazione Card
                 const card = document.createElement('div');
-                card.className = `history-card ${borderClass}`;
+                card.className = `history-card`;
 
                 card.innerHTML = `
                     <div class="delete-btn" data-id="${note.id}" title="Elimina scheda">
@@ -199,7 +219,8 @@
                 listContainer.appendChild(card);
             });
         }
-
+        
+        sortSelect.addEventListener('change', loadHistory);
         loadHistory();
     </script>
 </body>

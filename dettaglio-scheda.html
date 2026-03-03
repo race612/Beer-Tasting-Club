@@ -179,11 +179,32 @@
 
             const { data: note, error } = await supabase
                 .from('tasting_notes')
-                .select('*, events(name), profiles(full_name, bjcp_level, cicerone_level, role_pro, role_publican, role_ubt, role_doemens, role_sommelier, role_courses, bjcp_id, email)')
+                .select('*, events(name)')
                 .eq('id', noteId)
                 .single();
 
-            if (error) { await showModal("Errore", "Errore caricamento: " + error.message, "error"); return; }
+            if (error) { await showModal("Errore", "Errore caricamento scheda: " + error.message, "error"); return; }
+
+            // Seconda query per caricare il profilo, gestendo l'errore in modo non bloccante
+            if (note) {
+                const { data: profile, error: profileError } = await supabase
+                    .from('profiles')
+                    .select('full_name, bjcp_level, cicerone_level, role_pro, role_publican, role_ubt, role_doemens, role_sommelier, role_courses, bjcp_id, email')
+                    .eq('id', note.user_id)
+                    .single();
+
+                if (profileError) {
+                    console.warn("Profilo giudice non trovato o errore:", profileError.message);
+                    note.profiles = {}; // Assegna un oggetto vuoto per evitare crash
+                } else {
+                    note.profiles = profile;
+                }
+            } else {
+                // Se la nota non è stata trovata, la prima query con .single() restituisce un errore,
+                // ma in caso di future modifiche a Supabase, questo è un fallback.
+                await showModal("Errore", "Scheda di degustazione non trovata.", "error");
+                return;
+            }
 
             // GESTIONE EVENTO
             const evtName = note.events ? note.events.name : "";

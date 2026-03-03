@@ -175,9 +175,6 @@ input:focus, select:focus, textarea:focus {
     font-size: 0.8rem; color: #6b7280; margin-top: 10px; display: flex; justify-content: space-between;
     border-top: 1px solid #374151; padding-top: 8px;
 }
-.border-green { border-left-color: #10b981 !important; }
-.border-gold { border-left-color: #FFD700 !important; }
-.border-red { border-left-color: #ef4444 !important; }
 .delete-btn {
     position: absolute; top: 15px; right: 15px; background: rgba(17, 24, 39, 0.9);
     border: 1px solid var(--danger); color: var(--danger); border-radius: 50%; width: 35px; height: 35px;
