@@ -1,6 +1,6 @@
 // sw.js
 // IMPORTANTE: Cambia questa stringa ad ogni rilascio per forzare l'aggiornamento sugli utenti
-const CACHE_NAME = 'btc-cache-v0.7.18';
+const CACHE_NAME = 'btc-cache-v0.7.19';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -41,7 +41,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// ATTIVAZIONE (Pulizia vecchia cache)
+// ATTIVAZIONE
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -65,4 +65,10 @@ self.addEventListener('fetch', (event) => {
       return response || fetch(event.request);
     })
   );
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
