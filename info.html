@@ -268,43 +268,8 @@
         loadChangelog();
 
         // SW UPDATE MANAGEMENT
-        const updateToast = document.getElementById('update-toast');
-
-        const showUpdateUI = () => {
-            updateToast.classList.add('show');
-        };
-
-        const trackInstalling = (worker) => {
-            worker.addEventListener('statechange', () => {
-                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                    showUpdateUI();
-                }
-            });
-        };
-        
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then(reg => {
-                if (reg.waiting) {
-                    showUpdateUI();
-                } else if (reg.installing) {
-                    trackInstalling(reg.installing);
-                }
-
-                reg.addEventListener('updatefound', () => {
-                    trackInstalling(reg.installing);
-                });
-            }).catch(error => {
-                console.error('Registrazione Service Worker fallita:', error);
-            });
-        } else {
-            console.warn('Service Worker non supportato da questo browser.');
-        }
-        
-        if (updateToast) {
-            updateToast.addEventListener('click', () => {
-                window.location.reload();
-            });
-        }
+        import { initPWA } from './js/pwa-updater.js';
+        initPWA();
 
     </script>
 </body>
