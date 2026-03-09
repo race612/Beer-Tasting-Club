@@ -123,7 +123,7 @@
                             </div>
                         </div>
                 </div>
-                <p style="margin-bottom: 5px;"><strong>Icone</strong></p>
+                <p style="margin-bottom: 5px; margin-top: 15px;"><strong>Icone</strong></p>
                 <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.75rem;">
                     <a href="https://www.flaticon.com/free-icons/human-body" title="human body icons"
                         style="color: var(--text-muted); text-decoration: none;">Human body icons created by Freepik -
@@ -302,28 +302,41 @@
                 }
 
                 reg.addEventListener('updatefound', () => {
-                    // Una nuova versione del SW è stata trovata, la installiamo
                     trackInstalling(reg.installing);
                 });
 
-                // Gestione del pulsante di controllo manuale
+                // Gestione del pulsante di controllo manuale (CORRETTA)
                 btnCheckUpdate.addEventListener('click', async () => {
                     btnCheckUpdate.disabled = true;
-                    updateStatusMsg.textContent = 'Ricerca aggiornamenti in corso...';
+                    updateStatusMsg.innerHTML = 'Ricerca aggiornamenti in corso...';
                     
                     try {
-                        const updatedReg = await swRegistration.update();
-                        if (updatedReg.installing || updatedReg.waiting) {
-                            // L'evento 'updatefound' gestirà la notifica
-                            // Non c'è bisogno di fare altro qui
+                        await swRegistration.update();
+                        
+                        if (swRegistration.waiting) {
+                            // Se un aggiornamento era già in attesa
+                            showUpdateUI();
+                        } else if (swRegistration.installing) {
+                            // Se ne ha appena trovato uno e lo sta scaricando
+                            updateStatusMsg.innerHTML = 'Scaricamento in corso...';
                         } else {
-                            updateStatusMsg.textContent = '✅ Sei già alla versione più recente.';
-                            setTimeout(() => { updateStatusMsg.textContent = ''; }, 3000);
+                            // Nessun aggiornamento trovato
+                            updateStatusMsg.innerHTML = '✅ Sei già alla versione più recente.';
+                            setTimeout(() => { 
+                                // Rimuoviamo il messaggio solo se non si è trasformato in quello di successo
+                                if (updateStatusMsg.innerHTML.includes('✅')) {
+                                    updateStatusMsg.innerHTML = ''; 
+                                }
+                            }, 3000);
                         }
                     } catch (error) {
-                        updateStatusMsg.textContent = '⚠️ Errore durante il controllo. Riprova.';
+                        updateStatusMsg.innerHTML = '⚠️ Errore durante il controllo. Riprova.';
                         console.error('Errore durante swRegistration.update():', error);
-                         setTimeout(() => { updateStatusMsg.textContent = ''; }, 3000);
+                        setTimeout(() => { 
+                            if (updateStatusMsg.innerHTML.includes('⚠️')) {
+                                updateStatusMsg.innerHTML = ''; 
+                            }
+                        }, 3000);
                     } finally {
                         btnCheckUpdate.disabled = false;
                     }
@@ -346,5 +359,4 @@
 
     </script>
 </body>
-
 </html>
