@@ -35,7 +35,7 @@ const ASSETS_TO_CACHE = [
 
 // INSTALLAZIONE
 self.addEventListener('install', (event) => {
-  self.skipWaiting();
+  //self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
   );
