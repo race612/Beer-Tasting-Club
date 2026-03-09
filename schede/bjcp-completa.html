@@ -236,6 +236,13 @@
         import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js';
         import { APP_VERSION } from '../js/config.js';
         import { showModal } from '../js/modal.js';
+        import { initPWA } from '../js/pwa-updater.js';
+        import { initAccordions, initChips, getChipValue, initDirtyCheck, setFormDirty } from '../js/ui-components.js';
+        
+        initPWA();
+        initAccordions();
+        initChips();
+        initDirtyCheck('back-link', '../nuova-scheda.html');
 
         /* ... (IL RESTO DELLO SCRIPT RIMANE IDENTICO A QUELLO CHE HAI GIA') ... */
         const inputs = {
@@ -265,41 +272,13 @@
         }
 
         Object.values(inputs).forEach(inp => {
-            inp.addEventListener('input', updateTotal);
+            inp.addEventListener('input', () => { updateTotal(); setFormDirty(true); });
             inp.addEventListener('click', (e) => e.stopPropagation());
         });
 
-        const accordions = document.querySelectorAll('details.section-accordion');
-        accordions.forEach(acc => {
-            acc.addEventListener('toggle', (e) => {
-                if (acc.open) {
-                    accordions.forEach(other => {
-                        if (other !== acc && other.open) other.removeAttribute('open');
-                    });
-                }
-            });
-        });
+        // Event listener generalizzati per intercettare il dirtyState sui form
+        document.getElementById('bjcp-full-form').addEventListener('input', () => setFormDirty(true));
 
-        function setupChipGroup(groupId) {
-            const container = document.getElementById(groupId);
-            container.querySelectorAll('.chip-btn').forEach(chip => {
-                chip.addEventListener('click', () => {
-                    if (chip.classList.contains('disabled')) return;
-                    if (chip.classList.contains('selected')) container.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected'));
-                    else {
-                        container.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected'));
-                        chip.classList.add('selected');
-                    }
-                });
-            });
-        }
-        setupChipGroup('group-producer-type');
-
-        function getChipValue(groupId) {
-            const el = document.getElementById(groupId).querySelector('.chip-btn.selected');
-            return el ? el.getAttribute('data-value') : null;
-        }
-        
         let contextBeer = null;
         let linkedBeerCode = null;
         try {
@@ -412,6 +391,7 @@
                 return; 
             }
 
+            setFormDirty(false); // Resetta dirty warning
             localStorage.removeItem('btc_context_beer');
             const wantPdf = await showModal("Saved!", "Download PDF?", "confirm", "check_circle");
             if(wantPdf) window.location.href = `../dettaglio-scheda.html?id=${data[0].id}`;

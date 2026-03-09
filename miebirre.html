@@ -180,6 +180,7 @@
         import { bjcpCatalog, specialStyleRules } from './js/bjcp-2021.js';
         import { APP_VERSION } from './js/config.js';
         import { showModal } from './js/modal.js';
+        import { initChips, getChipValue, setChipValue } from './js/ui-components.js';
 
         // 1. Footer Version
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
@@ -197,30 +198,7 @@
         });
 
         // 3. Chip Helper
-        function setupChipGroup(groupId) {
-            const container = document.getElementById(groupId);
-            container.querySelectorAll('.chip-btn').forEach(chip => {
-                chip.addEventListener('click', () => {
-                    if (chip.classList.contains('selected')) {
-                        chip.classList.remove('selected');
-                    } else {
-                        container.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected'));
-                        chip.classList.add('selected');
-                    }
-                });
-            });
-        }
-        setupChipGroup('group-producer-type');
-        setupChipGroup('group-packaging');
-
-        function getChipValue(groupId) {
-            const el = document.getElementById(groupId).querySelector('.chip-btn.selected');
-            return el ? el.getAttribute('data-value') : null;
-        }
-        function setChipValue(groupId, val) {
-            const el = document.querySelector(`#${groupId} .chip-btn[data-value="${val}"]`);
-            if (el) el.classList.add('selected');
-        }
+        initChips();
 
         // 4. Color Conversion
         const colorSwitch = document.getElementById('color-unit-switch');
@@ -402,6 +380,13 @@
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) { window.location.href = 'index.html'; return; }
 
+            // SKELETON LOADING
+            container.innerHTML = `
+                <div class="beer-card skeleton" style="height: 100px; margin-bottom: 15px;"></div>
+                <div class="beer-card skeleton" style="height: 100px; margin-bottom: 15px;"></div>
+                <div class="beer-card skeleton" style="height: 100px; margin-bottom: 15px;"></div>
+            `;
+
             const { data: beers, error } = await supabase
                 .from('my_beers')
                 .select('*')
@@ -567,26 +552,8 @@
         loadBeers();
 
         // 10. SW Update
-        const updateToast = document.getElementById('update-toast');
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then(reg => {
-                const trackInstalling = (worker) => {
-                    worker.addEventListener('statechange', () => {
-                        if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                            if (updateToast) updateToast.classList.add('show');
-                        }
-                    });
-                };
-
-                if (reg.waiting) { if (updateToast) updateToast.classList.add('show'); }
-                else if (reg.installing) { trackInstalling(reg.installing); }
-
-                reg.addEventListener('updatefound', () => {
-                    trackInstalling(reg.installing);
-                });
-            });
-        }
-        if (updateToast) updateToast.addEventListener('click', () => window.location.reload());
+        import { initPWA } from './js/pwa-updater.js';
+        initPWA();
     </script>
 </body>
 

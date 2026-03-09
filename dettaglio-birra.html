@@ -53,9 +53,12 @@
         import { supabase } from './js/supabase-config.js';
         import { APP_VERSION } from './js/config.js';
         import { showModal } from './js/modal.js';
+        import { initPWA } from './js/pwa-updater.js';
 
         const footerVer = document.getElementById('footer-version');
         if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
+
+        initPWA();
 
         const params = new URLSearchParams(window.location.search);
         const beerId = params.get('id');
@@ -68,6 +71,8 @@
         };
 
         async function loadData() {
+            document.getElementById('beer-detail-container').innerHTML = `<div class="skeleton" style="height: 250px; border-radius: 8px;"></div>`;
+            document.getElementById('sheets-list').innerHTML = `<div class="skeleton" style="height: 100px; border-radius: 8px;"></div>`;
             const { data: beer, error } = await supabase
                 .from('my_beers')
                 .select('*')
