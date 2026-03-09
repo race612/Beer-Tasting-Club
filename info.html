@@ -7,7 +7,7 @@
     <title>Info - Beer Tasting Club</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="css/icomoon.css">
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
@@ -165,12 +165,7 @@
             <p>Versione installata: <strong id="app-version-display" style="color: var(--primary-color);">...</strong>
             </p>
 
-            <div class="update-check-container" style="margin: 15px 0;">
-                <button id="btn-check-update" class="btn btn-outline" style="width: 100%;">
-                    <span class="material-symbols-outlined">cloud_sync</span> Controlla Aggiornamenti
-                </button>
-                <div id="update-status-message" style="margin-top: 10px; text-align: center; color: var(--text-muted); font-size: 0.9rem;"></div>
-            </div>
+
 
             <p>Changelog delle versioni principali: </p>
             <div id="changelog-container"
@@ -274,12 +269,8 @@
 
         // SW UPDATE MANAGEMENT
         const updateToast = document.getElementById('update-toast');
-        const updateStatusMsg = document.getElementById('update-status-message');
-        const btnCheckUpdate = document.getElementById('btn-check-update');
-        let swRegistration;
 
         const showUpdateUI = () => {
-            updateStatusMsg.innerHTML = '🎉 Nuova versione disponibile! <a href="#" onclick="window.location.reload()">Aggiorna ora</a>';
             updateToast.classList.add('show');
         };
 
@@ -293,8 +284,6 @@
         
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js').then(reg => {
-                swRegistration = reg;
-
                 if (reg.waiting) {
                     showUpdateUI();
                 } else if (reg.installing) {
@@ -304,37 +293,11 @@
                 reg.addEventListener('updatefound', () => {
                     trackInstalling(reg.installing);
                 });
-               
-            btnCheckUpdate.addEventListener('click', async () => {
-                btnCheckUpdate.disabled = true;
-                updateStatusMsg.textContent = 'Ricerca aggiornamenti in corso...';
-                
-                try {
-                    const reg = await navigator.serviceWorker.getRegistration();
-                    await reg.update();
-                    
-                    if (!reg.installing && !reg.waiting) {
-                        updateStatusMsg.textContent = '✅ Sei già alla versione più recente.';
-                    } else {
-                        updateStatusMsg.textContent = '🎉 Nuova versione trovata! Riavvio...';
-                        // Se c'è un worker in attesa, gli diciamo di attivarsi
-                        if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-                        setTimeout(() => window.location.reload(), 1500);
-                    }
-                } catch (error) {
-                    updateStatusMsg.textContent = '⚠️ Errore durante il controllo.';
-                } finally {
-                    setTimeout(() => { btnCheckUpdate.disabled = false; }, 3000);
-                }
-            });
-
             }).catch(error => {
                 console.error('Registrazione Service Worker fallita:', error);
-                updateStatusMsg.textContent = 'Service Worker non supportato o fallito.';
             });
         } else {
-            btnCheckUpdate.style.display = 'none';
-            updateStatusMsg.textContent = 'Service Worker non supportato da questo browser.';
+            console.warn('Service Worker non supportato da questo browser.');
         }
         
         if (updateToast) {
