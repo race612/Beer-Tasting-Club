@@ -202,10 +202,57 @@
             </div>
         </div>
 
-        <div id="view-spillatura" class="tool-container" style="display: none; text-align: center; padding: 40px;">
-            <span class="icon-tap" style="font-size: 4rem; color: #f59e0b; margin-bottom: 20px; display:block;"></span>
-            <h3>Valori Spillatura</h3>
-            <p style="color: var(--text-muted);">Consigli su pressione e temperatura.<br>In arrivo nel prossimo aggiornamento!</p>
+        <div id="view-spillatura" class="tool-container" style="display: none;">
+            <div class="tool-box">
+                <h4 class="tool-header"><span class="icon-tap" style="font-size: 1.2rem; color: var(--primary-color);"></span> Categoria / Stile</h4>
+                <div class="conv-grid" style="grid-template-columns: 1fr;">
+                    <div class="conv-item">
+                        <label>Seleziona uno stile di birra</label>
+                        <select id="spill-style" style="padding: 12px; border-radius: 6px; border: 1px solid #4b5563; background: #1f2937; color: white; font-size: 1rem; width: 100%; box-sizing: border-box; cursor: pointer; outline: none;">
+                            <option value="" disabled selected>-- Seleziona --</option>
+                            <option value="lager">Lager Chiare (Pilsner, Helles)</option>
+                            <option value="lager_dark">Lager Scure (Dunkel, Schwarzbier)</option>
+                            <option value="weiss">Weissbier / Weizen</option>
+                            <option value="blanche">Blanche</option>
+                            <option value="apa">American Pale Ale (APA)</option>
+                            <option value="ipa">India Pale Ale (IPA)</option>
+                            <option value="bitter">Bitter / English IPA</option>
+                            <option value="stout">Stout / Porter</option>
+                            <option value="belgian">Belgian Ale (Tripel, Saison)</option>
+                            <option value="barley">Barley Wine</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-box" id="spill-results" style="display: none; animation: fadeIn 0.3s ease-out;">
+                <h4 class="tool-header"><span class="material-symbols-outlined">info</span> Valori Consigliati</h4>
+                
+                <h5 style="color: var(--primary-color); margin: 0 0 15px 0; font-size: 1.2rem;" id="spill-style-name">-</h5>
+                
+                <div class="conv-grid" style="grid-template-columns: 1fr; gap: 15px;">
+                    <div style="display: flex; flex-direction: column; gap: 5px; background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151;">
+                        <span style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;"><span class="material-symbols-outlined" style="vertical-align: text-bottom; font-size: 1.2rem; margin-right: 5px;">device_thermostat</span>Temp. di Servizio</span>
+                        <span style="font-size: 1.5rem; font-weight: bold; color: white; display: block; margin-top: 5px;" id="spill-temp">-</span>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 5px; background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151;">
+                        <span style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;"><span class="material-symbols-outlined" style="vertical-align: text-bottom; font-size: 1.2rem; margin-right: 5px;">bubble_chart</span>Carbonazione</span>
+                        <span style="font-size: 1.5rem; font-weight: bold; color: white; display: block; margin-top: 5px;"><span id="spill-vol">-</span> <span style="font-size: 0.9rem; font-weight: normal; color: #9ca3af;">volumi CO2</span></span>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 5px; background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151;">
+                        <span style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;"><span class="material-symbols-outlined" style="vertical-align: text-bottom; font-size: 1.2rem; margin-right: 5px;">speed</span>Spillatura / Pressione</span>
+                        <span style="font-size: 1.5rem; font-weight: bold; color: white; display: block; margin-top: 5px;" id="spill-pres">-</span>
+                        <span style="font-size: 0.8rem; color: #9ca3af; margin-top: 8px; display: block;"><i>Valore indicativo sul fusto. La pressione finale dipende anche da lunghezza, diametro del tubo e altezza rubinetto.</i></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="spill-empty" style="text-align: center; padding: 40px 10px;">
+                <span class="icon-tap" style="font-size: 3rem; color: #4b5563; margin-bottom: 15px; display:inline-block;"></span>
+                <p style="color: var(--text-muted); margin: 0;">Seleziona uno stile per visualizzare<br>i dati ottimali di servizio.</p>
+            </div>
         </div>
 
         <div id="view-quiz" class="tool-container" style="display: none; text-align: center; padding: 40px;">
@@ -329,6 +376,40 @@
             document.getElementById('color-desc').textContent=getDescForSRM(srm);
             document.getElementById('beer-glass-preview').style.backgroundColor=getColorForSRM(srm);
         });
+
+        /* --- LOGICA SPILLATURA --- */
+        const spillData = {
+            'lager': { name: 'Lager Chiare (Pilsner, Helles)', temp: '4 - 8 °C', vol: '2.4 - 2.8', pres: '0.8 - 1.2 Bar (12-17 PSI)' },
+            'lager_dark': { name: 'Lager Scure (Dunkel, Schwarzbier)', temp: '8 - 12 °C', vol: '2.3 - 2.6', pres: '0.9 - 1.2 Bar (13-17 PSI)' },
+            'weiss': { name: 'Weissbier / Weizen', temp: '6 - 8 °C', vol: '3.0 - 4.0', pres: '1.5 - 2.0 Bar (22-29 PSI)' },
+            'blanche': { name: 'Blanche', temp: '6 - 8 °C', vol: '2.5 - 3.0', pres: '1.0 - 1.5 Bar (15-22 PSI)' },
+            'apa': { name: 'American Pale Ale (APA)', temp: '8 - 12 °C', vol: '2.2 - 2.6', pres: '0.9 - 1.3 Bar (13-19 PSI)' },
+            'ipa': { name: 'India Pale Ale (IPA)', temp: '7 - 10 °C', vol: '2.2 - 2.7', pres: '0.9 - 1.4 Bar (13-20 PSI)' },
+            'bitter': { name: 'Bitter / English IPA', temp: '8 - 13 °C', vol: '1.5 - 2.2', pres: '0.5 - 0.9 Bar (7-13 PSI)' },
+            'stout': { name: 'Stout / Porter', temp: '10 - 15 °C', vol: '1.5 - 2.0', pres: '0.5 - 0.8 Bar (7-12 PSI)' },
+            'belgian': { name: 'Belgian Ale (Tripel, Saison)', temp: '10 - 16 °C', vol: '2.8 - 4.0', pres: '1.4 - 2.0 Bar (20-29 PSI)' },
+            'barley': { name: 'Barley Wine', temp: '14 - 16 °C', vol: '2.0 - 2.4', pres: '0.8 - 1.0 Bar (12-15 PSI)' }
+        };
+
+        const spillSelect = document.getElementById('spill-style');
+        const spillResults = document.getElementById('spill-results');
+        const spillEmpty = document.getElementById('spill-empty');
+        
+        if (spillSelect) {
+            spillSelect.addEventListener('change', (e) => {
+                const val = e.target.value;
+                if (val && spillData[val]) {
+                    const data = spillData[val];
+                    document.getElementById('spill-style-name').textContent = data.name;
+                    document.getElementById('spill-temp').textContent = data.temp;
+                    document.getElementById('spill-vol').textContent = data.vol;
+                    document.getElementById('spill-pres').textContent = data.pres;
+                    
+                    spillEmpty.style.display = 'none';
+                    spillResults.style.display = 'block';
+                }
+            });
+        }
 
         // SW
     </script>
