@@ -251,16 +251,16 @@
             document.getElementById('d-srm').textContent = getRange(style.color);
 
             let html = '';
-            html += createTextSection('icon-info', 'Impressioni Generali', style.overall_impression);
+            html += createTextSection('icon-info', 'Overall Impression', style.overall_impression);
             html += createTextSection('icon-nose', 'Aroma', style.aroma);
-            html += createTextSection('icon-eye', 'Aspetto', style.appearance);
-            html += createTextSection('icon-tongue', 'Gusto', style.flavor);
-            html += createTextSection('icon-mouth', 'Bocca', style.mouthfeel);
-            html += createTextSection('history_edu', 'Storia', style.history);
-            html += createTextSection('grain', 'Ingredienti', style.ingredients);
-            html += createTextSection('compare_arrows', 'Confronti', style.style_comparison);
-            html += createTextSection('verified', 'Esempi', style.examples);
-            html += createTextSection('label', 'Tag', style.tags);
+            html += createTextSection('icon-eye', 'Appearance', style.appearance);
+            html += createTextSection('icon-tongue', 'Flavor', style.flavor);
+            html += createTextSection('icon-mouth', 'Mouthfeel', style.mouthfeel);
+            html += createTextSection('history_edu', 'History', style.history);
+            html += createTextSection('grain', 'Ingredients', style.ingredients);
+            html += createTextSection('compare_arrows', 'Style Comparison', style.style_comparison);
+            html += createTextSection('verified', 'Commercial Examples', style.examples);
+            html += createTextSection('label', 'Tags', style.tags);
 
             detailsContainer.innerHTML = html; // Inserisce i dettagli
             overlay.classList.add('active');
