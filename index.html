@@ -7,7 +7,7 @@
     <title>Beer Tasting Club</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="css/icomoon.css">
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
@@ -174,6 +174,8 @@
         import { APP_VERSION } from './js/config.js';
         import { showModal } from './js/modal.js';
 
+        import { initPWA } from './js/pwa-updater.js';
+
         // URL base dell'applicazione
         const APP_URL = 'https://race612.github.io/Beer-Tasting-Club/';
 
@@ -181,74 +183,8 @@
         const footerVer = document.getElementById('footer-version');
         if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
 
-        // SW UPDATE MANAGEMENT
-        const updateToast = document.getElementById('update-toast');
-        
-        const showUpdateUI = () => {
-            if (updateToast) {
-                updateToast.classList.add('show');
-            }
-        };
-
-        const trackInstalling = (worker) => {
-            worker.addEventListener('statechange', () => {
-                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                    showUpdateUI();
-                }
-            });
-        };
-        
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then(reg => {
-                if (reg.waiting) {
-                    showUpdateUI();
-                } else if (reg.installing) {
-                    trackInstalling(reg.installing);
-                }
-
-                reg.addEventListener('updatefound', () => {
-                    trackInstalling(reg.installing);
-                });
-
-            }).catch(error => {
-                console.error('Registrazione Service Worker fallita:', error);
-            });
-        }
-        
-        if (updateToast) {
-            updateToast.addEventListener('click', () => {
-                window.location.reload();
-            });
-        }
-
-        // --- 3. PWA INSTALL LOGIC ---
-        let deferredPrompt;
-        const pwaToast = document.getElementById('pwa-toast');
-        const installTrigger = document.getElementById('pwa-install-trigger');
-        const closeBtn = document.getElementById('pwa-close-btn');
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            const isDismissed = localStorage.getItem('btc_pwa_dismissed');
-            if (!isDismissed && !window.matchMedia('(display-mode: standalone)').matches) {
-                pwaToast.classList.add('show');
-            }
-        });
-
-        installTrigger.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                await deferredPrompt.userChoice;
-                deferredPrompt = null;
-                pwaToast.classList.remove('show');
-            }
-        });
-
-        closeBtn.addEventListener('click', () => {
-            pwaToast.classList.remove('show');
-            localStorage.setItem('btc_pwa_dismissed', 'true');
-        });
+        // Inizializza logic PWA e update
+        initPWA();
 
         // --- 4. AUTH & DASHBOARD LOGIC ---
         const authView = document.getElementById('auth-view');

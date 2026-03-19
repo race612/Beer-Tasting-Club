@@ -240,28 +240,9 @@
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
 
         // HELPERS CHIPS
-        function setupChipGroup(groupId) {
-            const container = document.getElementById(groupId);
-            container.querySelectorAll('.chip-btn').forEach(chip => {
-                chip.addEventListener('click', () => {
-                    if (chip.classList.contains('disabled')) return;
-                    if (chip.classList.contains('selected')) chip.classList.remove('selected');
-                    else { container.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected')); chip.classList.add('selected'); }
-                    isDirty = true;
-                });
-            });
-        }
-        setupChipGroup('group-producer-type');
-        setupChipGroup('group-packaging');
-
-        function getChipValue(groupId) {
-            const el = document.getElementById(groupId).querySelector('.chip-btn.selected');
-            return el ? el.getAttribute('data-value') : null;
-        }
-        function setChipValue(groupId, val) {
-            const el = document.querySelector(`#${groupId} .chip-btn[data-value="${val}"]`);
-            if (el) el.classList.add('selected');
-        }
+        import { initChips, getChipValue, setChipValue, initDirtyCheck, setFormDirty } from '../js/ui-components.js';
+        
+        initChips();
 
         // CONTEXT CHECK
         const eventId = localStorage.getItem('hbl_selected_event') || '1';
@@ -274,8 +255,8 @@
 
         let isDirty = false;
         const form = document.getElementById('tasting-form');
-        form.addEventListener('input', () => isDirty = true);
-        form.addEventListener('change', () => isDirty = true);
+        form.addEventListener('input', () => setFormDirty(true));
+        form.addEventListener('change', () => setFormDirty(true));
 
         // DOM ELEMENTS
         const systemSelect = document.getElementById('style-system');
@@ -376,7 +357,7 @@
             checkbox.className = 'flaw-checkbox-hidden';
             checkbox.id = `flaw-${flaw}`;
             checkbox.value = flaw;
-            checkbox.addEventListener('change', () => isDirty = true);
+            checkbox.addEventListener('change', () => setFormDirty(true));
 
             const labelCard = document.createElement('label');
             labelCard.className = 'flaw-card';
@@ -404,17 +385,7 @@
         });
 
         // AVVISO USCITA
-        document.getElementById('back-link').addEventListener('click', async (e) => {
-            if (isDirty) {
-                e.preventDefault();
-                const proceed = await showModal("Attenzione", "Stai per uscire senza salvare. Vuoi davvero procedere? I dati andranno persi.", "confirm");
-                if (proceed) {
-                    isDirty = false;
-                    window.location.href = e.currentTarget.href;
-                }
-            }
-        });
-        window.addEventListener('beforeunload', (e) => { if (isDirty) { e.preventDefault(); e.returnValue = ''; } });
+        initDirtyCheck('back-link', '../nuova-scheda.html');
 
         // INVIO DATI
         form.addEventListener('submit', async (e) => {
@@ -486,7 +457,7 @@
             const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
             if (error) { await showModal("Errore", error.message, "error"); btn.disabled = false; return; }
 
-            isDirty = false;
+            setFormDirty(false);
             localStorage.removeItem('btc_context_beer');
             localStorage.removeItem('btc_context_mode');
 
@@ -500,24 +471,8 @@
         });
 
         // GESTIONE AGGIORNAMENTI (Service Worker Robusto)
-        const updateToast = document.getElementById('update-toast');
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('../sw.js').then(reg => {
-                // A) Aggiornamento GIA' in attesa
-                if (reg.waiting && updateToast) updateToast.classList.add('show');
-
-                // B) Aggiornamento trovato ORA
-                reg.addEventListener('updatefound', () => {
-                    const newWorker = reg.installing;
-                    newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller && updateToast) {
-                            updateToast.classList.add('show');
-                        }
-                    });
-                });
-            }).catch(err => console.log('SW failed', err));
-        }
-        if (updateToast) updateToast.addEventListener('click', () => window.location.reload());
+        import { initPWA } from '../js/pwa-updater.js';
+        initPWA();
     </script>
 </body>
 

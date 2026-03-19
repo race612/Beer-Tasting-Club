@@ -57,6 +57,22 @@ hr { border: 0; border-top: 1px solid #374151; margin: 25px 0; }
 .text-center { text-align: center; }
 .mt-20 { margin-top: 20px; }
 
+/* 3.5. SKELETON LOADING */
+.skeleton {
+    background: #374151; /* Colore base loader */
+    background-image: linear-gradient(90deg, #374151 0px, #4b5563 40px, #374151 80px);
+    background-size: 600px;
+    animation: shine-lines 1.6s infinite linear;
+    border-radius: var(--radius);
+    color: transparent !important;
+}
+.skeleton * { visibility: hidden; }
+
+@keyframes shine-lines {
+    0% { background-position: -100px; }
+    40%, 100% { background-position: 200px; }
+}
+
 /* 4. LAYOUT & HEADER UNIFORME */
 .container { max-width: 600px; margin: 0 auto; }
 

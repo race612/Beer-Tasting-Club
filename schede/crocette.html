@@ -300,23 +300,17 @@
         import { bjcpCatalog, specialStyleRules } from '../js/bjcp-2021.js';
         import { APP_VERSION } from '../js/config.js';
         import { showModal } from '../js/modal.js';
+        import { initAccordions, initChips, getChipValue, setChipValue, initDirtyCheck, setFormDirty } from '../js/ui-components.js';
 
         document.getElementById('footer-version').textContent = ` v${APP_VERSION}`;
         
-        // ... (IL RESTO DELLO SCRIPT E' IDENTICO ALLA TUA VERSIONE PRECEDENTE CORRETTA) ...
-        const accordions = document.querySelectorAll('details.section-accordion');
-        accordions.forEach(acc => {
-            acc.addEventListener('toggle', (e) => {
-                if (acc.open) {
-                    accordions.forEach(other => {
-                        if (other !== acc && other.open) other.removeAttribute('open');
-                    });
-                }
-            });
-        });
+        initAccordions();
+        initChips();
+        initDirtyCheck('back-link', '../nuova-scheda.html');
 
         function checkCompletion() {
-            accordions.forEach(acc => {
+            const accordionsInputs = document.querySelectorAll('details.section-accordion');
+            accordionsInputs.forEach(acc => {
                 const id = acc.id;
                 if (!id || id === 'sec-data') return;
                 const grids = acc.querySelectorAll('.options-grid');
@@ -329,25 +323,6 @@
             });
         }
 
-        // ... (LOGICA CHIPS, SLIDER, SUBMIT IDENTICA) ...
-        function setupChipGroup(groupId) {
-            const container = document.getElementById(groupId);
-            container.querySelectorAll('.chip-btn').forEach(chip => {
-                chip.addEventListener('click', () => {
-                    if (chip.classList.contains('disabled')) return;
-                    if (chip.classList.contains('selected')) {
-                        chip.classList.remove('selected');
-                    } else {
-                        container.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('selected'));
-                        chip.classList.add('selected');
-                    }
-                    isDirty = true;
-                });
-            });
-        }
-        setupChipGroup('group-producer-type');
-        setupChipGroup('group-packaging');
-
         function getChipValue(groupId) {
             const el = document.getElementById(groupId).querySelector('.chip-btn.selected');
             return el ? el.getAttribute('data-value') : null;
@@ -359,7 +334,7 @@
 
         document.querySelectorAll('.option-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                isDirty = true;
+                setFormDirty(true);
                 const parent = this.parentElement;
                 const isMulti = parent.getAttribute('data-type') === 'multi';
                 if (isMulti) {
@@ -386,7 +361,7 @@
                 const labelSpan = document.getElementById(targetId);
                 if (type === 'intensity') labelSpan.textContent = intensityMap[val];
                 else labelSpan.textContent = persistenceMap[val];
-                isDirty = true;
+                setFormDirty(true);
             });
         });
 
@@ -492,22 +467,9 @@
             });
         }
 
-        let isDirty = false;
         const form = document.getElementById('tasting-form');
-        form.addEventListener('input', () => isDirty = true);
-        form.addEventListener('change', () => isDirty = true);
-        
-        document.getElementById('back-link').addEventListener('click', async (e) => {
-            if (isDirty) {
-                e.preventDefault();
-                const confirmExit = await showModal("Attenzione", "Stai per uscire senza salvare. Le modifiche andranno perse.", "confirm", "warning");
-                if (confirmExit) {
-                    isDirty = false;
-                    window.location.href = '../nuova-scheda.html';
-                }
-            }
-        });
-        window.addEventListener('beforeunload', (e) => { if (isDirty) { e.preventDefault(); e.returnValue = ''; } });
+        form.addEventListener('input', () => setFormDirty(true));
+        form.addEventListener('change', () => setFormDirty(true));
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -573,7 +535,7 @@
             const { data, error } = await supabase.from('tasting_notes').insert([payload]).select();
             if (error) { await showModal("Errore", error.message, "error"); btn.disabled = false; btn.textContent = "Salva Scheda"; return; }
 
-            isDirty = false;
+            setFormDirty(false);
             localStorage.removeItem('btc_context_beer');
             localStorage.removeItem('btc_context_mode');
 
@@ -582,9 +544,8 @@
             else window.location.href = '../nuova-scheda.html';
         });
 
-        const updateToast = document.getElementById('update-toast');
-        if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').then(reg => { if (reg.waiting && updateToast) updateToast.classList.add('show'); reg.addEventListener('updatefound', () => { const n = reg.installing; n.addEventListener('statechange', () => { if (n.state === 'installed' && navigator.serviceWorker.controller && updateToast) updateToast.classList.add('show'); }); }); });
-        if(updateToast) updateToast.addEventListener('click', () => window.location.reload());
+        import { initPWA } from '../js/pwa-updater.js';
+        initPWA();
     </script>
 </body>
 </html>

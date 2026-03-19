@@ -7,7 +7,7 @@
     <title>Dettaglio Scheda - Beer Tasting Club</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="css/icomoon.css">
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="/Beer-Tasting-Club/manifest.json">
     <meta name="theme-color" content="#f59e0b">
@@ -36,10 +36,7 @@
             </button>
         </div>
 
-        <div id="loading" style="text-align: center; color: var(--text-muted);">
-            <span class="material-symbols-outlined" style="animation: spin 1s infinite;">refresh</span>
-            Caricamento scheda...
-        </div>
+        <div id="loading" class="skeleton" style="height: 400px; border-radius: 8px; margin-bottom: 20px;"></div>
 
         <div id="print-area" class="paper-sheet" style="display: none;">
 
@@ -111,52 +108,15 @@
     <script type="module">
         // 1. IMPORT (TASSATIVAMENTE IN CIMA)
         import { supabase } from './js/supabase-config.js';
-        import { APP_VERSION } from './js/config.js'; // Usa ./ perché siamo nella root
+        import { APP_VERSION } from './js/config.js';
         import { showModal } from './js/modal.js';
+        import { initPWA } from './js/pwa-updater.js';
 
         // 2. VERSION & UPDATE LOGIC (Robust)
         const footerVer = document.getElementById('footer-version');
         if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
 
-        // SW UPDATE MANAGEMENT
-        const updateToast = document.getElementById('update-toast');
-        
-        const showUpdateUI = () => {
-            if (updateToast) {
-                updateToast.classList.add('show');
-            }
-        };
-
-        const trackInstalling = (worker) => {
-            worker.addEventListener('statechange', () => {
-                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                    showUpdateUI();
-                }
-            });
-        };
-        
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then(reg => {
-                if (reg.waiting) {
-                    showUpdateUI();
-                } else if (reg.installing) {
-                    trackInstalling(reg.installing);
-                }
-
-                reg.addEventListener('updatefound', () => {
-                    trackInstalling(reg.installing);
-                });
-
-            }).catch(error => {
-                console.error('Registrazione Service Worker fallita:', error);
-            });
-        }
-        
-        if (updateToast) {
-            updateToast.addEventListener('click', () => {
-                window.location.reload();
-            });
-        }
+        initPWA();
 
         // 3. LOGICA PAGINA (Caricamento Dati)
         const params = new URLSearchParams(window.location.search);
