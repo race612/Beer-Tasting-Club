@@ -469,6 +469,13 @@
         // 9. SAVE BEER
         document.getElementById('beer-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            const recipeLinkInput = document.getElementById('recipe-link').value.trim();
+            if (recipeLinkInput && !recipeLinkInput.startsWith("https://share.brewfather.app/")) {
+                await showModal("Link Esterno Non Valido", "Per questioni di integrazione, il link della ricetta deve obbligatoriamente provenire da Brewfather ed iniziare con 'https://share.brewfather.app/'.", "warning");
+                return;
+            }
+            
             const btn = document.getElementById('btn-save');
             btn.disabled = true; btn.textContent = "Salvataggio...";
 

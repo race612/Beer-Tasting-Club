@@ -88,6 +88,55 @@
             const packIcon = { 'bottle': '', 'can': '', 'tap': '', 'growler': '' };
             const prodType = beer.producer_type === 'homebrewer' ? '<span class="beer-icon" title="Homebrewer"></span>' : '<span class="beer-icon" title="Professionale"></span>';
 
+            let characteristicsHTML = '<div style="display: flex; flex-direction: column; gap: 15px; margin-top: 25px;">';
+            
+            if (beer.abv || beer.ibu) {
+                characteristicsHTML += '<div style="display: flex; gap: 15px;">';
+                if (beer.abv) characteristicsHTML += `<div class="detail-item" style="flex: 1;"><div class="label">Alcol (% Vol)</div><div class="value">${beer.abv}%</div></div>`;
+                if (beer.ibu) characteristicsHTML += `<div class="detail-item" style="flex: 1;"><div class="label">IBU</div><div class="value">${beer.ibu}</div></div>`;
+                characteristicsHTML += '</div>';
+            }
+
+            if (beer.color_ebc || beer.packaging_date) {
+                characteristicsHTML += '<div style="display: flex; gap: 15px;">';
+                if (beer.color_ebc) characteristicsHTML += `<div class="detail-item" style="flex: 1;"><div class="label">Colore EBC</div><div class="value">${beer.color_ebc}</div></div>`;
+                if (beer.packaging_date) characteristicsHTML += `<div class="detail-item" style="flex: 1;"><div class="label">Data Pack</div><div class="value" style="font-size: 1.1rem;">${new Date(beer.packaging_date).toLocaleDateString('it-IT')}</div></div>`;
+                characteristicsHTML += '</div>';
+            }
+            
+            if (beer.packaging) {
+                characteristicsHTML += `<div class="detail-item" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 12px 20px;">
+                                            <div class="label" style="margin-bottom: 0;">Confezionamento</div>
+                                            <div class="value" style="display: flex; align-items: center; gap: 8px;">
+                                                <span class="beer-icon" style="font-size: 1.4rem; color: var(--primary-color);">${packIcon[beer.packaging]}</span> ${packMap[beer.packaging]}
+                                            </div>
+                                        </div>`;
+            }
+
+            if (beer.og || beer.fg) {
+                characteristicsHTML += '<div style="display: flex; gap: 15px;">';
+                if (beer.og) characteristicsHTML += `<div class="detail-item" style="flex: 1;"><div class="label">OG (Original Grav.)</div><div class="value">${beer.og.toFixed(3)}</div></div>`;
+                if (beer.fg) characteristicsHTML += `<div class="detail-item" style="flex: 1;"><div class="label">FG (Final Grav.)</div><div class="value">${beer.fg.toFixed(3)}</div></div>`;
+                characteristicsHTML += '</div>';
+            }
+
+            if (beer.yeast) {
+                characteristicsHTML += `<div class="detail-item" style="width: 100%; text-align: left; padding: 12px 20px;">
+                                            <div class="label">Lievito</div>
+                                            <div class="value" style="font-size: 1.1rem;">${beer.yeast}</div>
+                                        </div>`;
+            }
+
+            if (beer.recipe_link) {
+                characteristicsHTML += `<div style="margin-top: 5px;">
+                                            <a href="${beer.recipe_link}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                                                <span class="material-symbols-outlined">link</span> Apri Ricetta su Brewfather
+                                            </a>
+                                        </div>`;
+            }
+
+            characteristicsHTML += '</div>';
+
             document.getElementById('beer-detail-container').innerHTML = `
                 <div class="detail-header">
                     <h2>${beer.name}</h2>
@@ -95,25 +144,14 @@
                     <div style="font-size:1.1em; color:var(--primary-color); font-weight:bold;">${beer.style_name}</div>
                 </div>
 
-                <div class="detail-grid">
-                    ${beer.abv ? `<div class="detail-item"><div class="label">ABV</div><div class="value">${beer.abv}%</div></div>` : ''}
-                    ${beer.ibu ? `<div class="detail-item"><div class="label">IBU</div><div class="value">${beer.ibu}</div></div>` : ''}
-                    ${beer.color_ebc ? `<div class="detail-item"><div class="label">Colore</div><div class="value">${beer.color_ebc} EBC</div></div>` : ''}
-                    ${beer.packaging ? `<div class="detail-item"><div class="label">Pack</div><div class="value"><span class="beer-icon">${packIcon[beer.packaging]}</span> ${packMap[beer.packaging]}</div></div>` : ''}
-                    ${beer.packaging_date ? `<div class="detail-item"><div class="label">Data Pack</div><div class="value">${new Date(beer.packaging_date).toLocaleDateString()}</div></div>` : ''}
-                    ${beer.og ? `<div class="detail-item"><div class="label">OG</div><div class="value">${beer.og.toFixed(3)}</div></div>` : ''}
-                    ${beer.fg ? `<div class="detail-item"><div class="label">FG</div><div class="value">${beer.fg.toFixed(3)}</div></div>` : ''}
-                </div>
-                 ${beer.yeast ? `<div style="text-align:center; margin-top:15px;"><span style="color:var(--text-muted);">Lievito:</span> <span style="font-weight:bold;">${beer.yeast}</span></div>` : ''}
-                 ${beer.recipe_link ? `<div style="text-align:center; margin-top:10px;"><a href="${beer.recipe_link}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary"><span class="material-symbols-outlined">link</span> Vedi Ricetta</a></div>` : ''}
+                ${characteristicsHTML}
 
-
-                <div class="stat-box" style="margin-top:30px;">
+                <div class="stat-box" style="margin-top:40px;">
                     <div style="font-size:0.8rem; text-transform:uppercase; color:#9ca3af; margin-bottom:5px;">Codice Condivisione</div>
-                    <div class="stat-code" onclick="copySharingId('${beer.sharing_id}')" style="cursor:copy;">
+                    <div class="stat-code" onclick="copySharingId('${beer.sharing_id}')" style="cursor:copy;" title="Clicca per copiare">
                         ${beer.sharing_id} <span class="material-symbols-outlined" style="font-size:1.1rem; vertical-align:middle;">content_copy</span>
                     </div>
-                    <div style="font-size:0.7rem; color:#6b7280; margin-top:5px;">Tocca per copiare</div>
+                    <div style="font-size:0.75rem; color:#6b7280; margin-top:8px;">Tocca per copiare e condividere</div>
                 </div>
             `;
 
