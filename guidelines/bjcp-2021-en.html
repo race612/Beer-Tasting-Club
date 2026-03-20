@@ -1,84 +1,265 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BJCP Guidelines 2021 - BTC</title>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <style>
-         
         /* SEARCH BAR */
-        .search-container { position: sticky; top: 0; background: #111827; padding: 10px 0; z-index: 10; margin-bottom: 10px; border-bottom: 1px solid #374151; }
-        .search-box { display: flex; align-items: center; background: #1f2937; border: 1px solid #374151; border-radius: 8px; padding: 0 10px; margin-bottom: 10px; }
-        .search-box input { background: transparent; border: none; color: white; padding: 12px; width: 100%; outline: none; font-size: 1rem; }
-        .search-icon { color: #9ca3af; }
-        .category-select { width: 100%; background: #1f2937; color: white; border: 1px solid #374151; padding: 10px; border-radius: 8px; font-size: 0.95rem; outline: none; cursor: pointer; }
-        /* LISTA STILI */
-        .category-header { padding: 15px; background: #283040; color: var(--primary-color); font-weight: bold; border-radius: 8px; margin-top: 15px; margin-bottom: 5px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .style-item { padding: 15px; border-bottom: 1px solid #374151; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #111827; transition: background 0.2s; }
-        .style-item:active { background: rgba(245, 158, 11, 0.1); }
-        .style-code { font-family: monospace; background: #374151; padding: 2px 6px; border-radius: 4px; margin-right: 10px; color: #f59e0b; font-weight: bold; }
-        .style-name { color: #e5e7eb; font-size: 1rem; }
-        /* OVERLAY DETTAGLIO (COMPATTO) */
-        .detail-overlay { position: fixed; top: 0; height: 100%; background: #111827; z-index: 1000; overflow-y: auto; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; width: 100%; left: 0; }
+        .search-container {
+            position: sticky;
+            top: 0;
+            background: #111827;
+            padding: 10px 0;
+            z-index: 10;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #374151;
+        }
 
-        .detail-overlay.active { transform: translateX(0); }
-        .detail-header { position: sticky; top: 0; background: rgba(17, 24, 39, 0.95); backdrop-filter: blur(5px); padding: 15px; border-bottom: 1px solid #374151; display: flex; align-items: center; justify-content: center; z-index: 20; }
-        .detail-content { padding: 20px; padding-bottom: 80px; }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 0 10px;
+            margin-bottom: 10px;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 12px;
+            width: 100%;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .search-icon {
+            color: #9ca3af;
+        }
+
+        .category-select {
+            width: 100%;
+            background: #1f2937;
+            color: white;
+            border: 1px solid #374151;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* LISTA STILI */
+        .category-header {
+            padding: 15px;
+            background: #283040;
+            color: var(--primary-color);
+            font-weight: bold;
+            border-radius: 8px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .style-item {
+            padding: 15px;
+            border-bottom: 1px solid #374151;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #111827;
+            transition: background 0.2s;
+        }
+
+        .style-item:active {
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .style-code {
+            font-family: monospace;
+            background: #374151;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 10px;
+            color: #f59e0b;
+            font-weight: bold;
+        }
+
+        .style-name {
+            color: #e5e7eb;
+            font-size: 1rem;
+        }
+
+        /* OVERLAY DETTAGLIO (COMPATTO) */
+        .detail-overlay {
+            position: fixed;
+            top: 0;
+            height: 100%;
+            background: #111827;
+            z-index: 1000;
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            left: 0;
+        }
+
+        .detail-overlay.active {
+            transform: translateX(0);
+        }
+
+        .detail-header {
+            position: sticky;
+            top: 0;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(5px);
+            padding: 15px;
+            border-bottom: 1px solid #374151;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+        }
+
+        .detail-content {
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
         /* VITALS GRID */
-        .vitals-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; background: #1f2937; padding: 15px; border-radius: 8px; border: 1px solid #374151; }
-        .vital-box { text-align: center; }
-        .vital-label { font-size: 0.75rem; color: #9ca3af; display: block; margin-bottom: 2px; }
-        .vital-val { font-size: 0.85rem; font-weight: bold; color: white; display: block; white-space: nowrap; }
+        .vitals-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+            background: #1f2937;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #374151;
+        }
+
+        .vital-box {
+            text-align: center;
+        }
+
+        .vital-label {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .vital-val {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: white;
+            display: block;
+            white-space: nowrap;
+        }
+
         /* SEZIONI TESTO */
-        .bjcp-section { margin-bottom: 25px; }
-        .bjcp-label { color: var(--primary-color); font-weight: bold; font-size: 0.9rem; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #374151; padding-bottom: 5px; }
+        .bjcp-section {
+            margin-bottom: 25px;
+        }
+
+        .bjcp-label {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 5px;
+        }
+
         /* Classe per icone dentro le label */
-        .bjcp-label [class^="icon-"], .bjcp-label .material-symbols-outlined { font-size: 1.2rem; }
-        .bjcp-text { color: #d1d5db; font-size: 0.95rem; line-height: 1.6; margin: 0; text-align: justify; }
-        .scroll-anchor { scroll-margin-top: 140px; } 
+        .bjcp-label [class^="icon-"],
+        .bjcp-label .material-symbols-outlined {
+            font-size: 1.2rem;
+        }
+
+        .bjcp-text {
+            color: #d1d5db;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+            text-align: justify;
+        }
+
+        .scroll-anchor {
+            scroll-margin-top: 140px;
+        }
 
         /* DESKTOP LAYOUT - 2 COLONNE */
         @media (min-width: 900px) {
-            .mobile-only-title { display: none !important; }
+            .mobile-only-title {
+                display: none !important;
+            }
+
             .bjcp-layout {
                 display: flex;
-                height: calc(100vh - 70px); /* Altezza meno l'header bar */
+                height: calc(100vh - 70px);
+                /* Altezza meno l'header bar */
             }
+
             .container {
                 width: 40%;
                 flex-shrink: 0;
                 overflow-y: auto;
                 border-right: 1px solid #374151;
             }
+
             .detail-overlay {
                 position: static;
-                transform: none !important; /* Sovrascrive la trasformazione inline */
+                transform: none !important;
+                /* Sovrascrive la trasformazione inline */
                 width: 60%;
                 height: 100%;
                 display: block;
                 border-left: none;
             }
+
             .detail-header .btn-icon {
-                display: none; /* Nasconde il tasto 'back' su desktop */
+                display: none;
+                /* Nasconde il tasto 'back' su desktop */
             }
+
             .detail-overlay:not(.active) {
-                display: none; /* Nasconde la colonna dei dettagli se non attiva */
+                display: none;
+                /* Nasconde la colonna dei dettagli se non attiva */
             }
         }
     </style>
 </head>
+
 <body>
     <div class="bjcp-layout">
         <div class="container">
             <div class="header-bar">
-                <a href="../linee-guida.html" class="header-link"><span class="material-symbols-outlined">arrow_back</span> Linee Guida</a>
+                <a href="../linee-guida.html" class="header-link"><span
+                        class="material-symbols-outlined">arrow_back</span> Linee Guida</a>
                 <img src="../assets/logo.png" alt="Logo" class="header-logo">
             </div>
             <div style="text-align: center; margin: 15px 0;">
-                <img src="../assets/BJCP-logo.png" alt="Logo BJCP" style="width: 100px; height: auto; margin-bottom: 10px;">
+                <img src="../assets/BJCP-logo.png" alt="Logo BJCP"
+                    style="width: 100px; height: auto; margin-bottom: 10px;">
                 <h2 id="main-title" style="margin: 0;">BJCP 2021</h2>
             </div>
             <div class="controls-container">
@@ -86,39 +267,49 @@
                     <span class="material-symbols-outlined search-icon">search</span>
                     <input type="text" id="search-input" placeholder="Cerca stile (es. Pils, 12A)...">
                 </div>
-                <select id="category-select" class="category-select"><option value="all">Tutte le Categorie</option></select>
+                <select id="category-select" class="category-select">
+                    <option value="all">Tutte le Categorie</option>
+                </select>
             </div>
-            <div id="bjcp-list-container"><div style="text-align: center; padding: 40px; color: #6b7280;"><span class="material-symbols-outlined" style="animation: spin 1s infinite; font-size: 2rem;">refresh</span><br>Lettura BeerJSON...</div></div>
-        </div>
-
+            <div id="bjcp-list-container">
+                <div style="text-align: center; padding: 40px; color: #6b7280;"><span class="material-symbols-outlined"
+                        style="animation: spin 1s infinite; font-size: 2rem;">refresh</span><br>Lettura BeerJSON...
+                </div>
+            </div>
         </div>
 
     <div id="detail-overlay" class="detail-overlay">
         <div class="detail-header">
-                <button id="close-detail-btn" aria-label="Chiudi dettagli" class="btn btn-icon" style="position: absolute; left: 15px; background:transparent; border:none; color:white; z-index: 10;"><span class="material-symbols-outlined" style="font-size: 2rem;">arrow_back</span></button>
-                <div style="flex: 1; overflow: hidden; text-align: center; padding: 0 40px;">
-                    <h4 id="detail-category" style="display: none;">Category</h4>
-                    <span id="detail-code" style="display: none;">CODE</span>
-                    <h3 id="detail-name" style="margin:0; font-size: 1.1rem; color: var(--primary-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Style Name</h3>
-                </div>
+            <button id="close-detail-btn" aria-label="Chiudi dettagli" class="btn-icon"
+                style="position: absolute; left: 15px; background:transparent; border:none; color:white; z-index: 10;"><span
+                    class="material-symbols-outlined" style="font-size: 2rem;">arrow_back</span></button>
+            <div style="flex: 1; overflow: hidden; text-align: center; padding: 0 40px;">
+                <h4 id="detail-category" style="display: none;">Category</h4>
+                <span id="detail-code" style="display: none;">CODE</span>
+                <h3 id="detail-name"
+                    style="margin:0; font-size: 1.1rem; color: var(--primary-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    Style Name</h3>
             </div>
-            <div class="detail-content">
-                <div id="dynamic-details-container">
-                    <div class="placeholder-content" style="text-align: center; padding: 60px 20px; color: #6b7280;">
-                        <span class="material-symbols-outlined" style="font-size: 3rem; margin-bottom: 10px;">rule_folder</span>
-                        <p>Seleziona uno stile dalla lista per vederne i dettagli.</p>
-                    </div>
+        </div>
+        <div class="detail-content">
+            <div id="dynamic-details-container">
+                <div class="placeholder-content" style="text-align: center; padding: 60px 20px; color: #6b7280;">
+                    <span class="material-symbols-outlined"
+                        style="font-size: 3rem; margin-bottom: 10px;">rule_folder</span>
+                    <p>Seleziona uno stile dalla lista per vederne i dettagli.</p>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <footer style="text-align: center; margin-top: 20px; padding-bottom: 20px; font-size: 1rem; color: #4b5563;">
         &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
         <a href="../privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" rel="noopener noreferrer"
-                style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+        <p
+            style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
         </p>
     </footer>
 
@@ -143,7 +334,7 @@
         function showPlaceholder(show) {
             const placeholder = detailsContainer.querySelector('.placeholder-content');
             if (placeholder) placeholder.style.display = show ? 'block' : 'none';
-            
+
         }
 
         // ... (loadBjcpData, processData, renderList sono uguali a prima) ...
@@ -166,7 +357,7 @@
                 if (!groupedData[catId]) groupedData[catId] = { id: catId, name: style.category, styles: [] };
                 groupedData[catId].styles.push(style);
             });
-            const sortedKeys = Object.keys(groupedData).sort((a,b) => parseInt(a) - parseInt(b));
+            const sortedKeys = Object.keys(groupedData).sort((a, b) => parseInt(a) - parseInt(b));
             sortedKeys.forEach(key => {
                 const option = document.createElement('option');
                 option.value = key; option.textContent = `${groupedData[key].id}. ${groupedData[key].name}`;
@@ -203,12 +394,12 @@
         }
 
         searchInput.addEventListener('input', (e) => {
-            if (e.target.value.length > 0) { categorySelect.disabled = true; renderList([], e.target.value); } 
-            else { categorySelect.disabled = false; categorySelect.value = "all"; renderList(Object.keys(groupedData).sort((a,b) => parseInt(a) - parseInt(b))); }
+            if (e.target.value.length > 0) { categorySelect.disabled = true; renderList([], e.target.value); }
+            else { categorySelect.disabled = false; categorySelect.value = "all"; renderList(Object.keys(groupedData).sort((a, b) => parseInt(a) - parseInt(b))); }
         });
         categorySelect.addEventListener('change', (e) => {
             searchInput.value = "";
-            if (e.target.value === 'all') renderList(Object.keys(groupedData).sort((a,b) => parseInt(a) - parseInt(b)));
+            if (e.target.value === 'all') renderList(Object.keys(groupedData).sort((a, b) => parseInt(a) - parseInt(b)));
             else renderList([e.target.value]);
         });
 
@@ -217,8 +408,8 @@
         // MAPPATURA ICONE (QUI USO LE TUE CUSTOM DOVE POSSIBILE)
         function createTextSection(iconClass, title, text) {
             if (!text) return '';
-            const iconHTML = iconClass.startsWith('icon-') 
-                ? `<span class="${iconClass}" style="font-size:1.2rem;"></span>` 
+            const iconHTML = iconClass.startsWith('icon-')
+                ? `<span class="${iconClass}" style="font-size:1.2rem;"></span>`
                 : `<span class="material-symbols-outlined" style="font-size:1.2rem;">${iconClass}</span>`;
 
             return `
@@ -237,7 +428,7 @@
             document.getElementById('detail-category').textContent = style.category;
             document.getElementById('detail-code').textContent = style.style_id;
             document.getElementById('detail-name').textContent = `${style.style_id} - ${style.name}`;
-            
+
             let html = '';
             html += createTextSection('stars', 'Overall Impression', style.overall_impression);
             html += createTextSection('icon-nose', 'Aroma', style.aroma);
@@ -295,7 +486,7 @@
                 document.body.style.overflow = '';
             }
         });
-        
+
         // Setup iniziale
         if (isDesktop()) {
             showPlaceholder(true);
@@ -307,4 +498,5 @@
         loadBjcpData();
     </script>
 </body>
+
 </html>
