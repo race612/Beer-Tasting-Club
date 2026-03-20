@@ -83,6 +83,8 @@ Il mio ruolo in questo progetto è stato quello di:
 * **Backend / Database:** Supabase.
 * **Architecture:** PWA (Service Workers, Manifest).
 
+---
+
 ### 👨‍💻 Author & Vision
 **Mirko Caiani**
 

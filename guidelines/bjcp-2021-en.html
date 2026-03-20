@@ -42,6 +42,7 @@
 
         /* DESKTOP LAYOUT - 2 COLONNE */
         @media (min-width: 900px) {
+            .mobile-only-title { display: none !important; }
             .bjcp-layout {
                 display: flex;
                 height: calc(100vh - 70px); /* Altezza meno l'header bar */
@@ -90,8 +91,18 @@
             <div id="bjcp-list-container"><div style="text-align: center; padding: 40px; color: #6b7280;"><span class="material-symbols-outlined" style="animation: spin 1s infinite; font-size: 2rem;">refresh</span><br>Lettura BeerJSON...</div></div>
         </div>
 
-        <div id="detail-overlay" class="detail-overlay">
-            <div class="detail-header">
+        <footer style="text-align: center; margin-top: 40px; font-size: 1rem; color: #4b5563; padding-bottom: 20px;">
+            &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
+            <a href="../privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
+            <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+                    style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
+            </p>
+        </footer>
+    </div>
+
+    <div id="detail-overlay" class="detail-overlay">
+        <div class="detail-header">
                 <button id="close-detail-btn" class="btn btn-icon" style="background:transparent; border:none; color:white;"><span class="material-symbols-outlined" style="font-size: 2rem;">arrow_back</span></button>
                 <div style="flex: 1; overflow: hidden;">
                     <h4 id="detail-category" style="margin: 0; color: #9ca3af; font-size: 0.8rem; font-weight: normal; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Category</h4>
@@ -100,13 +111,6 @@
                 </div>
             </div>
             <div class="detail-content">
-                <div class="vitals-grid">
-                    <div class="vital-box"><span class="vital-label">OG</span><span class="vital-val" id="d-og">-</span></div>
-                    <div class="vital-box"><span class="vital-label">FG</span><span class="vital-val" id="d-fg">-</span></div>
-                    <div class="vital-box"><span class="vital-label">ABV</span><span class="vital-val" id="d-abv">-</span></div>
-                    <div class="vital-box"><span class="vital-label">IBU</span><span class="vital-val" id="d-ibu">-</span></div>
-                    <div class="vital-box"><span class="vital-label">SRM</span><span class="vital-val" id="d-srm">-</span></div>
-                </div>
                 <div id="dynamic-details-container">
                     <div class="placeholder-content" style="text-align: center; padding: 60px 20px; color: #6b7280;">
                         <span class="material-symbols-outlined" style="font-size: 3rem; margin-bottom: 10px;">rule_folder</span>
@@ -117,14 +121,7 @@
         </div>
     </div>
 
-    <footer style="text-align: center; padding: 20px 10px; font-size: 1rem; color: #4b5563; border-top: 1px solid #374151;">
-        &copy; 2026 Beer Tasting Club <span class="footer-ver" id="footer-version">v...</span><br>
-        <a href="../privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
-        <p style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
-                style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
-        </p>
-    </footer>
+
 
     <script type="module">
         import { APP_VERSION } from '../js/config.js';
@@ -136,7 +133,6 @@
         const categorySelect = document.getElementById('category-select');
         const overlay = document.getElementById('detail-overlay');
         const detailsContainer = document.getElementById('dynamic-details-container');
-        const vitalsGrid = document.querySelector('.vitals-grid');
         const detailHeaderContent = document.querySelector('.detail-header > div');
         const mainTitle = document.getElementById('main-title');
 
@@ -148,7 +144,6 @@
         function showPlaceholder(show) {
             const placeholder = detailsContainer.querySelector('.placeholder-content');
             if (placeholder) placeholder.style.display = show ? 'block' : 'none';
-            vitalsGrid.style.display = show ? 'none' : 'grid';
             
         }
 
@@ -244,14 +239,8 @@
             document.getElementById('detail-code').textContent = style.style_id;
             document.getElementById('detail-name').textContent = `${style.style_id} - ${style.name}`;
             
-            document.getElementById('d-og').textContent = getRange(style.original_gravity);
-            document.getElementById('d-fg').textContent = getRange(style.final_gravity);
-            document.getElementById('d-ibu').textContent = getRange(style.international_bitterness_units);
-            document.getElementById('d-abv').textContent = getRange(style.alcohol_by_volume);
-            document.getElementById('d-srm').textContent = getRange(style.color);
-
-            let html = '';
-            html += createTextSection('icon-info', 'Overall Impression', style.overall_impression);
+            let html = `<h2 class="mobile-only-title" style="color: var(--primary-color); margin-top: 0; margin-bottom: 20px; font-size: 1.5rem; line-height: 1.3;">${style.style_id} - ${style.name}</h2>`;
+            html += createTextSection('stars', 'Overall Impression', style.overall_impression);
             html += createTextSection('icon-nose', 'Aroma', style.aroma);
             html += createTextSection('icon-eye', 'Appearance', style.appearance);
             html += createTextSection('icon-tongue', 'Flavor', style.flavor);
@@ -262,6 +251,35 @@
             html += createTextSection('compare_arrows', 'Style Comparison', style.style_comparison);
             html += createTextSection('verified', 'Commercial Examples', style.examples);
             html += createTextSection('label', 'Tags', style.tags);
+
+            // Vitals Table
+            html += `
+                <div class="bjcp-section" style="margin-top: 30px;">
+                    <div class="bjcp-label"><span class="material-symbols-outlined" style="font-size:1.2rem;">monitor_heart</span> Vital Statistics</div>
+                    <table style="width:100%; border-collapse: collapse; margin-top: 15px; color: #d1d5db; font-size: 0.95rem; text-align: left;">
+                        <tr style="border-bottom: 1px solid #374151;">
+                            <td style="padding: 10px 0; font-weight: bold; width: 40%">OG</td>
+                            <td style="padding: 10px 0;">${getRange(style.original_gravity)}</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #374151;">
+                            <td style="padding: 10px 0; font-weight: bold;">FG</td>
+                            <td style="padding: 10px 0;">${getRange(style.final_gravity)}</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #374151;">
+                            <td style="padding: 10px 0; font-weight: bold;">ABV</td>
+                            <td style="padding: 10px 0;">${getRange(style.alcohol_by_volume)}</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #374151;">
+                            <td style="padding: 10px 0; font-weight: bold;">IBU</td>
+                            <td style="padding: 10px 0;">${getRange(style.international_bitterness_units)}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 0; font-weight: bold;">SRM</td>
+                            <td style="padding: 10px 0;">${getRange(style.color)}</td>
+                        </tr>
+                    </table>
+                </div>
+            `;
 
             detailsContainer.innerHTML = html; // Inserisce i dettagli
             overlay.classList.add('active');
