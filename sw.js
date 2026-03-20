@@ -1,6 +1,6 @@
 // sw.js
 // IMPORTANTE: Cambia questa stringa ad ogni rilascio per forzare l'aggiornamento sugli utenti
-const CACHE_NAME = 'btc-cache-v0.7.25';
+const CACHE_NAME = 'btc-cache-v0.7.26';
 
 const ASSETS_TO_CACHE = [
   './',

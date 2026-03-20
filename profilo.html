@@ -168,7 +168,7 @@
         <a href="privacy.html" style="color: inherit; text-decoration: underline;">Info Privacy e Cookie</a>
         <p
             style="text-align: center; margin-top: 5px; font-size: 0.7rem; color: #4b5563; display: flex; align-items: center; justify-content: center; gap: 4px;">
-            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank"
+            Crafted with love by <a href="https://www.linkedin.com/in/mirko-caiani/" target="_blank" rel="noopener noreferrer"
                 style="color: inherit; text-decoration: underline;">Mirko Caiani</a>
         </p>
     </footer>
@@ -183,6 +183,7 @@
         import { supabase } from './js/supabase-config.js';
         import { APP_VERSION } from './js/config.js'; // Usa ./ perché siamo in root
         import { showModal } from './js/modal.js';
+        import { initPWA } from './js/pwa-updater.js';
 
         // 2. VERSION & UPDATE LOGIC (Robust)
         const footerVer = document.getElementById('footer-version');
