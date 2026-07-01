@@ -1,57 +1,10 @@
-[   
+[
     {
-        "_comment":"modificare versione in js/config.js e cambiare CACHE_NAME in sw.js",
-        "version": "0.7.X Alpha",
-        "date": "20 Feb 2026",
+        "_comment": "modificare versione in js/config.js e cambiare CACHE_NAME in sw.js",
+        "version": "v0.8.x Beta",
+        "date": "02 Lug 2026",
         "changes": [
-            "Pagina dedicata alle linee guida",
-            "Linee guida Union Birrai 2026",
-            "Work in Progress..."
-        ]
-    },
-    {
-        "version": "0.6.X Alpha",
-        "date": "17 Feb 2026",
-        "changes": [
-            "Miglioramenti CSS.",
-            "Nuova grafica Popup avvisi (modal.js).",
-            "Aggiunte nuove icone personalizzate.",
-            "Rifiniture scheda descrittiva sintetica.",
-            "Aggiunta scheda BJCP completa.",
-            "Aggiunta licenza e aggiornato Readme.",
-            "Aggiunte GUidelinse BJCP da file Json.",
-            "Aggiornamento pagina Info."
-        ]
-    },
-    {
-        "version": "0.5.X Alpha",
-        "date": "10 Feb 2026",
-        "changes": [
-            "Aggiunta pagina Privacy Policy con note personali.",
-            "Miglioramento gestione cache e aggiornamenti PWA.",
-            "Tabella DB e pagina Le mie Birre.",
-            "Possibilità di Eliminare e modificare Le mie Birre.",
-            "Funzionalità Beer Sharing, primi test.",
-            "Implementazione primi tools: colore e convertitore.",
-            "Miglioramento e revisione codice di tutte le pagine."
-        ]
-    },
-    {
-        "version": "0.4.X Alpha",
-        "date": "8 Feb 2026",
-        "changes": [
-            "Aggiunto Versioning dell'app e changelog.",
-            "Implementazione sistema di Login e Registrazione.",
-            "Nuova gestione Password Dimenticata e Rinvio Email."
-        ]
-    },
-    {
-        "version": "0.3.X Alpha",
-        "date": "01 Feb 2026",
-        "changes": [
-            "Integrazione Supabase per il database.",
-            "Prima versione di prova delle schede di degustazione.",
-            "Creazione di tutte le pagine html."
+            "versioni di test"
         ]
     }
 ]

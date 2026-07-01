@@ -1,30 +1,21 @@
 // sw.js
 // IMPORTANTE: Cambia questa stringa ad ogni rilascio per forzare l'aggiornamento sugli utenti
-const CACHE_NAME = 'btc-cache-v0.7.27';
+const CACHE_NAME = 'btc-cache-v0.8.1-beta';
 
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './nuova-scheda.html',
-  './storico.html',
-  './profilo.html',
   './info.html',
   './privacy.html',
-  './dettaglio-birra.html',
   './linee-guida.html',
-  './miebirre.html',
-  './mieieventi.html',
   './tools.html',
   './guidelines/bjcp-2021-en.html',
   './guidelines/unionbirrai-2026.html',
+  './data/bjcp-2021.json',
+  './data/unionbirrai-2026.json',
   './changelog.json',
-  './schede/bjcp-completa.html',
-  './schede/bjcp-sintetica.html',
-  './schede/crocette.html',
-  './dettaglio-scheda.html',
   './css/style.css',
   './js/config.js',
-  './js/supabase-config.js',
   './js/bjcp-2021.js',
   './assets/logo.png',
   './assets/icon-192.png',

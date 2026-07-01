@@ -24,89 +24,8 @@
             <p class="home-slogan">IL TUO COMPAGNO DIGITALE DI DEGUSTAZIONE</p>
         </header>
 
-        <div id="auth-view" style="display: none;">
-            <div class="segmented-control">
-                <div class="segmented-option active" id="tab-login">Accedi</div>
-                <div class="segmented-option" id="tab-register">Registrati</div>
-            </div>
-
-            <div class="card">
-                <form id="auth-form">
-                    <div class="form-group" id="group-name" style="display: none;">
-                        <label>Nome Pubblico</label>
-                        <input type="text" id="display-name" placeholder="Nome e Cognome o Nickname">
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="email" required placeholder="nome@esempio.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="password" required placeholder="••••••••" minlength="6">
-                    </div>
-                    <div id="auth-message" style="margin-bottom: 15px; text-align: center; font-size: 0.9rem;"></div>
-                    <button type="submit" id="btn-submit" class="btn btn-primary">
-                        <span class="material-symbols-outlined">login</span> Accedi
-                    </button>
-                </form>
-            </div>
-
-            <div
-                style="text-align: center; margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
-                <a href="#" id="forgot-link" class="auth-link-styled">Password dimenticata?</a>
-                <a href="#" id="resend-link" class="auth-link-styled" style="display: none;">Rinvia email di
-                    verifica</a>
-            </div>
-        </div>
-
-        <div id="update-password-view" style="display: none;">
-            <div class="card" style="border-left: 5px solid #10b981;">
-                <h3 style="text-align: center;">Imposta Nuova Password</h3>
-                <p style="text-align: center; color: var(--text-muted); font-size: 0.9em; margin-bottom: 20px;">
-                    Inserisci la tua nuova password qui sotto.
-                </p>
-                <div class="form-group">
-                    <label>Nuova Password</label>
-                    <input type="password" id="new-password" placeholder="Nuova password (min 6 car.)" minlength="6">
-                </div>
-                <button id="btn-update-password" class="btn btn-primary">
-                    <span class="material-symbols-outlined">lock_reset</span> Aggiorna Password
-                </button>
-            </div>
-        </div>
-
-        <div id="dashboard-view" style="display: none;">
+        <div id="dashboard-view" style="display: block;">
             <nav class="menu-grid">
-
-                <a href="nuova-scheda.html" class="menu-item">
-                    <span class="material-symbols-outlined icon-large">post_add</span>
-                    <span class="menu-title">Nuova Degustazione</span>
-                    <span class="menu-desc">Compila una scheda per una nuova birra</span>
-                </a>
-
-                <a href="storico.html" class="menu-item">
-                    <span class="material-symbols-outlined icon-large">history</span>
-                    <span class="menu-title">Le mie degustazioni</span>
-                    <span class="menu-desc">Un archivio delle tue degustazioni passate</span>
-                </a>
-
-                <a href="miebirre.html" class="menu-item" id="nav-my-beers" style="display: none;">
-                    <span class="material-symbols-outlined icon-large">sports_bar</span>
-                    <span class="menu-title">Le mie birre</span>
-                    <span class="menu-desc">Un archivio delle tue birre prodotte</span>
-                </a>
-
-                <a href="mieieventi.html" class="menu-item" id="nav-my-events" style="display: none;">
-                    <span class="material-symbols-outlined icon-large">event</span>
-                    <span class="menu-title">I miei Eventi</span>
-                    <span class="menu-desc">Un archivio dei tuoi eventi</span>
-                </a>
-
-                <a href="tools.html" class="menu-item">
-                    <span class="material-symbols-outlined icon-large">handyman</span>
-                    <span class="menu-title">Tools & Utility</span>
-                    <span class="menu-desc">Strumenti e materiale di approfondimento</span>
-                </a>
 
                 <a href="linee-guida.html" class="menu-item">
                     <span class="material-symbols-outlined icon-large">rule_folder</span>
@@ -114,10 +33,10 @@
                     <span class="menu-desc">Consulta i riferimenti per gli stili di birra</span>
                 </a>
 
-                <a href="profilo.html" class="menu-item">
-                    <span class="material-symbols-outlined icon-large">person</span>
-                    <span class="menu-title">Profilo Personale</span>
-                    <span class="menu-desc">I tuoi dati e impostazioni</span>
+                <a href="tools.html" class="menu-item">
+                    <span class="material-symbols-outlined icon-large">handyman</span>
+                    <span class="menu-title">Tools & Utility</span>
+                    <span class="menu-desc">Strumenti e materiale di approfondimento</span>
                 </a>
 
                 <a href="info.html" class="menu-item">
@@ -157,168 +76,15 @@
         Nuova versione disponibile!
     </div>
 
-    <div id="modal-forgot" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <button class="modal-close" id="close-modal"><span class="material-symbols-outlined">close</span></button>
-            <h3 id="modal-title" style="color: var(--primary-color);">Reset Password</h3>
-            <p id="modal-desc" style="font-size: 0.9rem; color: #d1d5db; margin-bottom: 20px;">...</p>
-            <div class="form-group"><input type="email" id="modal-email" placeholder="nome@esempio.com"></div>
-            <button id="btn-modal-action" class="btn btn-primary"><span class="material-symbols-outlined">send</span>
-                Invia</button>
-        </div>
-    </div>
-
     <script type="module">
-        // --- 1. IMPORT (DEVONO ESSERE IN CIMA) ---
-        import { supabase } from './js/supabase-config.js';
         import { APP_VERSION } from './js/config.js';
-        import { showModal } from './js/modal.js';
-
         import { initPWA } from './js/pwa-updater.js';
 
-        // URL base dell'applicazione
-        const APP_URL = 'https://race612.github.io/Beer-Tasting-Club/';
-
-        // --- 2. VERSION & UPDATE LOGIC (Robust) ---
         const footerVer = document.getElementById('footer-version');
         if (footerVer) footerVer.textContent = ` v${APP_VERSION}`;
 
         // Inizializza logic PWA e update
         initPWA();
-
-        // --- 4. AUTH & DASHBOARD LOGIC ---
-        const authView = document.getElementById('auth-view');
-        const dashboardView = document.getElementById('dashboard-view');
-        const updatePasswordView = document.getElementById('update-password-view');
-        const hash = window.location.hash;
-
-        // Nav Items condizionali
-        const navMyBeers = document.getElementById('nav-my-beers');
-        const navMyEvents = document.getElementById('nav-my-events');
-
-        if (hash && hash.includes('type=recovery')) {
-            authView.style.display = 'none'; dashboardView.style.display = 'none'; updatePasswordView.style.display = 'block';
-        }
-
-        supabase.auth.onAuthStateChange(async (event, session) => {
-            if (updatePasswordView.style.display === 'block') return;
-
-            if (event === 'PASSWORD_RECOVERY') {
-                authView.style.display = 'none'; dashboardView.style.display = 'none'; updatePasswordView.style.display = 'block';
-            } else if (event === 'SIGNED_IN' || session) {
-                // UTENTE LOGGATO
-                const user = session.user;
-                const level = user.user_metadata.account_level || 'Taster';
-
-                // Reset visualizzazione
-                navMyBeers.style.display = 'none';
-                navMyEvents.style.display = 'none';
-
-                if (level === 'Brewer' || level === 'Event Master') navMyBeers.style.display = 'grid';
-                if (level === 'Event Master') navMyEvents.style.display = 'grid';
-
-                authView.style.display = 'none'; updatePasswordView.style.display = 'none'; dashboardView.style.display = 'block';
-            } else {
-                authView.style.display = 'block'; dashboardView.style.display = 'none'; updatePasswordView.style.display = 'none';
-            }
-        });
-
-        // --- 5. TABS & FORMS ---
-        const tabLogin = document.getElementById('tab-login');
-        const tabRegister = document.getElementById('tab-register');
-        const btnSubmit = document.getElementById('btn-submit');
-        const groupName = document.getElementById('group-name');
-        const inputName = document.getElementById('display-name');
-        const authMessage = document.getElementById('auth-message');
-        const linkForgot = document.getElementById('forgot-link');
-        const linkResend = document.getElementById('resend-link');
-        let isLoginMode = true;
-
-        tabLogin.addEventListener('click', () => {
-            isLoginMode = true;
-            tabLogin.classList.add('active'); tabRegister.classList.remove('active');
-            btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`;
-            groupName.style.display = 'none'; inputName.removeAttribute('required');
-            authMessage.textContent = '';
-            linkForgot.style.display = 'inline-block'; linkResend.style.display = 'none';
-        });
-
-        tabRegister.addEventListener('click', () => {
-            isLoginMode = false;
-            tabRegister.classList.add('active'); tabLogin.classList.remove('active');
-            btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`;
-            groupName.style.display = 'block'; inputName.setAttribute('required', 'true');
-            authMessage.textContent = '';
-            linkForgot.style.display = 'none'; linkResend.style.display = 'inline-block';
-        });
-
-        document.getElementById('auth-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const displayName = inputName.value;
-            btnSubmit.disabled = true; btnSubmit.textContent = "Elaborazione..."; authMessage.style.color = 'var(--text-muted)';
-
-            if (isLoginMode) {
-                const { error } = await supabase.auth.signInWithPassword({ email, password });
-                if (error) {
-                    authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message;
-                    btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">login</span> Accedi`;
-                }
-            } else {
-                const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: APP_URL, data: { full_name: displayName } } });
-                if (error) {
-                    authMessage.style.color = 'var(--danger)'; authMessage.textContent = error.message;
-                } else {
-                    authMessage.style.color = '#10b981'; authMessage.textContent = "Registrazione OK! Controlla la mail.";
-                }
-                btnSubmit.disabled = false; btnSubmit.innerHTML = `<span class="material-symbols-outlined">person_add</span> Registrati`;
-            }
-        });
-
-        // --- 6. MODALS ---
-        const modal = document.getElementById('modal-forgot');
-        const modalTitle = document.getElementById('modal-title');
-        const modalDesc = document.getElementById('modal-desc');
-        const btnModalAction = document.getElementById('btn-modal-action');
-        let modalMode = 'reset';
-
-        document.getElementById('forgot-link').addEventListener('click', (e) => {
-            e.preventDefault(); modalMode = 'reset'; modalTitle.textContent = "Reset Password";
-            modalDesc.textContent = "Inserisci la email per il ripristino.";
-            btnModalAction.innerHTML = `<span class="material-symbols-outlined">lock_reset</span> Invia Link`;
-            modal.style.display = 'flex';
-        });
-
-        document.getElementById('resend-link').addEventListener('click', (e) => {
-            e.preventDefault(); modalMode = 'resend'; modalTitle.textContent = "Rinvio Conferma";
-            modalDesc.textContent = "Inserisci l'email usata per la registrazione.";
-            btnModalAction.innerHTML = `<span class="material-symbols-outlined">mail</span> Rinvia Mail`;
-            modal.style.display = 'flex';
-        });
-
-        document.getElementById('close-modal').addEventListener('click', () => modal.style.display = 'none');
-
-        btnModalAction.addEventListener('click', async () => {
-            const email = document.getElementById('modal-email').value;
-            if (!email) { await showModal("Attenzione", "Inserisci email!", "error"); return; }
-            btnModalAction.disabled = true;
-            let error = null;
-            if (modalMode === 'reset') {
-                const res = await supabase.auth.resetPasswordForEmail(email, { redirectTo: APP_URL }); error = res.error;
-            } else {
-                const res = await supabase.auth.resend({ type: 'signup', email, options: { emailRedirectTo: APP_URL } }); error = res.error;
-            }
-            if (error) await showModal("Errore", "Errore: " + error.message, "error"); else { await showModal("Fatto!", "Operazione completata!", "success"); modal.style.display = 'none'; }
-            btnModalAction.disabled = false; btnModalAction.innerHTML = `<span class="material-symbols-outlined">send</span> Invia`;
-        });
-
-        document.getElementById('btn-update-password').addEventListener('click', async () => {
-            const newPass = document.getElementById('new-password').value;
-            if (!newPass || newPass.length < 6) { await showModal("Attenzione", "Password troppo corta.", "error"); return; }
-            const { error } = await supabase.auth.updateUser({ password: newPass });
-            if (error) await showModal("Errore", "Errore: " + error.message, "error"); else { await showModal("Successo", "Password aggiornata!", "success"); window.location.hash = ''; window.location.reload(); }
-        });
     </script>
 </body>
 
