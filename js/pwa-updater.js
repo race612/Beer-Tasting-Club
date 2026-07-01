@@ -6,24 +6,33 @@
  */
 export function initPWA() {
     const updateToast = document.getElementById('update-toast');
+    let newWorker;
     
     // Mostra il toast di Update
-    const showUpdateUI = () => {
+    const showUpdateUI = (worker) => {
+        newWorker = worker;
         if (updateToast) updateToast.classList.add('show');
     };
 
     const trackInstalling = (worker) => {
         worker.addEventListener('statechange', () => {
             if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                showUpdateUI();
+                showUpdateUI(worker);
             }
         });
     };
     
     // Registra Service Worker
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/Beer-Tasting-Club/sw.js').then(reg => {
-            if (reg.waiting) showUpdateUI();
+        // Determina il prefisso corretto della cartella radice per sw.js
+        let baseDir = '/';
+        if (window.location.pathname.includes('/Beer-Tasting-Club/')) {
+            baseDir = '/Beer-Tasting-Club/';
+        }
+        const swUrl = baseDir + 'sw.js';
+
+        navigator.serviceWorker.register(swUrl).then(reg => {
+            if (reg.waiting) showUpdateUI(reg.waiting);
             else if (reg.installing) trackInstalling(reg.installing);
 
             reg.addEventListener('updatefound', () => {
@@ -32,11 +41,23 @@ export function initPWA() {
         }).catch(error => {
             console.error('SW Registration Failed:', error);
         });
+
+        // Ricarica la pagina quando il nuovo SW prende il controllo
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (refreshing) return;
+            refreshing = true;
+            window.location.reload();
+        });
     }
     
     if (updateToast) {
         updateToast.addEventListener('click', () => {
-            window.location.reload();
+            if (newWorker) {
+                newWorker.postMessage({ type: 'SKIP_WAITING' });
+            } else {
+                window.location.reload();
+            }
         });
     }
 
