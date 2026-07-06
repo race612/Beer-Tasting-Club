@@ -15,7 +15,7 @@ const ASSETS_TO_CACHE = [
   './data/unionbirrai-2026.json',
   './changelog.json',
   './css/style.css',
-  './js/config.js',
+  './js/app-version.js',
   './js/bjcp-2021.js',
   './assets/logo.png',
   './assets/icon-192.png',
