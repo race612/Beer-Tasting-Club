@@ -2,11 +2,11 @@
 // FILE UNICO: VERSIONE CORRENTE E CHANGELOG DELL'APP
 // ====================================================
 
-export const APP_VERSION = '0.1.1 beta';
+export const APP_VERSION = '0.1.2 beta';
 
 export const CHANGELOG = [
     {
-        version: "v0.1.1 beta",
+        version: "v0.1.2 beta",
         date: "06 Lug 2026",
         changes: [
             "Predisposta la struttura per la futura pagina Quiz (BJCP, Cicerone, Cultura Generale)",
